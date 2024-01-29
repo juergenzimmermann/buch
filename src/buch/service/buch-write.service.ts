@@ -91,10 +91,9 @@ export class BuchWriteService {
     }
 
     /**
-     * Ein vorhandenes Buch soll aktualisiert werden.
-     * @param buch Das zu aktualisierende Buch
-     * @param id ID des zu aktualisierenden Buchs
-     * @param version Die Versionsnummer für optimistische Synchronisation
+     * Ein vorhandenes Buch soll aktualisiert werden. "Destructured" Argument
+     * mit id (ID des zu aktualisierenden Buchs), buch (zu aktualisierendes Buch)
+     * und version (Versionsnummer für optimistische Synchronisation).
      * @returns Die neue Versionsnummer gemäß optimistischer Synchronisation
      * @throws NotFoundException falls kein Buch zur ID vorhanden ist
      * @throws VersionInvalidException falls die Versionsnummer ungültig ist

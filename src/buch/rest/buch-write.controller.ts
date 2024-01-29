@@ -88,7 +88,7 @@ export class BuchWriteController {
      * gesetzt und genauso auch wenn der Titel oder die ISBN-Nummer bereits
      * existieren.
      *
-     * @param buch JSON-Daten für ein Buch im Request-Body.
+     * @param buchDTO JSON-Daten für ein Buch im Request-Body.
      * @param res Leeres Response-Objekt von Express.
      * @returns Leeres Promise-Objekt.
      */
@@ -132,7 +132,7 @@ export class BuchWriteController {
      * Statuscode `400` (`Bad Request`) gesetzt und genauso auch wenn der neue
      * Titel oder die neue ISBN-Nummer bereits existieren.
      *
-     * @param buch Buchdaten im Body des Request-Objekts.
+     * @param buchDTO Buchdaten im Body des Request-Objekts.
      * @param id Pfad-Paramater für die ID.
      * @param version Versionsnummer aus dem Header _If-Match_.
      * @param res Leeres Response-Objekt von Express.
@@ -194,7 +194,6 @@ export class BuchWriteController {
      * ist. Der zurückgelieferte Statuscode ist `204` (`No Content`).
      *
      * @param id Pfad-Paramater für die ID.
-     * @param res Leeres Response-Objekt von Express.
      * @returns Leeres Promise-Objekt.
      */
     @Delete(':id')
