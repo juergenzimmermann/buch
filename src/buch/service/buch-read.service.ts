@@ -20,9 +20,10 @@
  * @packageDocumentation
  */
 
-import { Buch, type BuchArt } from './../entity/buch.entity.js';
 import { Injectable, NotFoundException } from '@nestjs/common';
+import { Buch } from './../entity/buch.entity.js';
 import { QueryBuilder } from './query-builder.js';
+import { type Suchkriterien } from './suchkriterien.js';
 import { getLogger } from '../../logger/logger.js';
 
 /**
@@ -33,19 +34,6 @@ export interface FindByIdParams {
     readonly id: number;
     /** Sollen die Abbildungen mitgeladen werden? */
     readonly mitAbbildungen?: boolean;
-}
-export interface Suchkriterien {
-    readonly isbn?: string;
-    readonly rating?: number;
-    readonly art?: BuchArt;
-    readonly preis?: number;
-    readonly rabatt?: number;
-    readonly lieferbar?: boolean;
-    readonly datum?: string;
-    readonly homepage?: string;
-    readonly javascript?: string;
-    readonly typescript?: string;
-    readonly titel?: string;
 }
 
 /**

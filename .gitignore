@@ -16,6 +16,7 @@ build
 node-ts
 temp
 tmp
+dependencies.svg
 
 # Sensible Daten
 .extras/compose/db/mysql/db_root_password.txt

@@ -69,6 +69,7 @@
     - [Prettier](#prettier)
     - [ESLint](#eslint)
     - [SonarQube](#sonarqube)
+    - [Madge](#madge)
     - [type-coverage](#type-coverage)
   - [Sicherheitslücken](#sicherheitslücken)
     - [npm audit](#npm-audit)
@@ -604,6 +605,12 @@ Abschließend wird der oben gestartete Server heruntergefahren.
     cd .extras\compose\sonarqube
     docker compose down
 ```
+
+### Madge
+
+Mit _Madge_ kann man zyklische Abhängigkeiten auflisten lassen: `npm run madge`.
+Mit `npm run madge:dep` kann man sämtliche Abhängigkeiten in einer SVG-Datei
+`dependencies.svg` visualisieren.
 
 ### type-coverage
 

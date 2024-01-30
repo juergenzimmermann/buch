@@ -34,10 +34,6 @@ import {
 } from '@nestjs/swagger';
 import { type Buch, type BuchArt } from '../entity/buch.entity.js';
 import {
-    BuchReadService,
-    type Suchkriterien,
-} from '../service/buch-read.service.js';
-import {
     Controller,
     Get,
     Headers,
@@ -50,8 +46,10 @@ import {
     UseInterceptors,
 } from '@nestjs/common';
 import { Request, Response } from 'express';
+import { BuchReadService } from '../service/buch-read.service.js';
 import { Public } from 'nest-keycloak-connect';
 import { ResponseTimeInterceptor } from '../../logger/response-time.interceptor.js';
+import { type Suchkriterien } from '../service/suchkriterien.js';
 import { type Titel } from '../entity/titel.entity.js';
 import { getBaseUri } from './getBaseUri.js';
 import { getLogger } from '../../logger/logger.js';

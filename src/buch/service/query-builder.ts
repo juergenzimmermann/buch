@@ -25,10 +25,10 @@ import { Buch } from '../entity/buch.entity.js';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Injectable } from '@nestjs/common';
 import { Repository } from 'typeorm';
-import { type Suchkriterien } from './buch-read.service.js';
+import { type Suchkriterien } from './suchkriterien.js';
 import { Titel } from '../entity/titel.entity.js';
 import { getLogger } from '../../logger/logger.js';
-import { typeOrmModuleOptions } from '../../config/typeorm.js';
+import { typeOrmModuleOptions } from '../../config/typeormOptions.js';
 
 /** Typdefinitionen für die Suche mit der Buch-ID. */
 export interface BuildIdParams {

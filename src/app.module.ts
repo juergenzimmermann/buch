@@ -31,7 +31,7 @@ import { LoggerModule } from './logger/logger.module.js';
 import { RequestLoggerMiddleware } from './logger/request-logger.middleware.js';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { graphQlModuleOptions } from './config/graphql.js';
-import { typeOrmModuleOptions } from './config/typeorm.js';
+import { typeOrmModuleOptions } from './config/typeormOptions.js';
 
 @Module({
     imports: [

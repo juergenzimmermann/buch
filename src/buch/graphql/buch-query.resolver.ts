@@ -21,7 +21,7 @@ import { BuchReadService } from '../service/buch-read.service.js';
 import { HttpExceptionFilter } from './http-exception.filter.js';
 import { Public } from 'nest-keycloak-connect';
 import { ResponseTimeInterceptor } from '../../logger/response-time.interceptor.js';
-import { type Suchkriterien } from '../service/buch-read.service.js';
+import { type Suchkriterien } from '../service/suchkriterien.js';
 import { getLogger } from '../../logger/logger.js';
 
 export interface IdInput {

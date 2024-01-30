@@ -27,7 +27,7 @@ import {
     dbPopulate,
     dbResourcesDir,
     typeOrmModuleOptions,
-} from '../typeorm.js';
+} from '../typeormOptions.js';
 import { DataSource } from 'typeorm';
 import { InjectDataSource } from '@nestjs/typeorm';
 import { dbType } from '../db.js';

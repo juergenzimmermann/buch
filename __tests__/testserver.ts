@@ -30,7 +30,7 @@ import isPortReachable from 'is-port-reachable';
 import { join } from 'node:path';
 import { nodeConfig } from '../src/config/node.js';
 import { paths } from '../src/config/paths.js';
-import { typeOrmModuleOptions } from '../src/config/typeorm.js';
+import { typeOrmModuleOptions } from '../src/config/typeormOptions.js';
 
 export const loginPath = `${paths.auth}/${paths.login}`;
 export const refreshPath = `${paths.auth}/${paths.refresh}`;

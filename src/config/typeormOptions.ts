@@ -20,10 +20,12 @@
  * @packageDocumentation
  */
 import { BASEDIR, config } from './app.js';
+import {
+    OracleNamingStrategy,
+    SnakeNamingStrategy,
+} from './typeormNamingStrategy.js';
 import { Buch } from '../buch/entity/buch.entity.js';
 import { type DataSourceOptions } from 'typeorm';
-import { OracleNamingStrategy } from './typeorm-naming-strategy/oracle-naming-strategy.js';
-import { SnakeNamingStrategy } from './typeorm-naming-strategy/snake-naming-strategy.js';
 import { dbType } from './db.js';
 import { entities } from '../buch/entity/entities.js';
 import { loggerDefaultValue } from './logger.js';
