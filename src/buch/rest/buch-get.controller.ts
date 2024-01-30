@@ -217,7 +217,7 @@ export class BuchGetController {
     ): Promise<Response<BuchModel | undefined>> {
         this.#logger.debug('getById: idStr=%s, version=%s', idStr, version);
         const id = Number(idStr);
-        if (Number.isInteger(id)) {
+        if (!Number.isInteger(id)) {
             this.#logger.debug('getById: not isInteger()');
             throw new NotFoundException(`Die Buch-ID ${idStr} ist ungueltig.`);
         }
