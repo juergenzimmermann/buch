@@ -33,7 +33,7 @@
     "allowUnreachableCode": false, // return bei then-else und try-catch
     "allowUnusedLabels": false, // Labels muessen auch benutzt werden
     "esModuleInterop": true, // Kompatibilitaet zwischen CommonJS und ES Modulen
-    "exactOptionalPropertyTypes": true, // bei optionalen Properties ggf. explizit undefined spezifizieren
+    // "exactOptionalPropertyTypes": true, // bei optionalen Properties ggf. explizit undefined spezifizieren
     "forceConsistentCasingInFileNames": true, // Gross-/Kleinschreibung bei Dateinamen
     // "importsNotUsedAsValues": "error", // Fehler bei nicht-benutzen Imports
     "noErrorTruncation": true,

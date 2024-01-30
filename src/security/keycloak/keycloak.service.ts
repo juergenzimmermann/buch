@@ -33,7 +33,7 @@ export interface LoginResult {
     expires_in: number;
     refresh_token: string;
     refresh_expires_in: number;
-    roles?: string[] | undefined;
+    roles?: string[];
 }
 
 @Injectable()
