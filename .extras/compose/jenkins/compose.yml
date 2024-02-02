@@ -35,7 +35,7 @@ services:
   docker:
     # TODO https://github.com/docker-library/docker/issues/467
     #image: docker:dind
-    image: docker:25.0.1-dind
+    image: docker:25.0.2-dind
     restart: always
     ports:
       - published: 3000
