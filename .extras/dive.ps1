@@ -35,7 +35,7 @@ if ($versionMinimum -gt $versionCurrent) {
 # Titel setzen
 $host.ui.RawUI.WindowTitle = 'dive'
 
-$diveVersion = 'v0.11.0'
+$diveVersion = 'v0.12.0'
 $imagePrefix = 'juergenzimmermann/'
 $imageBase = 'buch'
 $imageTag = "2024.04.0-$base"
