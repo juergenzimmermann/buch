@@ -81,7 +81,7 @@ export class KeycloakService implements KeycloakConnectOptionsFactory {
             return;
         }
 
-        this.#logRoles(response);
+        this.#logPayload(response);
         this.#logger.debug('login: response.data=%o', response.data);
         return response.data;
     }
@@ -114,18 +114,30 @@ export class KeycloakService implements KeycloakConnectOptionsFactory {
     }
 
     // Extraktion der Rollen: wird auf Client-Seite benoetigt
-    // { ..., "resource_access": { "buch-client": { "roles": ["admin"] } ...}
-    // https://www.keycloak.org/docs-api/23.0.4/rest-api/index.html#ClientInitialAccessCreatePresentation
-    #logRoles(response: AxiosResponse<Record<string, string | number>>) {
+    // { ..., "azp": "buch-client", "exp": ..., "resource_access": { "buch-client": { "roles": ["admin"] } ...}
+    // azp = authorized party
+    #logPayload(response: AxiosResponse<Record<string, string | number>>) {
+        // https://www.keycloak.org/docs-api/23.0.6/rest-api/index.html#ClientInitialAccessCreatePresentation
         const { access_token } = response.data;
         // Payload ist der mittlere Teil zwischen 2 Punkten und mit Base64 codiert
         const [, payloadStr] = (access_token as string).split('.');
+
         // Base64 decodieren
-        const payloadDecoded = atob(payloadStr!);
-        // JSON-Objekt aus dem decodierten String herstellen
-        const payload = JSON.parse(payloadDecoded); // eslint-disable-line @typescript-eslint/no-unsafe-assignment
-        const { roles } = payload.resource_access['buch-client']; // eslint-disable-line @typescript-eslint/no-unsafe-assignment
-        this.#logger.debug('#logRoles: roles=%o', roles);
+        if (payloadStr === undefined) {
+            return;
+        }
+        const payloadDecoded = atob(payloadStr);
+
+        // JSON-Objekt fuer Payload aus dem decodierten String herstellen
+
+        /* eslint-disable @typescript-eslint/no-unsafe-assignment */
+        const payload = JSON.parse(payloadDecoded);
+        const { azp, exp, resource_access } = payload;
+        this.#logger.debug('#logPayload: exp=%s', exp);
+        const { roles } = resource_access[azp]; // eslint-disable-line security/detect-object-injection
+        /* eslint-enable @typescript-eslint/no-unsafe-assignment */
+
+        this.#logger.debug('#logPayload: roles=%o', roles);
     }
 }
 /* eslint-enable camelcase, @typescript-eslint/naming-convention */
