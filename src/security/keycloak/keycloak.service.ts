@@ -28,14 +28,6 @@ import { keycloakConnectOptions, paths } from '../../config/keycloak.js';
 import { Injectable } from '@nestjs/common';
 import { getLogger } from '../../logger/logger.js';
 
-export interface LoginResult {
-    access_token: string;
-    expires_in: number;
-    refresh_token: string;
-    refresh_expires_in: number;
-    roles?: string[];
-}
-
 @Injectable()
 export class KeycloakService implements KeycloakConnectOptionsFactory {
     readonly #loginHeaders: RawAxiosRequestHeaders;
@@ -89,21 +81,9 @@ export class KeycloakService implements KeycloakConnectOptionsFactory {
             return;
         }
 
-        // https://www.keycloak.org/docs-api/23.0.4/rest-api/index.html#ClientInitialAccessCreatePresentation
-        const { access_token, expires_in, refresh_expires_in, refresh_token } =
-            response.data;
-
-        const roles = await this.#getRoles(access_token as string);
-
-        const result: LoginResult = {
-            access_token: access_token as string,
-            expires_in: expires_in as number,
-            refresh_token: refresh_token as string,
-            refresh_expires_in: refresh_expires_in as number,
-            roles,
-        };
-        this.#logger.debug('login: result=%o', result);
-        return result;
+        this.#logRoles(response);
+        this.#logger.debug('login: response.data=%o', response.data);
+        return response.data;
     }
 
     async refresh(refresh_token: string | undefined) {
@@ -129,39 +109,23 @@ export class KeycloakService implements KeycloakConnectOptionsFactory {
             );
             return;
         }
-        this.#logger.debug('refresh: response=%o', response);
-
-        // https://www.keycloak.org/docs-api/23.0.4/rest-api/index.html#ClientInitialAccessCreatePresentation
-        const { access_token, expires_in, refresh_expires_in } = response.data;
-        const result: LoginResult = {
-            access_token: access_token as string,
-            expires_in: expires_in as number,
-            refresh_token: response.data.refresh_token as string,
-            refresh_expires_in: refresh_expires_in as number,
-        };
-        this.#logger.debug('refresh: result=%o', result);
-        return result;
+        this.#logger.debug('refresh: response.data=%o', response.data);
+        return response.data;
     }
 
-    async #getRoles(access_token: string) {
-        let response: AxiosResponse<Record<string, any>>;
-        try {
-            response = await this.#keycloakClient.get(paths.userInfo, {
-                headers: {
-                    Authorization: `Bearer ${access_token}`,
-                },
-            });
-        } catch {
-            this.#logger.warn('#getRoles: Fehler bei %s', paths.userInfo);
-            return;
-        }
-
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-        const { roles } =
-            response.data.resource_access[keycloakConnectOptions.clientId!];
-
-        this.#logger.debug('#getRoles: roles=%o', roles);
-        return roles as string[];
+    // Extraktion der Rollen: wird auf Client-Seite benoetigt
+    // { ..., "resource_access": { "buch-client": { "roles": ["admin"] } ...}
+    // https://www.keycloak.org/docs-api/23.0.4/rest-api/index.html#ClientInitialAccessCreatePresentation
+    #logRoles(response: AxiosResponse<Record<string, string | number>>) {
+        const { access_token } = response.data;
+        // Payload ist der mittlere Teil zwischen 2 Punkten und mit Base64 codiert
+        const [, payloadStr] = (access_token as string).split('.');
+        // Base64 decodieren
+        const payloadDecoded = atob(payloadStr!);
+        // JSON-Objekt aus dem decodierten String herstellen
+        const payload = JSON.parse(payloadDecoded); // eslint-disable-line @typescript-eslint/no-unsafe-assignment
+        const { roles } = payload.resource_access['buch-client']; // eslint-disable-line @typescript-eslint/no-unsafe-assignment
+        this.#logger.debug('#logRoles: roles=%o', roles);
     }
 }
 /* eslint-enable camelcase, @typescript-eslint/naming-convention */

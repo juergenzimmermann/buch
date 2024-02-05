@@ -71,29 +71,6 @@ Webbrowser `http://localhost:8080` oder `https://localhost:8443` aufgerufen hat:
                 Access Token Lifespan                       30 Minutes
                 Access Token Lifespan For Implicit Flow     30 Minutes
 
-    # https://stackoverflow.com/questions/57997377/get-the-user-roles-with-the-keycloak-userinfo-endpoint
-    # https://keycloak.discourse.group/t/user-realm-role-in-oidc-userinfo-endpoint/11822
-    Menüpunkt "Client scopes"
-        "roles" anklicken
-            Tab "mappers"
-                "client roles" anklicken
-                    "Add to userinfo" anklicken
-                    <Save> anklicken
-                Breadcrumb "Client scope details" anklicken
-                "realm roles" anklicken
-                    "Add to userinfo" anklicken
-                    <Save> anklicken
-
-        Breadcrumb "Client scope details" anklicken
-        # https://keycloak.discourse.group/t/issue-on-userinfo-endpoint-at-keycloak-20/18461/7
-        # https://github.com/keycloak/keycloak/issues/16403
-        # https://connect2id.com/products/server/docs/api/userinfo
-        <Create client scope> anklicken
-            Name            openid
-            Description     Zugriff auf Endpoint userinfo erlauben
-            Type            "Default" auswählen
-            <Save> anklicken
-
     Menüpunkt "Clients"
         <Create client> anklicken
         Client ID   buch-client
