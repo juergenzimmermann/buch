@@ -211,6 +211,7 @@ module.exports = {
         '@typescript-eslint/non-nullable-type-assertion-style': 'error',
         '@typescript-eslint/prefer-destructuring': 'error',
         '@typescript-eslint/prefer-enum-initializers': 'error',
+        '@typescript-eslint/prefer-find': 'error',
         '@typescript-eslint/prefer-includes': 'error',
         '@typescript-eslint/prefer-literal-enum-member': 'error',
         '@typescript-eslint/prefer-readonly': 'error',
@@ -505,6 +506,7 @@ module.exports = {
             multiline: { delimiter: 'semi' },
         }],
         '@stylistic/operator-linebreak': 'off',
+        '@stylistic/quote-props': ['error', 'as-needed'],
         '@stylistic/semi': ['error', 'always'],
     },
 };

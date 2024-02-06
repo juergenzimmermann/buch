@@ -45,7 +45,7 @@ export class KeycloakService implements KeycloakConnectOptionsFactory {
             'utf8',
         ).toString('base64');
         this.#loginHeaders = {
-            Authorization: `Basic ${authorization}`, // eslint-disable-line @stylistic/quote-props
+            Authorization: `Basic ${authorization}`,
             'Content-Type': 'application/x-www-form-urlencoded',
         };
 
