@@ -307,10 +307,9 @@ export class BuchGetController {
 
         this.#logger.debug('#toModel: buch=%o, links=%o', buch, links);
         const titelModel: TitelModel = {
-            titel: buch.titel?.titel ?? 'N/A', // eslint-disable-line unicorn/consistent-destructuring
-            untertitel: buch.titel?.untertitel ?? 'N/A', // eslint-disable-line unicorn/consistent-destructuring
+            titel: buch.titel?.titel ?? 'N/A',
+            untertitel: buch.titel?.untertitel ?? 'N/A',
         };
-        /* eslint-disable unicorn/consistent-destructuring */
         const buchModel: BuchModel = {
             isbn: buch.isbn,
             rating: buch.rating,
@@ -324,7 +323,6 @@ export class BuchGetController {
             titel: titelModel,
             _links: links,
         };
-        /* eslint-enable unicorn/consistent-destructuring */
 
         return buchModel;
     }
