@@ -192,7 +192,7 @@
     "ts-loader": "9.5.1",
     "ts-node": "10.9.2",
     "tsconfig-paths": "4.2.0",
-    "typedoc": "0.25.7",
+    "typedoc": "0.25.8",
     "typescript": "5.3.3",
     "unified": "11.0.4",
     "weak-napi": "2.0.2"
