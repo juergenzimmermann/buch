@@ -66,10 +66,12 @@ Webbrowser `http://localhost:8080` oder `https://localhost:8443` aufgerufen hat:
         Tab "Sessions"
             # Refresh Token: siehe https://stackoverflow.com/questions/52040265/how-to-specify-refresh-tokens-lifespan-in-keycloak
             SSO Session Idle                                60 Minutes
+            <Save> anklicken
         Tab "Tokens"
             Access Tokens
                 Access Token Lifespan                       30 Minutes
                 Access Token Lifespan For Implicit Flow     30 Minutes
+                <Save> anklicken
 
     Menüpunkt "Clients"
         <Create client> anklicken
@@ -88,23 +90,23 @@ Webbrowser `http://localhost:8080` oder `https://localhost:8443` aufgerufen hat:
             Tab "Roles"
                 <Create Role> anklicken
                 Role name       admin
-                <Save>
+                <Save> anklicken
                 <Create Role> anklicken
                 Role name       user
-                <Save>
+                <Save> anklicken
             Breadcrumb "Clients" anklicken
                 Tab "Initial access token"
-                    <Create>
+                    <Create> anklicken
                         Eine hinreichend lange Zeitdauer verwenden
 
     # https://www.keycloak.org/docs/latest/server_admin/index.html#assigning-permissions-using-roles-and-groups
     Menüpunkt "Realm roles"
         <Create role> anklicken
             Role name       buch-admin
-            <Save>
+            <Save> anklicken
         Breadcrumb "Realm roles" anklicken
             "buch-admin" anklicken
-                Drop-down Menü "Action":  "Add associated roles" auswählen
+                Drop-down Menü "Action" (in der rechten oberen Ecke):  "Add associated roles" auswählen
                 "Filter by clients"       auswählen und anklicken
                 "buch-client admin"       Haken setzen
                 <Assign> anklicken
@@ -114,7 +116,7 @@ Webbrowser `http://localhost:8080` oder `https://localhost:8443` aufgerufen hat:
             <Save>
         Breadcrumb "Realm roles" anklicken
             "buch-user" anklicken
-                Drop-down Menü "Action":  "Add associated roles" auswählen
+                Drop-down Menü "Action" (in der rechten oberen Ecke):  "Add associated roles" auswählen
                 "Filter by clients"       auswählen und anklicken
                 "buch-client user"        Haken setzen
                 <Assign> anklicken
@@ -122,7 +124,7 @@ Webbrowser `http://localhost:8080` oder `https://localhost:8443` aufgerufen hat:
 
     Menüpunkt "Users"
         <Add user>
-            Required User Actions:      "Update password" entfernen
+            Required User Actions:      Überprüfen, dass nichts ausgewählt ist
             Username                    admin
             Email                       admin@acme.com
             <Create> anklicken
@@ -135,13 +137,13 @@ Webbrowser `http://localhost:8080` oder `https://localhost:8443` aufgerufen hat:
             Tab "Role Mapping"
                 <Assign Role> anklicken
                     "Filter by clients" auswählen
-                        "buch-client user"     Haken setzen     (ggf. blättern)
+                        "buch-client admin"     Haken setzen     (ggf. blättern)
                         <Assign> anklicken
             Tab "Details"
                 Required user actions       Überprüfen, dass nichts ausgewählt ist
                 <Save> anklicken
         <Add user>
-            Required User Actions:      "Update password" entfernen
+            Required User Actions:      Überprüfen, dass nichts ausgewählt ist
             Username                    user
             Email                       user@acme.com
             <Create> anklicken
