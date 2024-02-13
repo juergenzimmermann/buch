@@ -64,12 +64,10 @@ describe('REST-Schnittstelle /login', () => {
 
         // when
         // eslint-disable-next-line @typescript-eslint/naming-convention
-        const response: AxiosResponse<{ access_token: string }> =
+        const { status, data }: AxiosResponse<{ access_token: string }> =
             await client.post(loginPath, body);
 
         // then
-        const { status, data } = response;
-
         expect(status).toBe(HttpStatus.OK);
 
         const { access_token } = data; // eslint-disable-line camelcase, @typescript-eslint/naming-convention
@@ -118,12 +116,10 @@ describe('REST-Schnittstelle /login', () => {
 
         // when
         // eslint-disable-next-line @typescript-eslint/naming-convention
-        const response: AxiosResponse<{ access_token: string }> =
+        const { status, data }: AxiosResponse<{ access_token: string }> =
             await client.post(refreshPath, body);
 
         // then
-        const { status, data } = response;
-
         expect(status).toBe(HttpStatus.OK);
 
         const { access_token } = data; // eslint-disable-line camelcase, @typescript-eslint/naming-convention

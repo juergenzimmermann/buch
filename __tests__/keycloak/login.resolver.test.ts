@@ -70,14 +70,12 @@ describe('Login', () => {
         };
 
         // when
-        const response: AxiosResponse<GraphQLResponseBody> = await client.post(
+        const { status, headers, data }: AxiosResponse<GraphQLResponseBody> = await client.post(
             graphqlPath,
             body,
         );
 
         // then
-        const { status, headers, data } = response;
-
         expect(status).toBe(HttpStatus.OK);
         // eslint-disable-next-line sonarjs/no-duplicate-string
         expect(headers['content-type']).toMatch(/json/iu);
@@ -119,14 +117,12 @@ describe('Login', () => {
         };
 
         // when
-        const response: AxiosResponse<GraphQLResponseBody> = await client.post(
+        const { status, headers, data }: AxiosResponse<GraphQLResponseBody> = await client.post(
             graphqlPath,
             body,
         );
 
         // then
-        const { status, headers, data } = response;
-
         expect(status).toBe(HttpStatus.OK);
         expect(headers['content-type']).toMatch(/json/iu);
         expect(data.data!.login).toBeNull();
@@ -179,14 +175,12 @@ describe('Login', () => {
         };
 
         // when
-        const response: AxiosResponse<GraphQLResponseBody> = await client.post(
+        const { status, headers, data }: AxiosResponse<GraphQLResponseBody> = await client.post(
             graphqlPath,
             body,
         );
 
         // then
-        const { status, headers, data } = response;
-
         expect(status).toBe(HttpStatus.OK);
         expect(headers['content-type']).toMatch(/json/iu);
         expect(data.errors).toBeUndefined();
