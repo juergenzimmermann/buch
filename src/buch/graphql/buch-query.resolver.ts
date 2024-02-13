@@ -46,8 +46,7 @@ export class BuchQueryResolver {
 
     @Query('buch')
     @Public()
-    async findById(@Args() idInput: IdInput) {
-        const { id } = idInput;
+    async findById(@Args() { id }: IdInput) {
         this.#logger.debug('findById: id=%d', id);
 
         const buch = await this.#service.findById({ id });
