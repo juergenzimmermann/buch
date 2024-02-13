@@ -99,11 +99,10 @@ export class LoginController {
     @ApiUnauthorizedResponse({
         description: 'Benutzername oder Passwort sind falsch.',
     })
-    async login(@Body() body: Login, @Res() res: Response) {
-        const { username, password } = body;
+    async login(@Body() { username, password }: Login, @Res() res: Response) {
         this.#logger.debug('login: username=%s', username);
 
-        const result = await this.#keycloakService.login(username, password);
+        const result = await this.#keycloakService.login({username, password});
         if (result === undefined) {
             return res.sendStatus(HttpStatus.UNAUTHORIZED);
         }

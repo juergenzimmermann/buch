@@ -28,6 +28,13 @@ import { keycloakConnectOptions, paths } from '../../config/keycloak.js';
 import { Injectable } from '@nestjs/common';
 import { getLogger } from '../../logger/logger.js';
 
+const { authServerUrl, clientId, secret } = keycloakConnectOptions;
+
+interface Login {
+    readonly username: string | undefined;
+    readonly password: string | undefined;
+}
+
 @Injectable()
 export class KeycloakService implements KeycloakConnectOptionsFactory {
     readonly #loginHeaders: RawAxiosRequestHeaders;
@@ -37,8 +44,6 @@ export class KeycloakService implements KeycloakConnectOptionsFactory {
     readonly #logger = getLogger(KeycloakService.name);
 
     constructor() {
-        const { authServerUrl, clientId, secret } = keycloakConnectOptions;
-
         // https://www.keycloak.org/docs-api/23.0.4/rest-api/index.html
         const authorization = Buffer.from(
             `${clientId}:${secret}`,
@@ -60,7 +65,7 @@ export class KeycloakService implements KeycloakConnectOptionsFactory {
         return keycloakConnectOptions;
     }
 
-    async login(username: string | undefined, password: string | undefined) {
+    async login({ username, password } : Login) {
         this.#logger.debug('login: username=%s', username);
         if (username === undefined || password === undefined) {
             return;

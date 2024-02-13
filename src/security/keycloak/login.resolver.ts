@@ -50,11 +50,10 @@ export class LoginResolver {
 
     @Mutation()
     @Public()
-    async login(@Args() input: LoginInput) {
-        this.#logger.debug('login: input=%o', input);
-        const { username, password } = input;
+    async login(@Args() { username, password }: LoginInput) {
+        this.#logger.debug('login: username=%s', username);
 
-        const result = await this.#keycloakService.login(username, password);
+        const result = await this.#keycloakService.login({username, password});
         if (result === undefined) {
             throw new BadUserInputError(
                 'Falscher Benutzername oder falsches Passwort',
