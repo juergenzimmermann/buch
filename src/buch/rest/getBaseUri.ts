@@ -26,9 +26,8 @@ import { nodeConfig } from '../../config/node.js';
 
 const port = `:${nodeConfig.port}`;
 
-export const getBaseUri = (req: Request) => {
-    const { protocol, hostname, url } = req;
-    // Query-String entfernen
+export const getBaseUri = ({ protocol, hostname, url }: Request) => {
+    // Query-String entfernen, falls vorhanden
     let basePath = url.includes('?') ? url.slice(0, url.lastIndexOf('?')) : url;
 
     // ID entfernen, falls der Pfad damit endet
