@@ -165,10 +165,8 @@ export class BuchWriteService {
         );
     }
 
-    async #validateCreate(buch: Buch): Promise<undefined> {
-        this.#logger.debug('#validateCreate: buch=%o', buch);
-
-        const { isbn } = buch;
+    async #validateCreate({ isbn }: Buch): Promise<undefined> {
+        this.#logger.debug('#validateCreate: isbn=%s', isbn);
         if (await this.#repo.existsBy({ isbn })) {
             throw new IsbnExistsException(isbn);
         }
