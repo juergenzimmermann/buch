@@ -163,11 +163,8 @@ describe('PUT /rest/:id', () => {
         ];
 
         // when
-        const { status, data }: AxiosResponse<Record<string, any>> = await client.put(
-            url,
-            geaendertesBuchInvalid,
-            { headers },
-        );
+        const { status, data }: AxiosResponse<Record<string, any>> =
+            await client.put(url, geaendertesBuchInvalid, { headers });
 
         // then
         expect(status).toBe(HttpStatus.UNPROCESSABLE_ENTITY);

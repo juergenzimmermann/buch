@@ -64,7 +64,8 @@ describe('GET /rest', () => {
         // given
 
         // when
-        const { status, headers, data }: AxiosResponse<BuecherModel> = await client.get('/');
+        const { status, headers, data }: AxiosResponse<BuecherModel> =
+            await client.get('/');
 
         // then
         expect(status).toBe(HttpStatus.OK);
@@ -86,9 +87,8 @@ describe('GET /rest', () => {
         const params = { titel: titelVorhanden };
 
         // when
-        const { status, headers, data }: AxiosResponse<BuecherModel> = await client.get('/', {
-            params,
-        });
+        const { status, headers, data }: AxiosResponse<BuecherModel> =
+            await client.get('/', { params });
 
         // then
         expect(status).toBe(HttpStatus.OK);
@@ -112,9 +112,10 @@ describe('GET /rest', () => {
         const params = { titel: titelNichtVorhanden };
 
         // when
-        const { status, data }: AxiosResponse<ErrorResponse> = await client.get('/', {
-            params,
-        });
+        const { status, data }: AxiosResponse<ErrorResponse> = await client.get(
+            '/',
+            { params },
+        );
 
         // then
         expect(status).toBe(HttpStatus.NOT_FOUND);
@@ -130,9 +131,8 @@ describe('GET /rest', () => {
         const params = { [schlagwortVorhanden]: 'true' };
 
         // when
-        const { status, headers, data }: AxiosResponse<BuecherModel> = await client.get('/', {
-            params,
-        });
+        const { status, headers, data }: AxiosResponse<BuecherModel> =
+            await client.get('/', { params });
 
         // then
         expect(status).toBe(HttpStatus.OK);
@@ -157,9 +157,10 @@ describe('GET /rest', () => {
         const params = { [schlagwortNichtVorhanden]: 'true' };
 
         // when
-        const { status, data }: AxiosResponse<ErrorResponse> = await client.get('/', {
-            params,
-        });
+        const { status, data }: AxiosResponse<ErrorResponse> = await client.get(
+            '/',
+            { params },
+        );
 
         // then
         expect(status).toBe(HttpStatus.NOT_FOUND);
@@ -175,9 +176,10 @@ describe('GET /rest', () => {
         const params = { foo: 'bar' };
 
         // when
-        const { status, data }: AxiosResponse<ErrorResponse> = await client.get('/', {
-            params,
-        });
+        const { status, data }: AxiosResponse<ErrorResponse> = await client.get(
+            '/',
+            { params },
+        );
 
         // then
         expect(status).toBe(HttpStatus.NOT_FOUND);

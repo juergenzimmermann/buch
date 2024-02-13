@@ -54,7 +54,6 @@ module.exports = {
         'sonarjs',
         'prettier',
         'promise',
-        'import',
         'security',
         'security-node',
         'prefer-arrow',
@@ -95,8 +94,8 @@ module.exports = {
         'plugin:import/errors',
         'plugin:import/warnings',
         'plugin:import/typescript',
-        // https://github.com/jest-community/eslint-plugin-jest#rules
-        'plugin:eslint-comments/recommended',
+        // https://github.com/eslint-community/eslint-plugin-eslint-comments/blob/main/lib/configs/recommended.js
+        'plugin:@eslint-community/eslint-comments/recommended',
         // https://github.com/ota-meshi/eslint-plugin-regexp/blob/master/lib/configs/recommended.ts
         'plugin:regexp/recommended',
         // https://eslint.style/guide/config-presets
@@ -110,6 +109,8 @@ module.exports = {
 
     // https://eslint.org/docs/latest/use/configure/rules#using-configuration-files
     rules: {
+        '@eslint-community/eslint-comments/no-unused-disable': 'error',
+
         // https://github.com/typescript-eslint/typescript-eslint/tree/main/packages/eslint-plugin#supported-rules
         // https://github.com/typescript-eslint/typescript-eslint/tree/main/packages/eslint-plugin/docs/rules
         // https://github.com/typescript-eslint/typescript-eslint/blob/main/packages/eslint-plugin/src/configs/recommended-type-checked.ts
@@ -242,8 +243,6 @@ module.exports = {
             ignoreStatic: true,
         }],
         '@typescript-eslint/unified-signatures': 'error',
-
-        'eslint-comments/no-unused-disable': 'error',
 
         // https://github.com/import-js/eslint-plugin-import/tree/main/docs/rules
         'import/consistent-type-specifier-style': ['error', 'prefer-inline'],

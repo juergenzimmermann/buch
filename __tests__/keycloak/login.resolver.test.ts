@@ -70,10 +70,8 @@ describe('Login', () => {
         };
 
         // when
-        const { status, headers, data }: AxiosResponse<GraphQLResponseBody> = await client.post(
-            graphqlPath,
-            body,
-        );
+        const { status, headers, data }: AxiosResponse<GraphQLResponseBody> =
+            await client.post(graphqlPath, body);
 
         // then
         expect(status).toBe(HttpStatus.OK);
@@ -117,10 +115,8 @@ describe('Login', () => {
         };
 
         // when
-        const { status, headers, data }: AxiosResponse<GraphQLResponseBody> = await client.post(
-            graphqlPath,
-            body,
-        );
+        const { status, headers, data }: AxiosResponse<GraphQLResponseBody> =
+            await client.post(graphqlPath, body);
 
         // then
         expect(status).toBe(HttpStatus.OK);
@@ -142,7 +138,6 @@ describe('Login', () => {
         expect(extensions!.code).toBe('BAD_USER_INPUT');
     });
 
-    // eslint-disable-next-line max-lines-per-function
     test('Refresh', async () => {
         // given
         const username = 'admin';
@@ -175,10 +170,8 @@ describe('Login', () => {
         };
 
         // when
-        const { status, headers, data }: AxiosResponse<GraphQLResponseBody> = await client.post(
-            graphqlPath,
-            body,
-        );
+        const { status, headers, data }: AxiosResponse<GraphQLResponseBody> =
+            await client.post(graphqlPath, body);
 
         // then
         expect(status).toBe(HttpStatus.OK);

@@ -97,11 +97,8 @@ describe('GraphQL Mutations', () => {
         };
 
         // when
-        const { status, headers, data }: AxiosResponse<GraphQLResponseBody> = await client.post(
-            graphqlPath,
-            body,
-            { headers: authorization },
-        );
+        const { status, headers, data }: AxiosResponse<GraphQLResponseBody> =
+            await client.post(graphqlPath, body, { headers: authorization });
 
         // then
         expect(status).toBe(HttpStatus.OK);
@@ -155,11 +152,8 @@ describe('GraphQL Mutations', () => {
         ];
 
         // when
-        const { status, headers, data }: AxiosResponse<GraphQLResponseBody> = await client.post(
-            graphqlPath,
-            body,
-            { headers: authorization },
-        );
+        const { status, headers, data }: AxiosResponse<GraphQLResponseBody> =
+            await client.post(graphqlPath, body, { headers: authorization });
 
         // then
         expect(status).toBe(HttpStatus.OK);
@@ -212,11 +206,8 @@ describe('GraphQL Mutations', () => {
         };
 
         // when
-        const { status, headers, data }: AxiosResponse<GraphQLResponseBody> = await client.post(
-            graphqlPath,
-            body,
-            { headers: authorization },
-        );
+        const { status, headers, data }: AxiosResponse<GraphQLResponseBody> =
+            await client.post(graphqlPath, body, { headers: authorization });
 
         // then
         expect(status).toBe(HttpStatus.OK);
@@ -230,7 +221,6 @@ describe('GraphQL Mutations', () => {
     });
 
     // -------------------------------------------------------------------------
-    // eslint-disable-next-line max-lines-per-function
     test('Buch mit ungueltigen Werten aktualisieren', async () => {
         // given
         const token = await loginGraphQL(client);
@@ -269,11 +259,8 @@ describe('GraphQL Mutations', () => {
         ];
 
         // when
-        const { status, headers, data }: AxiosResponse<GraphQLResponseBody> = await client.post(
-            graphqlPath,
-            body,
-            { headers: authorization },
-        );
+        const { status, headers, data }: AxiosResponse<GraphQLResponseBody> =
+            await client.post(graphqlPath, body, { headers: authorization });
 
         // then
         expect(status).toBe(HttpStatus.OK);
@@ -294,7 +281,6 @@ describe('GraphQL Mutations', () => {
     });
 
     // -------------------------------------------------------------------------
-    // eslint-disable-next-line max-lines-per-function
     test('Nicht-vorhandenes Buch aktualisieren', async () => {
         // given
         const token = await loginGraphQL(client);
@@ -325,11 +311,8 @@ describe('GraphQL Mutations', () => {
         };
 
         // when
-        const { status, headers, data }: AxiosResponse<GraphQLResponseBody> = await client.post(
-            graphqlPath,
-            body,
-            { headers: authorization },
-        );
+        const { status, headers, data }: AxiosResponse<GraphQLResponseBody> =
+            await client.post(graphqlPath, body, { headers: authorization });
 
         // then
         expect(status).toBe(HttpStatus.OK);
@@ -369,11 +352,8 @@ describe('GraphQL Mutations', () => {
         };
 
         // when
-        const { status, headers, data }: AxiosResponse<GraphQLResponseBody> = await client.post(
-            graphqlPath,
-            body,
-            { headers: authorization },
-        );
+        const { status, headers, data }: AxiosResponse<GraphQLResponseBody> =
+            await client.post(graphqlPath, body, { headers: authorization });
 
         // then
         expect(status).toBe(HttpStatus.OK);
@@ -400,8 +380,15 @@ describe('GraphQL Mutations', () => {
         };
 
         // when
-        const { status, headers, data }: AxiosResponse<Record<'errors' | 'data', any>> =
-            await client.post(graphqlPath, body, { headers: authorization });
+        const {
+            status,
+            headers,
+            data,
+        }: AxiosResponse<Record<'errors' | 'data', any>> = await client.post(
+            graphqlPath,
+            body,
+            { headers: authorization },
+        );
 
         // then
         expect(status).toBe(HttpStatus.OK);

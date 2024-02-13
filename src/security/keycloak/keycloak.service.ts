@@ -65,7 +65,7 @@ export class KeycloakService implements KeycloakConnectOptionsFactory {
         return keycloakConnectOptions;
     }
 
-    async login({ username, password } : Login) {
+    async login({ username, password }: Login) {
         this.#logger.debug('login: username=%s', username);
         if (username === undefined || password === undefined) {
             return;

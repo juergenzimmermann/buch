@@ -1,4 +1,4 @@
-// eslint-disable-next-line eslint-comments/disable-enable-pair
+// @eslint-community/eslint-disable-next-line eslint-comments/disable-enable-pair
 /* eslint-disable max-lines */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 /*
@@ -110,10 +110,8 @@ describe('GraphQL Queries', () => {
         };
 
         // when
-        const { status, headers, data }: AxiosResponse<GraphQLResponseBody> = await client.post(
-            graphqlPath,
-            body,
-        );
+        const { status, headers, data }: AxiosResponse<GraphQLResponseBody> =
+            await client.post(graphqlPath, body);
 
         // then
         expect(status).toBe(HttpStatus.OK);
@@ -145,10 +143,8 @@ describe('GraphQL Queries', () => {
         };
 
         // when
-        const { status, headers, data }: AxiosResponse<GraphQLResponseBody> = await client.post(
-            graphqlPath,
-            body,
-        );
+        const { status, headers, data }: AxiosResponse<GraphQLResponseBody> =
+            await client.post(graphqlPath, body);
 
         // then
         expect(status).toBe(HttpStatus.OK);
@@ -187,10 +183,8 @@ describe('GraphQL Queries', () => {
         };
 
         // when
-        const { status, headers, data }: AxiosResponse<GraphQLResponseBody> = await client.post(
-            graphqlPath,
-            body,
-        );
+        const { status, headers, data }: AxiosResponse<GraphQLResponseBody> =
+            await client.post(graphqlPath, body);
 
         // then
         expect(status).toBe(HttpStatus.OK);
@@ -229,10 +223,8 @@ describe('GraphQL Queries', () => {
         };
 
         // when
-        const { status, headers, data }: AxiosResponse<GraphQLResponseBody> = await client.post(
-            graphqlPath,
-            body,
-        );
+        const { status, headers, data }: AxiosResponse<GraphQLResponseBody> =
+            await client.post(graphqlPath, body);
 
         // then
         expect(status).toBe(HttpStatus.OK);
@@ -272,10 +264,8 @@ describe('GraphQL Queries', () => {
         };
 
         // when
-        const { status, headers, data }: AxiosResponse<GraphQLResponseBody> = await client.post(
-            graphqlPath,
-            body,
-        );
+        const { status, headers, data }: AxiosResponse<GraphQLResponseBody> =
+            await client.post(graphqlPath, body);
 
         // then
         expect(status).toBe(HttpStatus.OK);
@@ -314,10 +304,8 @@ describe('GraphQL Queries', () => {
         };
 
         // when
-        const { status, headers, data }: AxiosResponse<GraphQLResponseBody> = await client.post(
-            graphqlPath,
-            body,
-        );
+        const { status, headers, data }: AxiosResponse<GraphQLResponseBody> =
+            await client.post(graphqlPath, body);
 
         // then
         expect(status).toBe(HttpStatus.OK);
@@ -360,10 +348,8 @@ describe('GraphQL Queries', () => {
         };
 
         // when
-        const { status, headers, data }: AxiosResponse<GraphQLResponseBody> = await client.post(
-            graphqlPath,
-            body,
-        );
+        const { status, headers, data }: AxiosResponse<GraphQLResponseBody> =
+            await client.post(graphqlPath, body);
 
         // then
         expect(status).toBe(HttpStatus.OK);
@@ -405,10 +391,8 @@ describe('GraphQL Queries', () => {
         };
 
         // when
-        const { status, headers, data }: AxiosResponse<GraphQLResponseBody> = await client.post(
-            graphqlPath,
-            body,
-        );
+        const { status, headers, data }: AxiosResponse<GraphQLResponseBody> =
+            await client.post(graphqlPath, body);
 
         // then
         expect(status).toBe(HttpStatus.OK);
@@ -448,10 +432,8 @@ describe('GraphQL Queries', () => {
         };
 
         // when
-        const { status, headers, data }: AxiosResponse<GraphQLResponseBody> = await client.post(
-            graphqlPath,
-            body,
-        );
+        const { status, headers, data }: AxiosResponse<GraphQLResponseBody> =
+            await client.post(graphqlPath, body);
 
         // then
         expect(status).toBe(HttpStatus.OK);
@@ -492,10 +474,8 @@ describe('GraphQL Queries', () => {
         };
 
         // when
-        const { status, headers, data }: AxiosResponse<GraphQLResponseBody> = await client.post(
-            graphqlPath,
-            body,
-        );
+        const { status, headers, data }: AxiosResponse<GraphQLResponseBody> =
+            await client.post(graphqlPath, body);
 
         // then
         expect(status).toBe(HttpStatus.BAD_REQUEST);
@@ -531,10 +511,8 @@ describe('GraphQL Queries', () => {
         };
 
         // when
-        const { status, headers, data }: AxiosResponse<GraphQLResponseBody> = await client.post(
-            graphqlPath,
-            body,
-        );
+        const { status, headers, data }: AxiosResponse<GraphQLResponseBody> =
+            await client.post(graphqlPath, body);
 
         // then
         expect(status).toBe(HttpStatus.OK);
@@ -559,3 +537,4 @@ describe('GraphQL Queries', () => {
 });
 
 /* eslint-enable @typescript-eslint/no-unsafe-assignment */
+/* eslint-enable max-lines */

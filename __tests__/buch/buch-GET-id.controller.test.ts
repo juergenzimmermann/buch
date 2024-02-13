@@ -82,7 +82,8 @@ describe('GET /rest/:id', () => {
         const url = `/${idVorhanden}`;
 
         // when
-        const { status, headers, data }: AxiosResponse<BuchModel> = await client.get(url);
+        const { status, headers, data }: AxiosResponse<BuchModel> =
+            await client.get(url);
 
         // then
         expect(status).toBe(HttpStatus.OK);
@@ -100,7 +101,8 @@ describe('GET /rest/:id', () => {
         const url = `/${idNichtVorhanden}`;
 
         // when
-        const { status, data }: AxiosResponse<ErrorResponse> = await client.get(url);
+        const { status, data }: AxiosResponse<ErrorResponse> =
+            await client.get(url);
 
         // then
         expect(status).toBe(HttpStatus.NOT_FOUND);
@@ -117,7 +119,8 @@ describe('GET /rest/:id', () => {
         const url = `/${idFalsch}`;
 
         // when
-        const { status, data }: AxiosResponse<ErrorResponse> = await client.get(url);
+        const { status, data }: AxiosResponse<ErrorResponse> =
+            await client.get(url);
 
         // then
         expect(status).toBe(HttpStatus.NOT_FOUND);
