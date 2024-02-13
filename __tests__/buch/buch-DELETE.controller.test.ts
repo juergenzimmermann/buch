@@ -64,13 +64,11 @@ describe('DELETE /rest/buecher', () => {
         };
 
         // when
-        const response: AxiosResponse<string> = await client.delete(url, {
+        const { status, data }: AxiosResponse<string> = await client.delete(url, {
             headers,
         });
 
         // then
-        const { status, data } = response;
-
         expect(status).toBe(HttpStatus.NO_CONTENT);
         expect(data).toBeDefined();
     });

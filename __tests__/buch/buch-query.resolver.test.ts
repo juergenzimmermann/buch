@@ -110,14 +110,12 @@ describe('GraphQL Queries', () => {
         };
 
         // when
-        const response: AxiosResponse<GraphQLResponseBody> = await client.post(
+        const { status, headers, data }: AxiosResponse<GraphQLResponseBody> = await client.post(
             graphqlPath,
             body,
         );
 
         // then
-        const { status, headers, data } = response;
-
         expect(status).toBe(HttpStatus.OK);
         expect(headers['content-type']).toMatch(/json/iu); // eslint-disable-line sonarjs/no-duplicate-string
         expect(data.errors).toBeUndefined();
@@ -147,14 +145,12 @@ describe('GraphQL Queries', () => {
         };
 
         // when
-        const response: AxiosResponse<GraphQLResponseBody> = await client.post(
+        const { status, headers, data }: AxiosResponse<GraphQLResponseBody> = await client.post(
             graphqlPath,
             body,
         );
 
         // then
-        const { status, headers, data } = response;
-
         expect(status).toBe(HttpStatus.OK);
         expect(headers['content-type']).toMatch(/json/iu);
         expect(data.data!.buch).toBeNull();
@@ -191,14 +187,12 @@ describe('GraphQL Queries', () => {
         };
 
         // when
-        const response: AxiosResponse<GraphQLResponseBody> = await client.post(
+        const { status, headers, data }: AxiosResponse<GraphQLResponseBody> = await client.post(
             graphqlPath,
             body,
         );
 
         // then
-        const { status, headers, data } = response;
-
         expect(status).toBe(HttpStatus.OK);
         expect(headers['content-type']).toMatch(/json/iu);
         expect(data.errors).toBeUndefined();
@@ -235,14 +229,12 @@ describe('GraphQL Queries', () => {
         };
 
         // when
-        const response: AxiosResponse<GraphQLResponseBody> = await client.post(
+        const { status, headers, data }: AxiosResponse<GraphQLResponseBody> = await client.post(
             graphqlPath,
             body,
         );
 
         // then
-        const { status, headers, data } = response;
-
         expect(status).toBe(HttpStatus.OK);
         expect(headers['content-type']).toMatch(/json/iu);
         expect(data.errors).toBeUndefined();
@@ -280,14 +272,12 @@ describe('GraphQL Queries', () => {
         };
 
         // when
-        const response: AxiosResponse<GraphQLResponseBody> = await client.post(
+        const { status, headers, data }: AxiosResponse<GraphQLResponseBody> = await client.post(
             graphqlPath,
             body,
         );
 
         // then
-        const { status, headers, data } = response;
-
         expect(status).toBe(HttpStatus.OK);
         expect(headers['content-type']).toMatch(/json/iu);
         expect(data.data!.buecher).toBeNull();
@@ -324,14 +314,12 @@ describe('GraphQL Queries', () => {
         };
 
         // when
-        const response: AxiosResponse<GraphQLResponseBody> = await client.post(
+        const { status, headers, data }: AxiosResponse<GraphQLResponseBody> = await client.post(
             graphqlPath,
             body,
         );
 
         // then
-        const { status, headers, data } = response;
-
         expect(status).toBe(HttpStatus.OK);
         expect(headers['content-type']).toMatch(/json/iu);
         expect(data.errors).toBeUndefined();
@@ -372,14 +360,12 @@ describe('GraphQL Queries', () => {
         };
 
         // when
-        const response: AxiosResponse<GraphQLResponseBody> = await client.post(
+        const { status, headers, data }: AxiosResponse<GraphQLResponseBody> = await client.post(
             graphqlPath,
             body,
         );
 
         // then
-        const { status, headers, data } = response;
-
         expect(status).toBe(HttpStatus.OK);
         expect(headers['content-type']).toMatch(/json/iu);
         expect(data.errors).toBeUndefined();
@@ -419,14 +405,12 @@ describe('GraphQL Queries', () => {
         };
 
         // when
-        const response: AxiosResponse<GraphQLResponseBody> = await client.post(
+        const { status, headers, data }: AxiosResponse<GraphQLResponseBody> = await client.post(
             graphqlPath,
             body,
         );
 
         // then
-        const { status, headers, data } = response;
-
         expect(status).toBe(HttpStatus.OK);
         expect(headers['content-type']).toMatch(/json/iu);
         expect(data.data!.buecher).toBeNull();
@@ -464,14 +448,12 @@ describe('GraphQL Queries', () => {
         };
 
         // when
-        const response: AxiosResponse<GraphQLResponseBody> = await client.post(
+        const { status, headers, data }: AxiosResponse<GraphQLResponseBody> = await client.post(
             graphqlPath,
             body,
         );
 
         // then
-        const { status, headers, data } = response;
-
         expect(status).toBe(HttpStatus.OK);
         expect(headers['content-type']).toMatch(/json/iu);
         expect(data.errors).toBeUndefined();
@@ -510,14 +492,12 @@ describe('GraphQL Queries', () => {
         };
 
         // when
-        const response: AxiosResponse<GraphQLResponseBody> = await client.post(
+        const { status, headers, data }: AxiosResponse<GraphQLResponseBody> = await client.post(
             graphqlPath,
             body,
         );
 
         // then
-        const { status, headers, data } = response;
-
         expect(status).toBe(HttpStatus.BAD_REQUEST);
         expect(headers['content-type']).toMatch(/json/iu);
         expect(data.data).toBeUndefined();
@@ -551,14 +531,12 @@ describe('GraphQL Queries', () => {
         };
 
         // when
-        const response: AxiosResponse<GraphQLResponseBody> = await client.post(
+        const { status, headers, data }: AxiosResponse<GraphQLResponseBody> = await client.post(
             graphqlPath,
             body,
         );
 
         // then
-        const { status, headers, data } = response;
-
         expect(status).toBe(HttpStatus.OK);
         expect(headers['content-type']).toMatch(/json/iu);
         expect(data.errors).toBeUndefined();

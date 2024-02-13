@@ -82,11 +82,9 @@ describe('GET /rest/:id', () => {
         const url = `/${idVorhanden}`;
 
         // when
-        const response: AxiosResponse<BuchModel> = await client.get(url);
+        const { status, headers, data }: AxiosResponse<BuchModel> = await client.get(url);
 
         // then
-        const { status, headers, data } = response;
-
         expect(status).toBe(HttpStatus.OK);
         expect(headers['content-type']).toMatch(/json/iu);
 
@@ -102,11 +100,9 @@ describe('GET /rest/:id', () => {
         const url = `/${idNichtVorhanden}`;
 
         // when
-        const response: AxiosResponse<ErrorResponse> = await client.get(url);
+        const { status, data }: AxiosResponse<ErrorResponse> = await client.get(url);
 
         // then
-        const { status, data } = response;
-
         expect(status).toBe(HttpStatus.NOT_FOUND);
 
         const { error, message, statusCode } = data;
@@ -121,11 +117,9 @@ describe('GET /rest/:id', () => {
         const url = `/${idFalsch}`;
 
         // when
-        const response: AxiosResponse<ErrorResponse> = await client.get(url);
+        const { status, data }: AxiosResponse<ErrorResponse> = await client.get(url);
 
         // then
-        const { status, data } = response;
-
         expect(status).toBe(HttpStatus.NOT_FOUND);
 
         const { error, statusCode } = data;
@@ -139,13 +133,11 @@ describe('GET /rest/:id', () => {
         const url = `/${idVorhandenETag}`;
 
         // when
-        const response: AxiosResponse<string> = await client.get(url, {
+        const { status, data }: AxiosResponse<string> = await client.get(url, {
             headers: { 'If-None-Match': '"0"' }, // eslint-disable-line @typescript-eslint/naming-convention
         });
 
         // then
-        const { status, data } = response;
-
         expect(status).toBe(HttpStatus.NOT_MODIFIED);
         expect(data).toBe('');
     });

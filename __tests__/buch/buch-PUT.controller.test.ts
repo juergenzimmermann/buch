@@ -117,15 +117,13 @@ describe('PUT /rest/:id', () => {
         headers['If-Match'] = '"0"';
 
         // when
-        const response: AxiosResponse<string> = await client.put(
+        const { status, data }: AxiosResponse<string> = await client.put(
             url,
             geaendertesBuch,
             { headers },
         );
 
         // then
-        const { status, data } = response;
-
         expect(status).toBe(HttpStatus.NO_CONTENT);
         expect(data).toBe('');
     });
@@ -138,15 +136,13 @@ describe('PUT /rest/:id', () => {
         headers['If-Match'] = '"0"';
 
         // when
-        const response: AxiosResponse<string> = await client.put(
+        const { status }: AxiosResponse<string> = await client.put(
             url,
             geaendertesBuchIdNichtVorhanden,
             { headers },
         );
 
         // then
-        const { status } = response;
-
         expect(status).toBe(HttpStatus.NOT_FOUND);
     });
 
@@ -167,15 +163,13 @@ describe('PUT /rest/:id', () => {
         ];
 
         // when
-        const response: AxiosResponse<Record<string, any>> = await client.put(
+        const { status, data }: AxiosResponse<Record<string, any>> = await client.put(
             url,
             geaendertesBuchInvalid,
             { headers },
         );
 
         // then
-        const { status, data } = response;
-
         expect(status).toBe(HttpStatus.UNPROCESSABLE_ENTITY);
 
         // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
@@ -194,15 +188,13 @@ describe('PUT /rest/:id', () => {
         delete headers['If-Match'];
 
         // when
-        const response: AxiosResponse<string> = await client.put(
+        const { status, data }: AxiosResponse<string> = await client.put(
             url,
             geaendertesBuch,
             { headers },
         );
 
         // then
-        const { status, data } = response;
-
         expect(status).toBe(HttpStatus.PRECONDITION_REQUIRED);
         expect(data).toBe('Header "If-Match" fehlt');
     });
@@ -215,15 +207,13 @@ describe('PUT /rest/:id', () => {
         headers['If-Match'] = '"-1"';
 
         // when
-        const response: AxiosResponse<ErrorResponse> = await client.put(
+        const { status, data }: AxiosResponse<ErrorResponse> = await client.put(
             url,
             veraltesBuch,
             { headers },
         );
 
         // then
-        const { status, data } = response;
-
         expect(status).toBe(HttpStatus.PRECONDITION_FAILED);
 
         const { message, statusCode } = data;

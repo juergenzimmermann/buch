@@ -97,15 +97,13 @@ describe('GraphQL Mutations', () => {
         };
 
         // when
-        const response: AxiosResponse<GraphQLResponseBody> = await client.post(
+        const { status, headers, data }: AxiosResponse<GraphQLResponseBody> = await client.post(
             graphqlPath,
             body,
             { headers: authorization },
         );
 
         // then
-        const { status, headers, data } = response;
-
         expect(status).toBe(HttpStatus.OK);
         expect(headers['content-type']).toMatch(/json/iu); // eslint-disable-line sonarjs/no-duplicate-string
         expect(data.data).toBeDefined();
@@ -157,15 +155,13 @@ describe('GraphQL Mutations', () => {
         ];
 
         // when
-        const response: AxiosResponse<GraphQLResponseBody> = await client.post(
+        const { status, headers, data }: AxiosResponse<GraphQLResponseBody> = await client.post(
             graphqlPath,
             body,
             { headers: authorization },
         );
 
         // then
-        const { status, headers, data } = response;
-
         expect(status).toBe(HttpStatus.OK);
         expect(headers['content-type']).toMatch(/json/iu);
         expect(data.data!.create).toBeNull();
@@ -216,15 +212,13 @@ describe('GraphQL Mutations', () => {
         };
 
         // when
-        const response: AxiosResponse<GraphQLResponseBody> = await client.post(
+        const { status, headers, data }: AxiosResponse<GraphQLResponseBody> = await client.post(
             graphqlPath,
             body,
             { headers: authorization },
         );
 
         // then
-        const { status, headers, data } = response;
-
         expect(status).toBe(HttpStatus.OK);
         expect(headers['content-type']).toMatch(/json/iu);
         expect(data.errors).toBeUndefined();
@@ -275,15 +269,13 @@ describe('GraphQL Mutations', () => {
         ];
 
         // when
-        const response: AxiosResponse<GraphQLResponseBody> = await client.post(
+        const { status, headers, data }: AxiosResponse<GraphQLResponseBody> = await client.post(
             graphqlPath,
             body,
             { headers: authorization },
         );
 
         // then
-        const { status, headers, data } = response;
-
         expect(status).toBe(HttpStatus.OK);
         expect(headers['content-type']).toMatch(/json/iu);
         expect(data.data!.update).toBeNull();
@@ -333,15 +325,13 @@ describe('GraphQL Mutations', () => {
         };
 
         // when
-        const response: AxiosResponse<GraphQLResponseBody> = await client.post(
+        const { status, headers, data }: AxiosResponse<GraphQLResponseBody> = await client.post(
             graphqlPath,
             body,
             { headers: authorization },
         );
 
         // then
-        const { status, headers, data } = response;
-
         expect(status).toBe(HttpStatus.OK);
         expect(headers['content-type']).toMatch(/json/iu);
         expect(data.data!.update).toBeNull();
@@ -379,15 +369,13 @@ describe('GraphQL Mutations', () => {
         };
 
         // when
-        const response: AxiosResponse<GraphQLResponseBody> = await client.post(
+        const { status, headers, data }: AxiosResponse<GraphQLResponseBody> = await client.post(
             graphqlPath,
             body,
             { headers: authorization },
         );
 
         // then
-        const { status, headers, data } = response;
-
         expect(status).toBe(HttpStatus.OK);
         expect(headers['content-type']).toMatch(/json/iu);
         expect(data.errors).toBeUndefined();
@@ -412,12 +400,10 @@ describe('GraphQL Mutations', () => {
         };
 
         // when
-        const response: AxiosResponse<Record<'errors' | 'data', any>> =
+        const { status, headers, data }: AxiosResponse<Record<'errors' | 'data', any>> =
             await client.post(graphqlPath, body, { headers: authorization });
 
         // then
-        const { status, headers, data } = response;
-
         expect(status).toBe(HttpStatus.OK);
         expect(headers['content-type']).toMatch(/json/iu);
 

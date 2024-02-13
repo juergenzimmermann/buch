@@ -64,11 +64,9 @@ describe('GET /rest', () => {
         // given
 
         // when
-        const response: AxiosResponse<BuecherModel> = await client.get('/');
+        const { status, headers, data }: AxiosResponse<BuecherModel> = await client.get('/');
 
         // then
-        const { status, headers, data } = response;
-
         expect(status).toBe(HttpStatus.OK);
         expect(headers['content-type']).toMatch(/json/iu); // eslint-disable-line sonarjs/no-duplicate-string
         expect(data).toBeDefined();
@@ -88,13 +86,11 @@ describe('GET /rest', () => {
         const params = { titel: titelVorhanden };
 
         // when
-        const response: AxiosResponse<BuecherModel> = await client.get('/', {
+        const { status, headers, data }: AxiosResponse<BuecherModel> = await client.get('/', {
             params,
         });
 
         // then
-        const { status, headers, data } = response;
-
         expect(status).toBe(HttpStatus.OK);
         expect(headers['content-type']).toMatch(/json/iu);
         expect(data).toBeDefined();
@@ -116,13 +112,11 @@ describe('GET /rest', () => {
         const params = { titel: titelNichtVorhanden };
 
         // when
-        const response: AxiosResponse<ErrorResponse> = await client.get('/', {
+        const { status, data }: AxiosResponse<ErrorResponse> = await client.get('/', {
             params,
         });
 
         // then
-        const { status, data } = response;
-
         expect(status).toBe(HttpStatus.NOT_FOUND);
 
         const { error, statusCode } = data;
@@ -136,13 +130,11 @@ describe('GET /rest', () => {
         const params = { [schlagwortVorhanden]: 'true' };
 
         // when
-        const response: AxiosResponse<BuecherModel> = await client.get('/', {
+        const { status, headers, data }: AxiosResponse<BuecherModel> = await client.get('/', {
             params,
         });
 
         // then
-        const { status, headers, data } = response;
-
         expect(status).toBe(HttpStatus.OK);
         expect(headers['content-type']).toMatch(/json/iu);
         // JSON-Array mit mind. 1 JSON-Objekt
@@ -165,13 +157,11 @@ describe('GET /rest', () => {
         const params = { [schlagwortNichtVorhanden]: 'true' };
 
         // when
-        const response: AxiosResponse<ErrorResponse> = await client.get('/', {
+        const { status, data }: AxiosResponse<ErrorResponse> = await client.get('/', {
             params,
         });
 
         // then
-        const { status, data } = response;
-
         expect(status).toBe(HttpStatus.NOT_FOUND);
 
         const { error, statusCode } = data;
@@ -185,13 +175,11 @@ describe('GET /rest', () => {
         const params = { foo: 'bar' };
 
         // when
-        const response: AxiosResponse<ErrorResponse> = await client.get('/', {
+        const { status, data }: AxiosResponse<ErrorResponse> = await client.get('/', {
             params,
         });
 
         // then
-        const { status, data } = response;
-
         expect(status).toBe(HttpStatus.NOT_FOUND);
 
         const { error, statusCode } = data;
