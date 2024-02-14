@@ -30,6 +30,7 @@ import { resolve } from 'node:path';
 // http://2ality.com/2017/11/import-meta.html
 
 const tlsDir = resolve(RESOURCES_DIR, 'tls');
+console.debug('tlsDir = %s', tlsDir);
 
 // public/private keys und Zertifikat fuer TLS
 export const httpsOptions: HttpsOptions = {

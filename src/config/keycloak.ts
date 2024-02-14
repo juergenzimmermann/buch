@@ -54,10 +54,10 @@ export const keycloakConnectOptions: KeycloakConnectConfig = {
     tokenValidation,
 };
 if (NODE_ENV === 'development') {
-    console.debug('keycloakConnectOptions: %o', keycloakConnectOptions);
+    console.debug('keycloakConnectOptions = %o', keycloakConnectOptions);
 } else {
     const { secret, ...keycloakConnectOptionsLog } = keycloakConnectOptions;
-    console.debug('keycloakConnectOptions: %o', keycloakConnectOptionsLog);
+    console.debug('keycloakConnectOptions = %o', keycloakConnectOptionsLog);
 }
 
 /** Pfade für den REST-Client zu Keycloak */

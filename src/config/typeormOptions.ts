@@ -59,7 +59,7 @@ const logging =
 const logger = 'advanced-console';
 
 export const dbResourcesDir = resolve(nodeConfig.resourcesDir, 'db', dbType);
-console.debug('dbResourcesDir: %s', dbResourcesDir);
+console.debug('dbResourcesDir = %s', dbResourcesDir);
 
 // TODO records als "deeply immutable data structure" (Stage 2)
 // https://github.com/tc39/proposal-record-tuple
@@ -160,7 +160,7 @@ if (!loggerDefaultValue) {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     const { password, ssl, ...typeOrmModuleOptionsLog } =
         typeOrmModuleOptions as any;
-    console.debug('typeOrmModuleOptions: %o', typeOrmModuleOptionsLog);
+    console.debug('typeOrmModuleOptions = %o', typeOrmModuleOptionsLog);
 }
 
 export const dbPopulate = db?.populate === true;

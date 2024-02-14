@@ -61,5 +61,5 @@ export const mailConfig = {
 };
 Object.freeze(options);
 if (!loggerDefaultValue) {
-    console.debug('mailConfig: %o', mailConfig);
+    console.debug('mailConfig = %o', mailConfig);
 }
