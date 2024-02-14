@@ -111,6 +111,7 @@
     "xss": "1.0.14"
   },
   "devDependencies": {
+    "@asciidoctor/core": "3.0.4",
     "@asciidoctor/reveal.js": "5.1.0",
     "@eslint-community/eslint-plugin-eslint-comments": "4.1.0",
     "@eslint/js": "8.56.0",

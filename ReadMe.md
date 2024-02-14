@@ -595,7 +595,7 @@ Token in der Datei `.env` für die Umgebungsvariable `SONAR_TOKEN` ein, damit
 der Token im Skript `scripts\sonar-scanner.js` verwendet werden kann.
 
 Nachdem der Server gestartet ist, wird der SonarQube-Scanner in einer zweiten
-PowerShell mit `npm run sonar-scanner` gestartet. Das Resultat kann dann in der
+PowerShell mit `npm run sonar` gestartet. Das Resultat kann dann in der
 Webseite des zuvor gestarteten Servers über die URL `http://localhost:9000`
 inspiziert werden.
 
