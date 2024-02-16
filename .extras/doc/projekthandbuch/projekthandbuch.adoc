@@ -158,6 +158,7 @@ Styleguides empfehlenswert:
 _E-Book zu TypeScript_:: https://github.com/gibbok/typescript-book
 _Google_:: https://google.github.io/styleguide/tsguide.html
 _Airbnb_:: https://github.com/airbnb/javascript
+_Shopify_:: https://github.com/Shopify/javascript
 _React bei Airbnb_:: https://github.com/airbnb/javascript/tree/master/react
 _Angular_:: https://angular.io/docs/ts/latest/guide/style-guide.html
 _Microsoft_:: https://github.com/Microsoft/TypeScript/wiki/Coding-guidelines

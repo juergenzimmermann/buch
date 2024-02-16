@@ -64,21 +64,18 @@ package @nestjs/common {
   Post .[hidden].> Headers
 }
 
+package nest-keycloak-connect {
+  class AuthGuard
+
+  class "@Roles" as Roles
+  hide Roles circle
+}
+
 package express {
   class Request
   class Response
 
   Response .right[hidden].> Controller
-}
-
-package security.auth {
-  class "type Role = 'ADMIN' | 'MITARBEITER' | 'KUNDE'" as Role
-  hide Role circle
-
-  class "@Roles" as Roles
-  hide Roles circle
-
-  Roles .right.> Role
 }
 
 package buch {
@@ -107,8 +104,8 @@ package buch {
 
     BuchWriteController ..> Controller
 
+    BuchWriteController .up.> AuthGuard
     BuchWriteController .up.> Roles
-    BuchWriteController .up.> Role
 
     BuchWriteController ..> Request
     BuchWriteController ..> Response

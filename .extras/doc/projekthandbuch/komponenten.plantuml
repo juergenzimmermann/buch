@@ -41,6 +41,10 @@ cloud {
 }
 
 cloud {
+    [nest-keycloak-connect]
+}
+
+cloud {
     [nodemailer]
 }
 
@@ -48,6 +52,10 @@ database "DB buch" {
     [Tabelle buch]
     [Tabelle titel]
     [Tabelle abbildung]
+}
+
+node {
+    [Keycloak]
 }
 
 node {
@@ -69,9 +77,14 @@ GraphQLClient ~~> [RequestLoggerMiddleware]
 [TypeORM] ~~> [Tabelle titel]
 [TypeORM] ~~> [Tabelle abbildung]
 
+[BuchController] ..> [nest-keycloak-connect]
+[nest-keycloak-connect] ~~> [Keycloak]
+
 [BuchService] ..> [MailService]
 [MailService] ~~> [nodemailer]
 [nodemailer] ~~> [Mailserver]
+
+[MailService] ~[hidden]~> [nest-keycloak-connect]
 
 footer (c) Jürgen Zimmermann
 

@@ -24,6 +24,5 @@
     "titleBar.inactiveBackground": "#21573299",
     "titleBar.inactiveForeground": "#e7e7e799"
   },
-  "peacock.color": "#215732",
-  "asciidoc.antora.enableAntoraSupport": true
+  "peacock.color": "#215732"
 }

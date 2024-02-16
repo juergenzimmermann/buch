@@ -36,14 +36,11 @@ package @nestjs/graphql {
   hide Args circle
 }
 
-package security.auth {
-  class "type Role = 'ADMIN' | 'MITARBEITER' | 'KUNDE'" as Role
-  hide Role circle
+package nest-keycloak-connect {
+  class AuthGuard
 
   class "@Roles" as Roles
   hide Roles circle
-
-  Roles .right.> Role
 }
 
 package buch #DDDDDD {
@@ -77,8 +74,8 @@ package buch #DDDDDD {
   BuchMutationResolver ..> Promise
   BuchMutationResolver ..> Resolver
 
+  BuchMutationResolver .up.> AuthGuard
   BuchMutationResolver .up.> Roles
-  BuchMutationResolver .up.> Role
 
   BuchDTO .[hidden].> Promise
   BuchDTO .[hidden].> Resolver
