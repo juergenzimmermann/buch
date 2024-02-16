@@ -40,7 +40,7 @@
 # ---------------------------------------------------------------------------------------
 # S t a g e   d i s t
 # ---------------------------------------------------------------------------------------
-ARG NODE_VERSION=20.11.0
+ARG NODE_VERSION=20.11.1
 FROM node:${NODE_VERSION}-bookworm AS dist
 
 # https://packages.debian.org/bookworm/python3.11-minimal
@@ -63,11 +63,11 @@ COPY src ./src
 
 # https://docs.docker.com/engine/reference/builder/#run---mounttypebind
 RUN --mount=type=bind,source=package.json,target=package.json \
-  --mount=type=bind,source=package-lock.json,target=package-lock.json \
-  --mount=type=bind,source=nest-cli.json,target=nest-cli.json \
-  --mount=type=bind,source=tsconfig.json,target=tsconfig.json \
-  --mount=type=bind,source=tsconfig.build.json,target=tsconfig.build.json \
-  --mount=type=cache,target=/root/.npm <<EOF
+    --mount=type=bind,source=package-lock.json,target=package-lock.json \
+    --mount=type=bind,source=nest-cli.json,target=nest-cli.json \
+    --mount=type=bind,source=tsconfig.json,target=tsconfig.json \
+    --mount=type=bind,source=tsconfig.build.json,target=tsconfig.build.json \
+    --mount=type=cache,target=/root/.npm <<EOF
 set -eux
 # ci (= clean install) mit package-lock.json
 npm ci --no-audit --no-fund
@@ -89,8 +89,8 @@ USER node
 WORKDIR /home/node
 
 RUN --mount=type=bind,source=package.json,target=package.json \
-  --mount=type=bind,source=package-lock.json,target=package-lock.json \
-  --mount=type=cache,target=/root/.npm <<EOF
+    --mount=type=bind,source=package-lock.json,target=package-lock.json \
+    --mount=type=cache,target=/root/.npm <<EOF
 set -eux
 # ci (= clean install) mit package-lock.json
 # --omit=dev: ohne devDependencies
@@ -132,10 +132,10 @@ FROM gcr.io/distroless/nodejs20-debian12:nonroot AS final
 # https://spdx.org/licenses
 # MAINTAINER ist deprecated https://docs.docker.com/engine/reference/builder/#maintainer-deprecated
 LABEL org.opencontainers.image.title="buch" \
-  org.opencontainers.image.description="Appserver buch mit distroless-Image" \
-  org.opencontainers.image.version="2024.04.0-distroless" \
-  org.opencontainers.image.licenses="GPL-3.0-or-later" \
-  org.opencontainers.image.authors="Juergen.Zimmermann@h-ka.de"
+    org.opencontainers.image.description="Appserver buch mit distroless-Image" \
+    org.opencontainers.image.version="2024.04.0-distroless" \
+    org.opencontainers.image.licenses="GPL-3.0-or-later" \
+    org.opencontainers.image.authors="Juergen.Zimmermann@h-ka.de"
 
 WORKDIR /opt/app
 
