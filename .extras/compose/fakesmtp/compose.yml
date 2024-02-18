@@ -15,7 +15,7 @@
 
 services:
   fakesmtp:
-    image: gessnerfl/fake-smtp-server:2.1.6
+    image: gessnerfl/fake-smtp-server:2.2.0
     ports:
       - published: 5025
         target: 8025
