@@ -27,11 +27,13 @@ import {
     HealthCheckService,
     TypeOrmHealthIndicator,
 } from '@nestjs/terminus';
+import { Public } from 'nest-keycloak-connect';
 
 /**
  * Die Controller-Klasse für Health-Checks.
  */
 @Controller('health')
+@Public()
 @ApiTags('Health')
 export class HealthController {
     readonly #health: HealthCheckService;

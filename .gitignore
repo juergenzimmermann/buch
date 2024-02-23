@@ -35,6 +35,10 @@ yarn-error.log*
 lerna-debug.log*
 .scannerwork
 
+# Prometheus und Grafana
+.extras/compose/prometheus-grafana/prometheus-data/*
+.extras/compose/prometheus-grafana/grafana.db
+
 # OS
 .DS_Store
 Thumbs.db
