@@ -46,7 +46,7 @@ export class PrometheusController {
             // !!!app: 'node-application-monitoring-app',
             prefix: 'node_',
             // !!!timeout: 10_000,
-            gcDurationBuckets: [0.001, 0.01, 0.1, 1, 2, 5],
+            gcDurationBuckets: [0.001, 0.01, 0.1, 1, 2, 5], // eslint-disable-line @typescript-eslint/no-magic-numbers
             register: this.#register,
         });
         collectDefaultMetrics({ register: this.#register });
