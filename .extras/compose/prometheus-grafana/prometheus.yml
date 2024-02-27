@@ -19,7 +19,7 @@ global:
 
 # https://prometheus.io/docs/prometheus/latest/configuration/configuration/#scrape_config
 scrape_configs:
-  - job_name: webservices
+  - job_name: buch
     scheme: https
     # https://prometheus.io/docs/prometheus/latest/configuration/configuration/#tls_config
     tls_config:

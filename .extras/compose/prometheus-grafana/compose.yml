@@ -22,7 +22,7 @@
 
 services:
   prometheus:
-    image: prom/prometheus:v2.50.0
+    image: prom/prometheus:v2.50.1
     ports:
       - published: 9090
         target: 9090
