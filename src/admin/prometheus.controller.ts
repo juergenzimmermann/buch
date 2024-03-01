@@ -55,6 +55,7 @@ export class PrometheusController {
     @Get('')
     async metrics(@Res() res: Response<string>) {
         // https://grafana.com/grafana/dashboards/11159-nodejs-application-dashboard
+        // https://docs.micrometer.io/micrometer/reference/concepts.html
         const metrics = await this.#register.metrics();
         return res.contentType(this.#contentType).send(metrics);
     }
