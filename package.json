@@ -8,7 +8,7 @@
   "exports": "./dist/src/main.js",
   "type": "module",
   "engines": {
-    "node": ">=20.11.0",
+    "node": ">=20.11.1",
     "npm": ">=10.3.0"
   },
   "scripts": {
@@ -129,7 +129,7 @@
     "@types/figlet": "1.5.8",
     "@types/jest": "29.5.12",
     "@types/js-yaml": "4.0.9",
-    "@types/node": "20.11.24",
+    "@types/node": "20.11.25",
     "@types/nodemailer": "6.4.14",
     "@types/nodemailer-direct-transport": "1.0.35",
     "@types/nodemailer-smtp-transport": "2.7.8",
