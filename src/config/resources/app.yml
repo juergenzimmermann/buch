@@ -86,4 +86,4 @@ mail:
 # T e s t s
 # ==============================================================================
 #test:
-#  startDbServer: true
+#  startDbServer: false

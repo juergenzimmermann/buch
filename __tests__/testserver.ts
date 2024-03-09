@@ -75,10 +75,12 @@ const startDbServer = async () => {
     }
     const isDBReachable = await isPortReachable(dbPort, { host: 'localhost' });
     if (isDBReachable) {
+        console.info('DB-Server bereits gestartet.');
         return;
     }
 
     // Container starten
+    console.info('Docker-Container mit DB-Server wird gestartet.');
     try {
         await compose.upAll({
             cwd: dockerComposeDir,
@@ -96,6 +98,7 @@ const startDbServer = async () => {
     await compose.exec(dbType, ['sh', '-c', dbHealthCheck], {
         cwd: dockerComposeDir,
     });
+    console.info('Docker-Container mit DB-Server ist gestartet.');
 };
 
 const shutdownDbServer = async () => {
@@ -121,6 +124,7 @@ export const startServer = async () => {
         env.START_DB_SERVER === 'TRUE' ||
         config.test?.startDbServer === true
     ) {
+        console.info('DB-Server muss gestartet werden.');
         await startDbServer();
     }
 
