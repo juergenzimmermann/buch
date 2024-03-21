@@ -695,6 +695,12 @@ die Packages, die nur als `devDependencies` installiert wurden. Da es insgesamt
 zwischen 25.000 und 30.000 Packages sind, dauert dieser Abgleich 30 bis 45
 Minuten.
 
+Von https://nvd.nist.gov/developers/request-an-api-key fordert man einen "API Key"
+an, um im Laufe des Semesters mit _OWASP Dependency Check_ die benutzte Software
+("3rd Party Libraries") auf Sicherheitslücken zu prüfen. Diesen API Key trägt
+man im Skript `.extras\dependency-check\dependency-check.ps1` als Wert der
+Variablen `$nvdApiKey` ein.
+
 ```powershell
     cd .extras\compose\dependency-check
     docker compose up
