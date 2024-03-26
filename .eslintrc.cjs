@@ -189,7 +189,6 @@ module.exports = {
         '@typescript-eslint/no-non-null-asserted-nullish-coalescing': 'error',
         '@typescript-eslint/no-require-imports': 'error',
         '@typescript-eslint/no-shadow': 'error',
-        '@typescript-eslint/no-throw-literal': 'error',
         '@typescript-eslint/no-unnecessary-boolean-literal-compare': 'error',
         '@typescript-eslint/no-unnecessary-condition': ['error', {
             allowRuleToRunWithoutStrictNullChecksIKnowWhatIAmDoing: true,
@@ -210,6 +209,7 @@ module.exports = {
         '@typescript-eslint/no-useless-constructor': 'error',
         '@typescript-eslint/no-useless-empty-export': 'error',
         '@typescript-eslint/non-nullable-type-assertion-style': 'error',
+        '@typescript-eslint/only-throw-error': 'error',
         '@typescript-eslint/prefer-destructuring': 'error',
         '@typescript-eslint/prefer-enum-initializers': 'error',
         '@typescript-eslint/prefer-find': 'error',
@@ -447,7 +447,8 @@ module.exports = {
         'no-shadow': 'off',
         'no-shadow-restricted-names': 'error',
         'no-template-curly-in-string': 'error',
-        'no-throw-literal': 'error',
+        // siehe @typescript-eslint/only-throw-error
+        'no-throw-literal': 'off',
         'no-undef-init': 'error',
         'no-underscore-dangle': 'error',
         'no-unmodified-loop-condition': 'error',

@@ -30,7 +30,7 @@
 
 services:
   keycloak:
-    image: keycloak/keycloak:24.0.1-0
+    image: keycloak/keycloak:24.0.2-0
     #depends_on: [postgres]
     ports:
       - published: 8080
