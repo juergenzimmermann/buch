@@ -23,6 +23,7 @@ import { config } from './app.js';
 
 // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
 const dbConfig = config.db;
+console.debug('dbConfig: %o', dbConfig);
 
 type DbType = 'postgres' | 'mysql' | 'oracle' | 'sqlite';
 

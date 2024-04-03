@@ -648,10 +648,12 @@
 									"    const contentType = response.headers.get('Content-Type');\r",
 									"    pm.expect(contentType).to.match(/^application\\/json(; charset=utf-8)?/u);\r",
 									"});\r",
-									"pm.test('Body mit Token', () => {\r",
+									"pm.test('Body mit Token und Rollen', () => {\r",
 									"    const body = pm.response.json();\r",
-									"    const { token } = body.data.login;\r",
-									"    pm.expect(token).to.be.a('string').that.matches(/.+\\..+\\..+/u);\r",
+									"    const { access_token, expires_in, roles } = body.data.login;\r",
+									"    pm.expect(access_token).to.be.a('string').that.matches(/.+\\..+\\..+/u);\r",
+									"    pm.expect(expires_in).to.be.a('number');\r",
+									"    pm.expect(roles).to.be.an('array').that.is.not.empty;\r",
 									"});"
 								],
 								"type": "text/javascript"
@@ -664,7 +666,39 @@
 						"body": {
 							"mode": "graphql",
 							"graphql": {
-								"query": "mutation {\r\n    login(username: \"admin\", password: \"p\") {\r\n        token\r\n    }\r\n}",
+								"query": "mutation {\r\n    login(username: \"admin\", password: \"p\") {\r\n        access_token\r\n        expires_in\r\n        refresh_token\r\n        refresh_expires_in\r\n        roles\r\n    }\r\n}",
+								"variables": ""
+							}
+						},
+						"url": {
+							"raw": "{{graphql_url}}",
+							"host": [
+								"{{graphql_url}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Refresh",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation {\r\n    refresh(refresh_token: \"eyJhbGciOiJIUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICI3NDg1ODZmNi1iYjg5LTQ0MGEtYmFiNi01NGFlYWZmOGQ1ZjgifQ.eyJleHAiOjE3MDYzNzQ5OTMsImlhdCI6MTcwNjM3MTM5MywianRpIjoiN2IyMGRlOWItNTI0Ny00NDczLThlNjAtYzIwNjk5NjZhOWE5IiwiaXNzIjoiaHR0cDovL2xvY2FsaG9zdDo4MDgwL3JlYWxtcy9hY21lIiwiYXVkIjoiaHR0cDovL2xvY2FsaG9zdDo4MDgwL3JlYWxtcy9hY21lIiwic3ViIjoiZjkxNTZhYmYtNmRhNS00OGJmLWJjMWMtODEzM2FhZTI3NDE0IiwidHlwIjoiUmVmcmVzaCIsImF6cCI6ImJ1Y2gtY2xpZW50Iiwic2Vzc2lvbl9zdGF0ZSI6Ijc0OWE5ZGI3LWFhMjgtNDA1YS1hYzU5LWI1ZGE3OGM5MDFiNCIsInNjb3BlIjoib3BlbmlkIHByb2ZpbGUgZW1haWwiLCJzaWQiOiI3NDlhOWRiNy1hYTI4LTQwNWEtYWM1OS1iNWRhNzhjOTAxYjQifQ.X9FiLztLxqy9u4bEt6OAdUT8TsmEiWqs9oeQskT2ONo\") {\r\n        access_token\r\n        expires_in\r\n        refresh_token\r\n        refresh_expires_in\r\n        roles\r\n    }\r\n}",
 								"variables": ""
 							}
 						},
@@ -1086,13 +1120,13 @@
 							"        query: `",
 							"            mutation {",
 							"                login(username: \"admin\", password: \"p\") {",
-							"                    token",
+							"                    access_token",
 							"                }",
 							"            }",
 							"        `",
 							"    })",
 							"}, (err, res) => {",
-							"    pm.collectionVariables.set('TOKEN', res.json().data.login.token);",
+							"    pm.collectionVariables.set('TOKEN', res.json().data.login.access_token);",
 							"});"
 						]
 					}

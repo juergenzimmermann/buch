@@ -18,9 +18,8 @@
 import { type PrettyOptions } from 'pino-pretty';
 import { config } from './app.js';
 import { env } from './env.js';
-import { nodeConfig } from './node.js';
+import path from 'node:path';
 import pino from 'pino';
-import { resolve } from 'node:path';
 
 /**
  * Das Modul enthält die Konfiguration für den Logger.
@@ -29,14 +28,9 @@ import { resolve } from 'node:path';
 
 const logDirDefault = 'log';
 const logFileNameDefault = 'server.log';
-const logFileDefault = resolve(logDirDefault, logFileNameDefault);
+const logFileDefault = path.resolve(logDirDefault, logFileNameDefault);
 
 const { log } = config;
-const { nodeEnv } = nodeConfig;
-
-// Default-Einstellung fuer Logging
-export const loggerDefaultValue =
-    env.LOG_DEFAULT?.toLowerCase() === 'true' || log?.default === true;
 
 // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
 const logDir: string | undefined =
@@ -44,7 +38,9 @@ const logDir: string | undefined =
         ? undefined
         : log.dir.trimEnd(); // eslint-disable-line @typescript-eslint/no-unsafe-call
 const logFile =
-    logDir === undefined ? logFileDefault : resolve(logDir, logFileNameDefault);
+    logDir === undefined
+        ? logFileDefault
+        : path.resolve(logDir, logFileNameDefault);
 const pretty = log?.pretty === true;
 
 // https://getpino.io
@@ -53,21 +49,18 @@ const pretty = log?.pretty === true;
 // Pino wird auch von Fastify genutzt.
 // https://blog.appsignal.com/2021/09/01/best-practices-for-logging-in-nodejs.html
 
-let logLevel = 'info';
-if (
-    log?.level === 'debug' &&
-    nodeEnv !== 'production' &&
-    nodeEnv !== 'PRODUCTION' &&
-    !loggerDefaultValue
-) {
-    logLevel = 'debug';
+type LogLevel = 'error' | 'warn' | 'info' | 'debug';
+let logLevelTmp: LogLevel = 'info';
+if (env.LOG_LEVEL !== undefined) {
+    logLevelTmp = env.LOG_LEVEL as LogLevel;
+} else if (log?.level !== undefined) {
+    logLevelTmp = log?.level as LogLevel;
 }
+export const logLevel = logLevelTmp;
 
-if (!loggerDefaultValue) {
-    console.debug(
-        `logger config: logLevel=${logLevel}, logFile=${logFile}, pretty=${pretty}, loggerDefaultValue=${loggerDefaultValue}`,
-    );
-}
+console.debug(
+    `logger config: logLevel=${logLevel}, logFile=${logFile}, pretty=${pretty}`,
+);
 
 const fileOptions = {
     level: logLevel,
@@ -98,6 +91,7 @@ const options: pino.TransportMultiOptions | pino.TransportSingleOptions = pretty
 const transports = pino.transport(options); // eslint-disable-line @typescript-eslint/no-unsafe-assignment
 
 // https://github.com/pinojs/pino/issues/1160#issuecomment-944081187
-export const parentLogger: pino.Logger<string> = loggerDefaultValue
-    ? pino(pino.destination(logFileDefault))
-    : pino({ level: logLevel }, transports); // eslint-disable-line @typescript-eslint/no-unsafe-argument
+export const parentLogger: pino.Logger<string> =
+    logLevel === 'info'
+        ? pino(pino.destination(logFileDefault))
+        : pino({ level: logLevel }, transports); // eslint-disable-line @typescript-eslint/no-unsafe-argument

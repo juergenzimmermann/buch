@@ -322,13 +322,6 @@ module.exports = {
         'unicorn/consistent-function-scoping': 'error',
         'unicorn/custom-error-definition': 'error',
         'unicorn/filename-case': 'off',
-        'unicorn/import-style': ['error', {
-            styles: {
-                path: {
-                    named: true,
-                },
-            },
-        }],
         'unicorn/no-array-for-each': 'off',
         'unicorn/no-keyword-prefix': 'error',
         'unicorn/no-negated-condition': 'error',

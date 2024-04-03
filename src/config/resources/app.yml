@@ -57,7 +57,6 @@ log:
   level: debug
   #dir: ./log
   pretty: true
-  #default: true
 
 # ==============================================================================
 # H e a l t h

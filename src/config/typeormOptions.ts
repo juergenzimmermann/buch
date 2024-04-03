@@ -28,10 +28,10 @@ import { Buch } from '../buch/entity/buch.entity.js';
 import { type DataSourceOptions } from 'typeorm';
 import { dbType } from './db.js';
 import { entities } from '../buch/entity/entities.js';
-import { loggerDefaultValue } from './logger.js';
+import { logLevel } from './logger.js';
 import { nodeConfig } from './node.js';
+import path from 'node:path';
 import { readFileSync } from 'node:fs';
-import { resolve } from 'node:path';
 
 const { db } = config;
 
@@ -55,10 +55,14 @@ const namingStrategy =
 // logging bei TypeORM durch console.log()
 const logging =
     (nodeConfig.nodeEnv === 'development' || nodeConfig.nodeEnv === 'test') &&
-    !loggerDefaultValue;
+    logLevel === 'debug';
 const logger = 'advanced-console';
 
-export const dbResourcesDir = resolve(nodeConfig.resourcesDir, 'db', dbType);
+export const dbResourcesDir = path.resolve(
+    nodeConfig.resourcesDir,
+    'db',
+    dbType,
+);
 console.debug('dbResourcesDir = %s', dbResourcesDir);
 
 // TODO records als "deeply immutable data structure" (Stage 2)
@@ -66,7 +70,10 @@ console.debug('dbResourcesDir = %s', dbResourcesDir);
 let dataSourceOptions: DataSourceOptions;
 switch (dbType) {
     case 'postgres': {
-        const cert = readFileSync(resolve(dbResourcesDir, 'certificate.cer')); // eslint-disable-line security/detect-non-literal-fs-filename, sonarjs/no-duplicate-string
+        // eslint-disable-next-line security/detect-non-literal-fs-filename
+        const cert = readFileSync(
+            path.resolve(dbResourcesDir, 'certificate.cer'), // eslint-disable-line sonarjs/no-duplicate-string
+        );
         dataSourceOptions = {
             type: 'postgres',
             host,
@@ -90,7 +97,10 @@ switch (dbType) {
         break;
     }
     case 'mysql': {
-        const cert = readFileSync(resolve(dbResourcesDir, 'certificate.cer')); // eslint-disable-line security/detect-non-literal-fs-filename
+        // eslint-disable-next-line security/detect-non-literal-fs-filename
+        const cert = readFileSync(
+            path.resolve(dbResourcesDir, 'certificate.cer'),
+        );
         dataSourceOptions = {
             type: 'mysql',
             host,
@@ -133,7 +143,7 @@ switch (dbType) {
     }
     // 'better-sqlite3' erfordert Python zum Uebersetzen, wenn das Docker-Image gebaut wird
     case 'sqlite': {
-        const sqliteDatabase = resolve(
+        const sqliteDatabase = path.resolve(
             BASEDIR,
             'config',
             'resources',
@@ -155,7 +165,7 @@ switch (dbType) {
 Object.freeze(dataSourceOptions);
 export const typeOrmModuleOptions = dataSourceOptions;
 
-if (!loggerDefaultValue) {
+if (logLevel === 'debug') {
     // "rest properties" ab ES 2018: https://github.com/tc39/proposal-object-rest-spread
     // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     const { password, ssl, ...typeOrmModuleOptionsLog } =
@@ -166,7 +176,7 @@ if (!loggerDefaultValue) {
 export const dbPopulate = db?.populate === true;
 let adminDataSourceOptionsTemp: DataSourceOptions | undefined;
 if (dbType === 'postgres') {
-    const cert = readFileSync(resolve(dbResourcesDir, 'certificate.cer')); // eslint-disable-line security/detect-non-literal-fs-filename
+    const cert = readFileSync(path.resolve(dbResourcesDir, 'certificate.cer')); // eslint-disable-line security/detect-non-literal-fs-filename
     adminDataSourceOptionsTemp = {
         type: 'postgres',
         host,
@@ -186,7 +196,7 @@ if (dbType === 'postgres') {
         },
     };
 } else if (dbType === 'mysql') {
-    const cert = readFileSync(resolve(dbResourcesDir, 'certificate.cer')); // eslint-disable-line security/detect-non-literal-fs-filename
+    const cert = readFileSync(path.resolve(dbResourcesDir, 'certificate.cer')); // eslint-disable-line security/detect-non-literal-fs-filename
     adminDataSourceOptionsTemp = {
         type: 'mysql',
         host,

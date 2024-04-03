@@ -112,8 +112,7 @@ Jürgen Zimmermann <Juergen.Zimmermann@h-ka.de>
   - Payload
   - Signature
 * Guards durch Nest für RBAC
-* Lokale Strategie für Passport
-* Argon2
+* Integration mit Keycloak von Red Hat
 
 === JWT
 

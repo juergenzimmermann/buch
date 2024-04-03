@@ -27,8 +27,8 @@ import { config } from '../src/config/app.js';
 import { dbType } from '../src/config/db.js';
 import { env } from '../src/config/env.js';
 import isPortReachable from 'is-port-reachable';
-import { join } from 'node:path';
 import { nodeConfig } from '../src/config/node.js';
+import path from 'node:path';
 import { paths } from '../src/config/paths.js';
 import { typeOrmModuleOptions } from '../src/config/typeormOptions.js';
 
@@ -42,7 +42,7 @@ const { httpsOptions } = nodeConfig;
 // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
 const dbPort: number = (typeOrmModuleOptions as any).port;
 // Verzeichnis mit compose.yml ausgehend vom Wurzelverzeichnis
-const dockerComposeDir = join('.extras', 'compose');
+const dockerComposeDir = path.join('.extras', 'compose');
 
 let dbHealthCheck: string;
 switch (dbType) {

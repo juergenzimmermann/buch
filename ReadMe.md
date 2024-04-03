@@ -300,6 +300,10 @@ und wählt aus dem Verzeichnis `.extras\postman` die Datei `buch.postman_environ
 aus. Jetzt hat man die Umgebung `buch` mit der Variablen `base_url` und dem
 Wert `https://localhost:3000` angelegt.
 
+Im Environment `buch` muss man die Variable `client_secret` auf den Wert setzen,
+der in Keycloak beim _Realm acme_ in _Clients > buch-client > Credentials_
+bei _Client Secret_ steht.
+
 ### Collections und Folders
 
 Als nächstes wählt man den Menüpunkt _Collections_ aus und importiert der Reihe

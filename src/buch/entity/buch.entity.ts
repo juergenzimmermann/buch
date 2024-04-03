@@ -112,7 +112,7 @@ export class Buch {
     // TypeORM unterstuetzt *NICHT* das Temporal-API (ES2022)
     readonly datum: Date | string | undefined;
 
-    @Column('date')
+    @Column('varchar')
     @ApiProperty({ example: 'https://test.de/', type: String })
     readonly homepage: string | undefined;
 
