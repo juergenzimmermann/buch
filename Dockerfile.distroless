@@ -40,7 +40,7 @@
 # ---------------------------------------------------------------------------------------
 # S t a g e   d i s t
 # ---------------------------------------------------------------------------------------
-ARG NODE_VERSION=20.12.0
+ARG NODE_VERSION=20.12.1
 FROM node:${NODE_VERSION}-bookworm AS dist
 
 # https://packages.debian.org/bookworm/python3.11-minimal

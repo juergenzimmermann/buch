@@ -27,8 +27,8 @@ console.debug('dbConfig: %o', dbConfig);
 
 type DbType = 'postgres' | 'mysql' | 'oracle' | 'sqlite';
 
-// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-const type: DbType | undefined = dbConfig?.type;
+// "Optional Chaining" ab ES2020
+const type: DbType | undefined = dbConfig?.type; // eslint-disable-line @typescript-eslint/no-unsafe-assignment
 
 // 'better-sqlite3' erfordert node-gyp, wenn das Docker-Image gebaut wird
 export const dbType =

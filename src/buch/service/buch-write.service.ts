@@ -149,6 +149,7 @@ export class BuchWriteService {
             if (titelId !== undefined) {
                 await transactionalMgr.delete(Titel, titelId);
             }
+            // "Nullish Coalescing" ab ES2020
             const abbildungen = buch.abbildungen ?? [];
             for (const abbildung of abbildungen) {
                 await transactionalMgr.delete(Abbildung, abbildung.id);

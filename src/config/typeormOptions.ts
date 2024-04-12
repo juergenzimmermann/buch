@@ -35,7 +35,7 @@ import { readFileSync } from 'node:fs';
 
 const { db } = config;
 
-// nullish coalescing
+// "Optional Chaining" und "Nullish Coalescing" ab ES2020
 const database = (db?.name as string | undefined) ?? Buch.name.toLowerCase();
 
 const host = (db?.host as string | undefined) ?? 'localhost';

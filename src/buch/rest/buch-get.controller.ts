@@ -307,6 +307,7 @@ export class BuchGetController {
 
         this.#logger.debug('#toModel: buch=%o, links=%o', buch, links);
         const titelModel: TitelModel = {
+            // "Optional Chaining" und "Nullish Coalescing" ab ES2020
             titel: buch.titel?.titel ?? 'N/A',
             untertitel: buch.titel?.untertitel ?? 'N/A',
         };

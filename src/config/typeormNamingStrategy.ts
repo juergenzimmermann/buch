@@ -28,6 +28,7 @@ export class SnakeNamingStrategy extends DefaultNamingStrategy implements Naming
         className: string,
         userSpecifiedName: string | undefined,
     ) {
+        // "Nullish Coalescing" ab ES2020
         return userSpecifiedName ?? snakeCase(className);
     }
 

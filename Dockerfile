@@ -30,7 +30,7 @@
 # https://snyk.io/blog/10-best-practices-to-containerize-nodejs-web-applications-with-docker
 # https://cheatsheetseries.owasp.org/cheatsheets/NodeJS_Docker_Cheat_Sheet.html
 
-ARG NODE_VERSION=21.7.1
+ARG NODE_VERSION=21.7.3
 
 # ---------------------------------------------------------------------------------------
 # S t a g e   d i s t

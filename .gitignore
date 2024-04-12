@@ -18,9 +18,10 @@ temp
 tmp
 dependencies.svg
 
-# Sensible Daten
+# Sensible Daten (Passwort, Token, private Schluessel)
 .extras/compose/db/mysql/db_root_password.txt
 .extras/compose/db/postgres/db_password.txt
+.extras/postman
 src/config/resources/jwt/private-key.pem
 src/config/resources/tls/private-key.pem
 

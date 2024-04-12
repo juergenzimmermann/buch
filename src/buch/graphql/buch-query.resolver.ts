@@ -79,6 +79,7 @@ export class BuchQueryResolver {
                 short,
             );
         }
+        // "Nullish Coalescing" ab ES2020
         const rabatt = buch.rabatt ?? 0;
         const shortStr = short === undefined || short ? '%' : 'Prozent';
         // eslint-disable-next-line @typescript-eslint/no-magic-numbers

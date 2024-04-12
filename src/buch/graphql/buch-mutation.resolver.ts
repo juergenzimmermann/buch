@@ -119,6 +119,7 @@ export class BuchMutationResolver {
             untertitel: titelDTO.untertitel,
             buch: undefined,
         };
+        // "Optional Chaining" ab ES2020
         const abbildungen = buchDTO.abbildungen?.map((abbildungDTO) => {
             const abbildung: Abbildung = {
                 id: undefined,
