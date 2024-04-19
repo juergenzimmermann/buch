@@ -24,6 +24,7 @@ dependencies.svg
 .extras/postman
 src/config/resources/jwt/private-key.pem
 src/config/resources/tls/private-key.pem
+sonar-project.properties
 
 # Logs
 log
