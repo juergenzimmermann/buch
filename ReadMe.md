@@ -601,7 +601,9 @@ der Token im Skript `scripts\sonar-scanner.js` verwendet werden kann.
 Nachdem der Server gestartet ist, wird der SonarQube-Scanner in einer zweiten
 PowerShell mit `npm run sonar` gestartet. Das Resultat kann dann in der
 Webseite des zuvor gestarteten Servers über die URL `http://localhost:9000`
-inspiziert werden.
+inspiziert werden. Falls es dabei zu einem Fehler kommt, kann man auch direkt
+`C:\Users\<MY__USER>\.sonar\native-sonar-scanner\sonar-scanner-5.0.1.3006-windows\bin\sonar-scanner`
+aufrufen.
 
 Abschließend wird der oben gestartete Server heruntergefahren.
 
