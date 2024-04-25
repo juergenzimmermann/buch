@@ -51,6 +51,7 @@ import {
 } from 'typeorm';
 import { Abbildung } from './abbildung.entity.js';
 import { ApiProperty } from '@nestjs/swagger';
+import { BuchFile } from './buchFile.entity.js';
 import { DecimalTransformer } from './decimal-transformer.js';
 import { Titel } from './titel.entity.js';
 import { dbType } from '../../config/db.js';
@@ -132,6 +133,9 @@ export class Buch {
         cascade: ['insert', 'remove'],
     })
     readonly abbildungen: Abbildung[] | undefined;
+
+    @OneToOne(() => BuchFile, (buchFile) => buchFile.buch)
+    readonly file: BuchFile | undefined;
 
     // https://typeorm.io/entities#special-columns
     // https://typeorm.io/entities#column-types-for-postgres

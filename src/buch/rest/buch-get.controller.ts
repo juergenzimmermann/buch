@@ -81,7 +81,13 @@ export type TitelModel = Omit<Titel, 'buch' | 'id'>;
 /** Buch-Objekt mit HATEOAS-Links */
 export type BuchModel = Omit<
     Buch,
-    'abbildungen' | 'aktualisiert' | 'erzeugt' | 'id' | 'titel' | 'version'
+    | 'abbildungen'
+    | 'file'
+    | 'aktualisiert'
+    | 'erzeugt'
+    | 'id'
+    | 'titel'
+    | 'version'
 > & {
     titel: TitelModel;
     // eslint-disable-next-line @typescript-eslint/naming-convention

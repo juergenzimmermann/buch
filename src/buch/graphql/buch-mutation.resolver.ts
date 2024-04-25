@@ -143,6 +143,7 @@ export class BuchMutationResolver {
             schlagwoerter: buchDTO.schlagwoerter,
             titel,
             abbildungen,
+            file: undefined,
             erzeugt: new Date(),
             aktualisiert: new Date(),
         };
@@ -167,6 +168,7 @@ export class BuchMutationResolver {
             schlagwoerter: buchDTO.schlagwoerter,
             titel: undefined,
             abbildungen: undefined,
+            file: undefined,
             erzeugt: undefined,
             aktualisiert: new Date(),
         };
