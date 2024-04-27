@@ -1,4 +1,4 @@
-# syntax=docker/dockerfile:1.7.0
+# syntax=docker/dockerfile:1.7.1
 
 # Copyright (C) 2023 - Juergen Zimmermann, Hochschule Karlsruhe
 #
@@ -30,7 +30,7 @@
 # https://snyk.io/blog/10-best-practices-to-containerize-nodejs-web-applications-with-docker
 # https://cheatsheetseries.owasp.org/cheatsheets/NodeJS_Docker_Cheat_Sheet.html
 
-ARG NODE_VERSION=21.7.3
+ARG NODE_VERSION=22.0.0
 
 # ---------------------------------------------------------------------------------------
 # S t a g e   d i s t

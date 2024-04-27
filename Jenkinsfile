@@ -102,6 +102,7 @@ pipeline {
                 // https://github.com/nodesource/distributions#installation-instructions
                 // https://packages.debian.org/stable/python/python3
                 // https://packages.debian.org/bookworm/python3
+                // https://packages.debian.org/trixie/python3.12
                 // https://computingforgeeks.com/how-to-install-python-on-debian-linux
                 // https://cloudcone.com/docs/article/how-to-install-python-3-10-on-debian-11
                 // https://linuxhint.com/install-python-debian-10
