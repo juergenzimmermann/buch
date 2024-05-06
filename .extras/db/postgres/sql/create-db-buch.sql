@@ -24,10 +24,10 @@
 --        Kommentar entfernen:
 --           Zeile mit "#cap_add: [...]"
 -- (2) PowerShell:
---     cd .extras\compose\db\postgres
+--     cd .extras\compose\postgres
 --     docker compose up db
 -- (3) 2. PowerShell:
---     cd .extras\compose\db\postgres
+--     cd .extras\compose\postgres
 --     docker compose exec db bash
 --        chown postgres:postgres /var/lib/postgresql/tablespace
 --        chown postgres:postgres /var/lib/postgresql/tablespace/buch
@@ -48,6 +48,8 @@
 --     docker compose exec db bash
 --        psql --dbname=postgres --username=postgres --file=/sql/create-db-buch.sql
 --        psql --dbname=buch --username=buch --file=/sql/create-schema-buch.sql
+--        psql --dbname=postgres --username=postgres --file=/sql/create-db-sonar.sql
+--        psql --dbname=sonar --username=sonar --file=/sql/create-schema-sonar.sql
 --        exit
 --      docker compose down
 

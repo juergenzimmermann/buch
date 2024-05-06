@@ -27,6 +27,7 @@ scanner(
         serverUrl: 'http://localhost:9000',
         options: {
             'sonar.projectName': 'buch',
+            'sonar.projectKey': 'buch',
             'sonar.projectDescription': 'Beispiel fuer Software Engineering',
             'sonar.projectVersion': '2024.04.0',
             'sonar.sources': 'src',

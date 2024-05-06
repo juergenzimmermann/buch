@@ -62,7 +62,11 @@ import { dbType } from '../../config/db.js';
 export type BuchArt = 'DRUCKAUSGABE' | 'KINDLE';
 
 /**
- * Entity-Klasse zu einem relationalen Tabelle
+ * Entity-Klasse zu einer relationalen Tabelle.
+ * BEACHTE: Jede Entity-Klasse muss in einem JSON-Array deklariert sein, das in
+ * TypeOrmModule.forFeature(...) verwendet wird.
+ * Im Beispiel ist das JSON-Array in src\buch\entity\entities.ts und
+ * TypeOrmModule.forFeature(...) wird in src\buch\buch.module.ts aufgerufen.
  */
 // https://typeorm.io/entities
 @Entity()

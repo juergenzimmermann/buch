@@ -14,10 +14,10 @@
 -- along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 -- (1) PowerShell:
---     cd .extras\compose\db\mysql
+--     cd .extras\compose\mysql
 --     docker compose up
 -- (1) 2. PowerShell:
---     cd .extras\compose\db\mysql
+--     cd .extras\compose\mysql
 --     docker compose exec db bash
 --         mysql --user=root --password=p < /sql/create-db-buch.sql
 --         exit

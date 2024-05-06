@@ -32,7 +32,7 @@ import { httpsOptions } from './https.js';
 
 const { keycloak } = config;
 const authServerUrl =
-    (keycloak?.authServerUrl as string | undefined) ?? 'http://localhost:8080';
+    (keycloak?.authServerUrl as string | undefined) ?? 'http://localhost:8880';
 // Keycloak ist in Sicherheits-Bereich (= realms) unterteilt
 const realm = (keycloak?.realm as string | undefined) ?? 'acme';
 const clientId = (keycloak?.clientId as string | undefined) ?? 'buch-client';

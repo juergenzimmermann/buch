@@ -33,9 +33,9 @@ services:
     image: keycloak/keycloak:24.0.3-0
     #depends_on: [postgres]
     ports:
-      - published: 8080
+      - published: 8880
         target: 8080
-      - published: 8443
+      - published: 8843
         target: 8443
     volumes:
       - type: bind

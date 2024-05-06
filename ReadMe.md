@@ -174,11 +174,11 @@ Falls man _PostgreSQL_ oder _MySQL_ und nicht _SQLite_ als "Embedded Database" n
 
 ```powershell
     # PostgreSQL mit pgAdmin
-    cd .\extras\compose\db\postgres
+    cd .\extras\compose\postgres
     docker compose up
 
     # alternativ: MySQL mit phpMyAdmin:
-    cd .\extras\compose\db\mysql
+    cd .\extras\compose\mysql
     docker compose up
 ```
 
