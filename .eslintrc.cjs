@@ -20,6 +20,7 @@
 // https://stackoverflow.com/questions/74237042/how-to-correctly-configure-the-parser-plugins-with-eslints-new-flat-config
 
 const stylistic = require('@stylistic/eslint-plugin');
+
 // https://github.com/eslint-stylistic/eslint-stylistic/blob/main/packages/eslint-plugin/configs/customize.ts
 const customizedStylistic = stylistic.configs.customize({
     flat: false,
