@@ -34,7 +34,8 @@
 #  - nutzt den Linux-Kernel der Laufzeitumgebung, z.B. Container Runtime
 #  - glibc als C-Bibliothek und nicht musl wie bei Alpine
 #  - apk als Package-Format wie bei Alpine
-#  - mit Node 18 ca. 110 MB
+#  - mit Node 22 ca. 110 MB
+#  - https://images.chainguard.dev/directory/image/node/versions
 #  - https://github.com/wolfi-dev
 #  - https://chainguard.dev
 
@@ -98,7 +99,7 @@ RUN --mount=type=bind,source=package.json,target=package.json \
 set -eux
 # ci (= clean install) mit package-lock.json
 # --omit=dev: ohne devDependencies
-npm ci --omit=dev --no-audit --no-fund
+npm ci --no-audit --no-fund --omit=dev --omit=peer
 EOF
 
 # ------------------------------------------------------------------------------
