@@ -25,7 +25,7 @@ pipeline {
         docker {
             // https://www.debian.org/releases: Bookworm = Debian 12
             // https://deb.nodesource.com hat nur node_20.x
-            // image 'node:22.0.0-bookworm'
+            // image 'node:22.1.0-bookworm'
             image 'node:20.12.2-bookworm'
             // https://stackoverflow.com/questions/62330354/jenkins-pipeline-alpine-agent-apk-update-error-unable-to-lock-database-permis
             // https://stackoverflow.com/questions/42630894/jenkins-docker-how-to-control-docker-user-when-using-image-inside-command/51986870#51986870
