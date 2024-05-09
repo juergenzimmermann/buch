@@ -30,17 +30,17 @@
 # https://snyk.io/blog/10-best-practices-to-containerize-nodejs-web-applications-with-docker
 
 # Distroless-Image
-#   - auf Basis von Debian 11 (bullseye)
+#   - auf Basis von Debian 12 (bookworm)
 #   - ohne Shell, Package Manager, GUI, grep, sed, awk, ...
 #   - nur 2% der Größe von Debian und 50 % von Alpine
-#   - mit Node 20 ca. 170 MB:
+#   - mit Node 22 ca. 170 MB:
 #   - von Google
-#   - https://console.cloud.google.com/gcr/images/distroless/global/nodejs20-debian11
+#   - https://console.cloud.google.com/gcr/images/distroless/global/nodejs22-debian12
 
 # ---------------------------------------------------------------------------------------
 # S t a g e   d i s t
 # ---------------------------------------------------------------------------------------
-ARG NODE_VERSION=20.12.2
+ARG NODE_VERSION=22.1.0
 FROM node:${NODE_VERSION}-bookworm AS dist
 
 # https://packages.debian.org/bookworm/python3.11-minimal
@@ -81,6 +81,16 @@ FROM node:${NODE_VERSION}-bookworm-slim AS dependencies
 
 RUN <<EOF
 set -eux
+apt-get update
+apt-get upgrade --yes
+
+# Debian Bookworm bietet nur Packages fuer Python 3.11; Ubuntu Jammy LTS nur fuer Python 3.10
+# Python 3.12: Uebersetzung des Python-Quellcodes erforderlich
+# https://itnixpro.com/how-to-install-python-3-12-on-debian-12debian-11
+apt-get install --no-install-recommends --yes python3.11=3.11.2-6 python3.11-dev=3.11.2-6 build-essential=12.9
+ln -s /usr/bin/python3.11 /usr/bin/python3
+ln -s /usr/bin/python3.11 /usr/bin/python
+
 npm i -g --no-audit --no-fund npm
 EOF
 
@@ -100,7 +110,7 @@ EOF
 # ------------------------------------------------------------------------------
 # S t a g e   d u m b - i n i t
 # ------------------------------------------------------------------------------
-# gcr.io/distroless/nodejs20-debian12:nonroot basiert auf Debian Bookworm
+# gcr.io/distroless/nodejs22-debian12:nonroot basiert auf Debian Bookworm
 FROM debian:bookworm-slim AS dumb-init
 
 # dumb-init installieren, um im finalen Image "node" aufrufen zu koennen
@@ -123,9 +133,9 @@ EOF
 # S t a g e   f i n a l
 # ------------------------------------------------------------------------------
 # https://github.com/GoogleContainerTools/distroless
-# https://console.cloud.google.com/gcr/images/distroless/global/nodejs20-debian11
-FROM gcr.io/distroless/nodejs20-debian12:nonroot AS final
-# FROM gcr.io/distroless/nodejs20-debian12:debug-nonroot AS final
+# https://console.cloud.google.com/gcr/images/distroless/global/nodejs2-debian12
+FROM gcr.io/distroless/nodejs22-debian12:nonroot AS final
+# FROM gcr.io/distroless/nodejs22-debian12:debug-nonroot AS final
 
 # Anzeige bei "docker inspect ..."
 # https://specs.opencontainers.org/image-spec/annotations
