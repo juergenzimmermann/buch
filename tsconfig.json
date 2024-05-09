@@ -2,8 +2,10 @@
   // https://typestrong.org/ts-node/docs/configuration
   // https://github.com/tsconfig/bases/#node-22-tsconfigjson
   // https://stackoverflow.com/questions/63742790/unable-to-import-esm-ts-module-in-node/65163089#65163089
-  // Node 20 wegen Jenkinsfile
-  "extends": "@tsconfig/node20/tsconfig.json",
+  // NICHT "strictest" wegen "experimentalDecorators"
+  // Node 20 statt 22 wegen Jenkinsfile
+  // "extends": ["@tsconfig/strictest/tsconfig", "@tsconfig/node20/tsconfig"],
+  "extends": ["@tsconfig/node20/tsconfig"],
   "ts-node": {
     "esm": true,
     "module": "es2022",
@@ -24,11 +26,11 @@
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "allowSyntheticDefaultImports": true,
+    // https://www.typescriptlang.org/tsconfig/#target
     // "target": "es2023",
     "target": "es2022",
     "sourceMap": true,
     "outDir": "./dist",
-    // "baseUrl": "./", // fuer z.B. webpack https://www.typescriptlang.org/tsconfig#baseUrl
     "incremental": true,
     "skipLibCheck": true, // wegen @nestjs/graphql und @nestjs/apollo
     "allowUnreachableCode": false, // return bei then-else und try-catch
