@@ -20,7 +20,7 @@ import { IsInt, IsNumberString, Min } from 'class-validator';
 import { UseFilters, UseGuards, UseInterceptors } from '@nestjs/common';
 import { type Abbildung } from '../entity/abbildung.entity.js';
 import { type Buch } from '../entity/buch.entity.js';
-import { BuchDTO } from '../rest/buchDTO.entity.js';
+import { BuchDTO } from '../controller/buchDTO.entity.js';
 import { BuchWriteService } from '../service/buch-write.service.js';
 import { HttpExceptionFilter } from './http-exception.filter.js';
 import { type IdInput } from './buch-query.resolver.js';

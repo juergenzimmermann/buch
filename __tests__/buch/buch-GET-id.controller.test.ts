@@ -40,7 +40,7 @@ import {
     shutdownServer,
     startServer,
 } from '../testserver.js';
-import { type BuchModel } from '../../src/buch/rest/buch-get.controller.js';
+import { type BuchModel } from '../../src/buch/controller/buch-get.controller.js';
 import { type ErrorResponse } from './error-response.js';
 import { HttpStatus } from '@nestjs/common';
 

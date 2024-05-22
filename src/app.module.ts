@@ -20,9 +20,9 @@ import {
 } from '@nestjs/common';
 import { AdminModule } from './admin/admin.module.js';
 import { type ApolloDriverConfig } from '@nestjs/apollo';
-import { BuchGetController } from './buch/rest/buch-get.controller.js';
+import { BuchGetController } from './buch/controller/buch-get.controller.js';
 import { BuchModule } from './buch/buch.module.js';
-import { BuchWriteController } from './buch/rest/buch-write.controller.js';
+import { BuchWriteController } from './buch/controller/buch-write.controller.js';
 import { DevModule } from './config/dev/dev.module.js';
 import { GraphQLModule } from '@nestjs/graphql';
 import { KeycloakModule } from './security/keycloak/keycloak.module.js';

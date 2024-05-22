@@ -22,7 +22,7 @@ import {
     shutdownServer,
     startServer,
 } from '../testserver.js';
-import { type BuchDTO } from '../../src/buch/rest/buchDTO.entity.js';
+import { type BuchDTO } from '../../src/buch/controller/buchDTO.entity.js';
 import { BuchReadService } from '../../src/buch/service/buch-read.service.js';
 import { type ErrorResponse } from './error-response.js';
 import { HttpStatus } from '@nestjs/common';
