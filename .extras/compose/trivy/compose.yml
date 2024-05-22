@@ -13,12 +13,14 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-# Aufruf:   docker compose [-f compose.yml -f compose.distroless.yml|compose.wolfi.yml] up
+# Aufruf:   docker compose up
 
 services:
   trivy:
-    image: aquasec/trivy:0.51.1
+    image: aquasec/trivy:0.51.2
     command: [image, juergenzimmermann/buch:2024.04.0-bookworm]
+    #command: [image, juergenzimmermann/buch:2024.04.0-distroless]
+    #command: [image, juergenzimmermann/buch:2024.04.0-wolfi]
     volumes:
       - type: bind
         source: C:/Zimmermann/volumes/trivy

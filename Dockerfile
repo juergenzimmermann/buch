@@ -30,7 +30,8 @@
 # https://snyk.io/blog/10-best-practices-to-containerize-nodejs-web-applications-with-docker
 # https://cheatsheetseries.owasp.org/cheatsheets/NodeJS_Docker_Cheat_Sheet.html
 
-ARG NODE_VERSION=22.1.0
+# "Build Argument"; alternativ: ENV = Umgebungsvariable im gebauten Image
+ARG NODE_VERSION=22.2.0
 
 # ---------------------------------------------------------------------------------------
 # S t a g e   d i s t

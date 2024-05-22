@@ -1,25 +1,24 @@
-/* eslint-disable @stylistic/quotes */
-/*
- * Copyright (C) 2021 - present Juergen Zimmermann, Florian Goebel, Hochschule Karlsruhe
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <https://www.gnu.org/licenses/>.
- */
+// Copyright (C) 2021 - present Juergen Zimmermann, Hochschule Karlsruhe
+//
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 /**
  * Das Modul enthält die Funktion, um die Test-DB neu zu laden.
  * @packageDocumentation
  */
+
+/* eslint-disable @stylistic/quotes */
 
 import { Injectable, type OnApplicationBootstrap } from '@nestjs/common';
 import {
@@ -221,9 +220,10 @@ export class DbPopulateService implements OnApplicationBootstrap {
             `USE ${adminDataSourceOptions!.database};`,
         );
         const copyStmt =
+            // eslint-disable-next-line prefer-template
             "LOAD DATA INFILE '/var/lib/mysql-files/%TABELLE%.csv' " +
             "INTO TABLE %TABELLE% FIELDS TERMINATED BY ';' " +
-            "ENCLOSED BY '\"' LINES TERMINATED BY '\\n' IGNORE 1 ROWS;";
+            String.raw`ENCLOSED BY '"' LINES TERMINATED BY '\n' IGNORE 1 ROWS;`;
         for (const tabelle of this.#tabellen) {
             // eslint-disable-next-line unicorn/prefer-string-replace-all
             await dataSource.query(copyStmt.replace(/%TABELLE%/gu, tabelle));

@@ -49,7 +49,7 @@ keycloak:
   authServerUrl: http://keycloak:8080
   #realm: acme
   # siehe Keycloak Menuepunkt "Clients" > Tab "Clients list" > Spalte "Client ID"
-  #clientId: buch-client
+  #clientId: nest-client
   #tokenValidation: online
 
 # ==============================================================================

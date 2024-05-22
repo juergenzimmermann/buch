@@ -3,7 +3,8 @@
   "files.eol": "\n",
   "files.associations": {
     "*.csv": "csv (semicolon)"
-},
+  },
+  "material-icon-theme.activeIconPack": "nest",
   "typescript.tsdk": "node_modules/typescript/lib",
   "workbench.colorCustomizations": {
     "activityBar.activeBackground": "#2f7c47",

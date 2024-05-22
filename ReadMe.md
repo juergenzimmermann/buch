@@ -520,19 +520,13 @@ Mit _Docker Compose_ und der Konfigurationsdatei `compose.yml` im Verzeichnis
 PowerShell herunterfahren.
 
 ```powershell
-    cd .extras/compose
+    cd .extras\compose\buch
 
-    # PowerShell fuer buch-Server mit distroless-Image zzgl. DB-Server und Mailserver
+    # PowerShell fuer buch-Server mit Bookworm-Image zzgl. DB-Server und Mailserver
     docker compose up
 
-    # alternativ: buch-Image mit Debian Bookworm
-    docker compose -f compose.yml -f compose.bookworm.yml up
-
-    # alternativ: buch-Image mit Wolfi
-    docker compose -f compose.yml -f compose.wolfi.yml up
-
     # Nur zur Fehlersuche: weitere PowerShell für bash (NICHT bei distroless!)
-    cd .extras\compose
+    cd .extras\compose\buch
     docker compose exec buch bash
         id
         env
@@ -545,7 +539,7 @@ PowerShell herunterfahren.
         exit
 
     # 2. Powershell: buch-Server einschl. DB-Server und Mailserver herunterfahren
-    cd .extras/compose
+    cd .extras\compose\buch
     docker compose down
 ```
 
@@ -682,15 +676,8 @@ Service für Trivy so konfiguriert, dass das Image `buch` analysiert wird.
 
 ```powershell
     cd .extras\compose\trivy
-    # Analyse des Images mit distroless
-    docker compose up
-
     # Analyse des Images mit Debian Bookworm
-    docker compose -f compose.yml -f compose.bookworm.yml up
-
-    # Analyse des Images mit Wolfi
-    docker compose -f compose.yml -f compose.wolfi.yml up
-
+    docker compose up
 ```
 
 ### OWASP Dependency Check

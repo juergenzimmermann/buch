@@ -13,7 +13,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-# Aufruf:   docker compose [-f compose.yml -f compose.distroless.yml|compose.wolfi.yml] up
+# Aufruf:   docker compose up
 #           docker compose exec buch bash   # Bookworm
 #           docker compose exec buch ash    # Wolfi
 #             id
@@ -32,16 +32,18 @@
 # https://docs.docker.com/compose/compose-file/14-include
 # Der "service" fuer das DB-System muss fuer "depends_on" bekannt sein
 include:
-  - path: ./postgres/compose.yml
-  #- path: ./mysql/compose.yml
-  #- path: ./oracle/compose.yml
-  - path: ./keycloak/compose.yml
-  - path: ./fakesmtp/compose.yml
+  - path: ../postgres/compose.yml
+  #- path: ../mysql/compose.yml
+  #- path: ../oracle/compose.yml
+  - path: ../keycloak/compose.yml
+  - path: ../fakesmtp/compose.yml
 
 # https://docs.docker.com/compose/compose-file/05-services
 services:
   buch:
     image: juergenzimmermann/buch:2024.04.0-bookworm
+    #image: juergenzimmermann/buch:2024.04.0-distroless
+    #image: juergenzimmermann/buch:2024.04.0-wolfi
     depends_on:
       db:
         condition: service_healthy
@@ -54,21 +56,21 @@ services:
         target: /opt/app/dist/config/resources/app.yml
         read_only: true
       - type: bind
-        source: ../../log
+        source: ../../../log
         target: /opt/app/log
         read_only: true
       - type: bind
-        source: ../../src/config/resources/tls/key.pem
+        source: ../../../src/config/resources/tls/key.pem
         target: /opt/app/dist/config/resources/tls/key.pem
         read_only: true
       - type: bind
-        source: ../../src/config/resources/jwt/private-key.pem
+        source: ../../../src/config/resources/jwt/private-key.pem
         target: /opt/app/dist/config/resources/jwt/private-key.pem
         read_only: true
       - type: bind
-        source: ../../src/config/resources/db/sqlite/buch.sqlite
+        source: ../../../src/config/resources/db/sqlite/buch.sqlite
         target: /opt/app/dist/config/resources/db/sqlite/buch.sqlite
-    env_file: app.env
+    env_file: .env
     environment:
       # https://docs.docker.com/compose/compose-file/compose-file-v3/#variable-substitution
       - USER_PASSWORD_ENCODED=$$argon2i$$v=19$$m=4096,t=3,p=1$$aaxA2v/9rRSPGkwYN+NQog$$27Huii1XtD3iEd62fog+04G26LRPZMHoYCI6AGKTL8M

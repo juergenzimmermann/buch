@@ -31,7 +31,8 @@
 
 ## Installation
 
-_Keycloak_ wird als Docker Container gestartet:
+_Keycloak_ wird als Docker Container gestartet, wofÃ¼r das Verzeichnis
+`C:\Zimmermann\volumes\keycloak` vorhanden sein und ggf. angelegt werden muss:
 
 ```powershell
     cd .extras\compose\keycloak
@@ -44,13 +45,13 @@ und zwar Benutzername `admin` und Passwort `p`.
 
 Außerdem sind die Umgebungsvariablen für die beiden Dateien für den privatem
 Schlüssel und das Zertifikat gesetzt, so dass Keycloak wahlweise über
-`http://localhost:8080` oder `https://localhost:8443` aufgerufen werden kann.
+`http://localhost:8880` oder `https://localhost:8843` aufgerufen werden kann.
 
 ## Konfiguration
 
 Nachdem Keycloak als Container gestartet ist, sind folgende umfangreiche
 Konfigurationsschritte _sorgfältig_ durchzuführen, nachdem man in einem
-Webbrowser `http://localhost:8080` oder `https://localhost:8443` aufgerufen hat:
+Webbrowser `http://localhost:8880` oder `https://localhost:8843` aufgerufen hat:
 
 ```text
     "Administration Console" anklicken
@@ -62,6 +63,7 @@ Webbrowser `http://localhost:8080` oder `https://localhost:8443` aufgerufen hat:
         Drop-Down Menü: <Create realm> anklicken
             Realm name      acme
             <Create> anklicken
+
     Menüpunkt "Realm settings"
         Tab "Sessions"
             # Refresh Token: siehe https://stackoverflow.com/questions/52040265/how-to-specify-refresh-tokens-lifespan-in-keycloak
@@ -75,7 +77,8 @@ Webbrowser `http://localhost:8080` oder `https://localhost:8443` aufgerufen hat:
 
     Menüpunkt "Clients"
         <Create client> anklicken
-        Client ID   buch-client
+        Client ID   nest-client
+        Name        Nest Client
         <Next>
             "Capability config"
                 Client authentication       On
@@ -86,11 +89,13 @@ Webbrowser `http://localhost:8080` oder `https://localhost:8443` aufgerufen hat:
                                     https://oauth.pstmn.io/v1/callback
         <Save>
 
-        buch-client
+        nest-client
             Tab "Roles"
                 <Create Role> anklicken
                 Role name       admin
                 <Save> anklicken
+            Breadcrumb "Client details" anklicken
+            Tab "Roles"
                 <Create Role> anklicken
                 Role name       user
                 <Save> anklicken
@@ -102,25 +107,25 @@ Webbrowser `http://localhost:8080` oder `https://localhost:8443` aufgerufen hat:
     # https://www.keycloak.org/docs/latest/server_admin/index.html#assigning-permissions-using-roles-and-groups
     Menüpunkt "Realm roles"
         <Create role> anklicken
-            Role name       buch-admin
+            Role name       nest-admin
             <Save> anklicken
         Breadcrumb "Realm roles" anklicken
-            "buch-admin" anklicken
+            "nest-admin" anklicken
                 Drop-down Menü "Action" (in der rechten oberen Ecke):  "Add associated roles" auswählen
                 "Filter by clients"       auswählen und anklicken
-                "buch-client admin"       Haken setzen
+                "nest-client admin"       Haken setzen
                 <Assign> anklicken
         Breadcrumb "Realm roles" anklicken
         <Create role> anklicken
-            Role name       buch-user
+            Role name       nest-user
             <Save>
         Breadcrumb "Realm roles" anklicken
-            "buch-user" anklicken
+            "nest-user" anklicken
                 Drop-down Menü "Action" (in der rechten oberen Ecke):  "Add associated roles" auswählen
                 "Filter by clients"       auswählen und anklicken
                 "buch-client user"        Haken setzen
                 <Assign> anklicken
-            WICHTIG: "buch-admin" und "buch-user" haben in der Spalte "Composite" den Wert "True"
+            WICHTIG: "nest-admin" und "nest-user" haben bei Breadcrumb "Realm roles" in der Spalte "Composite" den Wert "True"
 
     Menüpunkt "Users"
         <Add user>
@@ -139,7 +144,7 @@ Webbrowser `http://localhost:8080` oder `https://localhost:8443` aufgerufen hat:
             Tab "Role Mapping"
                 <Assign Role> anklicken
                     "Filter by clients" auswählen
-                        "buch-client admin"     Haken setzen     (ggf. blättern)
+                        "nest-client admin"     Haken setzen     (ggf. blättern)
                         <Assign> anklicken
             Tab "Details"
                 Required user actions       Überprüfen, dass nichts ausgewählt ist
@@ -160,7 +165,7 @@ Webbrowser `http://localhost:8080` oder `https://localhost:8443` aufgerufen hat:
             Tab "Role Mapping"
                 <Assign Role> anklicken
                     "Filter by clients" auswählen
-                        "buch-client user"     Haken setzen     (ggf. blättern)
+                        "nest-client user"     Haken setzen     (ggf. blättern)
                         <Assign> anklicken
             Tab "Details"
                 Required user actions       Überprüfen, dass nichts ausgewählt ist
@@ -175,10 +180,13 @@ Im Wurzelverzeichnis des Projekts in der Datei `.env` muss man die
 Umgebungsvariable `CLIENT_SECRET` auf folgenden Wert aus _Keycloak_ setzen:
 
 - Menüpunkt `Clients`
-- `buch-client` aus der Liste beim voreingestellten Tab `Clients list` auswählen
+- `nest-client` aus der Liste beim voreingestellten Tab `Clients list` auswählen
 - Tab `Credentials` anklicken
 - Die Zeichenkette beim Label `Client Secret` kopieren und in der Datei `.env`
   bei der Umgebungsvariablen `CLIENT_SECRET` als Wert eintragen.
+
+Diese Zeichenkette muss man auch in Postman als Wert für die dortige
+Umgebungsvariable `client_secret` eintragen.
 
 ## Initial Access Token
 
