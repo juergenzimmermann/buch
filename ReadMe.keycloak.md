@@ -24,10 +24,22 @@
 
 ## Inhalt
 
+- [JWT](#jwt)
 - [Installation](#installation)
 - [Konfiguration](#konfiguration)
 - [Initial Access Token](#initial-access-token)
 - [Inspektion der H2-Datenbank](#inspektion-der-h2-datenbank)
+
+## JWT
+
+Ein _JWT_ (= JSON Web Token) ist ein codiertes JSON-Objekt, das Informationen zu
+einem authentifizierten Benutzer enthält. Ein JWT kann verfiziert werden, da er
+digital signiert ist. Mit der URL `https://jwt.io` kann ein JWT in seine Bestandteile
+decodiert werden:
+
+- Algorithm
+- Payload
+- Signature
 
 ## Installation
 
@@ -173,6 +185,9 @@ Webbrowser `http://localhost:8880` oder `https://localhost:8843` aufgerufen hat:
         Breadcrumb "Users" anklicken
             WICHTIG: "admin" und "user" mit der jeweiligen Emailadresse sind aufgelistet
 ```
+
+Mit der URL `http://localhost:8880/realms/acme/.well-known/openid-configuration`
+kann man in einem Webbrowser die Konfiguration als JSON-Datensatz erhalten.
 
 ## Client Secret
 
