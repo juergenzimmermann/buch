@@ -117,6 +117,7 @@ module.exports = {
         // https://github.com/typescript-eslint/typescript-eslint/blob/main/packages/eslint-plugin/src/configs/recommended-type-checked.ts
         // https://github.com/typescript-eslint/typescript-eslint/blob/main/packages/eslint-plugin/src/configs/stylistic-type-checked.ts
         '@typescript-eslint/array-type': ['error', { default: 'array'}],
+        '@typescript-eslint/ban-ts-comment': 'error',
         '@typescript-eslint/consistent-type-definitions': ['error', 'interface'],
         '@typescript-eslint/consistent-type-exports': 'error',
         '@typescript-eslint/consistent-type-imports': 'error',
@@ -209,6 +210,7 @@ module.exports = {
         }],
         '@typescript-eslint/no-useless-constructor': 'error',
         '@typescript-eslint/no-useless-empty-export': 'error',
+        //'@typescript-eslint/no-useless-template-expression': 'error',
         '@typescript-eslint/non-nullable-type-assertion-style': 'error',
         '@typescript-eslint/only-throw-error': 'error',
         '@typescript-eslint/prefer-destructuring': 'error',
@@ -223,7 +225,6 @@ module.exports = {
         '@typescript-eslint/prefer-reduce-type-parameter': 'error',
         '@typescript-eslint/prefer-regexp-exec': 'error',
         '@typescript-eslint/prefer-return-this-type': 'error',
-        '@typescript-eslint/prefer-ts-expect-error': 'error',
         '@typescript-eslint/require-array-sort-compare': 'error',
         '@typescript-eslint/restrict-plus-operands': ['error', {
             skipCompoundAssignments: false,
