@@ -1,4 +1,4 @@
-# syntax=docker/dockerfile:1.7.1
+# syntax=docker/dockerfile:1.8.0
 
 # Copyright (C) 2023 - Juergen Zimmermann, Hochschule Karlsruhe
 #
@@ -31,7 +31,7 @@
 # https://cheatsheetseries.owasp.org/cheatsheets/NodeJS_Docker_Cheat_Sheet.html
 
 # "Build Argument"; alternativ: ENV = Umgebungsvariable im gebauten Image
-ARG NODE_VERSION=22.2.0
+ARG NODE_VERSION=22.3.0
 
 # ---------------------------------------------------------------------------------------
 # S t a g e   d i s t

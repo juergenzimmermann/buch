@@ -30,7 +30,7 @@
 
 services:
   keycloak:
-    image: keycloak/keycloak:24.0.5-0
+    image: keycloak/keycloak:25.0.0-0
     #depends_on: [postgres]
     ports:
       - published: 8880
@@ -58,6 +58,7 @@ services:
     # --features=token-exchange
     entrypoint: ['/opt/keycloak/bin/kc.sh', 'start-dev']
     cap_drop: [ALL]
+    restart: unless-stopped
     deploy:
       resources:
         limits:

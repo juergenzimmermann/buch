@@ -28,7 +28,6 @@ services:
     ports:
       - published: 5432
         target: 5432
-    restart: unless-stopped
     # https://dev.to/danvixent/how-to-setup-postgresql-with-ssl-inside-a-docker-container-5f3
     # https://gist.github.com/mrw34/c97bb03ea1054afb551886ffc8b63c3b
     # https://stackoverflow.com/questions/55072221/deploying-postgresql-docker-with-ssl-certificate-and-key-with-volumes
@@ -82,16 +81,17 @@ services:
       - no-new-privileges:true
     hostname: postgres
     container_name: postgres
-    healthcheck:
-      test: [CMD, pg_isready, --dbname=postgres, --username=postgres]
-      interval: 5s
-      timeout: 2s
-      start_period: 5s
     # https://docs.docker.com/compose/compose-file/compose-file-v3/#cap_add-cap_drop
     cap_drop: [ALL]
     # https://man7.org/linux/man-pages/man7/capabilities.7.html
     #cap_add: [CHOWN, SETGID, SETUID, DAC_OVERRIDE, NET_BIND_SERVICE, CAP_FOWNER]
     # https://docs.docker.com/compose/compose-file/deploy
+    healthcheck:
+      test: [CMD, pg_isready, --dbname=postgres, --username=postgres]
+      interval: 5s
+      timeout: 2s
+      start_period: 5s
+    restart: unless-stopped
     deploy:
       # https://docs.docker.com/compose/compose-file/deploy/#resources
       resources:

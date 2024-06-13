@@ -47,6 +47,7 @@ services:
     # user: oracle:oinstall
     hostname: oracle
     container_name: oracle
+    cap_drop: [ALL]
     healthcheck:
       # /opt/oracle/healthcheck.sh
       # https://stackoverflow.com/questions/50217637/how-do-i-check-if-oracle-is-up-in-docker
@@ -61,7 +62,7 @@ services:
       interval: 120s
       timeout: 5s
       start_period: 30s
-    cap_drop: [ALL]
+    restart: unless-stopped
     deploy:
       resources:
         limits:
