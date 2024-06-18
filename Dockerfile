@@ -1,4 +1,4 @@
-# syntax=docker/dockerfile:1.8.0
+# syntax=docker/dockerfile:1.8.1
 
 # Copyright (C) 2023 - Juergen Zimmermann, Hochschule Karlsruhe
 #
@@ -23,7 +23,7 @@
 #           docker network ls
 
 # https://docs.docker.com/engine/reference/builder/#syntax
-# https://github.com/moby/buildkit/blob/master/frontend/dockerfile/docs/syntax.md
+# https://github.com/moby/buildkit/blob/master/frontend/dockerfile/docs/reference.md
 # https://hub.docker.com/r/docker/dockerfile
 # https://docs.docker.com/build/building/multi-stage
 # https://github.com/textbook/starter-kit/blob/main/Dockerfile
