@@ -94,7 +94,6 @@
     "form-data": "4.0.0",
     "graphql": "16.8.2",
     "helmet": "7.1.0",
-    "ip": "2.0.1",
     "js-yaml": "4.1.0",
     "keycloak-connect": "24.0.5",
     "mysql2": "3.10.1",
@@ -109,6 +108,7 @@
     "rxjs": "7.8.1",
     "sonic-boom": "4.0.1",
     "typeorm": "0.3.20",
+    "ws": "8.17.1",
     "xss": "1.0.15"
   },
   "devDependencies": {
