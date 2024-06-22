@@ -47,7 +47,7 @@ const pretty = log?.pretty === true;
 // Pino wird auch von Fastify genutzt.
 // https://blog.appsignal.com/2021/09/01/best-practices-for-logging-in-nodejs.html
 
-type LogLevel = 'error' | 'warn' | 'info' | 'debug';
+export type LogLevel = 'error' | 'warn' | 'info' | 'debug';
 let logLevelTmp: LogLevel = 'info';
 if (env.LOG_LEVEL !== undefined) {
     logLevelTmp = env.LOG_LEVEL as LogLevel;

@@ -14,14 +14,14 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 /**
- * Das Modul besteht aus der Klasse {@linkcode BuchReadService}.
+ * Das Modul besteht aus der Klasse {@linkcode Suchkriterien}.
  * @packageDocumentation
  */
 
 import { type BuchArt } from './../entity/buch.entity.js';
 
 /**
- * Typdefinition für `BuchReadService.find()`und `QueryBuilder.build()`
+ * Typdefinition für `find` in `buch-read.service` und `QueryBuilder.build()`.
  */
 export interface Suchkriterien {
     readonly isbn?: string;

@@ -30,7 +30,7 @@ import { getLogger } from '../../logger/logger.js';
 
 const { authServerUrl, clientId, secret } = keycloakConnectOptions;
 
-interface Login {
+export interface Login {
     readonly username: string | undefined;
     readonly password: string | undefined;
 }
