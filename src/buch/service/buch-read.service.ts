@@ -69,8 +69,7 @@ export class BuchReadService {
     /**
      * Ein Buch asynchron anhand seiner ID suchen
      * @param id ID des gesuchten Buches
-     * @returns Das gefundene Buch vom Typ [Buch](buch_entity_buch_entity.Buch.html)
-     *          in einem Promise aus ES2015.
+     * @returns Das gefundene Buch in einem Promise aus ES2015.
      * @throws NotFoundException falls kein Buch mit der ID existiert
      */
     // https://2ality.com/2015/01/es6-destructuring.html#simulating-named-parameters-in-javascript

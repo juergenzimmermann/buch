@@ -123,7 +123,7 @@ Umstieg auf ESM auch die Unterstützung in _ts-node_ und _ts-jest_ beachtet.
 Wenn man ESM verwendet, muss man die eigenen Module z.B. folgendermaßen
 importieren:
 
-```JavaScript
+```javascript
     import { myFunc } from './foo.js';
     import { myClass } from './bar/index.js';
 ```
@@ -131,7 +131,7 @@ importieren:
 Außerdem gibt es ab Node 17.1 das _Node Protocol_ für den Import von
 _Builtin Modules_, z.B.:
 
-```JavaScript
+```javascript
     import { resolve } from 'node:path';
 ```
 

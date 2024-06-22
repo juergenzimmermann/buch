@@ -9,4 +9,5 @@ module.exports = {
     validation: {
         invalidLink: true,
     },
+    // https://shiki.matsu.io/languages
 };
