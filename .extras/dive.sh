@@ -14,7 +14,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-# Aufruf:   .\dive.sh [distroless|wolfi|bookworm]
+# Aufruf:   .\dive.sh [alpine|bookworm]
 
 base=${1}
 
@@ -27,9 +27,8 @@ imageBase='buch'
 imageTag="2024.04.0-$base"
 
 image="$imagePrefix${imageBase}:$imageTag"
-# image='gcr.io/distroless/nodejs20-debian12:nonroot'
-# image='node:20.7.0-bookworm-slim'
-# image='cgr.dev/chainguard/node:latest'
+# image='node:22.3.0-bookworm-slim'
+# image='node:22.3.0-alpine3.19'
 
 # https://github.com/wagoodman/dive#installation
 docker run --rm --interactive --tty \

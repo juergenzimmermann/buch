@@ -15,7 +15,7 @@
 
 # https://docs.microsoft.com/en-us/powershell/scripting/developer/cmdlet/approved-verbs-for-windows-powershell-commands?view=powershell-7
 
-# Aufruf:   .\dive.ps1 [distroless|wolfi]
+# Aufruf:   .\dive.ps1 [alpine]
 # ggf. vorher:  Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
 # oder:         Set-ExecutionPolicy -ExecutionPolicy Bypass -Scope CurrentUser
 
@@ -41,9 +41,8 @@ $imageBase = 'buch'
 $imageTag = "2024.04.0-$base"
 $image = "$imagePrefix${imageBase}:$imageTag"
 
-# $image = 'gcr.io/distroless/nodejs20-debian12:nonroot'
-# $image = 'node:20.7.0-bookworm-slim'
-# $image = 'cgr.dev/chainguard/node:latest'
+# image='node:22.3.0-bookworm-slim'
+# image='node:22.3.0-alpine3.19'
 
 # https://github.com/wagoodman/dive#installation
 docker run --rm --interactive --tty `

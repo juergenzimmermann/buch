@@ -1,4 +1,4 @@
-# Copyright (C) 2022 - present Juergen Zimmermann, Hochschule Karlsruhe
+# Copyright (C) 2021 - present Juergen Zimmermann, Hochschule Karlsruhe
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -15,14 +15,21 @@
 
 services:
   fakesmtp:
-    image: gessnerfl/fake-smtp-server:2.2.1
+    # https://hub.docker.com/r/gessnerfl/fake-smtp-server
+    # https://hub.docker.com/r/greenmail/standalone
+    image: gessnerfl/fake-smtp-server:2.3.0
     ports:
-      - published: 5025
+      - published: 8025
         target: 8025
-      - published: 5080
+        protocol: tcp
+      # Web Interface
+      - published: 8026
         target: 8080
-      - published: 5081
-        target: 8081
+        protocol: tcp
+      # HTTP Management API
+      #- published: 8027
+      #  target: 8081
+      #  protocol: tcp
     volumes:
       - type: bind
         source: C:/Zimmermann/volumes/fakesmtp
@@ -35,13 +42,14 @@ services:
       SPRING_JPA_OPEN-IN-VIEW: true
     hostname: fakesmtp
     container_name: fakesmtp
-    cap_drop: [ALL]
+    cap_drop: [ ALL ]
+    stop_grace_period: 3s
     restart: unless-stopped
     deploy:
       resources:
         limits:
-          cpus: '0.5'
+          cpus: "0.5"
           memory: 768M
         reservations:
-          cpus: '0.5'
+          cpus: "0.5"
           memory: 768M

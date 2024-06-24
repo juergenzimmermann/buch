@@ -18,8 +18,8 @@
 # Aufruf:   docker build --tag juergenzimmermann/buch:2024.04.0-bookworm .
 #               ggf. --progress=plain
 #               ggf. --no-cache
-#           Get-Content Dockerfile.bookworm | docker run --rm --interactive hadolint/hadolint:2.12.1-beta-debian
-#               Linux:   cat Dockerfile.bookworm | docker run --rm --interactive hadolint/hadolint:2.12.1-beta-debian
+#           Get-Content Dockerfile | docker run --rm --interactive hadolint/hadolint:2.12.1-beta-debian
+#               Linux:   cat Dockerfile | docker run --rm --interactive hadolint/hadolint:2.12.1-beta-debian
 #           docker network ls
 
 # https://docs.docker.com/engine/reference/builder/#syntax

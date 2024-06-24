@@ -19,8 +19,7 @@ services:
   trivy:
     image: aquasec/trivy:0.52.2
     command: [image, juergenzimmermann/buch:2024.04.0-bookworm]
-    #command: [image, juergenzimmermann/buch:2024.04.0-distroless]
-    #command: [image, juergenzimmermann/buch:2024.04.0-wolfi]
+    #command: [image, juergenzimmermann/buch:2024.04.0-alpine]
     volumes:
       - type: bind
         source: C:/Zimmermann/volumes/trivy

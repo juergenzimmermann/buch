@@ -30,7 +30,8 @@
 
 services:
   keycloak:
-    image: keycloak/keycloak:25.0.1-0
+    image: quay.io/keycloak/keycloak:25.0.1-0
+    #image: keycloak/keycloak:25.0.1-0
     #depends_on: [db]
     ports:
       - published: 8880

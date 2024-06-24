@@ -15,9 +15,9 @@
 
 # Aufruf:   docker compose up
 #           docker compose exec buch bash   # Bookworm
-#           docker compose exec buch ash    # Wolfi
+#           docker compose exec buch ash    # Alpine
 #             id
-#             ps -ef                        # NUR Wolfi, NICHT Bookworm
+#             ps -ef                        # NUR Alpine
 #             env
 #             pwd
 #             ls -l dist
@@ -42,8 +42,7 @@ include:
 services:
   buch:
     image: juergenzimmermann/buch:2024.04.0-bookworm
-    #image: juergenzimmermann/buch:2024.04.0-distroless
-    #image: juergenzimmermann/buch:2024.04.0-wolfi
+    #image: juergenzimmermann/buch:2024.04.0-alpine
     depends_on:
       db:
         condition: service_healthy

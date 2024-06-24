@@ -78,7 +78,7 @@ health:
 mail:
   #activated: false
   host: localhost
-  port: 5025
+  port: 8025
   log: false
 
 # ==============================================================================

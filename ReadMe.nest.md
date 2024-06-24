@@ -428,23 +428,24 @@ Für ein minimales Basis-Image gibt es folgende Alternativen:
 - _Debian Bookworm slim_
   - ca. 250 MB
   - Bookworm ist der Codename für Debian 12
-  - mit Node 20
+  - mit Node 22
+- _Alpine_
+  - ca. 50 MB
+  - C-Bibliothek _musl_ statt von GNU
+  - _ash_ als Shell
+  - _apk_ ("Alpine Package Keeper") als Package-Manager
+  - mit Node 22
 - _Distroless_
-  - ca. 170 MB
-  - auf Basis von Debian 11 (Codename Bullseye)
+  - auf Basis von Debian
   - ohne Shell, Package Manager, GUI, grep, sed, awk, ...
-  - nur 2% der Größe vom vollständigen Debian und 50 % von Alpine
-  - mit Node 20
   - von Google
 - _Wolfi_
-  - ca. 110 MB
   - minimales Community Linux von Chainguard
   - _undistro_: keine volle Linux-Distribution
   - nutzt den Linux-Kernel der Laufzeitumgebung, z.B. Container Runtime
   - _glibc_ als C-Bibliothek und **nicht** _musl_ wie bei _Alpine_
   - _ash_ als Shell
   - _apk_ als Package-Format wie bei _Alpine_
-  - mit Node LTS: 18.x
   - https://github.com/wolfi-dev
   - https://chainguard.dev
 
@@ -460,17 +461,13 @@ Je nach Basis-Image kann man ein Image folgendermaßen erstellen und mit Hadolin
 validieren:
 
 ```powershell
-    # Distroless (Debian Bullseye bzw. 11)
-    Get-Content Dockerfile | docker run --rm --interactive hadolint/hadolint:2.12.1-beta-debian
-    docker build --tag juergenzimmermann/buch:2024.04.0-distroless .
-
     # Debian Bookworm (12) slim
-    Get-Content Dockerfile.debian | docker run --rm --interactive hadolint/hadolint:2.12.1-beta-debian
-    docker build --tag juergenzimmermann/buch:2024.04.0-bookworm --file Dockerfile.bookworm .
+    Get-Content Dockerfile | docker run --rm --interactive hadolint/hadolint:2.12.1-beta-debian
+    docker build --tag juergenzimmermann/buch:2024.04.0-bookworm .
 
-    # Wolfi
-    Get-Content Dockerfile.wolfi | docker run --rm --interactive hadolint/hadolint:2.12.1-beta-debian
-    docker build --tag juergenzimmermann/buch:2024.04.0-wolfi --file Dockerfile.wolfi .
+    # Alpine
+    Get-Content Dockerfile.alpine | docker run --rm --interactive hadolint/hadolint:2.12.1-beta-debian
+    docker build --tag juergenzimmermann/buch:2024.04.0-alpine --file Dockerfile.alpine .
 ```
 
 ### Image inspizieren
@@ -481,9 +478,8 @@ Mit dem Unterkommando `inspect` kann man die Metadaten, z.B. Labels, zu einem
 Image inspizieren:
 
 ```powershell
-    docker inspect juergenzimmermann/buch:2024.04.0-distroless
     docker inspect juergenzimmermann/buch:2024.04.0-bookworm
-    docker inspect juergenzimmermann/buch:2024.04.0-wolfi
+    docker inspect juergenzimmermann/buch:2024.04.0-alpine
 ```
 
 #### docker sbom
@@ -493,9 +489,8 @@ inspizieren, welche Bestandteilen in einem Docker-Images enthalten sind, z.B.
 npm-Packages oder Debian-Packages.
 
 ```powershell
-    docker sbom juergenzimmermann/buch:2024.04.0-distroless
     docker sbom juergenzimmermann/buch:2024.04.0-bookworm
-    docker sbom juergenzimmermann/buch:2024.04.0-wolfi
+    docker sbom juergenzimmermann/buch:2024.04.0-alpine
 ```
 
 #### dive
@@ -504,19 +499,17 @@ Mit _dive_ kann man ein Docker-Image und die einzelnen Layer inspizieren, z.B.:
 
 ```powershell
     cd .extras
-    # Distroless Image als Basis-Image
-    .\dive.ps1
     # Debian Bookworm als Basis-Image
-    .\dive.ps1 bookworm
-    # Wolfi als Basis-Image
-    .\dive.ps1 wolfi
+    .\dive.ps1
+    # Alpine als Basis-Image
+    .\dive.ps1 alpine
 ```
 
 ### Docker Compose
 
 Mit _Docker Compose_ und der Konfigurationsdatei `compose.yml` im Verzeichnis
-`.extras\compose` lässt sich der Container mit dem Basis-Image `distroless`
-(Debian Bullseye bzw. 11) folgendermaßen starten und später in einer weiteren
+`.extras\compose` lässt sich der Container mit dem Basis-Image mit _Debian
+Bookworm (12) Slim_ folgendermaßen starten und später in einer weiteren
 PowerShell herunterfahren.
 
 ```powershell
@@ -525,7 +518,7 @@ PowerShell herunterfahren.
     # PowerShell fuer buch-Server mit Bookworm-Image zzgl. DB-Server und Mailserver
     docker compose up
 
-    # Nur zur Fehlersuche: weitere PowerShell für bash (NICHT bei distroless!)
+    # Nur zur Fehlersuche: weitere PowerShell für bash
     cd .extras\compose\buch
     docker compose exec buch bash
         id
@@ -642,9 +635,8 @@ groben Überblick verschaffen, wieviele Sicherheitslücken in den Bibliotheken i
 Image enthalten sind:
 
 ```powershell
-    docker scout quickview juergenzimmermann/buch:2024.04.0-distroless
     docker scout quickview juergenzimmermann/buch:2024.04.0-bookworm
-    docker scout quickview juergenzimmermann/buch:2024.04.0-wolfi
+    docker scout quickview juergenzimmermann/buch:2024.04.0-alpine
 ```
 
 Dabei bedeutet:
