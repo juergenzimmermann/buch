@@ -37,20 +37,14 @@ export interface Login {
 
 @Injectable()
 export class KeycloakService implements KeycloakConnectOptionsFactory {
-    readonly #loginHeaders: RawAxiosRequestHeaders;
+    readonly #tokenHeaders: RawAxiosRequestHeaders;
 
     readonly #keycloakClient: AxiosInstance;
 
     readonly #logger = getLogger(KeycloakService.name);
 
     constructor() {
-        // https://www.keycloak.org/docs-api/23.0.4/rest-api/index.html
-        const authorization = Buffer.from(
-            `${clientId}:${secret}`,
-            'utf8',
-        ).toString('base64');
-        this.#loginHeaders = {
-            Authorization: `Basic ${authorization}`,
+        this.#tokenHeaders = {
             'Content-Type': 'application/x-www-form-urlencoded',
         };
 
@@ -71,15 +65,16 @@ export class KeycloakService implements KeycloakConnectOptionsFactory {
             return;
         }
 
+        // https://www.keycloak.org/docs-api/23.0.4/rest-api/index.html
         // https://stackoverflow.com/questions/62683482/keycloak-rest-api-call-to-get-access-token-of-a-user-through-admin-username-and
         // https://stackoverflow.com/questions/65714161/keycloak-generate-access-token-for-a-user-with-keycloak-admin
-        const body = `grant_type=password&username=${username}&password=${password}`;
+        const body = `username=${username}&password=${password}&grant_type=password&client_id=${clientId}&client_secret=${secret}`;
         let response: AxiosResponse<Record<string, number | string>>;
         try {
             response = await this.#keycloakClient.post(
                 paths.accessToken,
                 body,
-                { headers: this.#loginHeaders },
+                { headers: this.#tokenHeaders },
             );
         } catch {
             this.#logger.warn('token: Fehler bei %s', paths.accessToken);
@@ -98,13 +93,13 @@ export class KeycloakService implements KeycloakConnectOptionsFactory {
         }
 
         // https://stackoverflow.com/questions/51386337/refresh-access-token-via-refresh-token-in-keycloak
-        const refreshBody = `grant_type=refresh_token&refresh_token=${refresh_token}`;
+        const refreshBody = `refresh_token=${refresh_token}&grant_type=refresh_token&client_id=${clientId}&client_secret=${secret}`;
         let response: AxiosResponse<Record<string, number | string>>;
         try {
             response = await this.#keycloakClient.post(
                 paths.accessToken,
                 refreshBody,
-                { headers: this.#loginHeaders },
+                { headers: this.#tokenHeaders },
             );
         } catch {
             this.#logger.warn(
