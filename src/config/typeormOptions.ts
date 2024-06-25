@@ -86,11 +86,7 @@ switch (dbType) {
             logging,
             logger,
             ssl: { cert },
-            extra: {
-                ssl: {
-                    rejectUnauthorized: false,
-                },
-            },
+            extra: { ssl: { rejectUnauthorized: false } },
         };
         break;
     }
@@ -113,11 +109,7 @@ switch (dbType) {
             logging,
             logger,
             ssl: { cert },
-            extra: {
-                ssl: {
-                    rejectUnauthorized: false,
-                },
-            },
+            extra: { ssl: { rejectUnauthorized: false } },
         };
         break;
     }
@@ -187,11 +179,7 @@ if (dbType === 'postgres') {
         logging,
         logger,
         ssl: { cert },
-        extra: {
-            ssl: {
-                rejectUnauthorized: false,
-            },
-        },
+        extra: { ssl: { rejectUnauthorized: false } },
     };
 } else if (dbType === 'mysql') {
     const cert = readFileSync(path.resolve(dbResourcesDir, 'certificate.cer')); // eslint-disable-line security/detect-non-literal-fs-filename
@@ -207,11 +195,7 @@ if (dbType === 'postgres') {
         logging,
         logger,
         ssl: { cert },
-        extra: {
-            ssl: {
-                rejectUnauthorized: false,
-            },
-        },
+        extra: { ssl: { rejectUnauthorized: false } },
     };
 }
 export const adminDataSourceOptions = adminDataSourceOptionsTemp;

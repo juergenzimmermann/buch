@@ -46,9 +46,7 @@ const setupSwagger = (app: INestApplication) => {
         .addBearerAuth()
         .build();
     const document = SwaggerModule.createDocument(app, config);
-    const options: SwaggerCustomOptions = {
-        customSiteTitle: 'SWE 23/24',
-    };
+    const options: SwaggerCustomOptions = { customSiteTitle: 'SWE 24/25' };
     SwaggerModule.setup(paths.swagger, app, document, options);
 };
 

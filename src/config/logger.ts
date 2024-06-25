@@ -78,12 +78,8 @@ const prettyTransportOptions = {
 };
 
 const options: pino.TransportMultiOptions | pino.TransportSingleOptions = pretty
-    ? {
-          targets: [fileOptions, prettyTransportOptions],
-      }
-    : {
-          targets: [fileOptions],
-      };
+    ? { targets: [fileOptions, prettyTransportOptions] }
+    : { targets: [fileOptions] };
 // in pino: type ThreadStream = any
 // type-coverage:ignore-next-line
 const transports = pino.transport(options); // eslint-disable-line @typescript-eslint/no-unsafe-assignment

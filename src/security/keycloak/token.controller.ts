@@ -117,9 +117,7 @@ export class TokenController {
     @ApiConsumes('application/x-www-form-urlencoded', 'application/json')
     @ApiOperation({ summary: 'Refresh für vorhandenen Token' })
     @ApiOkResponse({ description: 'Erfolgreich aktualisiert.' })
-    @ApiUnauthorizedResponse({
-        description: 'Ungültiger Token.',
-    })
+    @ApiUnauthorizedResponse({ description: 'Ungültiger Token.' })
     async refresh(@Body() body: Refresh, @Res() res: Response) {
         // eslint-disable-next-line camelcase, @typescript-eslint/naming-convention
         const { refresh_token } = body;

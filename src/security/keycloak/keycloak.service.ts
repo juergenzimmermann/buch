@@ -93,7 +93,7 @@ export class KeycloakService implements KeycloakConnectOptionsFactory {
         }
 
         // https://stackoverflow.com/questions/51386337/refresh-access-token-via-refresh-token-in-keycloak
-        const refreshBody = `refresh_token=${refresh_token}&grant_type=refresh_token&client_id=${clientId}&client_secret=${secret}`;
+        const refreshBody = `refresh_token=${refresh_token}&`;
         let response: AxiosResponse<Record<string, number | string>>;
         try {
             response = await this.#keycloakClient.post(
