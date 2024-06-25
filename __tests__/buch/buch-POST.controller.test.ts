@@ -26,7 +26,7 @@ import { type BuchDTO } from '../../src/buch/controller/buchDTO.entity.js';
 import { BuchReadService } from '../../src/buch/service/buch-read.service.js';
 import { type ErrorResponse } from './error-response.js';
 import { HttpStatus } from '@nestjs/common';
-import { loginRest } from '../login.js';
+import { tokenRest } from '../token.js';
 
 // -----------------------------------------------------------------------------
 // T e s t d a t e n
@@ -111,7 +111,7 @@ describe('POST /rest', () => {
 
     test('Neues Buch', async () => {
         // given
-        const token = await loginRest(client);
+        const token = await tokenRest(client);
         headers.Authorization = `Bearer ${token}`;
 
         // when
@@ -145,7 +145,7 @@ describe('POST /rest', () => {
 
     test('Neues Buch mit ungueltigen Daten', async () => {
         // given
-        const token = await loginRest(client);
+        const token = await tokenRest(client);
         headers.Authorization = `Bearer ${token}`;
         const expectedMsg = [
             expect.stringMatching(/^isbn /u),
@@ -180,7 +180,7 @@ describe('POST /rest', () => {
 
     test('Neues Buch, aber die ISBN existiert bereits', async () => {
         // given
-        const token = await loginRest(client);
+        const token = await tokenRest(client);
         headers.Authorization = `Bearer ${token}`;
 
         // when

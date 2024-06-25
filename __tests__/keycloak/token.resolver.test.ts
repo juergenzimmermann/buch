@@ -33,7 +33,7 @@ import { HttpStatus } from '@nestjs/common';
 // -----------------------------------------------------------------------------
 // Test-Suite
 // eslint-disable-next-line max-lines-per-function
-describe('Login', () => {
+describe('Token', () => {
     let client: AxiosInstance;
     const graphqlPath = 'graphql';
 
@@ -51,14 +51,14 @@ describe('Login', () => {
         await shutdownServer();
     });
 
-    test('Login', async () => {
+    test('Token', async () => {
         // given
         const username = 'admin';
         const password = 'p'; // NOSONAR
         const body: GraphQLQuery = {
             query: `
                 mutation {
-                    login(
+                    token(
                         username: "${username}",
                         password: "${password}"
                     ) {
@@ -78,14 +78,14 @@ describe('Login', () => {
         expect(headers['content-type']).toMatch(/json/iu);
         expect(data.errors).toBeUndefined();
         expect(data.data).not.toBeNull();
-        expect(data.data!.login).not.toBeNull();
+        expect(data.data!.token).not.toBeNull();
 
-        const { login } = data.data!;
+        const { token } = data.data!;
 
-        expect(login).toBeDefined();
-        expect(login).not.toBeNull();
+        expect(token).toBeDefined();
+        expect(token).not.toBeNull();
 
-        const { access_token } = login; // eslint-disable-line camelcase, @typescript-eslint/naming-convention
+        const { access_token } = token; // eslint-disable-line camelcase, @typescript-eslint/naming-convention
 
         expect(access_token).toBeDefined();
         expect(access_token).not.toBeNull();
@@ -96,14 +96,14 @@ describe('Login', () => {
         expect(access_token).toMatch(/^[a-z\d]+\.[a-z\d]+\.[\w-]+$/iu);
     });
 
-    test('Login mit falschem Passwort', async () => {
+    test('Token mit falschem Passwort', async () => {
         // given
         const username = 'admin';
         const password = 'FALSCH'; // NOSONAR
         const body: GraphQLQuery = {
             query: `
                 mutation {
-                    login(
+                    token(
                         username: "${username}",
                         password: "${password}"
                     ) {
@@ -120,7 +120,7 @@ describe('Login', () => {
         // then
         expect(status).toBe(HttpStatus.OK);
         expect(headers['content-type']).toMatch(/json/iu);
-        expect(data.data!.login).toBeNull();
+        expect(data.data!.token).toBeNull();
 
         const { errors } = data;
 
@@ -132,7 +132,7 @@ describe('Login', () => {
 
         expect(message).toBe('Falscher Benutzername oder falsches Passwort');
         expect(path).toBeDefined();
-        expect(path![0]).toBe('login');
+        expect(path![0]).toBe('token');
         expect(extensions).toBeDefined();
         expect(extensions!.code).toBe('BAD_USER_INPUT');
     });
@@ -141,10 +141,10 @@ describe('Login', () => {
         // given
         const username = 'admin';
         const password = 'p'; // NOSONAR
-        const loginBody: GraphQLQuery = {
+        const tokenBody: GraphQLQuery = {
             query: `
                 mutation {
-                    login(
+                    token(
                         username: "${username}",
                         password: "${password}"
                     ) {
@@ -153,9 +153,9 @@ describe('Login', () => {
                 }
             `,
         };
-        const loginResponse: AxiosResponse<Record<string, any> | null> =
-            await client.post(graphqlPath, loginBody);
-        const { refresh_token } = loginResponse.data!.data!.login; // eslint-disable-line camelcase, @typescript-eslint/naming-convention
+        const tokenResponse: AxiosResponse<Record<string, any> | null> =
+            await client.post(graphqlPath, tokenBody);
+        const { refresh_token } = tokenResponse.data!.data!.token; // eslint-disable-line camelcase, @typescript-eslint/naming-convention
         const body: GraphQLQuery = {
             /* eslint-disable camelcase */
             query: `
@@ -177,7 +177,7 @@ describe('Login', () => {
         expect(headers['content-type']).toMatch(/json/iu);
         expect(data.errors).toBeUndefined();
         expect(data.data).not.toBeNull();
-        expect(data.data!.login).not.toBeNull();
+        expect(data.data!.token).not.toBeNull();
 
         const { refresh } = data.data!;
 

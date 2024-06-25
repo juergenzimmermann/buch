@@ -38,10 +38,10 @@ export interface RefreshInput {
 
 @Resolver('login')
 @UseInterceptors(ResponseTimeInterceptor)
-export class LoginResolver {
+export class TokenResolver {
     readonly #keycloakService: KeycloakService;
 
-    readonly #logger = getLogger(LoginResolver.name);
+    readonly #logger = getLogger(TokenResolver.name);
 
     constructor(keycloakService: KeycloakService) {
         this.#keycloakService = keycloakService;
@@ -49,10 +49,10 @@ export class LoginResolver {
 
     @Mutation()
     @Public()
-    async login(@Args() { username, password }: LoginInput) {
-        this.#logger.debug('login: username=%s', username);
+    async token(@Args() { username, password }: LoginInput) {
+        this.#logger.debug('token: username=%s', username);
 
-        const result = await this.#keycloakService.login({
+        const result = await this.#keycloakService.token({
             username,
             password,
         });
@@ -62,7 +62,7 @@ export class LoginResolver {
             );
         }
 
-        this.#logger.debug('login: result=%o', result);
+        this.#logger.debug('token: result=%o', result);
         return result;
     }
 

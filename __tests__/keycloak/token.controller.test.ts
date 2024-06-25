@@ -18,11 +18,11 @@ import axios, { type AxiosInstance, type AxiosResponse } from 'axios';
 import {
     host,
     httpsAgent,
-    loginPath,
     port,
     refreshPath,
     shutdownServer,
     startServer,
+    tokenPath,
 } from '../testserver.js';
 import { HttpStatus } from '@nestjs/common';
 
@@ -38,7 +38,7 @@ const passwordFalsch = 'FALSCHES_PASSWORT !!!'; // NOSONAR
 // -----------------------------------------------------------------------------
 // Test-Suite
 // eslint-disable-next-line max-lines-per-function
-describe('REST-Schnittstelle /login', () => {
+describe('REST-Schnittstelle /token', () => {
     let client: AxiosInstance;
 
     // Testserver starten und dabei mit der DB verbinden
@@ -56,14 +56,14 @@ describe('REST-Schnittstelle /login', () => {
         await shutdownServer();
     });
 
-    test('Login mit korrektem Passwort', async () => {
+    test('Token mit korrektem Passwort', async () => {
         // given
         const body = `username=${username}&password=${password}`;
 
         // when
         // eslint-disable-next-line @typescript-eslint/naming-convention
         const { status, data }: AxiosResponse<{ access_token: string }> =
-            await client.post(loginPath, body);
+            await client.post(tokenPath, body);
 
         // then
         expect(status).toBe(HttpStatus.OK);
@@ -75,13 +75,13 @@ describe('REST-Schnittstelle /login', () => {
         expect(access_token).toMatch(/^[a-z\d]+\.[a-z\d]+\.[\w-]+$/iu);
     });
 
-    test('Login mit falschem Passwort', async () => {
+    test('Token mit falschem Passwort', async () => {
         // given
         const body = `username=${username}&password=${passwordFalsch}`;
 
         // when
         const response: AxiosResponse<Record<string, any>> = await client.post(
-            loginPath,
+            tokenPath,
             body,
         );
 
@@ -89,13 +89,13 @@ describe('REST-Schnittstelle /login', () => {
         expect(response.status).toBe(HttpStatus.UNAUTHORIZED);
     });
 
-    test('Login ohne Benutzerkennung', async () => {
+    test('Token ohne Benutzerkennung', async () => {
         // given
         const body = '';
 
         // when
         const response: AxiosResponse<Record<string, any>> = await client.post(
-            loginPath,
+            tokenPath,
             body,
         );
 
@@ -105,11 +105,11 @@ describe('REST-Schnittstelle /login', () => {
 
     test('Refresh', async () => {
         // given
-        const loginBody = `username=${username}&password=${password}`;
+        const tokenBody = `username=${username}&password=${password}`;
         // eslint-disable-next-line @typescript-eslint/naming-convention
-        const loginResponse: AxiosResponse<{ refresh_token: string }> =
-            await client.post(loginPath, loginBody);
-        const { refresh_token } = loginResponse.data; // eslint-disable-line camelcase, @typescript-eslint/naming-convention
+        const tokenResponse: AxiosResponse<{ refresh_token: string }> =
+            await client.post(tokenPath, tokenBody);
+        const { refresh_token } = tokenResponse.data; // eslint-disable-line camelcase, @typescript-eslint/naming-convention
         const body = `refresh_token=${refresh_token}`; // eslint-disable-line camelcase
 
         // when

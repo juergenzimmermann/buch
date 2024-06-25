@@ -16,7 +16,7 @@
 export const paths = {
     rest: 'rest',
     auth: 'auth',
-    login: 'login',
+    token: 'token',
     refresh: 'refresh',
     swagger: 'swagger',
 } as const;

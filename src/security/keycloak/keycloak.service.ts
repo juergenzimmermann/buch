@@ -65,29 +65,29 @@ export class KeycloakService implements KeycloakConnectOptionsFactory {
         return keycloakConnectOptions;
     }
 
-    async login({ username, password }: Login) {
-        this.#logger.debug('login: username=%s', username);
+    async token({ username, password }: Login) {
+        this.#logger.debug('token: username=%s', username);
         if (username === undefined || password === undefined) {
             return;
         }
 
         // https://stackoverflow.com/questions/62683482/keycloak-rest-api-call-to-get-access-token-of-a-user-through-admin-username-and
         // https://stackoverflow.com/questions/65714161/keycloak-generate-access-token-for-a-user-with-keycloak-admin
-        const loginBody = `grant_type=password&username=${username}&password=${password}`;
+        const body = `grant_type=password&username=${username}&password=${password}`;
         let response: AxiosResponse<Record<string, number | string>>;
         try {
             response = await this.#keycloakClient.post(
                 paths.accessToken,
-                loginBody,
+                body,
                 { headers: this.#loginHeaders },
             );
         } catch {
-            this.#logger.warn('login: Fehler bei %s', paths.accessToken);
+            this.#logger.warn('token: Fehler bei %s', paths.accessToken);
             return;
         }
 
         this.#logPayload(response);
-        this.#logger.debug('login: response.data=%o', response.data);
+        this.#logger.debug('token: response.data=%o', response.data);
         return response.data;
     }
 

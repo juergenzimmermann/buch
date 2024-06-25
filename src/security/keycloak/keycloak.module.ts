@@ -21,9 +21,9 @@ import {
 } from 'nest-keycloak-connect';
 import { APP_GUARD } from '@nestjs/core';
 import { KeycloakService } from './keycloak.service.js';
-import { LoginController } from './login.controller.js';
-import { LoginResolver } from './login.resolver.js';
 import { Module } from '@nestjs/common';
+import { TokenController } from './token.controller.js';
+import { TokenResolver } from './token.resolver.js';
 
 @Module({
     providers: [KeycloakService],
@@ -38,10 +38,10 @@ class ConfigModule {}
             imports: [ConfigModule],
         }),
     ],
-    controllers: [LoginController],
+    controllers: [TokenController],
     providers: [
         KeycloakService,
-        LoginResolver,
+        TokenResolver,
         {
             // fuer @UseGuards(AuthGuard)
             provide: APP_GUARD,

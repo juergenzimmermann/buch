@@ -43,6 +43,7 @@ db:
 # ==============================================================================
 # K e y c l o a k
 # ==============================================================================
+# "Client Secret" muss durch die Umgebungsvariable CLIENT_SECRET gesetzt werden
 keycloak:
   #authServerUrl: http://localhost:8880
   #realm: acme

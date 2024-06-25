@@ -27,7 +27,7 @@ import {
 import { type GraphQLRequest } from '@apollo/server';
 import { type GraphQLResponseBody } from './buch-query.resolver.test.js';
 import { HttpStatus } from '@nestjs/common';
-import { loginGraphQL } from '../login.js';
+import { tokenGraphQL } from '../token.js';
 
 // eslint-disable-next-line jest/no-export
 export type GraphQLQuery = Pick<GraphQLRequest, 'query'>;
@@ -63,7 +63,7 @@ describe('GraphQL Mutations', () => {
     // -------------------------------------------------------------------------
     test('Neues Buch', async () => {
         // given
-        const token = await loginGraphQL(client);
+        const token = await tokenGraphQL(client);
         const authorization = { Authorization: `Bearer ${token}` }; // eslint-disable-line @typescript-eslint/naming-convention
         const body: GraphQLQuery = {
             query: `
@@ -115,7 +115,7 @@ describe('GraphQL Mutations', () => {
     // eslint-disable-next-line max-lines-per-function
     test('Buch mit ungueltigen Werten neu anlegen', async () => {
         // given
-        const token = await loginGraphQL(client);
+        const token = await tokenGraphQL(client);
         const authorization = { Authorization: `Bearer ${token}` }; // eslint-disable-line @typescript-eslint/naming-convention
         const body: GraphQLQuery = {
             query: `
@@ -178,7 +178,7 @@ describe('GraphQL Mutations', () => {
     // -------------------------------------------------------------------------
     test('Buch aktualisieren', async () => {
         // given
-        const token = await loginGraphQL(client);
+        const token = await tokenGraphQL(client);
         const authorization = { Authorization: `Bearer ${token}` }; // eslint-disable-line @typescript-eslint/naming-convention
         const body: GraphQLQuery = {
             query: `
@@ -222,7 +222,7 @@ describe('GraphQL Mutations', () => {
     // -------------------------------------------------------------------------
     test('Buch mit ungueltigen Werten aktualisieren', async () => {
         // given
-        const token = await loginGraphQL(client);
+        const token = await tokenGraphQL(client);
         const authorization = { Authorization: `Bearer ${token}` }; // eslint-disable-line @typescript-eslint/naming-convention
         const id = '40';
         const body: GraphQLQuery = {
@@ -282,7 +282,7 @@ describe('GraphQL Mutations', () => {
     // -------------------------------------------------------------------------
     test('Nicht-vorhandenes Buch aktualisieren', async () => {
         // given
-        const token = await loginGraphQL(client);
+        const token = await tokenGraphQL(client);
         const authorization = { Authorization: `Bearer ${token}` }; // eslint-disable-line @typescript-eslint/naming-convention
         const id = '999999';
         const body: GraphQLQuery = {
@@ -340,7 +340,7 @@ describe('GraphQL Mutations', () => {
     // -------------------------------------------------------------------------
     test('Buch loeschen', async () => {
         // given
-        const token = await loginGraphQL(client);
+        const token = await tokenGraphQL(client);
         const authorization = { Authorization: `Bearer ${token}` }; // eslint-disable-line @typescript-eslint/naming-convention
         const body: GraphQLQuery = {
             query: `
@@ -368,7 +368,7 @@ describe('GraphQL Mutations', () => {
     // -------------------------------------------------------------------------
     test('Buch loeschen als "user"', async () => {
         // given
-        const token = await loginGraphQL(client, 'user', 'p');
+        const token = await tokenGraphQL(client, 'user', 'p');
         const authorization = { Authorization: `Bearer ${token}` }; // eslint-disable-line @typescript-eslint/naming-convention
         const body: GraphQLQuery = {
             query: `

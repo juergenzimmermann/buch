@@ -23,7 +23,7 @@ import {
     startServer,
 } from '../testserver.js';
 import { HttpStatus } from '@nestjs/common';
-import { loginRest } from '../login.js';
+import { tokenRest } from '../token.js';
 
 // -----------------------------------------------------------------------------
 // T e s t d a t e n
@@ -56,7 +56,7 @@ describe('DELETE /rest/buecher', () => {
     test('Vorhandenes Buch loeschen', async () => {
         // given
         const url = `/rest/${id}`;
-        const token = await loginRest(client);
+        const token = await tokenRest(client);
         const headers: Record<string, string> = {
             Authorization: `Bearer ${token}`, // eslint-disable-line @typescript-eslint/naming-convention
         };
@@ -103,7 +103,7 @@ describe('DELETE /rest/buecher', () => {
     test('Vorhandenes Buch als "user" loeschen', async () => {
         // given
         const url = `/rest/60`;
-        const token = await loginRest(client, 'user', 'p');
+        const token = await tokenRest(client, 'user', 'p');
         const headers: Record<string, string> = {
             Authorization: `Bearer ${token}`, // eslint-disable-line @typescript-eslint/naming-convention
         };

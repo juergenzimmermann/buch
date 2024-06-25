@@ -36,8 +36,8 @@ type Mutation {
   delete(id: ID!): Boolean
 
   # Mutation, wenn z.B. der Login-Zeitpunkt im IDM-System gespeichert wird
-  login(username: String!, password: String!): LoginResult
-  refresh(refresh_token: String!): LoginResult
+  token(username: String!, password: String!): TokenResult
+  refresh(refresh_token: String!): TokenResult
 }
 
 "Daten zum Titel eines Buches"
@@ -136,7 +136,7 @@ type UpdatePayload {
   version: Int
 }
 
-type LoginResult {
+type TokenResult {
   access_token: String!
   expires_in: Int!
   refresh_token: String!

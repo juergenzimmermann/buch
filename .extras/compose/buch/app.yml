@@ -45,6 +45,7 @@ db:
 # ==============================================================================
 # K e y c l o a k
 # ==============================================================================
+# Client-ID muss durch die Umgebungsvariable CLIENT_ID gesetzt werden
 keycloak:
   authServerUrl: http://keycloak:8080
   #realm: acme

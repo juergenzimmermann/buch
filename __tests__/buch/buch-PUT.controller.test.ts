@@ -25,7 +25,7 @@ import {
 import { type BuchDtoOhneRef } from '../../src/buch/controller/buchDTO.entity.js';
 import { type ErrorResponse } from './error-response.js';
 import { HttpStatus } from '@nestjs/common';
-import { loginRest } from '../login.js';
+import { tokenRest } from '../token.js';
 
 // -----------------------------------------------------------------------------
 // T e s t d a t e n
@@ -110,7 +110,7 @@ describe('PUT /rest/:id', () => {
     test('Vorhandenes Buch aendern', async () => {
         // given
         const url = `/rest/${idVorhanden}`;
-        const token = await loginRest(client);
+        const token = await tokenRest(client);
         headers.Authorization = `Bearer ${token}`;
         headers['If-Match'] = '"0"';
 
@@ -129,7 +129,7 @@ describe('PUT /rest/:id', () => {
     test('Nicht-vorhandenes Buch aendern', async () => {
         // given
         const url = `/rest/${idNichtVorhanden}`;
-        const token = await loginRest(client);
+        const token = await tokenRest(client);
         headers.Authorization = `Bearer ${token}`;
         headers['If-Match'] = '"0"';
 
@@ -147,7 +147,7 @@ describe('PUT /rest/:id', () => {
     test('Vorhandenes Buch aendern, aber mit ungueltigen Daten', async () => {
         // given
         const url = `/rest/${idVorhanden}`;
-        const token = await loginRest(client);
+        const token = await tokenRest(client);
         headers.Authorization = `Bearer ${token}`;
         headers['If-Match'] = '"0"';
         const expectedMsg = [
@@ -178,7 +178,7 @@ describe('PUT /rest/:id', () => {
     test('Vorhandenes Buch aendern, aber ohne Versionsnummer', async () => {
         // given
         const url = `/rest/${idVorhanden}`;
-        const token = await loginRest(client);
+        const token = await tokenRest(client);
         headers.Authorization = `Bearer ${token}`;
         delete headers['If-Match'];
 
@@ -197,7 +197,7 @@ describe('PUT /rest/:id', () => {
     test('Vorhandenes Buch aendern, aber mit alter Versionsnummer', async () => {
         // given
         const url = `/rest/${idVorhanden}`;
-        const token = await loginRest(client);
+        const token = await tokenRest(client);
         headers.Authorization = `Bearer ${token}`;
         headers['If-Match'] = '"-1"';
 

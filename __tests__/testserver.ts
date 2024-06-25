@@ -31,7 +31,7 @@ import path from 'node:path';
 import { paths } from '../src/config/paths.js';
 import { typeOrmModuleOptions } from '../src/config/typeormOptions.js';
 
-export const loginPath = `${paths.auth}/${paths.login}`;
+export const tokenPath = `${paths.auth}/${paths.token}`;
 export const refreshPath = `${paths.auth}/${paths.refresh}`;
 
 export const { host, port } = nodeConfig;

@@ -64,15 +64,15 @@ export class Refresh {
 }
 
 /**
- * Die Controller-Klasse für die Authentifizierung.
+ * Die Controller-Klasse für die Authentifizierung mit Tokens.
  */
 @Controller(paths.auth)
 @UseInterceptors(ResponseTimeInterceptor)
 @ApiTags('Authentifizierung und Autorisierung')
-export class LoginController {
+export class TokenController {
     readonly #keycloakService: KeycloakService;
 
-    readonly #logger = getLogger(LoginController.name);
+    readonly #logger = getLogger(TokenController.name);
 
     constructor(keycloakService: KeycloakService) {
         this.#keycloakService = keycloakService;
@@ -88,19 +88,19 @@ export class LoginController {
      *  refresh_token und refresh_expires_in sowie Statuscode 200, falls das
      *  Login erfolgreich war. Sonst Statuscode 401.
      */
-    @Post(paths.login)
+    @Post(paths.token)
     @Public()
     @HttpCode(HttpStatus.OK)
     @ApiConsumes('application/x-www-form-urlencoded', 'application/json')
-    @ApiOperation({ summary: 'Login mit Benutzername und Passwort' })
+    @ApiOperation({ summary: 'Access Token zu Benutzername und Passwort' })
     @ApiOkResponse({ description: 'Erfolgreich eingeloggt.' })
     @ApiUnauthorizedResponse({
         description: 'Benutzername oder Passwort sind falsch.',
     })
     async login(@Body() { username, password }: Login, @Res() res: Response) {
-        this.#logger.debug('login: username=%s', username);
+        this.#logger.debug('token: username=%s', username);
 
-        const result = await this.#keycloakService.login({
+        const result = await this.#keycloakService.token({
             username,
             password,
         });
