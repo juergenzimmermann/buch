@@ -51,6 +51,9 @@ coverage
 .clinic
 __tests__/buch/__snapshots__
 
+# SonarQube
+.sonar
+
 # Snyk
 .snyk
 snyk_report.*

@@ -16,13 +16,13 @@
  */
 import dotenv from 'dotenv';
 import process from 'node:process';
-import scanner from 'sonarqube-scanner';
+import { scan } from 'sonarqube-scanner';
 
 // Umgebungsvariable aus .env einlesen
 dotenv.config();
 const sonarToken = process.env.SONAR_TOKEN;
 
-scanner(
+scan(
     {
         serverUrl: 'http://localhost:9000',
         options: {
