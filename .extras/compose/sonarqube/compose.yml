@@ -30,7 +30,7 @@ include:
 
 services:
   sonarqube:
-    image: sonarqube:10.5.1-community
+    image: sonarqube:10.6.0-community
     depends_on:
       db:
         condition: service_healthy
