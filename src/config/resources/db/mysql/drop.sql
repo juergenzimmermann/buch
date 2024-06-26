@@ -13,7 +13,7 @@
 -- You should have received a copy of the GNU General Public License
 -- along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
--- https://dev.mysql.com/doc/refman/8.2/en/drop-table.html
+-- https://dev.mysql.com/doc/refman/8.4/en/drop-table.html
 
 DROP TABLE IF EXISTS abbildung;
 DROP TABLE IF EXISTS titel;

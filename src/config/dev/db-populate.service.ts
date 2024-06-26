@@ -210,7 +210,7 @@ export class DbPopulateService implements OnApplicationBootstrap {
         await this.#executeStatements(createScript);
 
         // LOAD DATA zum Laden von CSV-Dateien erfordert Administrationsrechte
-        // https://dev.mysql.com/doc/refman/8.2/en/load-data.html
+        // https://dev.mysql.com/doc/refman/8.4/en/load-data.html
 
         // https://typeorm.io/data-source
         const dataSource = new DataSource(adminDataSourceOptions!);

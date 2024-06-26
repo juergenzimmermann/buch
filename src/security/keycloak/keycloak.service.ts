@@ -37,14 +37,14 @@ export interface Login {
 
 @Injectable()
 export class KeycloakService implements KeycloakConnectOptionsFactory {
-    readonly #tokenHeaders: RawAxiosRequestHeaders;
+    readonly #headers: RawAxiosRequestHeaders;
 
     readonly #keycloakClient: AxiosInstance;
 
     readonly #logger = getLogger(KeycloakService.name);
 
     constructor() {
-        this.#tokenHeaders = {
+        this.#headers = {
             'Content-Type': 'application/x-www-form-urlencoded',
         };
 
@@ -74,7 +74,7 @@ export class KeycloakService implements KeycloakConnectOptionsFactory {
             response = await this.#keycloakClient.post(
                 paths.accessToken,
                 body,
-                { headers: this.#tokenHeaders },
+                { headers: this.#headers },
             );
         } catch {
             this.#logger.warn('token: Fehler bei %s', paths.accessToken);
@@ -93,19 +93,21 @@ export class KeycloakService implements KeycloakConnectOptionsFactory {
         }
 
         // https://stackoverflow.com/questions/51386337/refresh-access-token-via-refresh-token-in-keycloak
-        const refreshBody = `refresh_token=${refresh_token}&`;
+        const body = `refresh_token=${refresh_token}&grant_type=refresh_token&client_id=${clientId}&client_secret=${secret}`;
         let response: AxiosResponse<Record<string, number | string>>;
         try {
             response = await this.#keycloakClient.post(
                 paths.accessToken,
-                refreshBody,
-                { headers: this.#tokenHeaders },
+                body,
+                { headers: this.#headers },
+                // { headers: this.#headersBasic },
             );
-        } catch {
+        } catch (err) {
+            this.#logger.warn('err=%o', err);
             this.#logger.warn(
                 'refresh: Fehler bei POST-Request: path=%s, body=%o',
                 paths.accessToken,
-                refreshBody,
+                body,
             );
             return;
         }

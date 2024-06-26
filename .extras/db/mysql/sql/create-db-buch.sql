@@ -23,21 +23,22 @@
 --         exit
 --     docker compose down
 
--- https://dev.mysql.com/doc/refman/8.2/en/mysql.html
+-- https://dev.mysql.com/doc/refman/8.4/en/mysql.html
 --   mysqlsh ist *NICHT* im Docker-Image enthalten
 
--- https://dev.mysql.com/doc/refman/8.2/en/create-user.html
--- https://dev.mysql.com/doc/refman/8.2/en/role-names.html
+
+-- https://dev.mysql.com/doc/refman/8.4/en/create-user.html
+-- https://dev.mysql.com/doc/refman/8.4/en/role-names.html
 CREATE USER IF NOT EXISTS buch IDENTIFIED BY 'p';
 GRANT USAGE ON *.* TO buch;
 
--- https://dev.mysql.com/doc/refman/8.2/en/create-database.html
--- https://dev.mysql.com/doc/refman/8.2/en/charset.html
+-- https://dev.mysql.com/doc/refman/8.4/en/create-database.html
+-- https://dev.mysql.com/doc/refman/8.4/en/charset.html
 -- SHOW CHARACTER SET;
 CREATE DATABASE IF NOT EXISTS buch CHARACTER SET utf8;
 
 GRANT ALL PRIVILEGES ON buch.* to buch;
 
--- https://dev.mysql.com/doc/refman/8.2/en/create-tablespace.html
+-- https://dev.mysql.com/doc/refman/8.4/en/create-tablespace.html
 -- .idb-Datei innerhalb vom "data"-Verzeichnis
 CREATE TABLESPACE `buchspace` ADD DATAFILE 'buchspace.ibd' ENGINE=INNODB;
