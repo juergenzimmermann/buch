@@ -91,10 +91,6 @@ module.exports = {
         // https://github.com/eslint-community/eslint-plugin-security#eslintrc-config-deprecated
         'plugin:security/recommended-legacy',
         'plugin:security-node/recommended',
-        // https://github.com/import-js/eslint-plugin/import/tree/main/config
-        'plugin:import/errors',
-        'plugin:import/warnings',
-        'plugin:import/typescript',
         // https://github.com/eslint-community/eslint-plugin-eslint-comments/blob/main/lib/configs/recommended.js
         'plugin:@eslint-community/eslint-comments/recommended',
         // https://github.com/ota-meshi/eslint-plugin-regexp/blob/master/lib/configs/recommended.ts
@@ -246,16 +242,6 @@ module.exports = {
         }],
         '@typescript-eslint/unified-signatures': 'error',
 
-        // https://github.com/import-js/eslint-plugin-import/tree/main/docs/rules
-        'import/consistent-type-specifier-style': ['error', 'prefer-inline'],
-        'import/no-cycle': ['error', {
-            maxDepth: 4,
-            ignoreExternal: true,
-        }],
-        'import/no-empty-named-blocks': 'error',
-        'import/no-extraneous-dependencies': 'error',
-        'import/no-unresolved': 'off',
-
         // https://github.com/jest-community/eslint-plugin-jest/blob/main/src/index.ts
         'jest/no-conditional-in-test': 'error',
         'jest/consistent-test-it':['error', {
@@ -389,8 +375,7 @@ module.exports = {
         'no-constant-binary-expression': 'error',
         'no-constructor-return': 'error',
         'no-continue': 'error',
-        // siehe import/no-duplicates
-        //'no-duplicate-imports': 'error',
+        'no-duplicate-imports': 'error',
         'no-else-return': 'error',
         'no-empty-function': 'error',
         'no-empty-static-block': 'error',
@@ -485,7 +470,7 @@ module.exports = {
         // siehe @typescript-eslint/require-await
         'require-await': 'off',
         'require-unicode-regexp': 'error',
-        'sort-imports': 'error',
+        // 'sort-imports': 'error',
         'strict': 'error',
         'symbol-description': 'error',
         'yoda': ['error', 'never'],

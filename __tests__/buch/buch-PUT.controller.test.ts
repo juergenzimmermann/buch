@@ -14,7 +14,9 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 import { afterAll, beforeAll, describe, test } from '@jest/globals';
+import { HttpStatus } from '@nestjs/common';
 import axios, { type AxiosInstance, type AxiosResponse } from 'axios';
+import { type BuchDtoOhneRef } from '../../src/buch/controller/buchDTO.entity.js';
 import {
     host,
     httpsAgent,
@@ -22,10 +24,8 @@ import {
     shutdownServer,
     startServer,
 } from '../testserver.js';
-import { type BuchDtoOhneRef } from '../../src/buch/controller/buchDTO.entity.js';
-import { type ErrorResponse } from './error-response.js';
-import { HttpStatus } from '@nestjs/common';
 import { tokenRest } from '../token.js';
+import { type ErrorResponse } from './error-response.js';
 
 // -----------------------------------------------------------------------------
 // T e s t d a t e n

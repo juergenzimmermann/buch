@@ -19,8 +19,8 @@
  */
 
 import { Controller, Get, Res } from '@nestjs/common';
-import { Public } from 'nest-keycloak-connect';
 import { Response } from 'express';
+import { Public } from 'nest-keycloak-connect';
 import client from 'prom-client';
 
 /**

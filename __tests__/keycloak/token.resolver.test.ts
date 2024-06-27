@@ -16,7 +16,10 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 
 import { afterAll, beforeAll, describe, test } from '@jest/globals';
+import { HttpStatus } from '@nestjs/common';
 import axios, { type AxiosInstance, type AxiosResponse } from 'axios';
+import { type GraphQLQuery } from '../buch/buch-mutation.resolver.test.js';
+import { type GraphQLResponseBody } from '../buch/buch-query.resolver.test.js';
 import {
     host,
     httpsAgent,
@@ -24,9 +27,6 @@ import {
     shutdownServer,
     startServer,
 } from '../testserver.js';
-import { type GraphQLQuery } from '../buch/buch-mutation.resolver.test.js';
-import { type GraphQLResponseBody } from '../buch/buch-query.resolver.test.js';
-import { HttpStatus } from '@nestjs/common';
 
 // -----------------------------------------------------------------------------
 // T e s t s

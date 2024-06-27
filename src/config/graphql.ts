@@ -14,8 +14,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 import { ApolloDriver, type ApolloDriverConfig } from '@nestjs/apollo';
-import { BASEDIR } from './app.js';
 import path from 'node:path';
+import { BASEDIR } from './app.js';
 
 const schemaGraphQL = path.join(
     BASEDIR,

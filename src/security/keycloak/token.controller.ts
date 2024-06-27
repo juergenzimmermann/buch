@@ -21,14 +21,6 @@
 
 // eslint-disable-next-line max-classes-per-file
 import {
-    ApiConsumes,
-    ApiOkResponse,
-    ApiOperation,
-    ApiProperty,
-    ApiTags,
-    ApiUnauthorizedResponse,
-} from '@nestjs/swagger';
-import {
     Body,
     Controller,
     HttpCode,
@@ -37,12 +29,20 @@ import {
     Res,
     UseInterceptors,
 } from '@nestjs/common';
-import { KeycloakService } from './keycloak.service.js';
-import { Public } from 'nest-keycloak-connect';
+import {
+    ApiConsumes,
+    ApiOkResponse,
+    ApiOperation,
+    ApiProperty,
+    ApiTags,
+    ApiUnauthorizedResponse,
+} from '@nestjs/swagger';
 import { Response } from 'express';
-import { ResponseTimeInterceptor } from '../../logger/response-time.interceptor.js';
-import { getLogger } from '../../logger/logger.js';
+import { Public } from 'nest-keycloak-connect';
 import { paths } from '../../config/paths.js';
+import { getLogger } from '../../logger/logger.js';
+import { ResponseTimeInterceptor } from '../../logger/response-time.interceptor.js';
+import { KeycloakService } from './keycloak.service.js';
 
 /** Entity-Klasse für Login-Daten. */
 export class Login {

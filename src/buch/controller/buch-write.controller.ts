@@ -19,19 +19,6 @@
  */
 
 import {
-    ApiBadRequestResponse,
-    ApiBearerAuth,
-    ApiCreatedResponse,
-    ApiForbiddenResponse,
-    ApiHeader,
-    ApiNoContentResponse,
-    ApiOperation,
-    ApiPreconditionFailedResponse,
-    ApiResponse,
-    ApiTags,
-} from '@nestjs/swagger';
-import { AuthGuard, Roles } from 'nest-keycloak-connect';
-import {
     Body,
     Controller,
     Delete,
@@ -46,16 +33,29 @@ import {
     UseGuards,
     UseInterceptors,
 } from '@nestjs/common';
-import { BuchDTO, BuchDtoOhneRef } from './buchDTO.entity.js';
+import {
+    ApiBadRequestResponse,
+    ApiBearerAuth,
+    ApiCreatedResponse,
+    ApiForbiddenResponse,
+    ApiHeader,
+    ApiNoContentResponse,
+    ApiOperation,
+    ApiPreconditionFailedResponse,
+    ApiResponse,
+    ApiTags,
+} from '@nestjs/swagger';
 import { Request, Response } from 'express';
+import { AuthGuard, Roles } from 'nest-keycloak-connect';
+import { paths } from '../../config/paths.js';
+import { getLogger } from '../../logger/logger.js';
+import { ResponseTimeInterceptor } from '../../logger/response-time.interceptor.js';
 import { type Abbildung } from '../entity/abbildung.entity.js';
 import { type Buch } from '../entity/buch.entity.js';
-import { BuchWriteService } from '../service/buch-write.service.js';
-import { ResponseTimeInterceptor } from '../../logger/response-time.interceptor.js';
 import { type Titel } from '../entity/titel.entity.js';
+import { BuchWriteService } from '../service/buch-write.service.js';
+import { BuchDTO, BuchDtoOhneRef } from './buchDTO.entity.js';
 import { getBaseUri } from './getBaseUri.js';
-import { getLogger } from '../../logger/logger.js';
-import { paths } from '../../config/paths.js';
 
 const MSG_FORBIDDEN = 'Kein Token mit ausreichender Berechtigung vorhanden';
 /**

@@ -18,16 +18,16 @@ import {
     type INestApplication,
     ValidationPipe,
 } from '@nestjs/common';
-import { Agent } from 'node:https';
-import { AppModule } from '../src/app.module.js';
 import { NestFactory } from '@nestjs/core';
 import { v2 as compose } from 'docker-compose';
+import isPortReachable from 'is-port-reachable';
+import { Agent } from 'node:https';
+import path from 'node:path';
+import { AppModule } from '../src/app.module.js';
 import { config } from '../src/config/app.js';
 import { dbType } from '../src/config/db.js';
 import { env } from '../src/config/env.js';
-import isPortReachable from 'is-port-reachable';
 import { nodeConfig } from '../src/config/node.js';
-import path from 'node:path';
 import { paths } from '../src/config/paths.js';
 import { typeOrmModuleOptions } from '../src/config/typeormOptions.js';
 

@@ -16,9 +16,12 @@
 /* eslint-disable max-lines */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 
-import { type Buch, type BuchArt } from '../../src/buch/entity/buch.entity.js';
+import { type GraphQLRequest } from '@apollo/server';
 import { afterAll, beforeAll, describe, expect, test } from '@jest/globals';
+import { HttpStatus } from '@nestjs/common';
 import axios, { type AxiosInstance, type AxiosResponse } from 'axios';
+import { type GraphQLFormattedError } from 'graphql';
+import { type Buch, type BuchArt } from '../../src/buch/entity/buch.entity.js';
 import {
     host,
     httpsAgent,
@@ -26,9 +29,6 @@ import {
     shutdownServer,
     startServer,
 } from '../testserver.js';
-import { type GraphQLFormattedError } from 'graphql';
-import { type GraphQLRequest } from '@apollo/server';
-import { HttpStatus } from '@nestjs/common';
 
 // eslint-disable-next-line jest/no-export
 export interface GraphQLResponseBody {

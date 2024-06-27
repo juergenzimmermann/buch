@@ -21,8 +21,8 @@
 
 import { Injectable } from '@nestjs/common';
 import { type SendMailOptions } from 'nodemailer';
-import { getLogger } from '../logger/logger.js';
 import { mailConfig } from '../config/mail.js';
+import { getLogger } from '../logger/logger.js';
 
 /** Typdefinition für das Senden einer Email. */
 export interface SendMailParams {

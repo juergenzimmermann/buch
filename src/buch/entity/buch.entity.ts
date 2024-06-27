@@ -37,6 +37,7 @@
  * @packageDocumentation
  */
 
+import { ApiProperty } from '@nestjs/swagger';
 import {
     Column,
     CreateDateColumn,
@@ -47,12 +48,11 @@ import {
     UpdateDateColumn,
     VersionColumn,
 } from 'typeorm';
+import { dbType } from '../../config/db.js';
 import { Abbildung } from './abbildung.entity.js';
-import { ApiProperty } from '@nestjs/swagger';
 import { BuchFile } from './buchFile.entity.js';
 import { DecimalTransformer } from './decimal-transformer.js';
 import { Titel } from './titel.entity.js';
-import { dbType } from '../../config/db.js';
 
 /**
  * Alias-Typ für gültige Strings bei der Art eines Buches.

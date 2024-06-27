@@ -17,19 +17,19 @@
  * Das Modul enthält die Konfiguration für den Zugriff auf die DB.
  * @packageDocumentation
  */
+import { readFileSync } from 'node:fs';
+import path from 'node:path';
+import { type DataSourceOptions } from 'typeorm';
+import { Buch } from '../buch/entity/buch.entity.js';
+import { entities } from '../buch/entity/entities.js';
 import { BASEDIR, config } from './app.js';
+import { dbType } from './db.js';
+import { logLevel } from './logger.js';
+import { nodeConfig } from './node.js';
 import {
     OracleNamingStrategy,
     SnakeNamingStrategy,
 } from './typeormNamingStrategy.js';
-import { Buch } from '../buch/entity/buch.entity.js';
-import { type DataSourceOptions } from 'typeorm';
-import { dbType } from './db.js';
-import { entities } from '../buch/entity/entities.js';
-import { logLevel } from './logger.js';
-import { nodeConfig } from './node.js';
-import path from 'node:path';
-import { readFileSync } from 'node:fs';
 
 const { db } = config;
 

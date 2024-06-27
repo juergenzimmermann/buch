@@ -15,17 +15,17 @@
 
 /* eslint-disable camelcase, @typescript-eslint/naming-convention */
 
-import {
-    type KeycloakConnectOptions,
-    type KeycloakConnectOptionsFactory,
-} from 'nest-keycloak-connect';
+import { Injectable } from '@nestjs/common';
 import axios, {
     type AxiosInstance,
     type AxiosResponse,
     type RawAxiosRequestHeaders,
 } from 'axios';
+import {
+    type KeycloakConnectOptions,
+    type KeycloakConnectOptionsFactory,
+} from 'nest-keycloak-connect';
 import { keycloakConnectOptions, paths } from '../../config/keycloak.js';
-import { Injectable } from '@nestjs/common';
 import { getLogger } from '../../logger/logger.js';
 
 const { authServerUrl, clientId, secret } = keycloakConnectOptions;

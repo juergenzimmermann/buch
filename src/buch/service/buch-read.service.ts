@@ -19,10 +19,10 @@
  */
 
 import { Injectable, NotFoundException } from '@nestjs/common';
+import { getLogger } from '../../logger/logger.js';
 import { Buch } from './../entity/buch.entity.js';
 import { QueryBuilder } from './query-builder.js';
 import { type Suchkriterien } from './suchkriterien.js';
-import { getLogger } from '../../logger/logger.js';
 
 /**
  * Typdefinition für `findById`

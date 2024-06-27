@@ -13,11 +13,11 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 
+import path from 'node:path';
+import pino from 'pino';
 import { type PrettyOptions } from 'pino-pretty';
 import { config } from './app.js';
 import { env } from './env.js';
-import path from 'node:path';
-import pino from 'pino';
 
 /**
  * Das Modul enthält die Konfiguration für den Logger.

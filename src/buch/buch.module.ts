@@ -13,18 +13,18 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 
+import { Module } from '@nestjs/common';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { MailModule } from '../mail/mail.module.js';
+import { KeycloakModule } from '../security/keycloak/keycloak.module.js';
 import { BuchGetController } from './controller/buch-get.controller.js';
+import { BuchWriteController } from './controller/buch-write.controller.js';
+import { entities } from './entity/entities.js';
 import { BuchMutationResolver } from './resolver/buch-mutation.resolver.js';
 import { BuchQueryResolver } from './resolver/buch-query.resolver.js';
 import { BuchReadService } from './service/buch-read.service.js';
-import { BuchWriteController } from './controller/buch-write.controller.js';
 import { BuchWriteService } from './service/buch-write.service.js';
-import { KeycloakModule } from '../security/keycloak/keycloak.module.js';
-import { MailModule } from '../mail/mail.module.js';
-import { Module } from '@nestjs/common';
 import { QueryBuilder } from './service/query-builder.js';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { entities } from './entity/entities.js';
 
 /**
  * Das Modul besteht aus Controller- und Service-Klassen für die Verwaltung von

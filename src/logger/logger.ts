@@ -20,8 +20,8 @@
  * @packageDocumentation
  */
 
-import { parentLogger } from '../config/logger.js';
 import type pino from 'pino';
+import { parentLogger } from '../config/logger.js';
 
 /**
  * Eine-Klasse, um ein Logger-Objekt von `Pino` zu erzeugen, so dass ein

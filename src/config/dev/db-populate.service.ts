@@ -21,18 +21,18 @@
 /* eslint-disable @stylistic/quotes */
 
 import { Injectable, type OnApplicationBootstrap } from '@nestjs/common';
+import { InjectDataSource } from '@nestjs/typeorm';
+import { readFileSync } from 'node:fs';
+import path from 'node:path';
+import { DataSource } from 'typeorm';
+import { getLogger } from '../../logger/logger.js';
+import { dbType } from '../db.js';
 import {
     adminDataSourceOptions,
     dbPopulate,
     dbResourcesDir,
     typeOrmModuleOptions,
 } from '../typeormOptions.js';
-import { DataSource } from 'typeorm';
-import { InjectDataSource } from '@nestjs/typeorm';
-import { dbType } from '../db.js';
-import { getLogger } from '../../logger/logger.js';
-import path from 'node:path';
-import { readFileSync } from 'node:fs';
 
 /**
  * Die Test-DB wird im Development-Modus neu geladen, nachdem die Module

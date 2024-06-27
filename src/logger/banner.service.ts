@@ -19,12 +19,12 @@
  */
 
 import { Injectable, type OnApplicationBootstrap } from '@nestjs/common';
-import { release, type, userInfo } from 'node:os';
-import { dbType } from '../config/db.js';
 import figlet from 'figlet';
-import { getLogger } from './logger.js';
-import { nodeConfig } from '../config/node.js';
+import { release, type, userInfo } from 'node:os';
 import process from 'node:process';
+import { dbType } from '../config/db.js';
+import { nodeConfig } from '../config/node.js';
+import { getLogger } from './logger.js';
 
 /**
  * Beim Start ein Banner ausgeben durch `onApplicationBootstrap()`.

@@ -13,11 +13,11 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-import { HealthController } from './health.controller.js';
 import { HttpModule } from '@nestjs/axios';
 import { Module } from '@nestjs/common';
-import { PrometheusController } from './prometheus.controller.js';
 import { TerminusModule } from '@nestjs/terminus';
+import { HealthController } from './health.controller.js';
+import { PrometheusController } from './prometheus.controller.js';
 
 @Module({
     imports: [TerminusModule, HttpModule],

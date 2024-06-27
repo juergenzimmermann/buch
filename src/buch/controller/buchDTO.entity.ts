@@ -20,6 +20,8 @@
 
 /* eslint-disable max-classes-per-file, @typescript-eslint/no-magic-numbers */
 
+import { ApiProperty } from '@nestjs/swagger';
+import { Type } from 'class-transformer';
 import {
     ArrayUnique,
     IsArray,
@@ -35,11 +37,9 @@ import {
     Min,
     ValidateNested,
 } from 'class-validator';
-import { AbbildungDTO } from './abbildungDTO.entity.js';
-import { ApiProperty } from '@nestjs/swagger';
 import { type BuchArt } from '../entity/buch.entity.js';
+import { AbbildungDTO } from './abbildungDTO.entity.js';
 import { TitelDTO } from './titelDTO.entity.js';
-import { Type } from 'class-transformer';
 
 export const MAX_RATING = 5;
 

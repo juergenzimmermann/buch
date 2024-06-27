@@ -13,18 +13,18 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 
+import { Temporal } from '@js-temporal/polyfill';
 import {
     type CallHandler,
     type ExecutionContext,
     Injectable,
     type NestInterceptor,
 } from '@nestjs/common';
-import { type Observable } from 'rxjs';
 import { type Response } from 'express';
+import { type Observable } from 'rxjs';
 import { type TapObserver } from 'rxjs/internal/operators/tap';
-import { Temporal } from '@js-temporal/polyfill';
-import { getLogger } from './logger.js';
 import { tap } from 'rxjs/operators';
+import { getLogger } from './logger.js';
 
 /**
  * `ResponseTimeInterceptor` protokolliert die Antwortzeit und den Statuscode

@@ -13,13 +13,13 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-import { Args, Mutation, Resolver } from '@nestjs/graphql';
-import { BadUserInputError } from '../../buch/resolver/errors.js';
-import { KeycloakService } from './keycloak.service.js';
-import { Public } from 'nest-keycloak-connect';
-import { ResponseTimeInterceptor } from '../../logger/response-time.interceptor.js';
 import { UseInterceptors } from '@nestjs/common';
+import { Args, Mutation, Resolver } from '@nestjs/graphql';
+import { Public } from 'nest-keycloak-connect';
+import { BadUserInputError } from '../../buch/resolver/errors.js';
 import { getLogger } from '../../logger/logger.js';
+import { ResponseTimeInterceptor } from '../../logger/response-time.interceptor.js';
+import { KeycloakService } from './keycloak.service.js';
 
 // @nestjs/graphql fasst die Input-Daten zu einem Typ zusammen
 /** Typdefinition für Login-Daten bei GraphQL */

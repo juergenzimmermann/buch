@@ -29,7 +29,9 @@
 //    ky          https://github.com/sindresorhus/ky
 
 import { afterAll, beforeAll, describe, test } from '@jest/globals';
+import { HttpStatus } from '@nestjs/common';
 import axios, { type AxiosInstance, type AxiosResponse } from 'axios';
+import { type BuchModel } from '../../src/buch/controller/buch-get.controller.js';
 import {
     host,
     httpsAgent,
@@ -37,8 +39,6 @@ import {
     shutdownServer,
     startServer,
 } from '../testserver.js';
-import { type BuchModel } from '../../src/buch/controller/buch-get.controller.js';
-import { HttpStatus } from '@nestjs/common';
 
 // -----------------------------------------------------------------------------
 // T e s t d a t e n

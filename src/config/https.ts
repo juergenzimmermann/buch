@@ -19,9 +19,9 @@
  */
 
 import { type HttpsOptions } from '@nestjs/common/interfaces/external/https-options.interface.js';
-import { RESOURCES_DIR } from './app.js';
-import path from 'node:path';
 import { readFileSync } from 'node:fs';
+import path from 'node:path';
+import { RESOURCES_DIR } from './app.js';
 
 // https://nodejs.org/api/path.html
 // https://nodejs.org/api/fs.html

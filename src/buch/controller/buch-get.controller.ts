@@ -21,17 +21,6 @@
 /* eslint-disable max-lines */
 // eslint-disable-next-line max-classes-per-file
 import {
-    ApiHeader,
-    ApiNotFoundResponse,
-    ApiOkResponse,
-    ApiOperation,
-    ApiParam,
-    ApiProperty,
-    ApiResponse,
-    ApiTags,
-} from '@nestjs/swagger';
-import { type Buch, type BuchArt } from '../entity/buch.entity.js';
-import {
     Controller,
     Get,
     Headers,
@@ -43,15 +32,26 @@ import {
     Res,
     UseInterceptors,
 } from '@nestjs/common';
+import {
+    ApiHeader,
+    ApiNotFoundResponse,
+    ApiOkResponse,
+    ApiOperation,
+    ApiParam,
+    ApiProperty,
+    ApiResponse,
+    ApiTags,
+} from '@nestjs/swagger';
 import { Request, Response } from 'express';
-import { BuchReadService } from '../service/buch-read.service.js';
 import { Public } from 'nest-keycloak-connect';
-import { ResponseTimeInterceptor } from '../../logger/response-time.interceptor.js';
-import { type Suchkriterien } from '../service/suchkriterien.js';
-import { type Titel } from '../entity/titel.entity.js';
-import { getBaseUri } from './getBaseUri.js';
-import { getLogger } from '../../logger/logger.js';
 import { paths } from '../../config/paths.js';
+import { getLogger } from '../../logger/logger.js';
+import { ResponseTimeInterceptor } from '../../logger/response-time.interceptor.js';
+import { type Buch, type BuchArt } from '../entity/buch.entity.js';
+import { type Titel } from '../entity/titel.entity.js';
+import { BuchReadService } from '../service/buch-read.service.js';
+import { type Suchkriterien } from '../service/suchkriterien.js';
+import { getBaseUri } from './getBaseUri.js';
 
 /** href-Link für HATEOAS */
 export interface Link {

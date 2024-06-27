@@ -14,9 +14,9 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 import { type AxiosInstance, type AxiosResponse } from 'axios';
-import { httpsAgent, tokenPath } from './testserver.js';
 import { type GraphQLQuery } from './buch/buch-mutation.resolver.test.js';
 import { type GraphQLResponseBody } from './buch/buch-query.resolver.test.js';
+import { httpsAgent, tokenPath } from './testserver.js';
 
 interface TokenResult {
     // eslint-disable-next-line @typescript-eslint/naming-convention

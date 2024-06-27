@@ -19,20 +19,20 @@
 
 // Modul in JS = Datei
 // Pfad innerhalb von Packages in node_modules ("nicht-relative Imports")
+import { type INestApplication, ValidationPipe } from '@nestjs/common';
 import {
     DocumentBuilder,
     type SwaggerCustomOptions,
     SwaggerModule,
 } from '@nestjs/swagger';
-import { type INestApplication, ValidationPipe } from '@nestjs/common';
 // relativer Import
-import { AppModule } from './app.module.js';
 import { NestFactory } from '@nestjs/core';
 import compression from 'compression';
+import { AppModule } from './app.module.js';
 import { corsOptions } from './config/cors.js';
-import { helmetHandlers } from './security/http/helmet.handler.js';
 import { nodeConfig } from './config/node.js';
 import { paths } from './config/paths.js';
+import { helmetHandlers } from './security/http/helmet.handler.js';
 
 // Destructuring ab ES 2015
 const { httpsOptions, port } = nodeConfig;

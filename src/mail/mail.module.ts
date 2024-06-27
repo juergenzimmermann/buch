@@ -13,8 +13,8 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-import { MailService } from './mail.service.js';
 import { Module } from '@nestjs/common';
+import { MailService } from './mail.service.js';
 
 /**
  * Das Modul besteht aus Services für Mail.
