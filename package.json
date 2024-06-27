@@ -130,7 +130,7 @@
     "@types/figlet": "1.5.8",
     "@types/jest": "29.5.12",
     "@types/js-yaml": "4.0.9",
-    "@types/node": "20.14.8",
+    "@types/node": "20.14.9",
     "@types/nodemailer": "6.4.15",
     "@types/nodemailer-direct-transport": "1.0.35",
     "@types/nodemailer-smtp-transport": "2.7.8",
