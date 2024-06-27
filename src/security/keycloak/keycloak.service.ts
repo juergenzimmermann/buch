@@ -38,6 +38,7 @@ export interface Login {
 @Injectable()
 export class KeycloakService implements KeycloakConnectOptionsFactory {
     readonly #headers: RawAxiosRequestHeaders;
+    readonly #headersAuthorization: RawAxiosRequestHeaders;
 
     readonly #keycloakClient: AxiosInstance;
 
@@ -46,6 +47,12 @@ export class KeycloakService implements KeycloakConnectOptionsFactory {
     constructor() {
         this.#headers = {
             'Content-Type': 'application/x-www-form-urlencoded',
+        };
+
+        const encoded = btoa(`${clientId}:${secret}`);
+        this.#headersAuthorization = {
+            'Content-Type': 'application/x-www-form-urlencoded',
+            Authorization: `Basic ${encoded}`,
         };
 
         this.#keycloakClient = axios.create({
@@ -93,13 +100,13 @@ export class KeycloakService implements KeycloakConnectOptionsFactory {
         }
 
         // https://stackoverflow.com/questions/51386337/refresh-access-token-via-refresh-token-in-keycloak
-        const body = `refresh_token=${refresh_token}&grant_type=refresh_token&client_id=${clientId}&client_secret=${secret}`;
+        const body = `refresh_token=${refresh_token}&grant_type=refresh_token`;
         let response: AxiosResponse<Record<string, number | string>>;
         try {
             response = await this.#keycloakClient.post(
                 paths.accessToken,
                 body,
-                { headers: this.#headers },
+                { headers: this.#headersAuthorization },
                 // { headers: this.#headersBasic },
             );
         } catch (err) {
