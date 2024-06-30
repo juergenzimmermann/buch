@@ -28,6 +28,9 @@
 #     Passwort:       password
 #         Tabellen: USER_ENTITY, USER_ROLE_MAPPING, ...
 
+#include:
+#  - path: [../postgres/compose.yml]
+
 services:
   keycloak:
     image: quay.io/keycloak/keycloak:25.0.1-0
@@ -66,7 +69,11 @@ services:
     # http://localhost:8880/health/ready
     healthcheck:
       # https://www.reddit.com/r/KeyCloak/comments/14a5a1y/how_to_enable_healthcheck_on_keycloak_on/
-      test: [ "CMD-SHELL", "exec 3<>/dev/tcp/localhost/8080 && echo -e 'GET /health/ready HTTP/1.1\\r\\nHost: localhost\\r\\nConnection: close\\r\\n\\r\\n' >&3 && cat <&3 | grep -q '200 OK'" ]
+      test:
+        [
+          'CMD-SHELL',
+          "exec 3<>/dev/tcp/localhost/8080 && echo -e 'GET /health/ready HTTP/1.1\\r\\nHost: localhost\\r\\nConnection: close\\r\\n\\r\\n' >&3 && cat <&3 | grep -q '200 OK'",
+        ]
       interval: 30s
       timeout: 5s
       retries: 2

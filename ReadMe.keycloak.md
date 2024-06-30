@@ -73,19 +73,8 @@ Webbrowser `http://localhost:8880` oder `https://localhost:8843` aufgerufen hat:
 
     Realm "master" ist voreingestellt
         Drop-Down Menü: <Create realm> anklicken
-            Realm name      acme
+            Realm name      nest
             <Create> anklicken
-
-    Menüpunkt "Realm settings"
-        Tab "Sessions"
-            # Refresh Token: siehe https://stackoverflow.com/questions/52040265/how-to-specify-refresh-tokens-lifespan-in-keycloak
-            SSO Session Idle                                60 Minutes
-            <Save> anklicken
-        Tab "Tokens"
-            Access Tokens
-                Access Token Lifespan                       30 Minutes
-                Access Token Lifespan For Implicit Flow     30 Minutes
-                <Save> anklicken
 
     Menüpunkt "Clients"
         <Create client> anklicken
@@ -99,6 +88,7 @@ Webbrowser `http://localhost:8880` oder `https://localhost:8843` aufgerufen hat:
             Valid redirect URIs     https://localhost:3000
                                     https://buch:3000
                                     https://oauth.pstmn.io/v1/callback
+            Web origins             +
         <Save>
 
         nest-client
@@ -144,8 +134,8 @@ Webbrowser `http://localhost:8880` oder `https://localhost:8843` aufgerufen hat:
             Required User Actions:      Überprüfen, dass nichts ausgewählt ist
             Username                    admin
             Email                       admin@acme.com
-            First name                  admin
-            Last name                   admin
+            First name                  Nest
+            Last name                   Admin
             <Create> anklicken
             Tab "Credentials"
                 <Set password> anklicken
@@ -165,8 +155,8 @@ Webbrowser `http://localhost:8880` oder `https://localhost:8843` aufgerufen hat:
             Required User Actions:      Überprüfen, dass nichts ausgewählt ist
             Username                    user
             Email                       user@acme.com
-            First name                  user
-            Last name                   user
+            First name                  Nest
+            Last name                   User
             <Create> anklicken
             Tab "Credentials"
                 <Set password> anklicken
@@ -184,6 +174,17 @@ Webbrowser `http://localhost:8880` oder `https://localhost:8843` aufgerufen hat:
                 <Save> anklicken
         Breadcrumb "Users" anklicken
             WICHTIG: "admin" und "user" mit der jeweiligen Emailadresse sind aufgelistet
+
+    Menüpunkt "Realm settings"
+        Tab "Sessions"
+            # Refresh Token: siehe https://stackoverflow.com/questions/52040265/how-to-specify-refresh-tokens-lifespan-in-keycloak
+            SSO Session Idle                                1 Hours
+            <Save> anklicken
+        Tab "Tokens"
+            Access Tokens
+                Access Token Lifespan                       30 Minutes
+                Access Token Lifespan For Implicit Flow     30 Minutes
+                <Save> anklicken
 ```
 
 Mit der URL `http://localhost:8880/realms/acme/.well-known/openid-configuration`

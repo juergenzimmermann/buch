@@ -32,7 +32,7 @@ const { keycloak } = config;
 const authServerUrl =
     (keycloak?.authServerUrl as string | undefined) ?? 'http://localhost:8880';
 // Keycloak ist in Sicherheits-Bereich (= realms) unterteilt
-const realm = (keycloak?.realm as string | undefined) ?? 'acme';
+const realm = (keycloak?.realm as string | undefined) ?? 'nest';
 const clientId = (keycloak?.clientId as string | undefined) ?? 'nest-client';
 const tokenValidation =
     (keycloak?.tokenValidation as TokenValidation | undefined) ??
