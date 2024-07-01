@@ -187,7 +187,7 @@ Webbrowser `http://localhost:8880` oder `https://localhost:8843` aufgerufen hat:
                 <Save> anklicken
 ```
 
-Mit der URL `http://localhost:8880/realms/acme/.well-known/openid-configuration`
+Mit der URL `http://localhost:8880/realms/nest/.well-known/openid-configuration`
 kann man in einem Webbrowser die Konfiguration als JSON-Datensatz erhalten.
 
 ## Client Secret
