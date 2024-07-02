@@ -37,7 +37,7 @@ ALTER ROLE buch SET search_path = 'buch';
 
 -- https://www.postgresql.org/docs/current/sql-createtype.html
 -- https://www.postgresql.org/docs/current/datatype-enum.html
-CREATE TYPE buchart AS ENUM ('DRUCKAUSGABE', 'KINDLE');
+CREATE TYPE buchart AS ENUM ('EPUB', 'HARDCOVER', 'PAPERBACK');
 
 -- https://www.postgresql.org/docs/current/sql-createtable.html
 -- https://www.postgresql.org/docs/current/datatype.html

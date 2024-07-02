@@ -22,14 +22,14 @@ CREATE TABLE IF NOT EXISTS buch (
     version       NUMBER(3,0) NOT NULL,
     isbn          VARCHAR2(17) NOT NULL,
     rating        NUMBER(1,0) NOT NULL CONSTRAINT buch_rating CHECK (rating >= 0 AND rating <= 5),
-    art           VARCHAR2(12) CONSTRAINT buch_art CHECK (art in ('DRUCKAUSGABE', 'KINDLE')),
+    art           VARCHAR2(9) CONSTRAINT buch_art CHECK (art in ('EPUB', 'HARDCOVER', 'PAPERBACK')),
     preis         NUMBER(8,2) NOT NULL,
     rabatt        NUMBER(4,3) NOT NULL,
                   -- boolean gibt es ab Oracle 23, wird aber von TypeORM nicht unterstuetzt
     lieferbar     NUMBER(1,0) NOT NULL CONSTRAINT buch_lieferbar CHECK (lieferbar = 0 OR lieferbar = 1),
     datum         DATE,
     homepage      VARCHAR2(40),
-    schlagwoerter VARCHAR2(64),
+    schlagwoerter VARCHAR2(128),
     erzeugt       TIMESTAMP,
     aktualisiert  TIMESTAMP
 );

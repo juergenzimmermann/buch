@@ -96,12 +96,14 @@ export class QueryBuilder {
     // z.B. { titel: 'a', rating: 5, javascript: true }
     // "rest properties" fuer anfaengliche WHERE-Klausel: ab ES 2018 https://github.com/tc39/proposal-object-rest-spread
     // eslint-disable-next-line max-lines-per-function
-    build({ titel, javascript, typescript, ...props }: Suchkriterien) {
+    build({ titel, javascript, typescript, java, python, ...props }: Suchkriterien) {
         this.#logger.debug(
-            'build: titel=%s, javascript=%s, typescript=%s, props=%o',
+            'build: titel=%s, javascript=%s, typescript=%s, java=%s, python=%s, props=%o',
             titel,
             javascript,
             typescript,
+            java,
+            python,
             props,
         );
 
@@ -146,6 +148,28 @@ export class QueryBuilder {
                   )
                 : queryBuilder.andWhere(
                       `${this.#buchAlias}.schlagwoerter like '%TYPESCRIPT%'`,
+                  );
+            useWhere = false;
+        }
+
+        if (java === 'true') {
+            queryBuilder = useWhere
+                ? queryBuilder.where(
+                      `${this.#buchAlias}.schlagwoerter like '%JAVA%'`,
+                  )
+                : queryBuilder.andWhere(
+                      `${this.#buchAlias}.schlagwoerter like '%JAVA%'`,
+                  );
+            useWhere = false;
+        }
+
+        if (python === 'true') {
+            queryBuilder = useWhere
+                ? queryBuilder.where(
+                      `${this.#buchAlias}.schlagwoerter like '%PYTHON%'`,
+                  )
+                : queryBuilder.andWhere(
+                      `${this.#buchAlias}.schlagwoerter like '%PYTHON%'`,
                   );
             useWhere = false;
         }

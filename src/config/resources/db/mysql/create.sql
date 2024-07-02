@@ -33,13 +33,13 @@ CREATE TABLE IF NOT EXISTS buch (
     version       INT NOT NULL DEFAULT 0,
     isbn          CHAR(17) UNIQUE NOT NULL,
     rating        INT NOT NULL CHECK (rating >= 0 AND rating <= 5),
-    art           ENUM('DRUCKAUSGABE', 'KINDLE'),
+    art           ENUM('EPUB', 'HARDCOVER', 'PAPERBACK'),
     preis         DECIMAL(8,2) NOT NULL,
     rabatt        DECIMAL(4,3) NOT NULL,
     lieferbar     BOOLEAN NOT NULL DEFAULT FALSE,
     datum         DATE,
     homepage      VARCHAR(40),
-    schlagwoerter VARCHAR(64),
+    schlagwoerter VARCHAR(128),
     erzeugt       DATETIME NOT NULL DEFAULT (CURRENT_TIMESTAMP),
     aktualisiert  DATETIME NOT NULL DEFAULT (CURRENT_TIMESTAMP)
 ) TABLESPACE buchspace ROW_FORMAT=COMPACT;

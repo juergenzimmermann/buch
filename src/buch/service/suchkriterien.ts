@@ -34,5 +34,7 @@ export interface Suchkriterien {
     readonly homepage?: string;
     readonly javascript?: string;
     readonly typescript?: string;
+    readonly java?: string;
+    readonly python?: string;
     readonly titel?: string;
 }

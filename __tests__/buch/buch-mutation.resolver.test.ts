@@ -72,7 +72,7 @@ describe('GraphQL Mutations', () => {
                         input: {
                             isbn: "978-0-321-19368-1",
                             rating: 1,
-                            art: KINDLE,
+                            art: EPUB,
                             preis: 99.99,
                             rabatt: 0.123,
                             lieferbar: true,
@@ -124,7 +124,7 @@ describe('GraphQL Mutations', () => {
                         input: {
                             isbn: "falsche-ISBN",
                             rating: -1,
-                            art: KINDLE,
+                            art: EPUB,
                             preis: -1,
                             rabatt: 2,
                             lieferbar: false,
@@ -189,13 +189,13 @@ describe('GraphQL Mutations', () => {
                             version: 0,
                             isbn: "978-0-007-09732-6",
                             rating: 5,
-                            art: KINDLE,
+                            art: HARDCOVER,
                             preis: 444.44,
                             rabatt: 0.099,
                             lieferbar: false,
                             datum: "2021-04-04",
                             homepage: "https://update.mutation"
-                            schlagwoerter: ["JAVASCRIPT", "TYPESCRIPT"],
+                            schlagwoerter: ["JAVA", "PYTHON"],
                         }
                     ) {
                         version
@@ -234,7 +234,7 @@ describe('GraphQL Mutations', () => {
                             version: 0,
                             isbn: "falsche-ISBN",
                             rating: -1,
-                            art: KINDLE,
+                            art: EPUB,
                             preis: -1,
                             rabatt: 2,
                             lieferbar: false,
@@ -294,7 +294,7 @@ describe('GraphQL Mutations', () => {
                             version: 0,
                             isbn: "978-0-007-09732-6",
                             rating: 5,
-                            art: DRUCKAUSGABE,
+                            art: EPUB,
                             preis: 99.99,
                             rabatt: 0.099,
                             lieferbar: false,

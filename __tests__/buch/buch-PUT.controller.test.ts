@@ -33,20 +33,20 @@ import { type ErrorResponse } from './error-response.js';
 const geaendertesBuch: BuchDtoOhneRef = {
     isbn: '978-0-201-63361-0',
     rating: 5,
-    art: 'KINDLE',
+    art: 'HARDCOVER',
     preis: 3333,
     rabatt: 0.33,
     lieferbar: true,
     datum: '2022-03-03',
     homepage: 'https://geaendert.put.rest',
-    schlagwoerter: ['JAVASCRIPT'],
+    schlagwoerter: ['JAVA'],
 };
 const idVorhanden = '30';
 
 const geaendertesBuchIdNichtVorhanden: BuchDtoOhneRef = {
     isbn: '978-0-007-09732-6',
     rating: 4,
-    art: 'DRUCKAUSGABE',
+    art: 'EPUB',
     preis: 44.4,
     rabatt: 0.044,
     lieferbar: true,
@@ -71,7 +71,7 @@ const geaendertesBuchInvalid: Record<string, unknown> = {
 const veraltesBuch: BuchDtoOhneRef = {
     isbn: '978-0-007-09732-6',
     rating: 1,
-    art: 'DRUCKAUSGABE',
+    art: 'EPUB',
     preis: 44.4,
     rabatt: 0.044,
     lieferbar: true,

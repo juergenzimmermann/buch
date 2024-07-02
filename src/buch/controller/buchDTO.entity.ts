@@ -58,9 +58,9 @@ export class BuchDtoOhneRef {
     @ApiProperty({ example: 5, type: Number })
     readonly rating: number | undefined;
 
-    @Matches(/^DRUCKAUSGABE$|^KINDLE$/u)
+    @Matches(/^EPUB$|HARDCOVER$|^PAPERBACK$/u)
     @IsOptional()
-    @ApiProperty({ example: 'DRUCKAUSGABE', type: String })
+    @ApiProperty({ example: 'EPUB', type: String })
     readonly art: BuchArt | undefined;
 
     @IsPositive()
@@ -90,7 +90,7 @@ export class BuchDtoOhneRef {
 
     @IsOptional()
     @ArrayUnique()
-    @ApiProperty({ example: ['JAVASCRIPT', 'TYPESCRIPT'] })
+    @ApiProperty({ example: ['JAVASCRIPT', 'TYPESCRIPT', 'JAVA', 'PYTHON'] })
     readonly schlagwoerter: string[] | undefined;
 }
 

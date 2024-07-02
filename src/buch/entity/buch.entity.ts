@@ -57,7 +57,7 @@ import { Titel } from './titel.entity.js';
 /**
  * Alias-Typ für gültige Strings bei der Art eines Buches.
  */
-export type BuchArt = 'DRUCKAUSGABE' | 'KINDLE';
+export type BuchArt = 'EPUB' | 'HARDCOVER' | 'PAPERBACK';
 
 /**
  * Entity-Klasse zu einer relationalen Tabelle.
@@ -86,7 +86,7 @@ export class Buch {
     readonly rating: number | undefined;
 
     @Column('varchar')
-    @ApiProperty({ example: 'DRUCKAUSGABE', type: String })
+    @ApiProperty({ example: 'EPUB', type: String })
     readonly art: BuchArt | undefined;
 
     @Column('decimal', {

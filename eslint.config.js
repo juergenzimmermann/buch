@@ -1,12 +1,13 @@
-/* eslint-disable prettier/prettier */
+/* eslint-disable prettier/prettier, @stylistic/semi, @stylistic/indent */
 // @ts-check
-import js from '@eslint/js';
+import eslint from '@eslint/js';
 import comments from '@eslint-community/eslint-plugin-eslint-comments/configs';
+import { FlatCompat } from '@eslint/eslintrc';
 import stylistic from '@stylistic/eslint-plugin';
-import typescriptEslint from '@typescript-eslint/eslint-plugin';
+import tsEslintPlugin from '@typescript-eslint/eslint-plugin';
 import tsParser from '@typescript-eslint/parser';
 import globals from 'globals';
-import nodePlugin  from 'eslint-plugin-n';
+import nodePlugin from 'eslint-plugin-n';
 import preferArrow from 'eslint-plugin-prefer-arrow';
 import prettierRecommended from 'eslint-plugin-prettier/recommended';
 import promise from 'eslint-plugin-promise';
@@ -14,13 +15,35 @@ import regexp from 'eslint-plugin-regexp';
 import security from 'eslint-plugin-security';
 import sonarjs from 'eslint-plugin-sonarjs';
 import unicorn from 'eslint-plugin-unicorn';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 
 // TODO eslint-plugin-security-node, eslint-plugin-jest, eslint-plugin-jest-formatting
+
+// https://eslint.org/docs/latest/use/configure/migration-guide#using-eslintrc-configs-in-flat-config
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+const compat = new FlatCompat({
+    // baseDirectory: __dirname,
+    baseDirectory: 'node_modules',
+    // resolvePluginsRelativeTo: __dirname,
+    recommendedConfig: tsEslintPlugin.configs['recommended-type-checked'],
+});
 
 export default [
     // https://eslint.org/docs/latest/rules
     // https://github.com/eslint/eslint/blob/main/packages/js/src/configs/eslint-recommended.js
-    js.configs.recommended,
+    eslint.configs.recommended,
+    // https://github.com/typescript-eslint/typescript-eslint/blob/main/packages/eslint-plugin/src/configs/recommended-type-checked.ts
+    // TODO https://github.com/typescript-eslint/typescript-eslint/issues/5908
+    // TODO https://github.com/typescript-eslint/typescript-eslint/issues/5938
+    // TODO https://github.com/jest-community/eslint-plugin-jest/issues/1408
+    // TODO https://github.com/microsoft/vscode-eslint/blob/747efb780e024eabc48b67ca68a2f8a0c594b753/playgrounds/flatConfig/eslint.config.js
+    // TODO https://stackoverflow.com/questions/74237042/how-to-correctly-configure-the-parser-plugins-with-eslints-new-flat-config
+    ...compat.config({
+        plugins: ['@typescript-eslint'],
+        extends: ['@typescript-eslint/recommended-type-checked', '@typescript-eslint/stylistic-type-checked'],
+    }),
     // https://github.com/sindresorhus/eslint-plugin-unicorn/blob/main/configs/recommended.js
     unicorn.configs['flat/recommended'], // eslint-disable-line sonarjs/no-duplicate-string
     // https://github.com/SonarSource/eslint-plugin-sonarjs
@@ -36,6 +59,7 @@ export default [
     regexp.configs['flat/recommended'],
     // https://github.com/eslint-community/eslint-plugin-promise#rules
     promise.configs['flat/recommended'],
+    stylistic.configs['recommended-flat'],
 
     // https://github.com/prettier/eslint-plugin-prettier?tab=readme-ov-file#configuration-new-eslintconfigjs
     {
@@ -51,15 +75,7 @@ export default [
         ],
 
         plugins: {
-        // https://github.com/typescript-eslint/typescript-eslint/blob/main/packages/eslint-plugin/src/configs/recommended-type-checked.ts
-        // TODO https://github.com/typescript-eslint/typescript-eslint/issues/5908
-        // TODO https://github.com/typescript-eslint/typescript-eslint/issues/5938
-        // TODO https://github.com/jest-community/eslint-plugin-jest/issues/1408
-        // TODO https://github.com/microsoft/vscode-eslint/blob/747efb780e024eabc48b67ca68a2f8a0c594b753/playgrounds/flatConfig/eslint.config.js
-        // TODO https://stackoverflow.com/questions/74237042/how-to-correctly-configure-the-parser-plugins-with-eslints-new-flat-config
-        '@typescript-eslint': typescriptEslint,
             'prefer-arrow': preferArrow,
-            '@stylistic': stylistic,
         },
 
         languageOptions: {
@@ -80,7 +96,7 @@ export default [
         },
 
         rules: {
-            '@typescript-eslint/array-type': ['error', { default: 'array'}],
+            '@typescript-eslint/array-type': ['error', { default: 'array' }],
             '@typescript-eslint/ban-ts-comment': 'error',
             '@typescript-eslint/consistent-type-definitions': ['error', 'interface'],
             '@typescript-eslint/consistent-type-exports': 'error',
@@ -124,10 +140,10 @@ export default [
                 },
             ],
             '@typescript-eslint/no-base-to-string': ['error', {
-                ignoredTypeNames: ['RegExp', 'boolean']
+                ignoredTypeNames: ['RegExp', 'boolean'],
             }],
             '@typescript-eslint/no-confusing-void-expression': ['error', {
-                ignoreArrowShorthand: true
+                ignoreArrowShorthand: true,
             }],
             '@typescript-eslint/no-dupe-class-members': 'error',
             '@typescript-eslint/no-dynamic-delete': 'error',
@@ -136,7 +152,7 @@ export default [
             }],
             '@typescript-eslint/no-explicit-any': 'off',
             '@typescript-eslint/no-floating-promises': ['error', {
-                ignoreIIFE: true
+                ignoreIIFE: true,
             }],
             '@typescript-eslint/no-invalid-this': 'error',
             '@typescript-eslint/no-invalid-void-type': 'error',
@@ -163,7 +179,7 @@ export default [
             '@typescript-eslint/no-unnecessary-type-arguments': 'error',
             '@typescript-eslint/no-unsafe-member-access': 'off',
             '@typescript-eslint/no-unsafe-unary-minus': 'error',
-            //'@typescript-eslint/no-untyped-public-signature': 'error',
+            // '@typescript-eslint/no-untyped-public-signature': 'error',
             '@typescript-eslint/no-unused-vars': ['off', {
                 ignoreRestSiblings: true,
             }],
@@ -174,7 +190,7 @@ export default [
             }],
             '@typescript-eslint/no-useless-constructor': 'error',
             '@typescript-eslint/no-useless-empty-export': 'error',
-            //'@typescript-eslint/no-useless-template-expression': 'error',
+            // '@typescript-eslint/no-useless-template-expression': 'error',
             '@typescript-eslint/non-nullable-type-assertion-style': 'error',
             '@typescript-eslint/only-throw-error': 'error',
             '@typescript-eslint/prefer-destructuring': 'error',
@@ -183,9 +199,9 @@ export default [
             '@typescript-eslint/prefer-includes': 'error',
             '@typescript-eslint/prefer-literal-enum-member': 'error',
             '@typescript-eslint/prefer-readonly': 'error',
-            //'@typescript-eslint/prefer-readonly-parameter-types': ['error', {
-            //    checkParameterProperties: true,
-            //}],
+            // '@typescript-eslint/prefer-readonly-parameter-types': ['error', {
+            //     checkParameterProperties: true,
+            // }],
             '@typescript-eslint/prefer-reduce-type-parameter': 'error',
             '@typescript-eslint/prefer-regexp-exec': 'error',
             '@typescript-eslint/prefer-return-this-type': 'error',
@@ -211,27 +227,27 @@ export default [
             '@typescript-eslint/unified-signatures': 'error',
 
             // https://github.com/jest-community/eslint-plugin-jest/blob/main/src/index.ts
-            //'jest/no-conditional-in-test': 'error',
-            //'jest/consistent-test-it':['error', {
-            //  fn: 'test',
-            //  withinDescribe: 'test',
-            //}],
-            //'jest/no-conditional-expect': 'off',
-            //'jest/no-duplicate-hooks': 'error',
-            //'jest/no-restricted-matchers': 'error',
-            //'jest/no-standalone-expect': 'off',
-            //'jest/no-test-return-statement': 'error',
-            //'jest/prefer-comparison-matcher': 'error',
-            //'jest/prefer-equality-matcher': 'error',
-            //'jest/prefer-expect-resolves': 'error',
-            //'jest/prefer-hooks-in-order': 'error',
-            //'jest/prefer-hooks-on-top': 'error',
-            //'jest/prefer-mock-promise-shorthand': 'error',
-            //'jest/prefer-snapshot-hint': 'error',
-            //'jest/prefer-to-be': 'error',
-            //'jest/prefer-todo': 'error',
-            //'jest/require-top-level-describe': 'error',
-            //'jest/valid-expect': 'off',
+            // 'jest/no-conditional-in-test': 'error',
+            // 'jest/consistent-test-it':['error', {
+            //     fn: 'test',
+            //     withinDescribe: 'test',
+            // }],
+            // 'jest/no-conditional-expect': 'off',
+            // 'jest/no-duplicate-hooks': 'error',
+            // 'jest/no-restricted-matchers': 'error',
+            // 'jest/no-standalone-expect': 'off',
+            // 'jest/no-test-return-statement': 'error',
+            // 'jest/prefer-comparison-matcher': 'error',
+            // 'jest/prefer-equality-matcher': 'error',
+            // 'jest/prefer-expect-resolves': 'error',
+            // 'jest/prefer-hooks-in-order': 'error',
+            // 'jest/prefer-hooks-on-top': 'error',
+            // 'jest/prefer-mock-promise-shorthand': 'error',
+            // 'jest/prefer-snapshot-hint': 'error',
+            // 'jest/prefer-to-be': 'error',
+            // 'jest/prefer-todo': 'error',
+            // 'jest/require-top-level-describe': 'error',
+            // 'jest/valid-expect': 'off',
 
             // https://github.com/weiran-zsd/eslint-plugin-node/blob/master/lib/configs/_commons.js
             'n/callback-return': 'error',
@@ -259,7 +275,6 @@ export default [
             'n/prefer-promises/dns': 'error',
             'n/prefer-promises/fs': 'error',
 
-
             'prefer-arrow/prefer-arrow-functions': ['error', {
                 classPropertiesAllowed: false,
             }],
@@ -273,7 +288,7 @@ export default [
 
             // https://github.com/sindresorhus/eslint-plugin-unicorn/blob/main/configs/recommended.js
             'unicorn/catch-error-name': ['error', {
-                name: 'err'
+                name: 'err',
             }],
             'unicorn/consistent-function-scoping': 'error',
             'unicorn/custom-error-definition': 'error',
@@ -334,7 +349,7 @@ export default [
             }],
             'max-params': 'error',
             'max-statements': ['error', {
-                max: 25
+                max: 25,
             }],
             'no-alert': 'error',
             'no-array-constructor': 'error',
@@ -470,4 +485,4 @@ export default [
     // prettier ueberschreibt vorherige Konfigurationseinstellungen
     prettierRecommended,
 ];
-/* eslint-enable prettier/prettier */
+/* eslint-enable prettier/prettier, @stylistic/semi, @stylistic/indent */

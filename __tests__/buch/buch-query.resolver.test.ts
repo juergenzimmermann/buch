@@ -411,9 +411,9 @@ describe('GraphQL Queries', () => {
         expect(extensions!.code).toBe('BAD_USER_INPUT');
     });
 
-    test('Buecher zur Art "KINDLE"', async () => {
+    test('Buecher zur Art "EPUB"', async () => {
         // given
-        const buchArt: BuchArt = 'KINDLE';
+        const buchArt: BuchArt = 'EPUB';
         const body: GraphQLRequest = {
             query: `
                 {

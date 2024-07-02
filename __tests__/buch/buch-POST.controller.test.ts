@@ -34,7 +34,7 @@ import { type ErrorResponse } from './error-response.js';
 const neuesBuch: BuchDTO = {
     isbn: '978-0-007-00644-1',
     rating: 1,
-    art: 'DRUCKAUSGABE',
+    art: 'EPUB',
     preis: 99.99,
     rabatt: 0.123,
     lieferbar: true,
@@ -69,7 +69,7 @@ const neuesBuchInvalid: Record<string, unknown> = {
 const neuesBuchIsbnExistiert: BuchDTO = {
     isbn: '978-3-897-22583-1',
     rating: 1,
-    art: 'DRUCKAUSGABE',
+    art: 'EPUB',
     preis: 99.99,
     rabatt: 0.099,
     lieferbar: true,

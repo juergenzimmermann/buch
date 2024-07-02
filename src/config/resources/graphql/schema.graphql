@@ -73,8 +73,9 @@ type Buch {
 
 "Enum-Typ für die Art eines Buches"
 enum Art {
-  DRUCKAUSGABE
-  KINDLE
+  EPUB
+  HARDCOVER
+  PAPERBACK
 }
 
 "Suchkriterien für Bücher"
