@@ -29,7 +29,7 @@ scan(
             'sonar.projectName': 'buch',
             'sonar.projectKey': 'buch',
             'sonar.projectDescription': 'Beispiel fuer Software Engineering',
-            'sonar.projectVersion': '2024.04.0',
+            'sonar.projectVersion': '2024.10.1',
             'sonar.sources': 'src',
             'sonar.tests': '__tests__',
             'sonar.token': sonarToken,

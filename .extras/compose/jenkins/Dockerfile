@@ -15,7 +15,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-# Aufruf:   docker build --tag juergenzimmermann/jenkins:2024.04.0 .
+# Aufruf:   docker build --tag juergenzimmermann/jenkins:2024.10.1 .
 #           Get-Content Dockerfile | docker run --rm --interactive hadolint/hadolint:2.12.1-beta-debian
 #           docker compose exec jenkins bash
 #               cat /etc/os-release
@@ -26,7 +26,7 @@
 # https://www.jenkins.io/doc/book/installing/docker
 # https://manpages.debian.org/bullseye/apt/apt-get.8.en.html
 
-ARG JENKINS_VERSION=2.464-jdk21
+ARG JENKINS_VERSION=2.466-jdk21
 
 FROM jenkins/jenkins:${JENKINS_VERSION}
 

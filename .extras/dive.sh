@@ -24,11 +24,9 @@ echo -en "\033]1; dive \007"
 diveVersion='v0.12.0'
 imagePrefix='juergenzimmermann/'
 imageBase='buch'
-imageTag="2024.04.0-$base"
+imageTag="2024.10.1-$base"
 
 image="$imagePrefix${imageBase}:$imageTag"
-# image='node:22.3.0-bookworm-slim'
-# image='node:22.3.0-alpine3.19'
 
 # https://github.com/wagoodman/dive#installation
 docker run --rm --interactive --tty \
