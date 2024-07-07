@@ -14,15 +14,15 @@
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 # Aufruf:   docker compose up
-#           docker compose exec buch bash   # Bookworm
-#           docker compose exec buch ash    # Alpine
+#           docker compose exec buch bash   # "sh" bzw. "busybox" bei Alpine
 #             id
-#             ps -ef                        # NUR Alpine
 #             env
 #             pwd
 #             ls -l dist
 #             hostname
 #             cat /etc/os-release
+#             ps                            # NUR Alpine
+#             busybox --help                # NUR Alpine
 #           docker compose down
 
 # https://docs.docker.com/compose/compose-file
