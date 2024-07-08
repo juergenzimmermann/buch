@@ -44,6 +44,12 @@ export interface UpdateParams {
     readonly version: string;
 }
 
+// TODO Transaktionen, wenn mehr als 1 TypeORM-Schreibmethode involviert ist
+// https://docs.nestjs.com/techniques/database#typeorm-transactions
+// https://papooch.github.io/nestjs-cls/plugins/available-plugins/transactional
+// https://betterprogramming.pub/handling-transactions-in-typeorm-and-nest-js-with-ease-3a417e6ab5
+// https://bytesmith.dev/blog/20240320-nestjs-transactions
+
 /**
  * Die Klasse `BuchWriteService` implementiert den Anwendungskern für das
  * Schreiben von Bücher und greift mit _TypeORM_ auf die DB zu.
