@@ -13,7 +13,7 @@
 -- You should have received a copy of the GNU General Public License
 -- along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
--- (1) in extras\compose\compose.yml
+-- (1) in .extras\compose\backend\postgres\compose.yml
 --        auskommentieren:
 --           Zeile mit "command:" und nachfolgende Listenelemente mit führendem "-"
 --              damit der PostgreSQL-Server ohne TLS gestartet wird
@@ -24,10 +24,10 @@
 --        Kommentar entfernen:
 --           Zeile mit "#cap_add: [...]"
 -- (2) PowerShell:
---     cd .extras\compose\postgres
+--     cd .extras\compose\backend\postgres
 --     docker compose up db
 -- (3) 2. PowerShell:
---     cd .extras\compose\postgres
+--     cd .extras\compose\backend\postgres
 --     docker compose exec db bash
 --        chown postgres:postgres /var/lib/postgresql/tablespace
 --        chown postgres:postgres /var/lib/postgresql/tablespace/buch

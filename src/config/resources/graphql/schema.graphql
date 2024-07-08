@@ -142,5 +142,4 @@ type TokenResult {
   expires_in: Int!
   refresh_token: String!
   refresh_expires_in: Int!
-  roles: [String!]
 }

@@ -30,7 +30,8 @@ import { getLogger } from '../../logger/logger.js';
 
 const { authServerUrl, clientId, secret } = keycloakConnectOptions;
 
-export interface Login {
+/** Typdefinition für Eingabedaten zu einem Token. */
+export interface TokenData {
     readonly username: string | undefined;
     readonly password: string | undefined;
 }
@@ -66,7 +67,7 @@ export class KeycloakService implements KeycloakConnectOptionsFactory {
         return keycloakConnectOptions;
     }
 
-    async token({ username, password }: Login) {
+    async token({ username, password }: TokenData) {
         this.#logger.debug('token: username=%s', username);
         if (username === undefined || password === undefined) {
             return;

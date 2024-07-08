@@ -66,10 +66,9 @@ Konfigurationsschritte _sorgfältig_ durchzuführen, nachdem man in einem
 Webbrowser `http://localhost:8880` oder `https://localhost:8843` aufgerufen hat:
 
 ```text
-    "Administration Console" anklicken
-        Username    admin
-        Password    p
-            siehe .env in .extras\compose\keycloak
+    Username    admin
+    Password    p
+        siehe .env in .extras\compose\keycloak
 
     Realm "master" ist voreingestellt
         Drop-Down Menü: <Create realm> anklicken
@@ -125,12 +124,12 @@ Webbrowser `http://localhost:8880` oder `https://localhost:8843` aufgerufen hat:
             "nest-user" anklicken
                 Drop-down Menü "Action" (in der rechten oberen Ecke):  "Add associated roles" auswählen
                 "Filter by clients"       auswählen und anklicken
-                "buch-client user"        Haken setzen
+                "nest-client user"        Haken setzen
                 <Assign> anklicken
             WICHTIG: "nest-admin" und "nest-user" haben bei Breadcrumb "Realm roles" in der Spalte "Composite" den Wert "True"
 
     Menüpunkt "Users"
-        <Add user>
+        <Create new user>
             Required User Actions:      Überprüfen, dass nichts ausgewählt ist
             Username                    admin
             Email                       admin@acme.com
@@ -151,7 +150,7 @@ Webbrowser `http://localhost:8880` oder `https://localhost:8843` aufgerufen hat:
             Tab "Details"
                 Required user actions       Überprüfen, dass nichts ausgewählt ist
                 <Save> anklicken
-        <Add user>
+        <Create new user>
             Required User Actions:      Überprüfen, dass nichts ausgewählt ist
             Username                    user
             Email                       user@acme.com

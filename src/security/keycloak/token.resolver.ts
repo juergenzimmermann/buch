@@ -22,8 +22,8 @@ import { ResponseTimeInterceptor } from '../../logger/response-time.interceptor.
 import { KeycloakService } from './keycloak.service.js';
 
 // @nestjs/graphql fasst die Input-Daten zu einem Typ zusammen
-/** Typdefinition für Login-Daten bei GraphQL */
-export interface LoginInput {
+/** Typdefinition für Token-Daten bei GraphQL */
+export interface TokenInput {
     /** Benutzername */
     readonly username: string;
     /** Passwort */
@@ -36,7 +36,7 @@ export interface RefreshInput {
     readonly refresh_token: string; // eslint-disable-line @typescript-eslint/naming-convention
 }
 
-@Resolver('login')
+@Resolver()
 @UseInterceptors(ResponseTimeInterceptor)
 export class TokenResolver {
     readonly #keycloakService: KeycloakService;
@@ -49,7 +49,7 @@ export class TokenResolver {
 
     @Mutation()
     @Public()
-    async token(@Args() { username, password }: LoginInput) {
+    async token(@Args() { username, password }: TokenInput) {
         this.#logger.debug('token: username=%s', username);
 
         const result = await this.#keycloakService.token({

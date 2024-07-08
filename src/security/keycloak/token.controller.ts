@@ -44,8 +44,8 @@ import { getLogger } from '../../logger/logger.js';
 import { ResponseTimeInterceptor } from '../../logger/response-time.interceptor.js';
 import { KeycloakService } from './keycloak.service.js';
 
-/** Entity-Klasse für Login-Daten. */
-export class Login {
+/** Entity-Klasse für Token-Daten. */
+export class TokenData {
     /** Benutzername */
     // https://docs.nestjs.com/openapi/types-and-parameters
     @ApiProperty({ example: 'admin', type: String })
@@ -79,14 +79,14 @@ export class TokenController {
     }
 
     /**
-     * Einloggen mit username und password im Request-Body und Content-Type
+     * Token zu username und password im Request-Body und Content-Type
      * application/x-www-form-urlencoded oder application/json.
      *
      * @param body Request-Body von Express mit username und password.
      * @param res Leeres Response-Objekt von Express.
-     * @returns Response mit mit Body aus access_token, expires_in,
-     *  refresh_token und refresh_expires_in sowie Statuscode 200, falls das
-     *  Login erfolgreich war. Sonst Statuscode 401.
+     * @returns Response mit Body aus access_token, expires_in,
+     *  refresh_token und refresh_expires_in sowie Statuscode 200, falls der
+     *  Request erfolgreich war. Sonst Statuscode 401.
      */
     @Post(paths.token)
     @Public()
@@ -97,7 +97,10 @@ export class TokenController {
     @ApiUnauthorizedResponse({
         description: 'Benutzername oder Passwort sind falsch.',
     })
-    async login(@Body() { username, password }: Login, @Res() res: Response) {
+    async token(
+        @Body() { username, password }: TokenData,
+        @Res() res: Response,
+    ) {
         this.#logger.debug('token: username=%s', username);
 
         const result = await this.#keycloakService.token({
