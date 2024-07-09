@@ -14,7 +14,7 @@
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 # Aufruf:   docker compose up
-#           docker compose exec buch bash   # "sh" bzw. "busybox" bei Alpine
+#           docker compose exec buch bash   # "ash" bei Alpine
 #             id
 #             env
 #             pwd
@@ -22,8 +22,13 @@
 #             hostname
 #             cat /etc/os-release
 #             ps                            # NUR Alpine
-#             busybox --help                # NUR Alpine
 #           docker compose down
+
+# ash = Almquist shell
+# https://en.wikipedia.org/wiki/Almquist_shell
+
+# Alpine mit busybox: "one binary to rule them all"
+# https://www.busybox.net
 
 # https://docs.docker.com/compose/compose-file
 # https://docs.docker.com/compose/compose-file/compose-file-v3
