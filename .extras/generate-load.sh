@@ -1,5 +1,5 @@
 #!/bin/bash
-# Copyright (C) 2024 -  Juergen Zimmermann, Hochschule Karlsruhe
+# Copyright (C) 2024 - present, Juergen Zimmermann, Hochschule Karlsruhe
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -42,7 +42,7 @@ do
   url="https://localhost:3000/rest/$id"
   #$url = "http://localhost:3000/rest/$id"
 
-  tls='--tlsv1.3'
+  tls='--tlsv1.3' # DevSkim: ignore DS440000
   # FIXME Option `--tlsv1.3` wird im aktuellen Build von libcurl für macOS 14.4.1 nicht unterstützt
   #tls=''
 

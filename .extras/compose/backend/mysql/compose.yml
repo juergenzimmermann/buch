@@ -108,7 +108,7 @@ services:
   # p h p M y A d m i n
   # ----------------------------------------------------------------------------
   phpmyadmin:
-    image: phpmyadmin/phpmyadmin:5.2.1
+    image: phpmyadmin:5.2.1
     ports:
       - published: 8889
         target: 80
