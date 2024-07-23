@@ -24,7 +24,7 @@
 services:
   db:
     # https://github.com/docker-library/mysql/blob/master/Dockerfile.oracle
-    image: mysql:9.0.0-oracle
+    image: mysql:9.0.1-oracle
     ports:
       - published: 3306
         target: 3306
