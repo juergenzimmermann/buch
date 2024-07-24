@@ -27,12 +27,12 @@ import { type Suchkriterien } from './suchkriterien.js';
 /**
  * Typdefinition für `findById`
  */
-export interface FindByIdParams {
+export type FindByIdParams = {
     /** ID des gesuchten Buchs */
     readonly id: number;
     /** Sollen die Abbildungen mitgeladen werden? */
     readonly mitAbbildungen?: boolean;
-}
+};
 
 /**
  * Die Klasse `BuchReadService` implementiert das Lesen für Bücher und greift

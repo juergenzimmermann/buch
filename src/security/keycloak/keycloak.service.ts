@@ -31,10 +31,10 @@ import { getLogger } from '../../logger/logger.js';
 const { authServerUrl, clientId, secret } = keycloakConnectOptions;
 
 /** Typdefinition für Eingabedaten zu einem Token. */
-export interface TokenData {
+export type TokenData = {
     readonly username: string | undefined;
     readonly password: string | undefined;
-}
+};
 
 @Injectable()
 export class KeycloakService implements KeycloakConnectOptionsFactory {

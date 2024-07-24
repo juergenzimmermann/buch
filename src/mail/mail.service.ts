@@ -25,12 +25,12 @@ import { mailConfig } from '../config/mail.js';
 import { getLogger } from '../logger/logger.js';
 
 /** Typdefinition für das Senden einer Email. */
-export interface SendMailParams {
+export type SendMailParams = {
     /** Subject für die Email. */
     readonly subject: string;
     /** Body für die Email. */
     readonly body: string;
-}
+};
 
 @Injectable()
 export class MailService {

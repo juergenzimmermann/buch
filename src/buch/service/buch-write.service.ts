@@ -35,14 +35,14 @@ import {
 } from './exceptions.js';
 
 /** Typdefinitionen zum Aktualisieren eines Buches mit `update`. */
-export interface UpdateParams {
+export type UpdateParams = {
     /** ID des zu aktualisierenden Buches. */
     readonly id: number | undefined;
     /** Buch-Objekt mit den aktualisierten Werten. */
     readonly buch: Buch;
     /** Versionsnummer für die aktualisierenden Werte. */
     readonly version: string;
-}
+};
 
 // TODO Transaktionen, wenn mehr als 1 TypeORM-Schreibmethode involviert ist
 // https://docs.nestjs.com/techniques/database#typeorm-transactions

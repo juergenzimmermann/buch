@@ -23,13 +23,13 @@ import { BuchReadService } from '../service/buch-read.service.js';
 import { type Suchkriterien } from '../service/suchkriterien.js';
 import { HttpExceptionFilter } from './http-exception.filter.js';
 
-export interface IdInput {
+export type IdInput = {
     readonly id: number;
-}
+};
 
-export interface SuchkriterienInput {
+export type SuchkriterienInput = {
     readonly suchkriterien: Suchkriterien;
-}
+};
 
 @Resolver((_: any) => Buch)
 @UseFilters(HttpExceptionFilter)

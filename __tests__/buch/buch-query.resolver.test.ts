@@ -31,10 +31,10 @@ import {
 } from '../testserver.js';
 
 // eslint-disable-next-line jest/no-export
-export interface GraphQLResponseBody {
+export type GraphQLResponseBody = {
     data?: Record<string, any> | null;
     errors?: readonly [GraphQLFormattedError];
-}
+};
 
 type BuchDTO = Omit<
     Buch,

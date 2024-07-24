@@ -23,18 +23,18 @@ import { KeycloakService } from './keycloak.service.js';
 
 // @nestjs/graphql fasst die Input-Daten zu einem Typ zusammen
 /** Typdefinition für Token-Daten bei GraphQL */
-export interface TokenInput {
+export type TokenInput = {
     /** Benutzername */
     readonly username: string;
     /** Passwort */
     readonly password: string;
-}
+};
 
 /** Typdefinition für Refresh-Daten bei GraphQL */
-export interface RefreshInput {
+export type RefreshInput = {
     /** Refresh Token */
     readonly refresh_token: string; // eslint-disable-line @typescript-eslint/naming-convention
-}
+};
 
 @Resolver()
 @UseInterceptors(ResponseTimeInterceptor)

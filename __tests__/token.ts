@@ -18,10 +18,10 @@ import { type GraphQLQuery } from './buch/buch-mutation.resolver.test.js';
 import { type GraphQLResponseBody } from './buch/buch-query.resolver.test.js';
 import { httpsAgent, tokenPath } from './testserver.js';
 
-interface TokenResult {
+type TokenResult = {
     // eslint-disable-next-line @typescript-eslint/naming-convention
     access_token: string;
-}
+};
 
 const usernameDefault = 'admin';
 const passwordDefault = 'p'; // NOSONAR

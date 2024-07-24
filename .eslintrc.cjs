@@ -114,7 +114,7 @@ module.exports = {
         // https://github.com/typescript-eslint/typescript-eslint/blob/main/packages/eslint-plugin/src/configs/stylistic-type-checked.ts
         '@typescript-eslint/array-type': ['error', { default: 'array'}],
         '@typescript-eslint/ban-ts-comment': 'error',
-        '@typescript-eslint/consistent-type-definitions': ['error', 'interface'],
+        '@typescript-eslint/consistent-type-definitions': ['error', 'type'],
         '@typescript-eslint/consistent-type-exports': 'error',
         '@typescript-eslint/consistent-type-imports': 'error',
         '@typescript-eslint/default-param-last': 'error',

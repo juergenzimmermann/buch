@@ -54,13 +54,13 @@ import { type Suchkriterien } from '../service/suchkriterien.js';
 import { getBaseUri } from './getBaseUri.js';
 
 /** href-Link für HATEOAS */
-export interface Link {
+export type Link = {
     /** href-Link für HATEOAS-Links */
     readonly href: string;
-}
+};
 
 /** Links für HATEOAS */
-export interface Links {
+export type Links = {
     /** self-Link */
     readonly self: Link;
     /** Optionaler Linke für list */
@@ -71,7 +71,7 @@ export interface Links {
     readonly update?: Link;
     /** Optionaler Linke für remove */
     readonly remove?: Link;
-}
+};
 
 /** Typedefinition für ein Titel-Objekt ohne Rückwärtsverweis zum Buch */
 export type TitelModel = Omit<Titel, 'buch' | 'id'>;
@@ -93,12 +93,12 @@ export type BuchModel = Omit<
 };
 
 /** Buch-Objekte mit HATEOAS-Links in einem JSON-Array. */
-export interface BuecherModel {
+export type BuecherModel = {
     // eslint-disable-next-line @typescript-eslint/naming-convention
     _embedded: {
         buecher: BuchModel[];
     };
-}
+};
 
 /**
  * Klasse für `BuchGetController`, um Queries in _OpenAPI_ bzw. Swagger zu

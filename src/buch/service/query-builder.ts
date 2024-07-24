@@ -29,12 +29,12 @@ import { Titel } from '../entity/titel.entity.js';
 import { type Suchkriterien } from './suchkriterien.js';
 
 /** Typdefinitionen für die Suche mit der Buch-ID. */
-export interface BuildIdParams {
+export type BuildIdParams = {
     /** ID des gesuchten Buchs. */
     readonly id: number;
     /** Sollen die Abbildungen mitgeladen werden? */
     readonly mitAbbildungen?: boolean;
-}
+};
 /**
  * Die Klasse `QueryBuilder` implementiert das Lesen für Bücher und greift
  * mit _TypeORM_ auf eine relationale DB zu.

@@ -38,13 +38,13 @@ import { HttpExceptionFilter } from './http-exception.filter.js';
 //      https://github.com/AstrumU/graphql-authz
 //      https://www.the-guild.dev/blog/graphql-authz
 
-export interface CreatePayload {
+export type CreatePayload = {
     readonly id: number;
-}
+};
 
-export interface UpdatePayload {
+export type UpdatePayload = {
     readonly version: number;
-}
+};
 
 export class BuchUpdateDTO extends BuchDTO {
     @IsNumberString()
