@@ -82,6 +82,9 @@ Webbrowser `http://localhost:8880` oder `https://localhost:8843` aufgerufen hat:
         <Next>
             "Capability config"
                 Client authentication       On
+                Authorization               Off
+                Authentication Flow         Standard flow                   Haken setzen
+                                            Direct access grants            Haken setzen
         <Next>
             Root URL                https://localhost:3000
             Valid redirect URIs     https://localhost:3000
@@ -106,28 +109,6 @@ Webbrowser `http://localhost:8880` oder `https://localhost:8843` aufgerufen hat:
                         Eine hinreichend lange Zeitdauer verwenden
 
     # https://www.keycloak.org/docs/latest/server_admin/index.html#assigning-permissions-using-roles-and-groups
-    Menüpunkt "Realm roles"
-        <Create role> anklicken
-            Role name       nest-admin
-            <Save> anklicken
-        Breadcrumb "Realm roles" anklicken
-            "nest-admin" anklicken
-                Drop-down Menü "Action" (in der rechten oberen Ecke):  "Add associated roles" auswählen
-                "Filter by clients"       auswählen und anklicken
-                "nest-client admin"       Haken setzen
-                <Assign> anklicken
-        Breadcrumb "Realm roles" anklicken
-        <Create role> anklicken
-            Role name       nest-user
-            <Save>
-        Breadcrumb "Realm roles" anklicken
-            "nest-user" anklicken
-                Drop-down Menü "Action" (in der rechten oberen Ecke):  "Add associated roles" auswählen
-                "Filter by clients"       auswählen und anklicken
-                "nest-client user"        Haken setzen
-                <Assign> anklicken
-            WICHTIG: "nest-admin" und "nest-user" haben bei Breadcrumb "Realm roles" in der Spalte "Composite" den Wert "True"
-
     Menüpunkt "Users"
         <Create new user>
             Required User Actions:      Überprüfen, dass nichts ausgewählt ist

@@ -34,11 +34,10 @@ services:
     # SHOW VARIABLES LIKE "ssl_key";
     # SHOW VARIABLES LIKE "ssl_cert";
     # SHOW VARIABLES LIKE "ssl_ca";
-    command:
-      - 'mysqld'
-      - '--ssl-key=/var/lib/mysql-tls/key.pem'
-      - '--ssl-cert=/var/lib/mysql-tls/certificate.crt'
-      - '--ssl-ca=/var/lib/mysql-tls/certificate.crt'
+    command: >
+      --ssl-key=/var/lib/mysql/server-key.pem
+      --ssl-cert=/var/lib/mysql/server-cert.pem
+      --ssl-ca=/var/lib/mysql/ca.pem
     volumes:
       - type: bind
         source: C:/Zimmermann/volumes/mysql/db
@@ -52,12 +51,16 @@ services:
         source: C:/Zimmermann/volumes/mysql/log
         target: /var/log
       - type: bind
-        source: C:/Zimmermann/volumes/mysql/tls/key.pem
-        target: /var/lib/mysql-tls/key.pem
+        source: C:/Zimmermann/volumes/mysql/tls/server-key.pem
+        target: /var/lib/mysql/server-key.pem
         read_only: true
       - type: bind
-        source: C:/Zimmermann/volumes/mysql/tls/certificate.crt
-        target: /var/lib/mysql-tls/certificate.crt
+        source: C:/Zimmermann/volumes/mysql/tls/server-cert.pem
+        target: /var/lib/mysql/server-cert.pem
+        read_only: true
+      - type: bind
+        source: C:/Zimmermann/volumes/mysql/tls/server-cert.pem
+        target: /var/lib/mysql/ca.pem
         read_only: true
       - type: bind
         source: C:/Zimmermann/volumes/mysql/csv/buch
@@ -65,10 +68,10 @@ services:
         # /etc/my.cnf
         # SHOW VARIABLES LIKE "secure_file_priv";
         target: /var/lib/mysql-files
-      - type: bind
-        source: config.phpmyadmin.inc.php
-        target: /etc/phpmyadmin/config.inc.php
-        read_only: true
+      #- type: bind
+      #  source: ...
+      #  target: /etc/phpmyadmin/config.inc.php
+      #  read_only: true
       - type: bind
         source: C:/Zimmermann/volumes/mysql/sql
         target: /sql
