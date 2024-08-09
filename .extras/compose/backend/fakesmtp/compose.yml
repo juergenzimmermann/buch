@@ -17,7 +17,7 @@ services:
   fakesmtp:
     # https://hub.docker.com/r/gessnerfl/fake-smtp-server
     # https://hub.docker.com/r/greenmail/standalone
-    image: gessnerfl/fake-smtp-server:2.3.0
+    image: gessnerfl/fake-smtp-server:2.4.0
     ports:
       - published: 8025
         target: 8025
@@ -42,14 +42,14 @@ services:
       SPRING_JPA_OPEN-IN-VIEW: true
     hostname: fakesmtp
     container_name: fakesmtp
-    cap_drop: [ ALL ]
+    cap_drop: [ALL]
     stop_grace_period: 3s
     restart: unless-stopped
     deploy:
       resources:
         limits:
-          cpus: "0.5"
+          cpus: '0.5'
           memory: 768M
         reservations:
-          cpus: "0.5"
+          cpus: '0.5'
           memory: 768M

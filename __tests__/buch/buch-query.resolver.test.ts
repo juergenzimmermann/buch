@@ -30,7 +30,6 @@ import {
     startServer,
 } from '../testserver.js';
 
-// eslint-disable-next-line jest/no-export
 export type GraphQLResponseBody = {
     data?: Record<string, any> | null;
     errors?: readonly [GraphQLFormattedError];

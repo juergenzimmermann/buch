@@ -35,7 +35,7 @@ module.exports = {
     env: {
         node: true,
         es2022: true,
-        jest: true,
+        // jest: true,
     },
     parser: '@typescript-eslint/parser',
     // https://eslint.org/docs/latest/use/configure/language-options#specifying-parser-options
@@ -60,7 +60,7 @@ module.exports = {
         'prefer-arrow',
         'regexp',
         '@stylistic',
-        'jest',
+        // 'jest',
         'jest-formatting',
     ],
 
@@ -99,8 +99,8 @@ module.exports = {
         // https://github.com/eslint-stylistic/eslint-stylistic/blob/main/packages/eslint-plugin/configs/customize.ts
         // 'plugin:@stylistic/recommended-extends',
         // https://github.com/jest-community/eslint-plugin-jest/blob/main/README.md#rules
-        'plugin:jest/recommended',
-        'plugin:jest/style',
+        // 'plugin:jest/recommended',
+        // 'plugin:jest/style',
         'plugin:jest-formatting/strict',
     ],
 
@@ -238,35 +238,33 @@ module.exports = {
             allowDefaultCaseForExhaustiveSwitch: false,
             requireDefaultForNonUnion: true,
         }],
-        '@typescript-eslint/type-annotation-spacing': 'error',
         '@typescript-eslint/unbound-method': ['error', {
             ignoreStatic: true,
         }],
         '@typescript-eslint/unified-signatures': 'error',
 
         // https://github.com/jest-community/eslint-plugin-jest/blob/main/src/index.ts
-        'jest/no-conditional-in-test': 'error',
-        'jest/consistent-test-it':['error', {
-          fn: 'test',
-          withinDescribe: 'test',
-        }],
-        //'jest/max-expects': 'error',
-        'jest/no-conditional-expect': 'off',
-        'jest/no-duplicate-hooks': 'error',
-        'jest/no-restricted-matchers': 'error',
-        'jest/no-standalone-expect': 'off',
-        'jest/no-test-return-statement': 'error',
-        'jest/prefer-comparison-matcher': 'error',
-        'jest/prefer-equality-matcher': 'error',
-        'jest/prefer-expect-resolves': 'error',
-        'jest/prefer-hooks-in-order': 'error',
-        'jest/prefer-hooks-on-top': 'error',
-        'jest/prefer-mock-promise-shorthand': 'error',
-        'jest/prefer-snapshot-hint': 'error',
-        'jest/prefer-to-be': 'error',
-        'jest/prefer-todo': 'error',
-        'jest/require-top-level-describe': 'error',
-        'jest/valid-expect': 'off',
+        // 'jest/no-conditional-in-test': 'error',
+        // 'jest/consistent-test-it':['error', {
+        //   fn: 'test',
+        //   withinDescribe: 'test',
+        // }],
+        // 'jest/no-conditional-expect': 'off',
+        // 'jest/no-duplicate-hooks': 'error',
+        // 'jest/no-restricted-matchers': 'error',
+        // 'jest/no-standalone-expect': 'off',
+        // 'jest/no-test-return-statement': 'error',
+        // 'jest/prefer-comparison-matcher': 'error',
+        // 'jest/prefer-equality-matcher': 'error',
+        // 'jest/prefer-expect-resolves': 'error',
+        // 'jest/prefer-hooks-in-order': 'error',
+        // 'jest/prefer-hooks-on-top': 'error',
+        // 'jest/prefer-mock-promise-shorthand': 'error',
+        // 'jest/prefer-snapshot-hint': 'error',
+        // 'jest/prefer-to-be': 'error',
+        // 'jest/prefer-todo': 'error',
+        // 'jest/require-top-level-describe': 'error',
+        // 'jest/valid-expect': 'off',
 
         // https://github.com/weiran-zsd/eslint-plugin-node/blob/master/lib/configs/_commons.js
         'n/callback-return': 'error',

@@ -15,7 +15,7 @@
 
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 
-import { afterAll, beforeAll, describe, test } from '@jest/globals';
+import { afterAll, beforeAll, describe, expect, test } from '@jest/globals';
 import { HttpStatus } from '@nestjs/common';
 import axios, { type AxiosInstance, type AxiosResponse } from 'axios';
 import { type GraphQLQuery } from '../buch/buch-mutation.resolver.test.js';

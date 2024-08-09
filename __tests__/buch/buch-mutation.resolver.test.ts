@@ -16,7 +16,7 @@
 /* eslint-disable max-lines, @typescript-eslint/no-unsafe-assignment */
 
 import { type GraphQLRequest } from '@apollo/server';
-import { afterAll, beforeAll, describe, test } from '@jest/globals';
+import { afterAll, beforeAll, describe, expect, test } from '@jest/globals';
 import { HttpStatus } from '@nestjs/common';
 import axios, { type AxiosInstance, type AxiosResponse } from 'axios';
 import {
@@ -29,7 +29,6 @@ import {
 import { tokenGraphQL } from '../token.js';
 import { type GraphQLResponseBody } from './buch-query.resolver.test.js';
 
-// eslint-disable-next-line jest/no-export
 export type GraphQLQuery = Pick<GraphQLRequest, 'query'>;
 
 // -----------------------------------------------------------------------------
