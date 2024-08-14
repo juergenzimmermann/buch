@@ -17,7 +17,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-// https://www.jenkins.io/doc/tutorials/create-a-pipeline-in-blue-ocean/
+// https://www.jenkins.io/doc/tutorials/create-a-pipeline-in-blue-ocean
 
 pipeline {
     // agent any
@@ -25,8 +25,8 @@ pipeline {
         docker {
             // https://www.debian.org/releases: Bookworm = Debian 12
             // https://deb.nodesource.com hat nur node_20.x
-            // image 'node:22.5.1-bookworm'
-            image 'node:20.15.1-bookworm'
+            image 'node:22.6.0-bookworm'
+            // image 'node:20.15.1-bookworm'
             // https://stackoverflow.com/questions/62330354/jenkins-pipeline-alpine-agent-apk-update-error-unable-to-lock-database-permis
             // https://stackoverflow.com/questions/42630894/jenkins-docker-how-to-control-docker-user-when-using-image-inside-command/51986870#51986870
             // https://stackoverflow.com/questions/42743201/npm-install-fails-in-jenkins-pipeline-in-docker
@@ -49,7 +49,7 @@ pipeline {
     //}
 
     options {
-      // Timeout fuer den gesamten Job
+        // Timeout fuer den gesamten Job
         timeout time: 60, unit: 'MINUTES'
     }
 
@@ -114,12 +114,12 @@ pipeline {
                 sh 'apt-get upgrade --yes'
                 sh 'python3 --version'
 
-                sh 'mkdir -p /etc/apt/keyrings'
-                sh 'curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key | gpg --dearmor -o /etc/apt/keyrings/nodesource.gpg'
-                sh 'echo "deb [signed-by=/etc/apt/keyrings/nodesource.gpg] https://deb.nodesource.com/node_20.x nodistro main" | tee /etc/apt/sources.list.d/nodesource.list'
-                sh 'apt-get update'
-                sh 'apt-get install nodejs --no-install-recommends --yes --show-progress'
-                sh 'apt-cache policy nodejs'
+                // sh 'mkdir -p /etc/apt/keyrings'
+                // sh 'curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key | gpg --dearmor -o /etc/apt/keyrings/nodesource.gpg'
+                // sh 'echo "deb [signed-by=/etc/apt/keyrings/nodesource.gpg] https://deb.nodesource.com/node_20.x nodistro main" | tee /etc/apt/sources.list.d/nodesource.list'
+                // sh 'apt-get update'
+                // sh 'apt-get install nodejs --no-install-recommends --yes --show-progress'
+                // sh 'apt-cache policy nodejs'
 
                 sh 'node --version'
                 sh 'npm i -g npm'
