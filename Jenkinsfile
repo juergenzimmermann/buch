@@ -23,10 +23,7 @@ pipeline {
     // agent any
     agent {
         docker {
-            // https://www.debian.org/releases: Bookworm = Debian 12
-            // https://deb.nodesource.com hat nur node_20.x
             image 'node:22.6.0-bookworm'
-            // image 'node:20.15.1-bookworm'
             // https://stackoverflow.com/questions/62330354/jenkins-pipeline-alpine-agent-apk-update-error-unable-to-lock-database-permis
             // https://stackoverflow.com/questions/42630894/jenkins-docker-how-to-control-docker-user-when-using-image-inside-command/51986870#51986870
             // https://stackoverflow.com/questions/42743201/npm-install-fails-in-jenkins-pipeline-in-docker
@@ -114,6 +111,8 @@ pipeline {
                 sh 'apt-get upgrade --yes'
                 sh 'python3 --version'
 
+                // https://www.debian.org/releases: Bookworm = Debian 12
+                // https://deb.nodesource.com hat nur node_20.x
                 // sh 'mkdir -p /etc/apt/keyrings'
                 // sh 'curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key | gpg --dearmor -o /etc/apt/keyrings/nodesource.gpg'
                 // sh 'echo "deb [signed-by=/etc/apt/keyrings/nodesource.gpg] https://deb.nodesource.com/node_20.x nodistro main" | tee /etc/apt/sources.list.d/nodesource.list'
