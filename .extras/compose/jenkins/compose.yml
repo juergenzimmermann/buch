@@ -33,7 +33,7 @@
 
 services:
   docker:
-    image: docker:27.1.2-dind
+    image: docker:27.2.0-rc.1-dind
     restart: always
     ports:
       - published: 3000
