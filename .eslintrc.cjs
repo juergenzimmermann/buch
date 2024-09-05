@@ -161,6 +161,7 @@ module.exports = {
         '@typescript-eslint/no-confusing-void-expression': ['error', {
             ignoreArrowShorthand: true
         }],
+        '@typescript-eslint/no-deprecated': 'error',
         '@typescript-eslint/no-dupe-class-members': 'error',
         '@typescript-eslint/no-dynamic-delete': 'error',
         '@typescript-eslint/no-empty-function': ['error', {
