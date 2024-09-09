@@ -28,8 +28,13 @@ import { BadUserInputError } from './errors.js';
 @Catch(HttpException)
 export class HttpExceptionFilter implements ExceptionFilter {
     catch(exception: HttpException, _host: ArgumentsHost) {
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-        const { message }: { message: string } = exception.getResponse() as any;
+        const response = exception.getResponse();
+        if (typeof response === 'string') {
+            throw new BadUserInputError(response, exception);
+        }
+
+        // Typ "object", default: mit den Properties statusCode und message
+        const { message } = response as { message: string };
         throw new BadUserInputError(message, exception);
     }
 }

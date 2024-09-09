@@ -116,7 +116,7 @@
     "@asciidoctor/reveal.js": "5.1.0",
     "@eslint-community/eslint-plugin-eslint-comments": "4.4.0",
     "@eslint/eslintrc": "3.1.0",
-    "@eslint/js": "9.9.1",
+    "@eslint/js": "9.10.0",
     "@graphql-eslint/eslint-plugin": "3.20.1",
     "@jest/globals": "29.7.0",
     "@jest/types": "29.6.3",
@@ -177,7 +177,7 @@
     "ts-loader": "9.5.1",
     "ts-node": "10.9.2",
     "tsconfig-paths": "4.2.0",
-    "typedoc": "0.26.6",
+    "typedoc": "0.26.7",
     "typescript": "5.5.4",
     "unified": "11.0.5",
     "weak-napi": "2.0.2"

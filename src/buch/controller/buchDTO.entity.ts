@@ -56,9 +56,9 @@ export class BuchDtoOhneRef {
     @Min(0)
     @Max(MAX_RATING)
     @ApiProperty({ example: 5, type: Number })
-    readonly rating: number | undefined;
+    readonly rating!: number;
 
-    @Matches(/^EPUB$|^HARDCOVER$|^PAPERBACK$/u)
+    @Matches(/^(EPUB|HARDCOVER|PAPERBACK)$/u)
     @IsOptional()
     @ApiProperty({ example: 'EPUB', type: String })
     readonly art: BuchArt | undefined;
@@ -75,6 +75,7 @@ export class BuchDtoOhneRef {
     readonly rabatt: number | undefined;
 
     @IsBoolean()
+    @IsOptional()
     @ApiProperty({ example: true, type: Boolean })
     readonly lieferbar: boolean | undefined;
 

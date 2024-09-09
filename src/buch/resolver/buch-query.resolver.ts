@@ -31,7 +31,7 @@ export type SuchkriterienInput = {
     readonly suchkriterien: Suchkriterien;
 };
 
-@Resolver((_: any) => Buch)
+@Resolver()
 @UseFilters(HttpExceptionFilter)
 @UseInterceptors(ResponseTimeInterceptor)
 export class BuchQueryResolver {
