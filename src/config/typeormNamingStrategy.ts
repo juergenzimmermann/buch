@@ -139,7 +139,7 @@ export class OracleNamingStrategy extends SnakeNamingStrategy {
     override joinTableColumnName(
         tableName: string,
         propertyName: string,
-        columnName?: string | undefined,
+        columnName?: string,
     ) {
         return super
             .joinTableColumnName(tableName, propertyName, columnName)

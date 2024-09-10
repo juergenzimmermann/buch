@@ -54,7 +54,7 @@ export class BuchUpdateDTO extends BuchDTO {
     @Min(0)
     readonly version!: number;
 }
-@Resolver()
+@Resolver('Buch')
 // alternativ: globale Aktivierung der Guards https://docs.nestjs.com/security/authorization#basic-rbac-implementation
 @UseGuards(AuthGuard)
 @UseFilters(HttpExceptionFilter)
@@ -75,7 +75,6 @@ export class BuchMutationResolver {
 
         const buch = this.#buchDtoToBuch(buchDTO);
         const id = await this.#service.create(buch);
-        // TODO BadUserInputError
         this.#logger.debug('createBuch: id=%d', id);
         const payload: CreatePayload = { id };
         return payload;
