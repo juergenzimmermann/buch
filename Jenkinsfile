@@ -99,12 +99,13 @@ pipeline {
                 // https://github.com/nodesource/distributions#installation-instructions
                 // https://packages.debian.org/stable/python/python3
                 // https://packages.debian.org/bookworm/python3
+                // https://packages.debian.org/bookworm/python3-minimal
                 // https://packages.debian.org/trixie/python3.12
                 // https://computingforgeeks.com/how-to-install-python-on-debian-linux
                 // https://cloudcone.com/docs/article/how-to-install-python-3-10-on-debian-11
                 // https://linuxhint.com/install-python-debian-10
                 // https://computingforgeeks.com/how-to-install-python-on-debian-linux
-                sh 'apt-get install --no-install-recommends --yes --show-progress gcc=4:12.2.0-3 g++=4:12.2.0-3 make=4.3-4.1 python3.11-minimal=3.11.2-6+deb12u2'
+                sh 'apt-get install --no-install-recommends --yes --show-progress gcc=4:12.2.0-3 g++=4:12.2.0-3 make=4.3-4.1 python3.11-minimal=3.11.2-1'
                 // sh 'apt show python3.11-minimal'
                 sh 'apt-get install --no-install-recommends --yes --show-progress ca-certificates=20230311 curl=7.88.1-10+deb12u6 gnupg=2.2.40-1.1'
                 sh 'apt-get update --yes'
