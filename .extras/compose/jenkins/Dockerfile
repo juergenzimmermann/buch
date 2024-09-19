@@ -26,7 +26,7 @@
 # https://www.jenkins.io/doc/book/installing/docker
 # https://manpages.debian.org/bullseye/apt/apt-get.8.en.html
 
-ARG JENKINS_VERSION=2.476-jdk21
+ARG JENKINS_VERSION=2.477-jdk21
 
 FROM jenkins/jenkins:${JENKINS_VERSION}
 
@@ -66,4 +66,4 @@ EOF
 USER jenkins
 # https://plugins.jenkins.io/blueocean
 # https://plugins.jenkins.io/docker-workflow
-RUN jenkins-plugin-cli --plugins "blueocean:1.27.15 docker-workflow:580.vc0c340686b_54"
+RUN jenkins-plugin-cli --plugins "blueocean:1.27.16 docker-workflow:580.vc0c340686b_54"
