@@ -57,7 +57,7 @@ apk upgrade
 # https://pkgs.alpinelinux.org/package/v3.20/main/x86_64/gcc
 # https://pkgs.alpinelinux.org/package/v3.20/main/x86_64/g++
 # https://pkgs.alpinelinux.org/package/v3.20/main/x86_64/build-base
-apk add --update --no-cache python3=3.12.3-r2 make=4.4.1-r2 gcc=13.2.1_git20240309-r0 g++=13.2.1_git20240309-r0 build-base=0.5-r3
+apk add --update --no-cache python3=3.12.6-r0 make=4.4.1-r2 gcc=13.2.1_git20240309-r0 g++=13.2.1_git20240309-r0 build-base=0.5-r3
 ln -sf python3 /usr/bin/python
 
 npm i -g --no-audit --no-fund npm
@@ -91,7 +91,7 @@ RUN <<EOF
 set -eux
 apk update
 apk upgrade
-apk add --update --no-cache python3=3.12.3-r2 make=4.4.1-r2 gcc=13.2.1_git20240309-r0 g++=13.2.1_git20240309-r0 build-base=0.5-r3
+apk add --update --no-cache python3=3.12.6-r0 make=4.4.1-r2 gcc=13.2.1_git20240309-r0 g++=13.2.1_git20240309-r0 build-base=0.5-r3
 ln -sf python3 /usr/bin/python
 npm i -g --no-audit --no-fund npm
 EOF
