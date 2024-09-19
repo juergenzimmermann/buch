@@ -38,6 +38,7 @@
   - [Download- und ggf. Upload Geschwindigkeit](#download--und-ggf-upload-geschwindigkeit)
   - [Vorbereitung der Installation](#vorbereitung-der-installation)
   - [ES Modules (= ESM)](#es-modules--esm)
+  - [Version für SQLite](#version-für-sqlite)
   - [DB-Server und DB-Browser](#db-server-und-db-browser)
     - [DB-Server](#db-server)
     - [pgAdmin](#pgadmin)
@@ -150,6 +151,12 @@ Unterstützung für ESM ist notwendig in:
 - ts-jest: versteht noch nicht die Datei-Endung `.mts` und beim Import `.mjs`
 - VS Code
 - Node innerhalb von Jenkins
+
+---
+
+## Version für SQLite
+
+_TypeORM_ unterstützt nur SQLite 9, aber nicht SQLite 11: https://github.com/typeorm/typeorm/blob/master/package.json#L153
 
 ---
 
