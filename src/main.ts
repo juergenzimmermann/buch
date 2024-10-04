@@ -20,14 +20,14 @@
 // Modul in JS = Datei
 // Pfad innerhalb von Packages in node_modules ("nicht-relative Imports")
 import { type INestApplication, ValidationPipe } from '@nestjs/common';
+import { NestFactory } from '@nestjs/core';
 import {
     DocumentBuilder,
     type SwaggerCustomOptions,
     SwaggerModule,
 } from '@nestjs/swagger';
-// relativer Import
-import { NestFactory } from '@nestjs/core';
 import compression from 'compression';
+// relativer Import
 import { AppModule } from './app.module.js';
 import { corsOptions } from './config/cors.js';
 import { nodeConfig } from './config/node.js';
