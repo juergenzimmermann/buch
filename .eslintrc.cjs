@@ -481,6 +481,7 @@ module.exports = {
         ...customizedStylistic.rules,
         '@stylistic/arrow-parens': ['error', 'always'],
         '@stylistic/brace-style': ['error', '1tbs'],
+        '@stylistic/curly-newline': 'error',
         '@stylistic/indent': 'off',
         '@stylistic/indent-binary-ops': 'off',
         '@stylistic/member-delimiter-style': ['error', {
