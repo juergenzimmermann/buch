@@ -132,6 +132,9 @@ switch (dbType) {
         break;
     }
     // 'better-sqlite3' erfordert Python zum Uebersetzen, wenn das Docker-Image gebaut wird
+    // ${env:LOCALAPPDATA}\node-gyp\Cache\<Node_Version>\include\node\v8config.h
+    // npm rebuild better-sqlite3 --update-binary
+    // npm i better-sqlite3
     case 'sqlite': {
         const sqliteDatabase = path.resolve(
             BASEDIR,
@@ -142,7 +145,8 @@ switch (dbType) {
             `${database}.sqlite`,
         );
         dataSourceOptions = {
-            type: 'better-sqlite3',
+            type: 'sqlite',
+            // type: 'better-sqlite3',
             database: sqliteDatabase,
             entities,
             namingStrategy,
