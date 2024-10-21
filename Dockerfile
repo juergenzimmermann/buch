@@ -31,7 +31,7 @@
 # https://cheatsheetseries.owasp.org/cheatsheets/NodeJS_Docker_Cheat_Sheet.html
 
 # "Build Argument"; alternativ: ENV = Umgebungsvariable im gebauten Image
-ARG NODE_VERSION=22.9.0
+ARG NODE_VERSION=23.0.0
 
 # ---------------------------------------------------------------------------------------
 # S t a g e   d i s t
@@ -129,6 +129,7 @@ LABEL org.opencontainers.image.title="buch" \
 RUN <<EOF
 set -eux
 apt-get update
+apt-get upgrade --yes
 # https://github.com/Yelp/dumb-init
 # https://packages.debian.org/bookworm/dumb-init
 apt-get install --no-install-recommends --yes dumb-init=1.2.5-2

@@ -19,7 +19,7 @@ import {
     ValidationPipe,
 } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
-import { v2 as compose } from 'docker-compose';
+import { down, exec, upAll } from 'docker-compose';
 import isPortReachable from 'is-port-reachable';
 import { Agent } from 'node:https';
 import path from 'node:path';
@@ -81,7 +81,7 @@ const startDbServer = async () => {
     // Container starten
     console.info('Docker-Container mit DB-Server wird gestartet.');
     try {
-        await compose.upAll({
+        await upAll({
             cwd: dockerComposeDir,
             commandOptions: [dbType],
             composeOptions: [['-f', `compose.${dbType}.yml`]],
@@ -94,7 +94,7 @@ const startDbServer = async () => {
     }
 
     // Ist der DB-Server im Container bereit fuer DB-Anfragen?
-    await compose.exec(dbType, ['sh', '-c', dbHealthCheck], {
+    await exec(dbType, ['sh', '-c', dbHealthCheck], {
         cwd: dockerComposeDir,
     });
     console.info('Docker-Container mit DB-Server ist gestartet.');
@@ -105,7 +105,7 @@ const shutdownDbServer = async () => {
     if (dbType === 'sqlite') {
         return;
     }
-    await compose.down({
+    await down({
         cwd: dockerComposeDir,
         composeOptions: [['-f', 'compose.postgres.yml']],
         log: true,
