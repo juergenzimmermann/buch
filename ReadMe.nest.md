@@ -64,7 +64,6 @@
     - [Image inspizieren](#image-inspizieren)
       - [docker inspect](#docker-inspect)
       - [docker sbom](#docker-sbom)
-      - [dive](#dive)
     - [Docker Compose](#docker-compose)
   - [Statische Codeanalyse und Formattierer](#statische-codeanalyse-und-formattierer)
     - [Prettier](#prettier)
@@ -478,6 +477,16 @@ validieren:
 
 ### Image inspizieren
 
+#### docker history
+
+Mit dem Unterkommando `history` kann man ein Docker-Image und die einzelnen Layer
+inspizieren:
+
+```powershell
+    docker history juergenzimmermann/buch:2024.10.1-bookworm
+    docker history juergenzimmermann/buch:2024.10.1-alpine
+```
+
 #### docker inspect
 
 Mit dem Unterkommando `inspect` kann man die Metadaten, z.B. Labels, zu einem
@@ -497,18 +506,6 @@ npm-Packages oder Debian-Packages.
 ```powershell
     docker sbom juergenzimmermann/buch:2024.10.1-bookworm
     docker sbom juergenzimmermann/buch:2024.10.1-alpine
-```
-
-#### dive
-
-Mit _dive_ kann man ein Docker-Image und die einzelnen Layer inspizieren, z.B.:
-
-```powershell
-    cd .extras
-    # Debian Bookworm als Basis-Image
-    .\dive.ps1
-    # Alpine als Basis-Image
-    .\dive.ps1 alpine
 ```
 
 ### Docker Compose
