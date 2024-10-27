@@ -31,7 +31,7 @@
 # https://cheatsheetseries.owasp.org/cheatsheets/NodeJS_Docker_Cheat_Sheet.html
 
 # "Build Argument"; alternativ: ENV = Umgebungsvariable im gebauten Image
-ARG NODE_VERSION=23.0.0
+ARG NODE_VERSION=23.1.0
 
 # ---------------------------------------------------------------------------------------
 # S t a g e   d i s t
