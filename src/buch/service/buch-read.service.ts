@@ -56,7 +56,7 @@ export class BuchReadService {
 
     // Rueckgabetyp Promise bei asynchronen Funktionen
     //    ab ES2015
-    //    vergleiche Task<> bei C# und Mono<> aus Project Reactor
+    //    vergleiche Task<> bei C#
     // Status eines Promise:
     //    Pending: das Resultat ist noch nicht vorhanden, weil die asynchrone
     //             Operation noch nicht abgeschlossen ist
@@ -124,7 +124,7 @@ export class BuchReadService {
         }
 
         // Falsche Namen fuer Suchkriterien?
-        if (!this.#checkKeys(keys)) {
+        if (!this.#checkKeys(keys) || !this.#checkEnums(suchkriterien)) {
             throw new NotFoundException('Ungueltige Suchkriterien');
         }
 
@@ -148,6 +148,7 @@ export class BuchReadService {
     }
 
     #checkKeys(keys: string[]) {
+        this.#logger.debug('#checkKeys: keys=%s', keys);
         // Ist jedes Suchkriterium auch eine Property von Buch oder "schlagwoerter"?
         let validKeys = true;
         keys.forEach((key) => {
@@ -165,5 +166,15 @@ export class BuchReadService {
         });
 
         return validKeys;
+    }
+
+    #checkEnums(suchkriterien: Suchkriterien) {
+        const { art } = suchkriterien;
+        this.#logger.debug('#checkEnums: Suchkriterium "art=%s"', art);
+        if (art === undefined) {
+            return true;
+        }
+        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+        return art === 'EPUB' || art === 'HARDCOVER' || art === 'PAPERBACK';
     }
 }
