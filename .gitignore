@@ -22,6 +22,9 @@ dependencies.svg
 .extras/compose/db/mysql/db_root_password.txt
 .extras/compose/db/postgres/db_password.txt
 .extras/postman
+.extras/*.png
+.extras/*.jpeg
+.extras/*.mp4
 src/config/resources/tls/key.pem
 sonar-project.properties
 
