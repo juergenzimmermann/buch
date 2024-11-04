@@ -19,7 +19,10 @@
  */
 
 import { Injectable, NotFoundException } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 import { getLogger } from '../../logger/logger.js';
+import { BuchFile } from '../entity/buchFile.entity.js';
 import { Buch } from './../entity/buch.entity.js';
 import { QueryBuilder } from './query-builder.js';
 import { type Suchkriterien } from './suchkriterien.js';
@@ -46,12 +49,18 @@ export class BuchReadService {
 
     readonly #queryBuilder: QueryBuilder;
 
+    readonly #fileRepo: Repository<BuchFile>;
+
     readonly #logger = getLogger(BuchReadService.name);
 
-    constructor(queryBuilder: QueryBuilder) {
+    constructor(
+        queryBuilder: QueryBuilder,
+        @InjectRepository(BuchFile) fileRepo: Repository<BuchFile>,
+    ) {
         const buchDummy = new Buch();
         this.#buchProps = Object.getOwnPropertyNames(buchDummy);
         this.#queryBuilder = queryBuilder;
+        this.#fileRepo = fileRepo;
     }
 
     // Rueckgabetyp Promise bei asynchronen Funktionen
@@ -103,6 +112,26 @@ export class BuchReadService {
             }
         }
         return buch;
+    }
+
+    /**
+     * Binärdatei zu einem Buch suchen.
+     * @param buchId ID des zugehörigen Buchs.
+     * @returns Binärdatei oder undefined als Promise.
+     */
+    async findFileByBuchId(buchId: number) {
+        this.#logger.debug('findFileByBuchId: buchId=%s', buchId);
+        const buchFile = await this.#fileRepo
+            .createQueryBuilder('buch_file')
+            .where('buch_id = :id', { id: buchId })
+            .getOne();
+        if (buchFile === null) {
+            this.#logger.debug('findFileByBuchId: Keine Datei gefunden');
+            return;
+        }
+
+        this.#logger.debug('findFileByBuchId: filename=%s', buchFile.filename);
+        return buchFile;
     }
 
     /**

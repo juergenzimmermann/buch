@@ -15,18 +15,20 @@ export class BuchFile {
     @Column('varchar')
     filename: string | undefined;
 
+    @Column('varchar')
+    mimetype: string | undefined;
+
     @OneToOne(() => Buch, (buch) => buch.file)
     @JoinColumn({ name: 'buch_id' })
     buch: Buch | undefined;
 
-    @Column({
-        type: 'bytea',
-    })
+    @Column({ type: 'bytea' })
     data: Uint8Array | undefined;
 
     public toString = (): string =>
         JSON.stringify({
             id: this.id,
             filename: this.filename,
+            mimetype: this.mimetype,
         });
 }

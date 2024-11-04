@@ -93,6 +93,7 @@ CREATE TABLE IF NOT EXISTS buch_file (
     id              integer GENERATED ALWAYS AS IDENTITY(START WITH 1000) PRIMARY KEY USING INDEX TABLESPACE buchspace,
     data            bytea NOT NULL,
     filename        text NOT NULL,
+    mimetype        text,
     buch_id         integer NOT NULL REFERENCES buch
 ) TABLESPACE buchspace;
 CREATE INDEX IF NOT EXISTS buch_file_buch_id_idx ON buch_file(buch_id) TABLESPACE buchspace;

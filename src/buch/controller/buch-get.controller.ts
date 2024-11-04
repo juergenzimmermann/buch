@@ -30,6 +30,7 @@ import {
     Query,
     Req,
     Res,
+    StreamableFile,
     UseInterceptors,
 } from '@nestjs/common';
 import {
@@ -44,6 +45,7 @@ import {
 } from '@nestjs/swagger';
 import { Request, Response } from 'express';
 import { Public } from 'nest-keycloak-connect';
+import { Readable } from 'node:stream';
 import { paths } from '../../config/paths.js';
 import { getLogger } from '../../logger/logger.js';
 import { ResponseTimeInterceptor } from '../../logger/response-time.interceptor.js';
@@ -293,6 +295,40 @@ export class BuchGetController {
 
         const result: BuecherModel = { _embedded: { buecher: buecherModel } };
         return res.contentType(APPLICATION_HAL_JSON).json(result).send();
+    }
+
+    @Get('/file/:id')
+    @Public()
+    @ApiOperation({ description: 'Suche nach Datei mit der Buch-ID' })
+    @ApiParam({
+        name: 'id',
+        description: 'Z.B. 1',
+    })
+    @ApiNotFoundResponse({ description: 'Keine Datei zur Buch-ID gefunden' })
+    @ApiOkResponse({ description: 'Die Datei wurde gefunden' })
+    async getFileById(
+        @Param('id') idStr: number,
+        @Res({ passthrough: true }) res: Response,
+    ) {
+        this.#logger.debug('getFileById: buchId:%s', idStr);
+
+        const id = Number(idStr);
+        if (!Number.isInteger(id)) {
+            this.#logger.debug('getById: not isInteger()');
+            throw new NotFoundException(`Die Buch-ID ${idStr} ist ungueltig.`);
+        }
+
+        const buchFile = await this.#service.findFileByBuchId(id);
+        if (buchFile?.data === undefined) {
+            throw new NotFoundException('Keine Datei gefunden.');
+        }
+
+        const stream = Readable.from(buchFile.data);
+        res.contentType(buchFile.mimetype ?? 'image/png').set({
+            'Content-Disposition': `inline; filename="${buchFile.filename}"`, // eslint-disable-line @typescript-eslint/naming-convention
+        });
+
+        return new StreamableFile(stream);
     }
 
     #toModel(buch: Buch, req: Request, all = true) {

@@ -136,7 +136,9 @@ export class Buch {
     })
     readonly abbildungen: Abbildung[] | undefined;
 
-    @OneToOne(() => BuchFile, (buchFile) => buchFile.buch)
+    @OneToOne(() => BuchFile, (buchFile) => buchFile.buch, {
+        cascade: ['insert', 'remove'],
+    })
     readonly file: BuchFile | undefined;
 
     // https://typeorm.io/entities#special-columns

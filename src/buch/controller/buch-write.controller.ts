@@ -1,3 +1,4 @@
+/* eslint-disable max-lines */
 // Copyright (C) 2021 - present Juergen Zimmermann, Hochschule Karlsruhe
 //
 // This program is free software: you can redistribute it and/or modify
@@ -30,9 +31,11 @@ import {
     Put,
     Req,
     Res,
+    UploadedFile,
     UseGuards,
     UseInterceptors,
 } from '@nestjs/common';
+import { FileInterceptor } from '@nestjs/platform-express';
 import {
     ApiBadRequestResponse,
     ApiBearerAuth,
@@ -41,12 +44,13 @@ import {
     ApiHeader,
     ApiNoContentResponse,
     ApiOperation,
+    ApiParam,
     ApiPreconditionFailedResponse,
     ApiResponse,
     ApiTags,
 } from '@nestjs/swagger';
-import { Request, Response } from 'express';
-import { AuthGuard, Roles } from 'nest-keycloak-connect';
+import { Express, Request, Response } from 'express';
+import { AuthGuard, Public, Roles } from 'nest-keycloak-connect';
 import { paths } from '../../config/paths.js';
 import { getLogger } from '../../logger/logger.js';
 import { ResponseTimeInterceptor } from '../../logger/response-time.interceptor.js';
@@ -87,6 +91,7 @@ export class BuchWriteController {
      * existieren.
      *
      * @param buchDTO JSON-Daten für ein Buch im Request-Body.
+     * @param req: Request-Objekt von Express für den Location-Header.
      * @param res Leeres Response-Objekt von Express.
      * @returns Leeres Promise-Objekt.
      */
@@ -108,6 +113,58 @@ export class BuchWriteController {
 
         const location = `${getBaseUri(req)}/${id}`;
         this.#logger.debug('post: location=%s', location);
+        return res.location(location).send();
+    }
+
+    /**
+     * Zu einem gegebenen Buch wird eine Binärdatei, z.B. ein Bild, hochgeladen.
+     * Nest realisiert File-Upload mit POST.
+     * https://docs.nestjs.com/techniques/file-upload.
+     * Postman: Body mit "form-data", key: "file" und "File" im Dropdown-Menü
+     * @param id ID des vorhandenen Buches
+     * @param file Binärdatei als `File`-Objekt von _Multer_.
+     * @param req: Request-Objekt von Express für den Location-Header.
+     * @param res Leeres Response-Objekt von Express.
+     * @returns Leeres Promise-Objekt.
+     */
+    // eslint-disable-next-line max-params
+    @Post(':id')
+    @Public()
+    // @Roles({ roles: ['admin']})
+    @HttpCode(HttpStatus.NO_CONTENT)
+    @ApiOperation({ summary: 'Binärdatei mit einem Bild hochladen' })
+    @ApiParam({
+        name: 'id',
+        description: 'Z.B. 1',
+    })
+    @ApiCreatedResponse({ description: 'Erfolgreich hinzugefügt' })
+    @ApiBadRequestResponse({ description: 'Fehlerhafte Datei' })
+    @ApiForbiddenResponse({ description: MSG_FORBIDDEN })
+    @UseInterceptors(FileInterceptor('file'))
+    async addFile(
+        @Param('id') id: number,
+        @UploadedFile() file: Express.Multer.File,
+        @Req() req: Request,
+        @Res() res: Response,
+    ): Promise<Response> {
+        this.#logger.debug(
+            'addFile: id: %d, originalname=%s, mimetype=%s',
+            id,
+            file.originalname,
+            file.mimetype,
+        );
+
+        // TODO Dateigroesse pruefen
+
+        await this.#service.addFile(
+            id,
+            file.buffer,
+            file.originalname,
+            file.mimetype,
+        );
+
+        const location = `${getBaseUri(req)}/file/${id}`;
+        this.#logger.debug('addFile: location=%s', location);
         return res.location(location).send();
     }
 
@@ -140,10 +197,7 @@ export class BuchWriteController {
     @Put(':id')
     @Roles({ roles: ['admin', 'user'] })
     @HttpCode(HttpStatus.NO_CONTENT)
-    @ApiOperation({
-        summary: 'Ein vorhandenes Buch aktualisieren',
-        tags: ['Aktualisieren'],
-    })
+    @ApiOperation({ summary: 'Ein vorhandenes Buch aktualisieren' })
     @ApiHeader({
         name: 'If-Match',
         description: 'Header für optimistische Synchronisation',
@@ -272,3 +326,4 @@ export class BuchWriteController {
         };
     }
 }
+/* eslint-enable max-lines */

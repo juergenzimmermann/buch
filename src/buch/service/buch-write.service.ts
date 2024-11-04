@@ -26,6 +26,7 @@ import { getLogger } from '../../logger/logger.js';
 import { MailService } from '../../mail/mail.service.js';
 import { Abbildung } from '../entity/abbildung.entity.js';
 import { Buch } from '../entity/buch.entity.js';
+import { BuchFile } from '../entity/buchFile.entity.js';
 import { Titel } from '../entity/titel.entity.js';
 import { BuchReadService } from './buch-read.service.js';
 import {
@@ -60,18 +61,23 @@ export class BuchWriteService {
 
     readonly #repo: Repository<Buch>;
 
+    readonly #fileRepo: Repository<BuchFile>;
+
     readonly #readService: BuchReadService;
 
     readonly #mailService: MailService;
 
     readonly #logger = getLogger(BuchWriteService.name);
 
+    // eslint-disable-next-line max-params
     constructor(
         @InjectRepository(Buch) repo: Repository<Buch>,
+        @InjectRepository(BuchFile) fileRepo: Repository<BuchFile>,
         readService: BuchReadService,
         mailService: MailService,
     ) {
         this.#repo = repo;
+        this.#fileRepo = fileRepo;
         this.#readService = readService;
         this.#mailService = mailService;
     }
@@ -87,11 +93,58 @@ export class BuchWriteService {
         await this.#validateCreate(buch);
 
         const buchDb = await this.#repo.save(buch); // implizite Transaktion
-        this.#logger.debug('create: buchDb=%o', buchDb);
-
         await this.#sendmail(buchDb);
 
         return buchDb.id!;
+    }
+
+    /**
+     * Zu einem vorhandenen Buch ein3 Binärdatei mit z.B. einem Bild abspeichern.
+     * @param buchId ID des vorhandenen Buches
+     * @param data Bytes der Datei
+     * @param filename Dateiname
+     * @param mimetype MIME-Type
+     * @returns Entity-Objekt für `BuchFile`
+     */
+    // eslint-disable-next-line max-params
+    async addFile(
+        buchId: number,
+        data: Buffer,
+        filename: string,
+        mimetype: string,
+    ) {
+        this.#logger.debug(
+            'addFile: buchId: %d, filename:%s, mimetype: %s',
+            buchId,
+            filename,
+            mimetype,
+        );
+
+        // Buch ermitteln, falls vorhanden
+        const buch = await this.#readService.findById({ id: buchId });
+
+        // evtl. vorhandene Datei loeschen
+        await this.#fileRepo
+            .createQueryBuilder('buch_file')
+            .delete()
+            .where('buch_id = :id', { id: buchId })
+            .execute();
+
+        // Entity-Objekt aufbauen, um es spaeter in der DB zu speichern (s.u.)
+        const buchFile = this.#fileRepo.create({
+            filename,
+            data,
+            mimetype,
+            buch,
+        });
+
+        // Den Datensatz fuer Buch mit der neuen Binaerdatei aktualisieren
+        await this.#repo.save({
+            id: buch.id,
+            file: buchFile,
+        });
+
+        return buchFile;
     }
 
     /**

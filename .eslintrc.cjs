@@ -47,6 +47,9 @@ module.exports = {
         ecmaFeatures: {
             impliedStrict: true,
         },
+        // https://typescript-eslint.io/getting-started/typed-linting
+        projectService: true,
+        tsconfigRootDir: __dirname,
     },
 
     plugins: [
