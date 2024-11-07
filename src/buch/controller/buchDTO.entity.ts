@@ -37,6 +37,7 @@ import {
     Min,
     ValidateNested,
 } from 'class-validator';
+import Decimal from 'decimal.js'; // eslint-disable-line @typescript-eslint/naming-convention
 import { type BuchArt } from '../entity/buch.entity.js';
 import { AbbildungDTO } from './abbildungDTO.entity.js';
 import { TitelDTO } from './titelDTO.entity.js';
@@ -66,13 +67,13 @@ export class BuchDtoOhneRef {
     @IsPositive()
     @ApiProperty({ example: 1, type: Number })
     // statt number ggf. Decimal aus decimal.js analog zu BigDecimal von Java
-    readonly preis!: number;
+    readonly preis!: Decimal;
 
     @Min(0)
     @Max(1)
     @IsOptional()
     @ApiProperty({ example: 0.1, type: Number })
-    readonly rabatt: number | undefined;
+    readonly rabatt: Decimal | undefined;
 
     @IsBoolean()
     @IsOptional()

@@ -102,16 +102,16 @@ export class QueryBuilder {
         typescript,
         java,
         python,
-        ...props
+        ...restProps
     }: Suchkriterien) {
         this.#logger.debug(
-            'build: titel=%s, javascript=%s, typescript=%s, java=%s, python=%s, props=%o',
+            'build: titel=%s, javascript=%s, typescript=%s, java=%s, python=%s, restProps=%o',
             titel,
             javascript,
             typescript,
             java,
             python,
-            props,
+            restProps,
         );
 
         let queryBuilder = this.#repo.createQueryBuilder(this.#buchAlias);
@@ -120,7 +120,7 @@ export class QueryBuilder {
         // z.B. { titel: 'a', rating: 5, javascript: true }
         // "rest properties" fuer anfaengliche WHERE-Klausel: ab ES 2018 https://github.com/tc39/proposal-object-rest-spread
         // type-coverage:ignore-next-line
-        // const { titel, javascript, typescript, ...props } = suchkriterien;
+        // const { titel, javascript, typescript, ...otherProps } = suchkriterien;
 
         let useWhere = true;
 
@@ -182,9 +182,9 @@ export class QueryBuilder {
         }
 
         // Restliche Properties als Key-Value-Paare: Vergleiche auf Gleichheit
-        Object.keys(props).forEach((key) => {
+        Object.entries(restProps).forEach(([key, value]) => {
             const param: Record<string, any> = {};
-            param[key] = (props as Record<string, any>)[key]; // eslint-disable-line @typescript-eslint/no-unsafe-assignment, security/detect-object-injection
+            param[key] = value; // eslint-disable-line security/detect-object-injection
             queryBuilder = useWhere
                 ? queryBuilder.where(
                       `${this.#buchAlias}.${key} = :${key}`,

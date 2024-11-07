@@ -36,3 +36,10 @@ export const dbType =
     type === 'sqlite'
         ? type
         : 'postgres';
+
+let binaryTypeTmp: 'bytea' | 'blob' = 'bytea';
+if (dbType === 'mysql' || dbType === 'oracle' || dbType === 'sqlite') {
+    binaryTypeTmp = 'blob';
+}
+export const binaryType = binaryTypeTmp;
+console.debug('binaryType: %s', binaryType);

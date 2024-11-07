@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-magic-numbers */
 // Copyright (C) 2016 - present Juergen Zimmermann, Hochschule Karlsruhe
 //
 // This program is free software: you can redistribute it and/or modify
@@ -16,6 +17,7 @@
 import { afterAll, beforeAll, describe, expect, test } from '@jest/globals';
 import { HttpStatus } from '@nestjs/common';
 import axios, { type AxiosInstance, type AxiosResponse } from 'axios';
+import Decimal from 'decimal.js'; // eslint-disable-line @typescript-eslint/naming-convention
 import { type BuchDtoOhneRef } from '../../src/buch/controller/buchDTO.entity.js';
 import {
     host,
@@ -34,8 +36,8 @@ const geaendertesBuch: BuchDtoOhneRef = {
     isbn: '978-0-201-63361-0',
     rating: 5,
     art: 'HARDCOVER',
-    preis: 3333,
-    rabatt: 0.33,
+    preis: new Decimal(3333),
+    rabatt: new Decimal(0.33),
     lieferbar: true,
     datum: '2022-03-03',
     homepage: 'https://geaendert.put.rest',
@@ -47,8 +49,8 @@ const geaendertesBuchIdNichtVorhanden: BuchDtoOhneRef = {
     isbn: '978-0-007-09732-6',
     rating: 4,
     art: 'EPUB',
-    preis: 44.4,
-    rabatt: 0.044,
+    preis: new Decimal(44.4),
+    rabatt: new Decimal(0.044),
     lieferbar: true,
     datum: '2022-02-04',
     homepage: 'https://acme.de',
@@ -72,8 +74,8 @@ const veraltesBuch: BuchDtoOhneRef = {
     isbn: '978-0-007-09732-6',
     rating: 1,
     art: 'EPUB',
-    preis: 44.4,
-    rabatt: 0.044,
+    preis: new Decimal(44.4),
+    rabatt: new Decimal(0.044),
     lieferbar: true,
     datum: '2022-02-04',
     homepage: 'https://acme.de',
@@ -99,7 +101,7 @@ describe('PUT /rest/:id', () => {
             baseURL,
             headers,
             httpsAgent,
-            validateStatus: (status) => status < 500, // eslint-disable-line @typescript-eslint/no-magic-numbers
+            validateStatus: (status) => status < 500,
         });
     });
 
@@ -251,3 +253,4 @@ describe('PUT /rest/:id', () => {
         expect(response.status).toBe(HttpStatus.UNAUTHORIZED);
     });
 });
+/* eslint-enable @typescript-eslint/no-magic-numbers */

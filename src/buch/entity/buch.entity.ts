@@ -38,6 +38,7 @@
  */
 
 import { ApiProperty } from '@nestjs/swagger';
+import Decimal from 'decimal.js'; // eslint-disable-line @typescript-eslint/naming-convention
 import {
     Column,
     CreateDateColumn,
@@ -89,14 +90,16 @@ export class Buch {
     @ApiProperty({ example: 'EPUB', type: String })
     readonly art: BuchArt | undefined;
 
+    // TypeORM liest Gleitkommazahlen als String: Rundungsfehler vermeiden
     @Column('decimal', {
         precision: 8,
         scale: 2,
+        // https://typeorm.io/entities#column-options
         transformer: new DecimalTransformer(),
     })
     @ApiProperty({ example: 1, type: Number })
-    // statt number ggf. Decimal aus decimal.js analog zu BigDecimal von Java
-    readonly preis!: number;
+    // Decimal aus decimal.js analog zu BigDecimal von Java
+    readonly preis!: Decimal;
 
     @Column('decimal', {
         precision: 4,
@@ -104,7 +107,7 @@ export class Buch {
         transformer: new DecimalTransformer(),
     })
     @ApiProperty({ example: 0.1, type: Number })
-    readonly rabatt: number | undefined;
+    readonly rabatt: Decimal | undefined;
 
     @Column('decimal') // TypeORM unterstuetzt bei Oracle *NICHT* den Typ boolean
     @ApiProperty({ example: true, type: Boolean })

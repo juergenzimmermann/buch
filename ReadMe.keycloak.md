@@ -79,19 +79,19 @@ Webbrowser `http://localhost:8880` oder `https://localhost:8843` aufgerufen hat:
         <Create client> anklicken
         Client ID   nest-client
         Name        Nest Client
-        <Next>
+        <Next> anklicken
             "Capability config"
                 Client authentication       On
                 Authorization               Off
                 Authentication Flow         Standard flow                   Haken setzen
                                             Direct access grants            Haken setzen
-        <Next>
+        <Next> anklicken
             Root URL                https://localhost:3000
             Valid redirect URIs     https://localhost:3000
                                     https://buch:3000
                                     https://oauth.pstmn.io/v1/callback
             Web origins             +
-        <Save>
+        <Save> anklicken
 
         nest-client
             Tab "Roles"
@@ -110,7 +110,7 @@ Webbrowser `http://localhost:8880` oder `https://localhost:8843` aufgerufen hat:
 
     # https://www.keycloak.org/docs/latest/server_admin/index.html#assigning-permissions-using-roles-and-groups
     Menüpunkt "Users"
-        <Create new user>
+        <Create new user> anklicken
             Required User Actions:      Überprüfen, dass nichts ausgewählt ist
             Username                    admin
             Email                       admin@acme.com
@@ -131,7 +131,7 @@ Webbrowser `http://localhost:8880` oder `https://localhost:8843` aufgerufen hat:
             Tab "Details"
                 Required user actions       Überprüfen, dass nichts ausgewählt ist
                 <Save> anklicken
-        <Create new user>
+        <Create new user> anklicken
             Required User Actions:      Überprüfen, dass nichts ausgewählt ist
             Username                    user
             Email                       user@acme.com

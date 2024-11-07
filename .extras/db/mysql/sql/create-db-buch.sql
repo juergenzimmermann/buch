@@ -13,32 +13,40 @@
 -- You should have received a copy of the GNU General Public License
 -- along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
--- (1) in extras\compose\backend\postgres\compose.yml
+-- (1) in .extras\compose\backend\mysql\compose.yml
 --        auskommentieren:
 --           Zeile mit "command:" und nachfolgende Listenelemente mit führendem "-"
 --              damit der MySQL-Server ohne TLS gestartet wird
---           bei den Listenelementen unterhalb von "volumes:" die Zeilen mit "read_only:" bei server-key.pem, server-cert.pem und ca.pem
---              damit die Zugriffsrechte fuer den privaten Schluessel und das Zertifikat nachfolgend gesetzt werden koennen
+--           unterhalb von "volumes:" die kompletten Listenelemente mit server-key.pem,
+--              server-cert.pem und ca.pem auskommentieren
 -- (2) PowerShell:
---     cd extras\compose\backend\mysql
+--     cd .extras\compose\backend\mysql
 --     docker compose up db
 -- (3) 2. PowerShell:
---     cd extras\compose\backend\mysql
+--     cd .extras\compose\backend\mysql
+--     docker compose down
+-- (4) in .extras\compose\backend\mysql\compose.yml
+--        bei den Listenelementen mit server-key.pem, server-cert.pem und ca.pem
+--           alle Kommentare entfernen *BIS AUF* die Zeilen mit "read_only"
+-- (5) PowerShell:
+--     docker compose up db
+-- (6) 2. PowerShell:
 --     docker compose exec db bash
 --        cd /var/lib/mysql
 --        chmod 400 server-key.pem
 --        chmod 400 server-cert.pem
 --        chmod 400 ca.pem
---        chgrp mysql server-key.pem
---        chgrp mysql server-cert.pem
---        chgrp mysql ca.pem
 --        exit
 --     docker compose down
--- (4) PowerShell:
+-- (7) in .extras\compose\backend\mysql\compose.yml
+--        Kommentar entfernen in der Zeile mit "command:" und den nachfolgende Listenelemente mit führendem "-"
+--        bei den Listenelementen mit server-key.pem, server-cert.pem und ca.pem
+--           jeweils die Kommentare bei "read_only" entfernen
+-- (8) PowerShell:
 --     docker compose up
--- (5) 2. PowerShell:
+-- (9) 2. PowerShell:
 --     docker compose exec db bash
---         mysql --user=root --password=p < /sql/create-db-buc.sql
+--         mysql --user=root --password=p < /sql/create-db-buch.sql
 --         exit
 --     docker compose down
 

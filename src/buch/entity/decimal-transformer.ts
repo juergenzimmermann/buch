@@ -18,6 +18,7 @@
  * @packageDocumentation
  */
 
+import Decimal from 'decimal.js'; // eslint-disable-line @typescript-eslint/naming-convention
 import { type ValueTransformer } from 'typeorm';
 
 // https://github.com/typeorm/typeorm/issues/873#issuecomment-328945433
@@ -28,14 +29,14 @@ export class DecimalTransformer implements ValueTransformer {
     /**
      * Transformation beim Schreiben in die DB
      */
-    to(decimal?: number): string | undefined {
+    to(decimal?: Decimal): string | undefined {
         return decimal?.toString();
     }
 
     /**
      * Transformation beim Lesen aus der DB
      */
-    from(decimal?: string): number | undefined {
-        return decimal === undefined ? undefined : Number(decimal);
+    from(decimal?: string): Decimal | undefined {
+        return decimal === undefined ? undefined : new Decimal(decimal);
     }
 }
