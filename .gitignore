@@ -24,7 +24,13 @@ dependencies.svg
 .extras/postman
 .extras/*.png
 .extras/*.jpeg
+.extras/*.gif
 .extras/*.mp4
+.extras/*.mpeg
+.extras/*.mkv
+.extras/*.avi
+.extras/*.ogg
+.extras/*.webm
 src/config/resources/tls/key.pem
 sonar-project.properties
 
