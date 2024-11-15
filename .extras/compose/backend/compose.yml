@@ -22,9 +22,9 @@
 
 # https://docs.docker.com/compose/compose-file/14-include
 include:
-  - path: ./postgres/compose.yml
-  #- path: ./mysql/compose.yml
-  #- path: ./oracle/compose.yml
-  - path: ./keycloak/compose.yml
-  - path: ./fakesmtp/compose.yml
-  #- path: ./prometheus-grafana/compose.yml
+  - path: ../postgres/compose.yml
+  #- path: ../mysql/compose.yml
+  #- path: ../oracle/compose.yml
+  - path: ../keycloak/compose.yml
+  - path: ../fakesmtp/compose.yml
+  #- path: ../prometheus-grafana/compose.yml
