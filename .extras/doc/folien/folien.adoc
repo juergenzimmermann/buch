@@ -70,10 +70,11 @@ Jürgen Zimmermann <Juergen.Zimmermann@h-ka.de>
 * Controller mit `@Controller()` usw.
 * Services durch `@Injectable()`
 * Entity-Klasse mit `@Entity()` und Decorators für die Properties, wie z.B. `@Column()`, für TypeORM
-* Guards und Strategies
+* Guards für Security
 * Middleware, z.B. `RequestLoggerMiddleware`
 * Interceptor, z.B. für Antwortzeit und Statuscode
-* `@Module()`
+* `@Module()` für Dependency Injection
+* Postman
 
 === Decorator für die Controller-Klasse
 
@@ -81,7 +82,7 @@ Jürgen Zimmermann <Juergen.Zimmermann@h-ka.de>
 * `@UseGuards()`
 * `@UseInterceptors()`
 
-=== Decorator für die Controller-Funktionen
+=== Decorator für die Controller-Methoden
 
 * `@Get()`, `@Post()`, `@Put()`, `@Delete()`
 * `@Param()`, `@Query()`
@@ -107,29 +108,18 @@ Jürgen Zimmermann <Juergen.Zimmermann@h-ka.de>
 == Security
 
 * JWT
-  - Private und Public Key
-  - Header
-  - Payload
+  - Header: alg (z.B. RS256), typ
+  - Payload: iat (issued at), exp (expiration), iss (issuer)
   - Signature
-* Guards durch Nest für RBAC
 * Integration mit Keycloak von Red Hat
-
-=== JWT
-
-* Header
-  - alg, z.B. RS256
-  - typ
-*  Payload
-  - iat (issued at)
-  - exp (expiration)
-  - iss (issuer)
+  - @Roles()
+  - @Public()
 
 == Jest, Axios und Istanbul
 
-* Jest
-* ts-jest
-* Axios
-* Istanbul
+* Jest als Test-Framework zzgl. ts-jest
+* Axios für HTTP-Requests bei Integrationstests
+* Testabdeckung durch Istanbul
 
 == OpenAPI durch Swagger
 
