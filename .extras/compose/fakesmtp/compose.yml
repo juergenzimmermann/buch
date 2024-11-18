@@ -17,7 +17,7 @@ services:
   fakesmtp:
     # https://hub.docker.com/r/gessnerfl/fake-smtp-server
     # https://hub.docker.com/r/greenmail/standalone
-    image: gessnerfl/fake-smtp-server:2.4.0
+    image: gessnerfl/fake-smtp-server:2.4.1
     ports:
       - published: 8025
         target: 8025
