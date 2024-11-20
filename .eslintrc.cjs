@@ -200,6 +200,7 @@ module.exports = {
         '@typescript-eslint/no-unnecessary-type-arguments': 'error',
         '@typescript-eslint/no-unnecessary-type-parameters': 'error',
         '@typescript-eslint/no-unsafe-member-access': 'off',
+        //'@typescript-eslint/no-unsafe-type-assertion': 'error',
         '@typescript-eslint/no-unsafe-unary-minus': 'error',
         //'@typescript-eslint/no-untyped-public-signature': 'error',
         '@typescript-eslint/no-unused-vars': ['off', {

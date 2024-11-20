@@ -33,6 +33,33 @@ import {
 
 const { db } = config;
 
+if (db !== undefined) {
+    if (db.name !== undefined && typeof db.name !== 'string') {
+        throw new TypeError('Der konfigurierte DB-Name ist kein String');
+    }
+    if (db.host !== undefined && typeof db.host !== 'number') {
+        throw new TypeError(
+            'Der konfigurierte Rechnername für den DB-Server ist kein String',
+        );
+    }
+    if (db.username !== undefined && typeof db.username !== 'string') {
+        throw new TypeError(
+            'Der konfigurierte username für die DB ist kein String',
+        );
+    }
+    if (db.password !== undefined && typeof db.password !== 'string') {
+        throw new TypeError('Das konfigurierte DB-Passwort ist kein String');
+    }
+    if (
+        db.passwordAdmin !== undefined &&
+        typeof db.passwordAdmin !== 'string'
+    ) {
+        throw new TypeError(
+            'Das konfigurierte Administrations-Passwort für die DB ist kein String',
+        );
+    }
+}
+
 // "Optional Chaining" und "Nullish Coalescing" ab ES2020
 const database = (db?.name as string | undefined) ?? Buch.name.toLowerCase();
 

@@ -30,6 +30,10 @@ const logFileDefault = path.resolve(logDirDefault, logFileNameDefault);
 
 const { log } = config;
 
+if (log !== undefined && log.dir !== undefined && typeof log.dir !== 'string') {
+    throw new TypeError('Das konfigurierte Log-Verzeichnis ist kein String');
+}
+
 // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
 const logDir: string | undefined =
     (log?.dir as string | undefined) === undefined

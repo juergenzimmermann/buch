@@ -25,8 +25,7 @@
 # https://www.jenkins.io/doc/tutorials/build-a-node-js-and-react-app-with-npm
 # https://www.jenkins.io/doc/book/installing/docker
 # https://manpages.debian.org/bullseye/apt/apt-get.8.en.html
-
-ARG JENKINS_VERSION=2.485-jdk21
+6ARG JENKINS_VERSION=2.485-jdk21
 
 FROM jenkins/jenkins:${JENKINS_VERSION}
 

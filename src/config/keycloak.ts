@@ -29,6 +29,39 @@ import { env } from './env.js';
 import { httpsOptions } from './https.js';
 
 const { keycloak } = config;
+
+if (keycloak !== undefined && keycloak !== null) {
+    if (
+        keycloak.authServerUrl !== undefined &&
+        typeof keycloak.authServerUrl !== 'string'
+    ) {
+        throw new TypeError(
+            'Die konfigurierte URL für Keycloak ist kein String',
+        );
+    }
+    if (keycloak.realm !== undefined && typeof keycloak.realm !== 'string') {
+        throw new TypeError(
+            'Der konfigurierte Realm-Name für Keycloak ist kein String',
+        );
+    }
+    if (
+        keycloak.clientId !== undefined &&
+        typeof keycloak.clientId !== 'string'
+    ) {
+        throw new TypeError(
+            'Der konfigurierte Client-ID für Keycloak ist kein String',
+        );
+    }
+    if (
+        keycloak.tokenValidation !== undefined &&
+        Object.values(TokenValidation).includes(keycloak.tokenValidation) // eslint-disable-line @typescript-eslint/no-unsafe-argument
+    ) {
+        throw new TypeError(
+            'Der konfigurierte Wert für TokenValidation bei Keycloak ist ungültig',
+        );
+    }
+}
+
 const authServerUrl =
     (keycloak?.authServerUrl as string | undefined) ?? 'http://localhost:8880';
 // Keycloak ist in Sicherheits-Bereich (= realms) unterteilt

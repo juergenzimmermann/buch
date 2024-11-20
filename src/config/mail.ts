@@ -26,10 +26,18 @@ const { mail } = config;
 
 const activated = mail?.activated === undefined || mail?.activated === true;
 
-// Hochschule Karlsruhe: smtp.h-ka.de
-// nullish coalescing
+if (mail !== undefined) {
+    if (mail.host !== undefined && typeof mail.host !== 'string') {
+        throw new TypeError('Der konfigurierte Mailserver ist kein String');
+    }
+    if (mail.port !== undefined && typeof mail.port !== 'number') {
+        throw new TypeError(
+            'Der konfigurierte Port für den Mailserver ist keine Zahl',
+        );
+    }
+}
+// "Optional Chaining" und "Nullish Coalescing"
 const host = (mail?.host as string | undefined) ?? 'smtp';
-// Hochschule Karlsruhe:   25
 const port = (mail?.port as number | undefined) ?? 25; // eslint-disable-line @typescript-eslint/no-magic-numbers
 const logger = mail?.log === true;
 
