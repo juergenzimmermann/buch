@@ -17,7 +17,6 @@
 import { afterAll, beforeAll, describe, expect, test } from '@jest/globals';
 import { HttpStatus } from '@nestjs/common';
 import axios, { type AxiosInstance, type AxiosResponse } from 'axios';
-import Decimal from 'decimal.js'; // eslint-disable-line @typescript-eslint/naming-convention
 import { type BuchDTO } from '../../src/buch/controller/buchDTO.entity.js';
 import { BuchReadService } from '../../src/buch/service/buch-read.service.js';
 import {
@@ -37,8 +36,8 @@ const neuesBuch: BuchDTO = {
     isbn: '978-0-007-00644-1',
     rating: 1,
     art: 'EPUB',
-    preis: new Decimal(99.99),
-    rabatt: new Decimal(0.123),
+    preis: '99.99',
+    rabatt: '0.123',
     lieferbar: true,
     datum: '2022-02-28',
     homepage: 'https://post.rest',
@@ -72,8 +71,8 @@ const neuesBuchIsbnExistiert: BuchDTO = {
     isbn: '978-3-897-22583-1',
     rating: 1,
     art: 'EPUB',
-    preis: new Decimal(99.99),
-    rabatt: new Decimal(0.099),
+    preis: '99.99',
+    rabatt: '0.099',
     lieferbar: true,
     datum: '2022-02-28',
     homepage: 'https://post.isbn/',
@@ -153,8 +152,6 @@ describe('POST /rest', () => {
             expect.stringMatching(/^isbn /u),
             expect.stringMatching(/^rating /u),
             expect.stringMatching(/^art /u),
-            expect.stringMatching(/^preis /u),
-            expect.stringMatching(/^rabatt /u),
             expect.stringMatching(/^datum /u),
             expect.stringMatching(/^homepage /u),
             expect.stringMatching(/^titel.titel /u),

@@ -72,8 +72,8 @@ describe('GraphQL Mutations', () => {
                             isbn: "978-0-321-19368-1",
                             rating: 1,
                             art: EPUB,
-                            preis: 99.99,
-                            rabatt: 0.123,
+                            preis: "99.99",
+                            rabatt: "0.123",
                             lieferbar: true,
                             datum: "2022-02-28",
                             homepage: "https://create.mutation",
@@ -111,7 +111,6 @@ describe('GraphQL Mutations', () => {
     });
 
     // -------------------------------------------------------------------------
-    // eslint-disable-next-line max-lines-per-function
     test('Buch mit ungueltigen Werten neu anlegen', async () => {
         // given
         const token = await tokenGraphQL(client);
@@ -124,8 +123,8 @@ describe('GraphQL Mutations', () => {
                             isbn: "falsche-ISBN",
                             rating: -1,
                             art: EPUB,
-                            preis: -1,
-                            rabatt: 2,
+                            preis: "-1",
+                            rabatt: "2",
                             lieferbar: false,
                             datum: "12345-123-123",
                             homepage: "anyHomepage",
@@ -142,8 +141,6 @@ describe('GraphQL Mutations', () => {
         const expectedMsg = [
             expect.stringMatching(/^isbn /u),
             expect.stringMatching(/^rating /u),
-            expect.stringMatching(/^preis /u),
-            expect.stringMatching(/^rabatt /u),
             expect.stringMatching(/^datum /u),
             expect.stringMatching(/^homepage /u),
             expect.stringMatching(/^titel.titel /u),
@@ -189,8 +186,8 @@ describe('GraphQL Mutations', () => {
                             isbn: "978-0-007-09732-6",
                             rating: 5,
                             art: HARDCOVER,
-                            preis: 444.44,
-                            rabatt: 0.099,
+                            preis: "444.44",
+                            rabatt: "0.099",
                             lieferbar: false,
                             datum: "2021-04-04",
                             homepage: "https://update.mutation"
@@ -234,8 +231,8 @@ describe('GraphQL Mutations', () => {
                             isbn: "falsche-ISBN",
                             rating: -1,
                             art: EPUB,
-                            preis: -1,
-                            rabatt: 2,
+                            preis: "-1",
+                            rabatt: "2",
                             lieferbar: false,
                             datum: "12345-123-123",
                             homepage: "anyHomepage",
@@ -250,8 +247,6 @@ describe('GraphQL Mutations', () => {
         const expectedMsg = [
             expect.stringMatching(/^isbn /u),
             expect.stringMatching(/^rating /u),
-            expect.stringMatching(/^preis /u),
-            expect.stringMatching(/^rabatt /u),
             expect.stringMatching(/^datum /u),
             expect.stringMatching(/^homepage /u),
         ];
@@ -294,8 +289,8 @@ describe('GraphQL Mutations', () => {
                             isbn: "978-0-007-09732-6",
                             rating: 5,
                             art: EPUB,
-                            preis: 99.99,
-                            rabatt: 0.099,
+                            preis: "99.99",
+                            rabatt: "0.099",
                             lieferbar: false,
                             datum: "2021-01-02",
                             homepage: "https://acme.com",

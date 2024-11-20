@@ -49,6 +49,7 @@ import {
     ApiResponse,
     ApiTags,
 } from '@nestjs/swagger';
+import Decimal from 'decimal.js'; // eslint-disable-line @typescript-eslint/naming-convention
 import { Express, Request, Response } from 'express';
 import { AuthGuard, Public, Roles } from 'nest-keycloak-connect';
 import { paths } from '../../config/paths.js';
@@ -284,8 +285,8 @@ export class BuchWriteController {
             isbn: buchDTO.isbn,
             rating: buchDTO.rating,
             art: buchDTO.art,
-            preis: buchDTO.preis,
-            rabatt: buchDTO.rabatt,
+            preis: new Decimal(buchDTO.preis),
+            rabatt: new Decimal(buchDTO.rabatt ?? '0'),
             lieferbar: buchDTO.lieferbar,
             datum: buchDTO.datum,
             homepage: buchDTO.homepage,
@@ -312,8 +313,8 @@ export class BuchWriteController {
             isbn: buchDTO.isbn,
             rating: buchDTO.rating,
             art: buchDTO.art,
-            preis: buchDTO.preis,
-            rabatt: buchDTO.rabatt,
+            preis: new Decimal(buchDTO.preis),
+            rabatt: new Decimal(buchDTO.rabatt ?? '0'),
             lieferbar: buchDTO.lieferbar,
             datum: buchDTO.datum,
             homepage: buchDTO.homepage,

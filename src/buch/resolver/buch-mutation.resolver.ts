@@ -17,6 +17,7 @@
 import { UseFilters, UseGuards, UseInterceptors } from '@nestjs/common';
 import { Args, Mutation, Resolver } from '@nestjs/graphql';
 import { IsInt, IsNumberString, Min } from 'class-validator';
+import Decimal from 'decimal.js'; // eslint-disable-line @typescript-eslint/naming-convention
 import { AuthGuard, Roles } from 'nest-keycloak-connect';
 import { getLogger } from '../../logger/logger.js';
 import { ResponseTimeInterceptor } from '../../logger/response-time.interceptor.js';
@@ -133,8 +134,8 @@ export class BuchMutationResolver {
             isbn: buchDTO.isbn,
             rating: buchDTO.rating,
             art: buchDTO.art,
-            preis: buchDTO.preis,
-            rabatt: buchDTO.rabatt,
+            preis: new Decimal(buchDTO.preis),
+            rabatt: new Decimal(buchDTO.rabatt ?? ''),
             lieferbar: buchDTO.lieferbar,
             datum: buchDTO.datum,
             homepage: buchDTO.homepage,
@@ -158,8 +159,8 @@ export class BuchMutationResolver {
             isbn: buchDTO.isbn,
             rating: buchDTO.rating,
             art: buchDTO.art,
-            preis: buchDTO.preis,
-            rabatt: buchDTO.rabatt,
+            preis: new Decimal(buchDTO.preis),
+            rabatt: new Decimal(buchDTO.rabatt ?? ''),
             lieferbar: buchDTO.lieferbar,
             datum: buchDTO.datum,
             homepage: buchDTO.homepage,
