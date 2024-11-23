@@ -104,8 +104,8 @@ input BuchInput {
   isbn: String
   rating: Int
   art: Art
-  preis: String
-  rabatt: String
+  preis: Float
+  rabatt: Float
   lieferbar: Boolean
   datum: String
   homepage: String
@@ -125,8 +125,8 @@ input BuchUpdateInput {
   isbn: String
   rating: Int
   art: Art
-  preis: String
-  rabatt: String
+  preis: Float
+  rabatt: Float
   lieferbar: Boolean
   datum: String
   homepage: String

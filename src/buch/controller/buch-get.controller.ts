@@ -27,6 +27,7 @@ import {
     HttpStatus,
     NotFoundException,
     Param,
+    ParseIntPipe,
     Query,
     Req,
     Res,
@@ -214,17 +215,16 @@ export class BuchGetController {
         description: 'Das Buch wurde bereits heruntergeladen',
     })
     async getById(
-        @Param('id') idStr: string,
+        @Param(
+            'id',
+            new ParseIntPipe({ errorHttpStatusCode: HttpStatus.NOT_FOUND }),
+        )
+        id: number,
         @Req() req: Request,
         @Headers('If-None-Match') version: string | undefined,
         @Res() res: Response,
     ): Promise<Response<BuchModel | undefined>> {
-        this.#logger.debug('getById: idStr=%s, version=%s', idStr, version);
-        const id = Number(idStr);
-        if (!Number.isInteger(id)) {
-            this.#logger.debug('getById: not isInteger()');
-            throw new NotFoundException(`Die Buch-ID ${idStr} ist ungueltig.`);
-        }
+        this.#logger.debug('getById: id=%s, version=%s', id, version);
 
         if (req.accepts([APPLICATION_HAL_JSON, 'json', 'html']) === false) {
             this.#logger.debug('getById: accepted=%o', req.accepted);

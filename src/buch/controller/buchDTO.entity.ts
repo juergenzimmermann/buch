@@ -21,7 +21,7 @@
 /* eslint-disable max-classes-per-file, @typescript-eslint/no-magic-numbers */
 
 import { ApiProperty } from '@nestjs/swagger';
-import { Type } from 'class-transformer';
+import { Transform, Type } from 'class-transformer';
 import {
     ArrayUnique,
     IsArray,
@@ -34,13 +34,72 @@ import {
     Matches,
     Max,
     Min,
+    Validate,
     ValidateNested,
+    type ValidationArguments,
+    ValidatorConstraint,
+    type ValidatorConstraintInterface,
 } from 'class-validator';
+import Decimal from 'decimal.js'; // eslint-disable-line @typescript-eslint/naming-convention
 import { type BuchArt } from '../entity/buch.entity.js';
 import { AbbildungDTO } from './abbildungDTO.entity.js';
 import { TitelDTO } from './titelDTO.entity.js';
 
 export const MAX_RATING = 5;
+
+// https://github.com/typestack/class-transformer?tab=readme-ov-file#basic-usage
+const number2Decimal = ({ value }: { value: Decimal.Value | undefined }) => {
+    if (value === undefined) {
+        return;
+    }
+
+    // Decimal aus decimal.js analog zu BigDecimal von Java
+    // precision wie bei SQL beim Spaltentyp DECIMAL bzw. NUMERIC
+    Decimal.set({ precision: 6 });
+    return new Decimal(value);
+};
+
+const number2Percent = ({ value }: { value: Decimal.Value | undefined }) => {
+    if (value === undefined) {
+        return;
+    }
+
+    // precision wie bei SQL beim Spaltentyp DECIMAL bzw. NUMERIC
+    Decimal.set({ precision: 4 });
+    return new Decimal(value).div(100);
+};
+
+// https://github.com/typestack/class-validator?tab=readme-ov-file#custom-validation-classes
+@ValidatorConstraint({ name: 'decimalMin', async: false })
+class DecimalMin implements ValidatorConstraintInterface {
+    validate(value: Decimal | undefined, args: ValidationArguments) {
+        if (value === undefined) {
+            return true;
+        }
+        const [minValue]: Decimal[] = args.constraints; // eslint-disable-line @typescript-eslint/no-unsafe-assignment
+        return value.greaterThanOrEqualTo(minValue!);
+    }
+
+    defaultMessage(args: ValidationArguments) {
+        return `Der Wert muss groesser oder gleich ${(args.constraints[0] as Decimal).toNumber()} sein.`;
+    }
+}
+
+// https://github.com/typestack/class-validator?tab=readme-ov-file#custom-validation-classes
+@ValidatorConstraint({ name: 'max', async: false })
+class DecimalMax implements ValidatorConstraintInterface {
+    validate(value: Decimal | undefined, args: ValidationArguments) {
+        if (value === undefined) {
+            return true;
+        }
+        const [maxValue]: Decimal[] = args.constraints; // eslint-disable-line @typescript-eslint/no-unsafe-assignment
+        return value.lessThanOrEqualTo(maxValue!);
+    }
+
+    defaultMessage(args: ValidationArguments) {
+        return `Der Wert muss kleiner oder gleich ${(args.constraints[0] as Decimal).toNumber()} sein.`;
+    }
+}
 
 /**
  * Entity-Klasse für Bücher ohne TypeORM und ohne Referenzen.
@@ -62,13 +121,25 @@ export class BuchDtoOhneRef {
     @ApiProperty({ example: 'EPUB', type: String })
     readonly art: BuchArt | undefined;
 
+    // https://github.com/typestack/class-transformer?tab=readme-ov-file#basic-usage
+    @Transform(number2Decimal)
+    @Validate(DecimalMin, [new Decimal(0)], {
+        message: 'preis muss positiv sein.',
+    })
     @ApiProperty({ example: 1, type: Number })
-    // statt number ggf. Decimal aus decimal.js analog zu BigDecimal von Java
-    readonly preis!: string;
+    // Decimal aus decimal.js analog zu BigDecimal von Java
+    readonly preis!: Decimal;
 
+    @Transform(number2Percent)
+    @Validate(DecimalMin, [new Decimal(0)], {
+        message: 'rabatt muss positiv sein.',
+    })
+    @Validate(DecimalMax, [new Decimal(1)], {
+        message: 'rabatt muss kleiner 100 sein.',
+    })
     @IsOptional()
     @ApiProperty({ example: 0.1, type: Number })
-    readonly rabatt: string | undefined;
+    readonly rabatt: Decimal | undefined;
 
     @IsBoolean()
     @IsOptional()

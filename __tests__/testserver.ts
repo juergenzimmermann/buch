@@ -134,6 +134,7 @@ export const startServer = async () => {
     });
     server.useGlobalPipes(
         new ValidationPipe({
+            transform: true,
             errorHttpStatusCode: HttpStatus.UNPROCESSABLE_ENTITY,
         }),
     );

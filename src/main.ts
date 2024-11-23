@@ -61,8 +61,9 @@ const bootstrap = async () => {
     app.use(helmetHandlers, compression());
 
     // https://docs.nestjs.com/techniques/validation
+    // https://docs.nestjs.com/techniques/validation#transform-payload-objects
     // https://docs.nestjs.com/exception-filters
-    app.useGlobalPipes(new ValidationPipe());
+    app.useGlobalPipes(new ValidationPipe({ transform: true }));
 
     setupSwagger(app);
 

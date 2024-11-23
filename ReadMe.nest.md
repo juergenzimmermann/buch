@@ -475,6 +475,14 @@ validieren:
     docker build --tag juergenzimmermann/buch:2024.10.1-alpine --file Dockerfile.alpine .
 ```
 
+Mit Docker_Bake_:
+
+```powershell
+    # Debian als default
+    docker buildx bake
+    docker buildx bake alpine
+```
+
 ### Image inspizieren
 
 #### docker history

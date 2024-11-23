@@ -17,6 +17,7 @@
 import { afterAll, beforeAll, describe, expect, test } from '@jest/globals';
 import { HttpStatus } from '@nestjs/common';
 import axios, { type AxiosInstance, type AxiosResponse } from 'axios';
+import Decimal from 'decimal.js'; // eslint-disable-line @typescript-eslint/naming-convention
 import { type BuchDTO } from '../../src/buch/controller/buchDTO.entity.js';
 import { BuchReadService } from '../../src/buch/service/buch-read.service.js';
 import {
@@ -32,12 +33,15 @@ import { type ErrorResponse } from './error-response.js';
 // -----------------------------------------------------------------------------
 // T e s t d a t e n
 // -----------------------------------------------------------------------------
-const neuesBuch: BuchDTO = {
+const neuesBuch: Omit<BuchDTO, 'preis' | 'rabatt'> & {
+    preis: number;
+    rabatt: number;
+} = {
     isbn: '978-0-007-00644-1',
     rating: 1,
-    art: 'EPUB',
-    preis: '99.99',
-    rabatt: '0.123',
+    art: 'HARDCOVER',
+    preis: 99.99,
+    rabatt: 12.3,
     lieferbar: true,
     datum: '2022-02-28',
     homepage: 'https://post.rest',
@@ -58,7 +62,7 @@ const neuesBuchInvalid: Record<string, unknown> = {
     rating: -1,
     art: 'UNSICHTBAR',
     preis: -1,
-    rabatt: 2,
+    rabatt: 200,
     lieferbar: true,
     datum: '12345-123-123',
     homepage: 'anyHomepage',
@@ -71,8 +75,8 @@ const neuesBuchIsbnExistiert: BuchDTO = {
     isbn: '978-3-897-22583-1',
     rating: 1,
     art: 'EPUB',
-    preis: '99.99',
-    rabatt: '0.099',
+    preis: new Decimal(99.99),
+    rabatt: new Decimal(9.9),
     lieferbar: true,
     datum: '2022-02-28',
     homepage: 'https://post.isbn/',
@@ -152,6 +156,8 @@ describe('POST /rest', () => {
             expect.stringMatching(/^isbn /u),
             expect.stringMatching(/^rating /u),
             expect.stringMatching(/^art /u),
+            expect.stringMatching(/^preis /u),
+            expect.stringMatching(/^rabatt /u),
             expect.stringMatching(/^datum /u),
             expect.stringMatching(/^homepage /u),
             expect.stringMatching(/^titel.titel /u),

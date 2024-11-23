@@ -17,6 +17,7 @@
 import { afterAll, beforeAll, describe, expect, test } from '@jest/globals';
 import { HttpStatus } from '@nestjs/common';
 import axios, { type AxiosInstance, type AxiosResponse } from 'axios';
+import Decimal from 'decimal.js'; // eslint-disable-line @typescript-eslint/naming-convention
 import { type BuchDtoOhneRef } from '../../src/buch/controller/buchDTO.entity.js';
 import {
     host,
@@ -31,12 +32,15 @@ import { type ErrorResponse } from './error-response.js';
 // -----------------------------------------------------------------------------
 // T e s t d a t e n
 // -----------------------------------------------------------------------------
-const geaendertesBuch: BuchDtoOhneRef = {
+const geaendertesBuch: Omit<BuchDtoOhneRef, 'preis' | 'rabatt'> & {
+    preis: number;
+    rabatt: number;
+} = {
     isbn: '978-0-201-63361-0',
     rating: 5,
     art: 'HARDCOVER',
-    preis: '3333',
-    rabatt: '0.33',
+    preis: 3333,
+    rabatt: 3.3,
     lieferbar: true,
     datum: '2022-03-03',
     homepage: 'https://geaendert.put.rest',
@@ -44,12 +48,18 @@ const geaendertesBuch: BuchDtoOhneRef = {
 };
 const idVorhanden = '30';
 
-const geaendertesBuchIdNichtVorhanden: BuchDtoOhneRef = {
+const geaendertesBuchIdNichtVorhanden: Omit<
+    BuchDtoOhneRef,
+    'preis' | 'rabatt'
+> & {
+    preis: number;
+    rabatt: number;
+} = {
     isbn: '978-0-007-09732-6',
     rating: 4,
     art: 'EPUB',
-    preis: '44.4',
-    rabatt: '0.044',
+    preis: 44.4,
+    rabatt: 4.4,
     lieferbar: true,
     datum: '2022-02-04',
     homepage: 'https://acme.de',
@@ -62,7 +72,7 @@ const geaendertesBuchInvalid: Record<string, unknown> = {
     rating: -1,
     art: 'UNSICHTBAR',
     preis: -1,
-    rabatt: 2,
+    rabatt: 200,
     lieferbar: true,
     datum: '12345-123-123',
     titel: '?!',
@@ -73,8 +83,8 @@ const veraltesBuch: BuchDtoOhneRef = {
     isbn: '978-0-007-09732-6',
     rating: 1,
     art: 'EPUB',
-    preis: '44.4',
-    rabatt: '0.044',
+    preis: new Decimal(44.4),
+    rabatt: new Decimal(4.4),
     lieferbar: true,
     datum: '2022-02-04',
     homepage: 'https://acme.de',
@@ -155,6 +165,8 @@ describe('PUT /rest/:id', () => {
             expect.stringMatching(/^isbn /u),
             expect.stringMatching(/^rating /u),
             expect.stringMatching(/^art /u),
+            expect.stringMatching(/^preis /u),
+            expect.stringMatching(/^rabatt /u),
             expect.stringMatching(/^datum /u),
             expect.stringMatching(/^homepage /u),
         ];

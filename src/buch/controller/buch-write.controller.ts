@@ -27,6 +27,7 @@ import {
     HttpCode,
     HttpStatus,
     Param,
+    ParseIntPipe,
     Post,
     Put,
     Req,
@@ -143,7 +144,11 @@ export class BuchWriteController {
     @ApiForbiddenResponse({ description: MSG_FORBIDDEN })
     @UseInterceptors(FileInterceptor('file'))
     async addFile(
-        @Param('id') id: number,
+        @Param(
+            'id',
+            new ParseIntPipe({ errorHttpStatusCode: HttpStatus.NOT_FOUND }),
+        )
+        id: number,
         @UploadedFile() file: Express.Multer.File,
         @Req() req: Request,
         @Res() res: Response,
@@ -216,7 +221,11 @@ export class BuchWriteController {
     @ApiForbiddenResponse({ description: MSG_FORBIDDEN })
     async put(
         @Body() buchDTO: BuchDtoOhneRef,
-        @Param('id') id: number,
+        @Param(
+            'id',
+            new ParseIntPipe({ errorHttpStatusCode: HttpStatus.NOT_FOUND }),
+        )
+        id: number,
         @Headers('If-Match') version: string | undefined,
         @Res() res: Response,
     ): Promise<Response> {
