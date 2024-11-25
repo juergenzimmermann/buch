@@ -136,7 +136,7 @@ pipeline {
                 sh 'cat package.json'
 
                 // Konfigurationsverzeichnis /root/.npm
-                sh 'npm ci --no-fund --no-audit'
+                sh 'npm ci --no-fund --no-audit --force'
             }
         }
 
