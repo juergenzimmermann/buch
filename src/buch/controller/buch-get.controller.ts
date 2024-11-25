@@ -188,7 +188,7 @@ export class BuchGetController {
      * Falls es kein Buch zur angegebenen ID gibt, wird der Statuscode `404`
      * (`Not Found`) zurückgeliefert.
      *
-     * @param idStr Pfad-Parameter `id`
+     * @param id Pfad-Parameter `id`
      * @param req Request-Objekt von Express mit Pfadparameter, Query-String,
      *            Request-Header und Request-Body.
      * @param version Versionsnummer im Request-Header bei `If-None-Match`
