@@ -95,8 +95,8 @@ export class QueryBuilder {
      */
     // z.B. { titel: 'a', rating: 5, javascript: true }
     // "rest properties" fuer anfaengliche WHERE-Klausel: ab ES 2018 https://github.com/tc39/proposal-object-rest-spread
-    // eslint-disable-next-line max-lines-per-function, sonarjs/cognitive-complexity
-    build({
+    // eslint-disable-next-line max-lines-per-function, prettier/prettier, sonarjs/cognitive-complexity
+    build({ // SONAR
         titel,
         javascript,
         typescript,
