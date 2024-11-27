@@ -302,6 +302,7 @@ module.exports = {
         }],
 
         'promise/no-multiple-resolved': 'error',
+        'promise/prefer-catch': 'error',
 
         'regexp/no-extra-lookaround-assertions': 'error',
         'regexp/no-misleading-capturing-group': 'error',

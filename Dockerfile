@@ -1,4 +1,4 @@
-# syntax=docker/dockerfile:1.11.1
+# syntax=docker/dockerfile:1.12.0
 
 # Copyright (C) 2023 - present, Juergen Zimmermann, Hochschule Karlsruhe
 #
@@ -77,7 +77,7 @@ RUN --mount=type=bind,source=package.json,target=package.json \
     --mount=type=cache,target=/root/.npm <<EOF
 set -eux
 # ci (= clean install) mit package-lock.json
-npm ci --no-audit --no-fund --force
+npm ci --no-audit --no-fund
 npm run build
 EOF
 
@@ -108,7 +108,7 @@ RUN --mount=type=bind,source=package.json,target=package.json \
 set -eux
 # ci (= clean install) mit package-lock.json
 # --omit=dev: ohne devDependencies
-npm ci --no-audit --no-fund --omit=dev --omit=peer --force
+npm ci --no-audit --no-fund --omit=dev --omit=peer
 EOF
 
 # ------------------------------------------------------------------------------
