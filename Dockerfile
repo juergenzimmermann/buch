@@ -30,14 +30,14 @@
 # https://snyk.io/blog/10-best-practices-to-containerize-nodejs-web-applications-with-docker
 # https://cheatsheetseries.owasp.org/cheatsheets/NodeJS_Docker_Cheat_Sheet.html
 
-# "Build Argument"; alternativ: ENV = Umgebungsvariable im gebauten Image
+# ARG: "build-time" Variable
+# ENV: "build-time" und "runtime" Variable
 ARG NODE_VERSION=23.3.0
 
 # ---------------------------------------------------------------------------------------
 # S t a g e   d i s t
 # ---------------------------------------------------------------------------------------
 FROM node:${NODE_VERSION}-bookworm-slim AS dist
-# FROM node:${NODE_VERSION}-bookworm AS dist
 
 # ggf. Python fuer Argon2
 # https://packages.debian.org/bookworm/python3.11-minimal
