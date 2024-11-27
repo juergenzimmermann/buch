@@ -747,9 +747,9 @@ Dazu muss zunächst das Jenkins-Image um eine Docker-Installation ergänzt werde
 wozu es die Datei `Dockerfile.jenkins` gibt, um ein solches Image zu erstellen:
 
 ```powershell
-    cd .extras\compose\jenkins
+    cd .extras\jenkins
     Get-Content Dockerfile | docker run --rm --interactive hadolint/hadolint:2.10.0-beta-debian
-    docker build --tag juergenzimmermann/jenkins:2024.10.1 .
+    docker build bake
 ```
 
 Das neu gebaute Image `juergenzimmermann/jenkins:2024.10.1` wird in
