@@ -6,6 +6,7 @@ module.exports = {
     entryPoints: ['src'],
     entryPointStrategy: 'expand',
     excludePrivate: true,
+    favicon: 'favicon.ico',
     validation: {
         invalidLink: true,
     },

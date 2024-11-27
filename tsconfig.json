@@ -12,6 +12,7 @@
     // "transpileOnly": true,
     // "files": true,
   },
+  //"include": ["src/**/*", "tsconfig.cjs"],
   "compilerOptions": {
     "lib": ["es2023"],
     // uebersetzter JS-Code im Hinblick auf Module. "NodeNext" erfordert dasselbe fuer "moduleResolution"
@@ -48,6 +49,7 @@
     "noUnusedParameters": true, // keine nicht-benutzen Parameter
     "preserveWatchOutput": true,
     "strict": true // alle "strict"-Optionen aktivieren
+
     // "noImplicitAny": true, // Fehler bei implizitem Typ "any", default bei strict
     // "noImplicitThis": true, // Fehler bei this mit implizitem "any", default bei strict
     // "useUnknownInCatchVariables": true // unknown als default-Typ bei catch-Klauseln, default bei strict
