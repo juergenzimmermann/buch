@@ -28,7 +28,7 @@
     "experimentalDecorators": true,
     "allowSyntheticDefaultImports": true,
     // https://www.typescriptlang.org/tsconfig/#target
-    "target": "es2023",
+    "target": "es2022",
     "sourceMap": true,
     "outDir": "./dist",
     "incremental": true,

@@ -34,7 +34,7 @@
 import { afterAll, beforeAll, describe, expect, test } from '@jest/globals';
 import { HttpStatus } from '@nestjs/common';
 import axios, { type AxiosInstance, type AxiosResponse } from 'axios';
-import { type BuchModel } from '../../src/buch/controller/buch-get.controller.js';
+import { type Buch } from '../../src/buch/entity/buch.entity.js';
 import {
     host,
     httpsAgent,
@@ -80,18 +80,16 @@ describe('GET /rest/:id', () => {
         const url = `/${idVorhanden}`;
 
         // when
-        const { status, headers, data }: AxiosResponse<BuchModel> =
+        const { status, headers, data }: AxiosResponse<Buch> =
             await client.get(url);
 
         // then
         expect(status).toBe(HttpStatus.OK);
         expect(headers['content-type']).toMatch(/json/iu);
 
-        // eslint-disable-next-line no-underscore-dangle
-        const selfLink = data._links.self.href;
+        const { id } = data;
 
-        // eslint-disable-next-line security-node/non-literal-reg-expr
-        expect(selfLink).toMatch(new RegExp(`${url}$`, 'u'));
+        expect(id?.toString()).toBe(idVorhanden);
     });
 
     test('Kein Buch zu nicht-vorhandener ID', async () => {

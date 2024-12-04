@@ -13,12 +13,10 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-/* eslint-disable no-underscore-dangle */
-
 import { afterAll, beforeAll, describe, expect, test } from '@jest/globals';
 import { HttpStatus } from '@nestjs/common';
 import axios, { type AxiosInstance, type AxiosResponse } from 'axios';
-import { type BuecherModel } from '../../src/buch/controller/buch-get.controller.js';
+import { type Buch } from '../../src/buch/entity/buch.entity.js';
 import {
     host,
     httpsAgent,
@@ -63,7 +61,7 @@ describe('GET /rest', () => {
         // given
 
         // when
-        const { status, headers, data }: AxiosResponse<BuecherModel> =
+        const { status, headers, data }: AxiosResponse<Buch[]> =
             await client.get('/');
 
         // then
@@ -71,14 +69,9 @@ describe('GET /rest', () => {
         expect(headers['content-type']).toMatch(/json/iu); // eslint-disable-line sonarjs/no-duplicate-string
         expect(data).toBeDefined();
 
-        const { buecher } = data._embedded;
-
-        buecher
-            .map((buch) => buch._links.self.href)
-            .forEach((selfLink) => {
-                // eslint-disable-next-line security/detect-non-literal-regexp, security-node/non-literal-reg-expr
-                expect(selfLink).toMatch(new RegExp(`^${baseURL}`, 'iu'));
-            });
+        data.map((buch) => buch.id).forEach((id) => {
+            expect(id).toBeDefined();
+        });
     });
 
     test('Buecher mit einem Teil-Titel suchen', async () => {
@@ -86,7 +79,7 @@ describe('GET /rest', () => {
         const params = { titel: titelVorhanden };
 
         // when
-        const { status, headers, data }: AxiosResponse<BuecherModel> =
+        const { status, headers, data }: AxiosResponse<Buch[]> =
             await client.get('/', { params });
 
         // then
@@ -94,16 +87,12 @@ describe('GET /rest', () => {
         expect(headers['content-type']).toMatch(/json/iu);
         expect(data).toBeDefined();
 
-        const { buecher } = data._embedded;
-
         // Jedes Buch hat einen Titel mit dem Teilstring 'a'
-        buecher
-            .map((buch) => buch.titel)
-            .forEach((titel) =>
-                expect(titel.titel.toLowerCase()).toEqual(
-                    expect.stringContaining(titelVorhanden),
-                ),
-            );
+        data.map((buch) => buch.titel).forEach((titel) =>
+            expect(titel?.titel.toLowerCase()).toEqual(
+                expect.stringContaining(titelVorhanden),
+            ),
+        );
     });
 
     test('Buecher zu einem nicht vorhandenen Teil-Titel suchen', async () => {
@@ -130,7 +119,7 @@ describe('GET /rest', () => {
         const params = { [schlagwortVorhanden]: 'true' };
 
         // when
-        const { status, headers, data }: AxiosResponse<BuecherModel> =
+        const { status, headers, data }: AxiosResponse<Buch[]> =
             await client.get('/', { params });
 
         // then
@@ -139,16 +128,12 @@ describe('GET /rest', () => {
         // JSON-Array mit mind. 1 JSON-Objekt
         expect(data).toBeDefined();
 
-        const { buecher } = data._embedded;
-
         // Jedes Buch hat im Array der Schlagwoerter z.B. "javascript"
-        buecher
-            .map((buch) => buch.schlagwoerter)
-            .forEach((schlagwoerter) =>
-                expect(schlagwoerter).toEqual(
-                    expect.arrayContaining([schlagwortVorhanden.toUpperCase()]),
-                ),
-            );
+        data.map((buch) => buch.schlagwoerter).forEach((schlagwoerter) =>
+            expect(schlagwoerter).toEqual(
+                expect.arrayContaining([schlagwortVorhanden.toUpperCase()]),
+            ),
+        );
     });
 
     test('Keine Buecher zu einem nicht vorhandenen Schlagwort', async () => {
@@ -189,4 +174,3 @@ describe('GET /rest', () => {
         expect(statusCode).toBe(HttpStatus.NOT_FOUND);
     });
 });
-/* eslint-enable no-underscore-dangle */

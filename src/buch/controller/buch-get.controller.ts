@@ -18,7 +18,6 @@
  * @packageDocumentation
  */
 
-/* eslint-disable max-lines */
 // eslint-disable-next-line max-classes-per-file
 import {
     Controller,
@@ -51,57 +50,8 @@ import { paths } from '../../config/paths.js';
 import { getLogger } from '../../logger/logger.js';
 import { ResponseTimeInterceptor } from '../../logger/response-time.interceptor.js';
 import { type Buch, type BuchArt } from '../entity/buch.entity.js';
-import { type Titel } from '../entity/titel.entity.js';
 import { BuchReadService } from '../service/buch-read.service.js';
 import { type Suchkriterien } from '../service/suchkriterien.js';
-import { getBaseUri } from './getBaseUri.js';
-
-/** href-Link für HATEOAS */
-export type Link = {
-    /** href-Link für HATEOAS-Links */
-    readonly href: string;
-};
-
-/** Links für HATEOAS */
-export type Links = {
-    /** self-Link */
-    readonly self: Link;
-    /** Optionaler Linke für list */
-    readonly list?: Link;
-    /** Optionaler Linke für add */
-    readonly add?: Link;
-    /** Optionaler Linke für update */
-    readonly update?: Link;
-    /** Optionaler Linke für remove */
-    readonly remove?: Link;
-};
-
-/** Typedefinition für ein Titel-Objekt ohne Rückwärtsverweis zum Buch */
-export type TitelModel = Omit<Titel, 'buch' | 'id'>;
-
-/** Buch-Objekt mit HATEOAS-Links */
-export type BuchModel = Omit<
-    Buch,
-    | 'abbildungen'
-    | 'file'
-    | 'aktualisiert'
-    | 'erzeugt'
-    | 'id'
-    | 'titel'
-    | 'version'
-> & {
-    titel: TitelModel;
-    // eslint-disable-next-line @typescript-eslint/naming-convention
-    _links: Links;
-};
-
-/** Buch-Objekte mit HATEOAS-Links in einem JSON-Array. */
-export type BuecherModel = {
-    // eslint-disable-next-line @typescript-eslint/naming-convention
-    _embedded: {
-        buecher: BuchModel[];
-    };
-};
 
 /**
  * Klasse für `BuchGetController`, um Queries in _OpenAPI_ bzw. Swagger zu
@@ -147,8 +97,6 @@ export class BuchQuery implements Suchkriterien {
     @ApiProperty({ required: false })
     declare readonly titel: string;
 }
-
-const APPLICATION_HAL_JSON = 'application/hal+json';
 
 /**
  * Die Controller-Klasse für die Verwaltung von Bücher.
@@ -223,10 +171,10 @@ export class BuchGetController {
         @Req() req: Request,
         @Headers('If-None-Match') version: string | undefined,
         @Res() res: Response,
-    ): Promise<Response<BuchModel | undefined>> {
+    ): Promise<Response<Buch | undefined>> {
         this.#logger.debug('getById: id=%s, version=%s', id, version);
 
-        if (req.accepts([APPLICATION_HAL_JSON, 'json', 'html']) === false) {
+        if (req.accepts(['json', 'html']) === false) {
             this.#logger.debug('getById: accepted=%o', req.accepted);
             return res.sendStatus(HttpStatus.NOT_ACCEPTABLE);
         }
@@ -246,10 +194,8 @@ export class BuchGetController {
         this.#logger.debug('getById: versionDb=%s', versionDb);
         res.header('ETag', `"${versionDb}"`);
 
-        // HATEOAS mit Atom Links und HAL (= Hypertext Application Language)
-        const buchModel = this.#toModel(buch, req);
-        this.#logger.debug('getById: buchModel=%o', buchModel);
-        return res.contentType(APPLICATION_HAL_JSON).json(buchModel);
+        this.#logger.debug('getById: buch=%o', buch);
+        return res.json(buch);
     }
 
     /**
@@ -276,10 +222,10 @@ export class BuchGetController {
         @Query() query: BuchQuery,
         @Req() req: Request,
         @Res() res: Response,
-    ): Promise<Response<BuecherModel | undefined>> {
+    ): Promise<Response<Buch[] | undefined>> {
         this.#logger.debug('get: query=%o', query);
 
-        if (req.accepts([APPLICATION_HAL_JSON, 'json', 'html']) === false) {
+        if (req.accepts(['json', 'html']) === false) {
             this.#logger.debug('get: accepted=%o', req.accepted);
             return res.sendStatus(HttpStatus.NOT_ACCEPTABLE);
         }
@@ -287,14 +233,7 @@ export class BuchGetController {
         const buecher = await this.#service.find(query);
         this.#logger.debug('get: %o', buecher);
 
-        // HATEOAS: Atom Links je Buch
-        const buecherModel = buecher.map((buch) =>
-            this.#toModel(buch, req, false),
-        );
-        this.#logger.debug('get: buecherModel=%o', buecherModel);
-
-        const result: BuecherModel = { _embedded: { buecher: buecherModel } };
-        return res.contentType(APPLICATION_HAL_JSON).json(result).send();
+        return res.json(buecher).send();
     }
 
     @Get('/file/:id')
@@ -330,42 +269,4 @@ export class BuchGetController {
 
         return new StreamableFile(stream);
     }
-
-    #toModel(buch: Buch, req: Request, all = true) {
-        const baseUri = getBaseUri(req);
-        this.#logger.debug('#toModel: baseUri=%s', baseUri);
-        const { id } = buch;
-        const links = all
-            ? {
-                  self: { href: `${baseUri}/${id}` },
-                  list: { href: `${baseUri}` },
-                  add: { href: `${baseUri}` },
-                  update: { href: `${baseUri}/${id}` },
-                  remove: { href: `${baseUri}/${id}` },
-              }
-            : { self: { href: `${baseUri}/${id}` } };
-
-        this.#logger.debug('#toModel: buch=%o, links=%o', buch, links);
-        const titelModel: TitelModel = {
-            // "Optional Chaining" und "Nullish Coalescing" ab ES2020
-            titel: buch.titel?.titel ?? 'N/A',
-            untertitel: buch.titel?.untertitel ?? 'N/A',
-        };
-        const buchModel: BuchModel = {
-            isbn: buch.isbn,
-            rating: buch.rating,
-            art: buch.art,
-            preis: buch.preis,
-            rabatt: buch.rabatt,
-            lieferbar: buch.lieferbar,
-            datum: buch.datum,
-            homepage: buch.homepage,
-            schlagwoerter: buch.schlagwoerter,
-            titel: titelModel,
-            _links: links,
-        };
-
-        return buchModel;
-    }
 }
-/* eslint-enable max-lines */
