@@ -66,7 +66,7 @@ const number2Percent = ({ value }: { value: Decimal.Value | undefined }) => {
 
     // precision wie bei SQL beim Spaltentyp DECIMAL bzw. NUMERIC
     Decimal.set({ precision: 4 });
-    return new Decimal(value).div(100);
+    return new Decimal(value);
 };
 
 // https://github.com/typestack/class-validator?tab=readme-ov-file#custom-validation-classes
@@ -86,7 +86,7 @@ class DecimalMin implements ValidatorConstraintInterface {
 }
 
 // https://github.com/typestack/class-validator?tab=readme-ov-file#custom-validation-classes
-@ValidatorConstraint({ name: 'max', async: false })
+@ValidatorConstraint({ name: 'decimalMax', async: false })
 class DecimalMax implements ValidatorConstraintInterface {
     validate(value: Decimal | undefined, args: ValidationArguments) {
         if (value === undefined) {
@@ -135,7 +135,7 @@ export class BuchDtoOhneRef {
         message: 'rabatt muss positiv sein.',
     })
     @Validate(DecimalMax, [new Decimal(1)], {
-        message: 'rabatt muss kleiner 100 sein.',
+        message: 'rabatt muss kleiner 1 sein.',
     })
     @IsOptional()
     @ApiProperty({ example: 0.1, type: Number })

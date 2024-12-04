@@ -82,7 +82,6 @@ export class BuchQueryResolver {
         // "Nullish Coalescing" ab ES2020
         const rabatt = buch.rabatt ?? new Decimal(0);
         const shortStr = short === undefined || short ? '%' : 'Prozent';
-        // eslint-disable-next-line @typescript-eslint/no-magic-numbers
-        return `${rabatt.times(100).toString()} ${shortStr}`;
+        return `${rabatt.toString()} ${shortStr}`;
     }
 }
