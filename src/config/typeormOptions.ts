@@ -35,16 +35,18 @@ const { db } = config;
 
 if (db !== undefined) {
     if (db.name !== undefined && typeof db.name !== 'string') {
-        throw new TypeError('Der konfigurierte DB-Name ist kein String');
-    }
-    if (db.host !== undefined && typeof db.host !== 'number') {
         throw new TypeError(
-            'Der konfigurierte Rechnername für den DB-Server ist kein String',
+            `Der konfigurierte DB-Name ist kein String: ${db.name}`,
+        );
+    }
+    if (db.host !== undefined && typeof db.host !== 'string') {
+        throw new TypeError(
+            `Der konfigurierte Rechnername für den DB-Server ist kein String: ${db.host}`,
         );
     }
     if (db.username !== undefined && typeof db.username !== 'string') {
         throw new TypeError(
-            'Der konfigurierte username für die DB ist kein String',
+            `Der konfigurierte username für die DB ist kein String: ${db.username}`,
         );
     }
     if (db.password !== undefined && typeof db.password !== 'string') {
