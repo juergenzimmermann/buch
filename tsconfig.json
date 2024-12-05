@@ -7,14 +7,14 @@
   "extends": ["@tsconfig/node23/tsconfig"],
   "ts-node": {
     "esm": true,
-    "module": "ES2024",
+    "module": "es2024",
     // "experimentalSpecifierResolution": "node"
     // "transpileOnly": true,
     // "files": true,
   },
   //"include": ["src/**/*", "tsconfig.cjs"],
   "compilerOptions": {
-    "lib": ["ES2024"],
+    "lib": ["es2023"],
     // uebersetzter JS-Code im Hinblick auf Module. "NodeNext" erfordert dasselbe fuer "moduleResolution"
     // "module": "NodeNext", // entspricht "Node16"
     "module": "es2022",
@@ -28,7 +28,7 @@
     "experimentalDecorators": true,
     "allowSyntheticDefaultImports": true,
     // https://www.typescriptlang.org/tsconfig/#target
-    "target": "ES2024",
+    "target": "es2022",
     "sourceMap": true,
     "outDir": "./dist",
     "incremental": true,
