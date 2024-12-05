@@ -4,17 +4,17 @@
   // https://stackoverflow.com/questions/63742790/unable-to-import-esm-ts-module-in-node/65163089#65163089
   // NICHT "strictest" wegen "experimentalDecorators"
   // "extends": ["@tsconfig/strictest/tsconfig", "@tsconfig/node22/tsconfig"],
-  "extends": ["@tsconfig/node22/tsconfig"],
+  "extends": ["@tsconfig/node23/tsconfig"],
   "ts-node": {
     "esm": true,
-    "module": "es2022",
+    "module": "ES2024",
     // "experimentalSpecifierResolution": "node"
     // "transpileOnly": true,
     // "files": true,
   },
   //"include": ["src/**/*", "tsconfig.cjs"],
   "compilerOptions": {
-    "lib": ["es2023"],
+    "lib": ["ES2024"],
     // uebersetzter JS-Code im Hinblick auf Module. "NodeNext" erfordert dasselbe fuer "moduleResolution"
     // "module": "NodeNext", // entspricht "Node16"
     "module": "es2022",
@@ -28,7 +28,7 @@
     "experimentalDecorators": true,
     "allowSyntheticDefaultImports": true,
     // https://www.typescriptlang.org/tsconfig/#target
-    "target": "es2022",
+    "target": "ES2024",
     "sourceMap": true,
     "outDir": "./dist",
     "incremental": true,
