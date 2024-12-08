@@ -53,6 +53,7 @@ const setupSwagger = (app: INestApplication) => {
 // Promise ab ES 2015, vgl: Future in Java
 // async/await ab ES 2017, vgl: C#
 const bootstrap = async () => {
+    // https://expressjs.com/en/advanced/best-practice-security.html#use-tls
     const app = await NestFactory.create(AppModule, { httpsOptions }); // "Shorthand Properties" ab ES 2015
 
     // Beispiele fuer "Middleware" bei Express:
@@ -65,6 +66,7 @@ const bootstrap = async () => {
     //  * Filter (Interceptoren) und
     //  * Chain of Responsibility
 
+    // https://expressjs.com/en/advanced/best-practice-security.html#use-helmet
     // https://docs.nestjs.com/security/helmet
     // compression von Express fuer GZip-Komprimierung
     // Default "Chunk Size" ist 16 KB: https://github.com/expressjs/compression#chunksize

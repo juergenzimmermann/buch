@@ -32,6 +32,7 @@ import {
 /**
  * Security-Funktionen für z.B. CSP, XSS, Click-Jacking, HSTS und MIME-Sniffing.
  */
+// https://expressjs.com/en/advanced/best-practice-security.html#use-helmet
 // https://blog.appcanary.com/2017/http-security-headers.html
 export const helmetHandlers = [
     // CSP = Content Security Policy
