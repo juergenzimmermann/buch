@@ -55,6 +55,16 @@ const setupSwagger = (app: INestApplication) => {
 const bootstrap = async () => {
     const app = await NestFactory.create(AppModule, { httpsOptions }); // "Shorthand Properties" ab ES 2015
 
+    // Beispiele fuer "Middleware" bei Express:
+    //  * Authentifizierung und Autorisierung
+    //  * CSP (= Content Security Policy), XSS (= Cross-site scripting attacks) Protection ... durch Helmet
+    //  * (De-) Komprimierung durch GZip oder Brotli
+    //  * Logging, z.B. von Requests
+    //  * Rumpf bei POST- und PUT-Requests einlesen
+    // d.h. "Middleware" ist eine Variation der Patterns
+    //  * Filter (Interceptoren) und
+    //  * Chain of Responsibility
+
     // https://docs.nestjs.com/security/helmet
     // compression von Express fuer GZip-Komprimierung
     // Default "Chunk Size" ist 16 KB: https://github.com/expressjs/compression#chunksize
