@@ -32,12 +32,12 @@
 
 # ARG: "build-time" Variable
 # ENV: "build-time" und "runtime" Variable
-ARG NODE_VERSION=23.3.0
+ARG NODE_VERSION=23.4.0
 
 # ---------------------------------------------------------------------------------------
 # S t a g e   d i s t
 # ---------------------------------------------------------------------------------------
-FROM node:${NODE_VERSION}-alpine3.20 AS dist
+FROM node:${NODE_VERSION}-alpine3.21 AS dist
 
 # ggf. Python fuer Argon2
 ENV PYTHONUNBUFFERED=1

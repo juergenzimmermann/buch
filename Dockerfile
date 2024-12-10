@@ -32,7 +32,7 @@
 
 # ARG: "build-time" Variable
 # ENV: "build-time" und "runtime" Variable
-ARG NODE_VERSION=23.3.0
+ARG NODE_VERSION=23.4.0
 
 # ---------------------------------------------------------------------------------------
 # S t a g e   d i s t
