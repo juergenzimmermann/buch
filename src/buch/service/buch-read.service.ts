@@ -184,7 +184,9 @@ export class BuchReadService {
             if (
                 !this.#buchProps.includes(key) &&
                 key !== 'javascript' &&
-                key !== 'typescript'
+                key !== 'typescript' &&
+                key !== 'java' &&
+                key !== 'python'
             ) {
                 this.#logger.debug(
                     '#checkKeys: ungueltiges Suchkriterium "%s"',
