@@ -1,4 +1,4 @@
-# syntax=docker/dockerfile:1.12.0
+# syntax=docker/dockerfile:1.12.1
 
 # Copyright (C) 2022 - present Juergen Zimmermann, Hochschule Karlsruhe
 #
@@ -25,7 +25,7 @@
 # https://www.jenkins.io/doc/tutorials/build-a-node-js-and-react-app-with-npm
 # https://www.jenkins.io/doc/book/installing/docker
 # https://manpages.debian.org/bullseye/apt/apt-get.8.en.html
-ARG JENKINS_VERSION=2.489-jdk21
+ARG JENKINS_VERSION=2.490-jdk21
 
 FROM jenkins/jenkins:${JENKINS_VERSION}
 
