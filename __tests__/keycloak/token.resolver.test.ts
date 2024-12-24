@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 // Copyright (C) 2021 - present Juergen Zimmermann, Hochschule Karlsruhe
 //
 // This program is free software: you can redistribute it and/or modify
@@ -13,13 +14,10 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
-
 import { afterAll, beforeAll, describe, expect, test } from '@jest/globals';
 import { HttpStatus } from '@nestjs/common';
 import axios, { type AxiosInstance, type AxiosResponse } from 'axios';
-import { type GraphQLQuery } from '../buch/buch-mutation.resolver.test.js';
-import { type GraphQLResponseBody } from '../buch/buch-query.resolver.test.js';
+import { type GraphQLQuery, type GraphQLResponseBody } from '../graphql.js';
 import {
     host,
     httpsAgent,
@@ -54,6 +52,7 @@ describe('Token', () => {
     test('Token', async () => {
         // given
         const username = 'admin';
+        // eslint-disable-next-line sonarjs/no-hardcoded-passwords
         const password = 'p'; // NOSONAR
         const body: GraphQLQuery = {
             query: `
@@ -74,7 +73,6 @@ describe('Token', () => {
 
         // then
         expect(status).toBe(HttpStatus.OK);
-        // eslint-disable-next-line sonarjs/no-duplicate-string
         expect(headers['content-type']).toMatch(/json/iu);
         expect(data.errors).toBeUndefined();
         expect(data.data).not.toBeNull();
@@ -90,7 +88,7 @@ describe('Token', () => {
         expect(access_token).toBeDefined();
         expect(access_token).not.toBeNull();
 
-        const tokenParts = access_token.split('.'); // eslint-disable-line @typescript-eslint/no-unsafe-call, camelcase
+        const tokenParts = access_token.split('.'); // eslint-disable-line camelcase
 
         expect(tokenParts).toHaveLength(3); // eslint-disable-line @typescript-eslint/no-magic-numbers
         expect(access_token).toMatch(/^[a-z\d]+\.[a-z\d]+\.[\w-]+$/iu);
@@ -99,6 +97,7 @@ describe('Token', () => {
     test('Token mit falschem Passwort', async () => {
         // given
         const username = 'admin';
+        // eslint-disable-next-line sonarjs/no-hardcoded-passwords
         const password = 'FALSCH'; // NOSONAR
         const body: GraphQLQuery = {
             query: `
@@ -140,6 +139,7 @@ describe('Token', () => {
     test('Refresh', async () => {
         // given
         const username = 'admin';
+        // eslint-disable-next-line sonarjs/no-hardcoded-passwords
         const password = 'p'; // NOSONAR
         const tokenBody: GraphQLQuery = {
             query: `
@@ -189,10 +189,10 @@ describe('Token', () => {
         expect(access_token).toBeDefined();
         expect(access_token).not.toBeNull();
 
-        const tokenParts = access_token.split('.'); // eslint-disable-line @typescript-eslint/no-unsafe-call, camelcase
+        const tokenParts = access_token.split('.'); // eslint-disable-line camelcase
 
         expect(tokenParts).toHaveLength(3); // eslint-disable-line @typescript-eslint/no-magic-numbers
         expect(access_token).toMatch(/^[a-z\d]+\.[a-z\d]+\.[\w-]+$/iu);
     });
 });
-/* eslint-enable @typescript-eslint/no-unsafe-assignment */
+/* eslint-enable @typescript-eslint/no-non-null-assertion */

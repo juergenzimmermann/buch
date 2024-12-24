@@ -1,3 +1,4 @@
+/* eslint-disable max-lines,  @typescript-eslint/no-non-null-assertion */
 // Copyright (C) 2016 - present Juergen Zimmermann, Hochschule Karlsruhe
 //
 // This program is free software: you can redistribute it and/or modify
@@ -13,9 +14,6 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-/* eslint-disable max-lines, @typescript-eslint/no-unsafe-assignment */
-
-import { type GraphQLRequest } from '@apollo/server';
 import { afterAll, beforeAll, describe, expect, test } from '@jest/globals';
 import { HttpStatus } from '@nestjs/common';
 import axios, { type AxiosInstance, type AxiosResponse } from 'axios';
@@ -27,9 +25,7 @@ import {
     startServer,
 } from '../testserver.js';
 import { tokenGraphQL } from '../token.js';
-import { type GraphQLResponseBody } from './buch-query.resolver.test.js';
-
-export type GraphQLQuery = Pick<GraphQLRequest, 'query'>;
+import { type GraphQLQuery, type GraphQLResponseBody } from './graphql.js';
 
 // -----------------------------------------------------------------------------
 // T e s t d a t e n
@@ -100,7 +96,7 @@ describe('GraphQL Mutations', () => {
 
         // then
         expect(status).toBe(HttpStatus.OK);
-        expect(headers['content-type']).toMatch(/json/iu); // eslint-disable-line sonarjs/no-duplicate-string
+        expect(headers['content-type']).toMatch(/json/iu);
         expect(data.data).toBeDefined();
 
         const { create } = data.data!;
@@ -399,4 +395,4 @@ describe('GraphQL Mutations', () => {
         expect(data.data.delete).toBeNull();
     });
 });
-/* eslint-enable max-lines, @typescript-eslint/no-unsafe-assignment */
+/* eslint-enable max-lines, @typescript-eslint/no-non-null-assertion */

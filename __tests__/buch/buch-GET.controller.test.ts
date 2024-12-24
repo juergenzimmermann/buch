@@ -66,7 +66,7 @@ describe('GET /rest', () => {
 
         // then
         expect(status).toBe(HttpStatus.OK);
-        expect(headers['content-type']).toMatch(/json/iu); // eslint-disable-line sonarjs/no-duplicate-string
+        expect(headers['content-type']).toMatch(/json/iu);
         expect(data).toBeDefined();
 
         data.map((buch) => buch.id).forEach((id) => {

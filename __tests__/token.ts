@@ -14,8 +14,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 import { type AxiosInstance, type AxiosResponse } from 'axios';
-import { type GraphQLQuery } from './buch/buch-mutation.resolver.test.js';
-import { type GraphQLResponseBody } from './buch/buch-query.resolver.test.js';
+import { type GraphQLQuery, type GraphQLResponseBody } from './graphql.js';
 import { httpsAgent, tokenPath } from './testserver.js';
 
 type TokenResult = {
@@ -24,6 +23,7 @@ type TokenResult = {
 };
 
 const usernameDefault = 'admin';
+// eslint-disable-next-line sonarjs/no-hardcoded-passwords
 const passwordDefault = 'p'; // NOSONAR
 
 export const tokenRest = async (
@@ -63,6 +63,6 @@ export const tokenGraphQL = async (
     const response: AxiosResponse<GraphQLResponseBody> =
         await axiosInstance.post('graphql', body, { httpsAgent });
 
-    const data = response.data.data!;
-    return data.token.access_token; // eslint-disable-line @typescript-eslint/no-unsafe-return
+    const data = response.data.data!; // eslint-disable-line @typescript-eslint/no-non-null-assertion
+    return data.token.access_token;
 };

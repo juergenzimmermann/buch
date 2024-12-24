@@ -178,7 +178,6 @@ describe('PUT /rest/:id', () => {
         // then
         expect(status).toBe(HttpStatus.UNPROCESSABLE_ENTITY);
 
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
         const messages: string[] = data.message;
 
         expect(messages).toBeDefined();

@@ -1,3 +1,4 @@
+/* eslint-disable max-lines, @typescript-eslint/no-non-null-assertion */
 // Copyright (C) 2016 - present Juergen Zimmermann, Hochschule Karlsruhe
 //
 // This program is free software: you can redistribute it and/or modify
@@ -13,15 +14,12 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-/* eslint-disable max-lines */
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
-
 import { type GraphQLRequest } from '@apollo/server';
 import { afterAll, beforeAll, describe, expect, test } from '@jest/globals';
 import { HttpStatus } from '@nestjs/common';
 import axios, { type AxiosInstance, type AxiosResponse } from 'axios';
-import { type GraphQLFormattedError } from 'graphql';
 import { type Buch, type BuchArt } from '../../src/buch/entity/buch.entity.js';
+import { type GraphQLResponseBody } from '../graphql.js';
 import {
     host,
     httpsAgent,
@@ -29,11 +27,6 @@ import {
     shutdownServer,
     startServer,
 } from '../testserver.js';
-
-export type GraphQLResponseBody = {
-    data?: Record<string, any> | null;
-    errors?: readonly [GraphQLFormattedError];
-};
 
 type BuchDTO = Omit<
     Buch,
@@ -112,7 +105,7 @@ describe('GraphQL Queries', () => {
 
         // then
         expect(status).toBe(HttpStatus.OK);
-        expect(headers['content-type']).toMatch(/json/iu); // eslint-disable-line sonarjs/no-duplicate-string
+        expect(headers['content-type']).toMatch(/json/iu);
         expect(data.errors).toBeUndefined();
         expect(data.data).toBeDefined();
 
@@ -533,5 +526,4 @@ describe('GraphQL Queries', () => {
     });
 });
 
-/* eslint-enable @typescript-eslint/no-unsafe-assignment */
-/* eslint-enable max-lines */
+/* eslint-enable max-lines, , @typescript-eslint/no-non-null-assertion */

@@ -1,11 +1,11 @@
 {
-  "csv-preview.separator": "\\;",
   "files.eol": "\n",
   "files.associations": {
     "*.csv": "csv (semicolon)"
   },
   "material-icon-theme.activeIconPack": "nest",
   "typescript.tsdk": "node_modules/typescript/lib",
+  "eslint.useFlatConfig": true,
   "workbench.colorCustomizations": {
     "activityBar.activeBackground": "#2f7c47",
     "activityBar.background": "#2f7c47",
@@ -26,5 +26,5 @@
     "titleBar.inactiveForeground": "#e7e7e799"
   },
   "peacock.color": "#215732",
-  "asciidoc.antora.enableAntoraSupport": false
+  "asciidoc.antora.showEnableAntoraPrompt": false
 }

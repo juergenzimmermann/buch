@@ -38,7 +38,6 @@ export const { host, port } = nodeConfig;
 
 const { httpsOptions } = nodeConfig;
 
-// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
 const dbPort: number = (typeOrmModuleOptions as any).port;
 // Verzeichnis mit compose.yml ausgehend vom Wurzelverzeichnis
 const dockerComposeDir = path.join('.extras', 'compose');

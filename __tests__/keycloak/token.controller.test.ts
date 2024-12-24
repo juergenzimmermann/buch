@@ -30,8 +30,10 @@ import {
 // T e s t d a t e n
 // -----------------------------------------------------------------------------
 const username = 'admin';
+/* eslint-disable sonarjs/no-hardcoded-passwords */
 const password = 'p'; // NOSONAR
 const passwordFalsch = 'FALSCHES_PASSWORT !!!'; // NOSONAR
+/* eslint-enable sonarjs/no-hardcoded-passwords */
 
 // -----------------------------------------------------------------------------
 // T e s t s
