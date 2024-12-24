@@ -63,7 +63,6 @@ export default tseslint.config(
             },
             globals: {
                 ...globals.node,
-                ...jest.environments.globals.globals,
             },
         },
 
@@ -507,7 +506,29 @@ export default tseslint.config(
             '@stylistic/operator-linebreak': 'off',
             '@stylistic/quote-props': ['error', 'as-needed'],
             '@stylistic/semi': ['error', 'always'],
+        },
+    },
+    {
+        files: ['__tests__/**/*.ts'],
 
+        extends: [jest.configs['flat/recommended'], jest.configs['flat/style']],
+
+        languageOptions: {
+            ecmaVersion: 2024,
+            sourceType: 'module',
+            parserOptions: {
+                project: true,
+                ecmaFeatures: {
+                    impliedStrict: true,
+                },
+            },
+            globals: {
+                ...globals.node,
+                ...jest.environments.globals.globals,
+            },
+        },
+
+        rules: {
             // https://github.com/jest-community/eslint-plugin-jest/blob/main/src/index.ts
             'jest/consistent-test-it': [
                 'error',
@@ -516,11 +537,9 @@ export default tseslint.config(
                     withinDescribe: 'test',
                 },
             ],
-            // 'jest/no-conditional-expect': 'off',
             'jest/no-conditional-in-test': 'error',
             'jest/no-duplicate-hooks': 'error',
             'jest/no-restricted-matchers': 'error',
-            // 'jest/no-standalone-expect': 'off',
             'jest/no-test-return-statement': 'error',
             'jest/prefer-comparison-matcher': 'error',
             'jest/prefer-equality-matcher': 'error',
@@ -531,7 +550,6 @@ export default tseslint.config(
             'jest/prefer-snapshot-hint': 'error',
             'jest/prefer-todo': 'error',
             'jest/require-top-level-describe': 'error',
-            // 'jest/valid-expect': 'off',
         },
     },
 
