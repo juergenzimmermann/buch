@@ -64,5 +64,5 @@ export const tokenGraphQL = async (
         await axiosInstance.post('graphql', body, { httpsAgent });
 
     const data = response.data.data!; // eslint-disable-line @typescript-eslint/no-non-null-assertion
-    return data.token.access_token;
+    return data.token.access_token as string;
 };

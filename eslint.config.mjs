@@ -26,7 +26,7 @@ export default tseslint.config(
             // https://eslint.org/docs/latest/rules
             // https://github.com/eslint/eslint/blob/main/packages/js/src/configs/eslint-recommended.js
             eslint.configs.recommended,
-            ...tseslint.configs.strict,
+            ...tseslint.configs.strictTypeChecked,
             ...tseslint.configs.stylistic,
             // https://github.com/sindresorhus/eslint-plugin-unicorn/blob/main/configs/recommended.js
             unicorn.configs['flat/recommended'],

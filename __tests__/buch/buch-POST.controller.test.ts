@@ -175,7 +175,7 @@ describe('POST /rest', () => {
 
         expect(status).toBe(HttpStatus.UNPROCESSABLE_ENTITY);
 
-        const messages: string[] = data.message;
+        const messages = data.message as string[];
 
         expect(messages).toBeDefined();
         expect(messages).toHaveLength(expectedMsg.length);

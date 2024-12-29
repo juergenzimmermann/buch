@@ -38,7 +38,7 @@ export const { host, port } = nodeConfig;
 
 const { httpsOptions } = nodeConfig;
 
-const dbPort: number = (typeOrmModuleOptions as any).port;
+const dbPort: number = (typeOrmModuleOptions as any).port as number;
 // Verzeichnis mit compose.yml ausgehend vom Wurzelverzeichnis
 const dockerComposeDir = path.join('.extras', 'compose');
 

@@ -78,7 +78,10 @@ describe('Token', () => {
         expect(data.data).not.toBeNull();
         expect(data.data!.token).not.toBeNull();
 
-        const { token } = data.data!;
+        const { token } = data.data! as {
+            // eslint-disable-next-line @typescript-eslint/naming-convention
+            token: { access_token: string };
+        };
 
         expect(token).toBeDefined();
         expect(token).not.toBeNull();
@@ -136,6 +139,7 @@ describe('Token', () => {
         expect(extensions!.code).toBe('BAD_USER_INPUT');
     });
 
+    // eslint-disable-next-line max-lines-per-function
     test('Refresh', async () => {
         // given
         const username = 'admin';
@@ -155,7 +159,10 @@ describe('Token', () => {
         };
         const tokenResponse: AxiosResponse<Record<string, any> | null> =
             await client.post(graphqlPath, tokenBody);
-        const { refresh_token } = tokenResponse.data!.data!.token; // eslint-disable-line camelcase, @typescript-eslint/naming-convention
+        // eslint-disable-next-line camelcase, @typescript-eslint/naming-convention
+        const { refresh_token } = tokenResponse.data!.data!.token as {
+            refresh_token: string; // eslint-disable-line @typescript-eslint/naming-convention
+        };
         const body: GraphQLQuery = {
             /* eslint-disable camelcase */
             query: `
@@ -179,7 +186,9 @@ describe('Token', () => {
         expect(data.data).not.toBeNull();
         expect(data.data!.token).not.toBeNull();
 
-        const { refresh } = data.data!;
+        const { refresh } =
+            // eslint-disable-next-line @typescript-eslint/naming-convention
+            data.data! as { refresh: { access_token: string } };
 
         expect(refresh).toBeDefined();
         expect(refresh).not.toBeNull();

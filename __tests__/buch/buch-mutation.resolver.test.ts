@@ -17,6 +17,7 @@
 import { afterAll, beforeAll, describe, expect, test } from '@jest/globals';
 import { HttpStatus } from '@nestjs/common';
 import axios, { type AxiosInstance, type AxiosResponse } from 'axios';
+import { type GraphQLQuery, type GraphQLResponseBody } from '../graphql.js';
 import {
     host,
     httpsAgent,
@@ -25,7 +26,6 @@ import {
     startServer,
 } from '../testserver.js';
 import { tokenGraphQL } from '../token.js';
-import { type GraphQLQuery, type GraphQLResponseBody } from './graphql.js';
 
 // -----------------------------------------------------------------------------
 // T e s t d a t e n
@@ -354,7 +354,7 @@ describe('GraphQL Mutations', () => {
         expect(headers['content-type']).toMatch(/json/iu);
         expect(data.errors).toBeUndefined();
 
-        const deleteMutation = data.data!.delete;
+        const deleteMutation = data.data!.delete as boolean;
 
         // Der Wert der Mutation ist true (falls geloescht wurde) oder false
         expect(deleteMutation).toBe(true);
@@ -388,7 +388,7 @@ describe('GraphQL Mutations', () => {
         expect(status).toBe(HttpStatus.OK);
         expect(headers['content-type']).toMatch(/json/iu);
 
-        const { errors } = data;
+        const { errors } = data as { errors: any[] };
 
         expect(errors[0].message).toBe('Forbidden resource');
         expect(errors[0].extensions.code).toBe('BAD_USER_INPUT');

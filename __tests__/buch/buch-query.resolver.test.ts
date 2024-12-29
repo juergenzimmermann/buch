@@ -109,12 +109,11 @@ describe('GraphQL Queries', () => {
         expect(data.errors).toBeUndefined();
         expect(data.data).toBeDefined();
 
-        const { buch } = data.data!;
-        const result: BuchDTO = buch;
+        const { buch } = data.data! as { buch: BuchDTO };
 
-        expect(result.titel?.titel).toMatch(/^\w/u);
-        expect(result.version).toBeGreaterThan(-1);
-        expect(result.id).toBeUndefined();
+        expect(buch.titel?.titel).toMatch(/^\w/u);
+        expect(buch.version).toBeGreaterThan(-1);
+        expect(buch.id).toBeUndefined();
     });
 
     test('Buch zu nicht-vorhandener ID', async () => {
@@ -180,18 +179,14 @@ describe('GraphQL Queries', () => {
         expect(status).toBe(HttpStatus.OK);
         expect(headers['content-type']).toMatch(/json/iu);
         expect(data.errors).toBeUndefined();
-
         expect(data.data).toBeDefined();
 
-        const { buecher } = data.data!;
+        const { buecher } = data.data! as { buecher: BuchDTO[] };
 
         expect(buecher).not.toHaveLength(0);
+        expect(buecher).toHaveLength(1);
 
-        const buecherArray: BuchDTO[] = buecher;
-
-        expect(buecherArray).toHaveLength(1);
-
-        const [buch] = buecherArray;
+        const [buch] = buecher;
 
         expect(buch!.titel?.titel).toBe(titelVorhanden);
     });
@@ -222,12 +217,11 @@ describe('GraphQL Queries', () => {
         expect(data.errors).toBeUndefined();
         expect(data.data).toBeDefined();
 
-        const { buecher } = data.data!;
+        const { buecher } = data.data! as { buecher: BuchDTO[] };
 
         expect(buecher).not.toHaveLength(0);
 
-        const buecherArray: BuchDTO[] = buecher;
-        buecherArray
+        buecher
             .map((buch) => buch.titel)
             .forEach((titel) =>
                 expect(titel?.titel.toLowerCase()).toEqual(
@@ -301,18 +295,14 @@ describe('GraphQL Queries', () => {
         expect(status).toBe(HttpStatus.OK);
         expect(headers['content-type']).toMatch(/json/iu);
         expect(data.errors).toBeUndefined();
-
         expect(data.data).toBeDefined();
 
-        const { buecher } = data.data!;
+        const { buecher } = data.data! as { buecher: BuchDTO[] };
 
         expect(buecher).not.toHaveLength(0);
+        expect(buecher).toHaveLength(1);
 
-        const buecherArray: BuchDTO[] = buecher;
-
-        expect(buecherArray).toHaveLength(1);
-
-        const [buch] = buecherArray;
+        const [buch] = buecher;
         const { isbn, titel } = buch!;
 
         expect(isbn).toBe(isbnVorhanden);
@@ -348,13 +338,11 @@ describe('GraphQL Queries', () => {
 
         expect(data.data).toBeDefined();
 
-        const { buecher } = data.data!;
+        const { buecher } = data.data! as { buecher: BuchDTO[] };
 
         expect(buecher).not.toHaveLength(0);
 
-        const buecherArray: BuchDTO[] = buecher;
-
-        buecherArray.forEach((buch) => {
+        buecher.forEach((buch) => {
             const { rating, titel } = buch;
 
             expect(rating).toBe(ratingVorhanden);
@@ -429,16 +417,13 @@ describe('GraphQL Queries', () => {
         expect(status).toBe(HttpStatus.OK);
         expect(headers['content-type']).toMatch(/json/iu);
         expect(data.errors).toBeUndefined();
-
         expect(data.data).toBeDefined();
 
-        const { buecher } = data.data!;
+        const { buecher } = data.data! as { buecher: BuchDTO[] };
 
         expect(buecher).not.toHaveLength(0);
 
-        const buecherArray: BuchDTO[] = buecher;
-
-        buecherArray.forEach((buch) => {
+        buecher.forEach((buch) => {
             const { art, titel } = buch;
 
             expect(art).toBe(buchArt);
@@ -508,16 +493,13 @@ describe('GraphQL Queries', () => {
         expect(status).toBe(HttpStatus.OK);
         expect(headers['content-type']).toMatch(/json/iu);
         expect(data.errors).toBeUndefined();
-
         expect(data.data).toBeDefined();
 
-        const { buecher } = data.data!;
+        const { buecher } = data.data! as { buecher: BuchDTO[] };
 
         expect(buecher).not.toHaveLength(0);
 
-        const buecherArray: BuchDTO[] = buecher;
-
-        buecherArray.forEach((buch) => {
+        buecher.forEach((buch) => {
             const { lieferbar, titel } = buch;
 
             expect(lieferbar).toBe(true);
