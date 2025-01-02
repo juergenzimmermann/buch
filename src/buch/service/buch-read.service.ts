@@ -82,7 +82,7 @@ export class BuchReadService {
      * @throws NotFoundException falls kein Buch mit der ID existiert
      */
     // https://2ality.com/2015/01/es6-destructuring.html#simulating-named-parameters-in-javascript
-    async findById({ id, mitAbbildungen = false }: FindByIdParams) {
+    async findById({ id, mitAbbildungen = false }: FindByIdParams): Promise<Readonly<Buch>> {
         this.#logger.debug('findById: id=%d', id);
 
         // https://typeorm.io/working-with-repository
@@ -119,7 +119,7 @@ export class BuchReadService {
      * @param buchId ID des zugehörigen Buchs.
      * @returns Binärdatei oder undefined als Promise.
      */
-    async findFileByBuchId(buchId: number) {
+    async findFileByBuchId(buchId: number): Promise<Readonly<BuchFile> | undefined> {
         this.#logger.debug('findFileByBuchId: buchId=%s', buchId);
         const buchFile = await this.#fileRepo
             .createQueryBuilder('buch_file')
@@ -140,7 +140,7 @@ export class BuchReadService {
      * @returns Ein JSON-Array mit den gefundenen Büchern.
      * @throws NotFoundException falls keine Bücher gefunden wurden.
      */
-    async find(suchkriterien?: Suchkriterien) {
+    async find(suchkriterien?: Suchkriterien): Promise<ReadonlyArray<Buch>> {
         this.#logger.debug('find: suchkriterien=%o', suchkriterien);
 
         // Keine Suchkriterien?

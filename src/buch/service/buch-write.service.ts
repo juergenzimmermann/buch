@@ -88,7 +88,7 @@ export class BuchWriteService {
      * @returns Die ID des neu angelegten Buches
      * @throws IsbnExists falls die ISBN-Nummer bereits existiert
      */
-    async create(buch: Buch): Promise<number> {
+    async create(buch: Buch) {
         this.#logger.debug('create: buch=%o', buch);
         await this.#validateCreate(buch);
 
@@ -112,7 +112,7 @@ export class BuchWriteService {
         data: Buffer,
         filename: string,
         mimetype: string,
-    ) {
+    ): Promise<Readonly<BuchFile>> {
         this.#logger.debug(
             'addFile: buchId: %d, filename:%s, mimetype: %s',
             buchId,
@@ -157,7 +157,7 @@ export class BuchWriteService {
      * @throws VersionOutdatedException falls die Versionsnummer veraltet ist
      */
     // https://2ality.com/2015/01/es6-destructuring.html#simulating-named-parameters-in-javascript
-    async update({ id, buch, version }: UpdateParams): Promise<number> {
+    async update({ id, buch, version }: UpdateParams) {
         this.#logger.debug(
             'update: id=%d, buch=%o, version=%s',
             id,
