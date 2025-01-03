@@ -28,7 +28,7 @@ urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 # https://docs.locust.io/en/stable/api.html#httpuser-class
 class BuchRequests(HttpUser):
-    """Lasttest für HTTP-Requests fuer Buch."""
+    """Lasttest für HTTP-Requests fuer Server Buch."""
 
     # https://docs.locust.io/en/stable/writing-a-locustfile.html#wait-time-attribute
     # https://docs.locust.io/en/stable/api.html#locust.User.wait_time
