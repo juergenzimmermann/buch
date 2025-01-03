@@ -1,0 +1,173 @@
+# Copyright (C) 2024 - present Juergen Zimmermann, Hochschule Karlsruhe
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program. If not, see <https://www.gnu.org/licenses/>.
+
+# venv aktivieren       .\.venv\Scripts\Activate.ps1
+# ggf.                  python -m pip install --upgrade pip
+#                       pip install --upgrade wheel setuptools
+# Installation          pip install --upgrade .[quality]
+# Aktuellere Releases   pip list --outdated
+
+[project]
+name = "locust-buch"
+version = "2025.04.1"
+description = "Beispiel mit locust"
+readme = "ReadMe.txt"
+requires-python = ">=3.13"
+# license = "GPL-3.0-or-later"
+keywords = ["Lasttest", "Python"]
+authors = [{ name = "Jürgen Zimmermann", email = "Juergen.Zimmermann@h-ka.de" }]
+maintainers = [
+  { name = "Jürgen Zimmermann", email = "Juergen.Zimmermann@h-ka.de" },
+]
+# https://pypi.org/classifiers
+classifiers = [
+  "Development Status :: 5 - Production/Stable",
+  "Environment :: Console",
+  "Intended Audience :: Developers",
+  "Intended Audience :: Information Technology",
+  "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
+  "Programming Language :: Python",
+  "Programming Language :: Python :: 3.13",
+  "Topic :: Software Development :: Testing",
+  "Topic :: Software Development :: Testing :: Traffic Generation",
+]
+
+dependencies = [
+  # https://locust.io
+  "locust == 2.32.4",
+]
+
+# https://peps.python.org/pep-0508/#extras
+# https://pip.pypa.io/en/stable/cli/pip_install
+[project.optional-dependencies]
+quality = [
+  # http://www.mypy-lang.org
+  "mypy == 1.13.0",
+  # https://github.com/PyCQA/pylint (Python Code Quality Authority)
+  "pylint == 3.3.2",
+  # https://github.com/PyCQA/flake8 (Wrapper um pyflakes)
+  # https://github.com/charliermarsh/ruff
+  "flake8 == 7.1.1",
+  # https://github.com/PyCQA/flake8-bugbear
+  "flake8-bugbear == 24.12.12",
+  # https://github.com/sco1/flake8-annotations
+  "flake8-annotations == 3.1.1",
+  # https://github.com/gforcada/flake8-builtins
+  "flake8-builtins == 2.5.0",
+  # https://github.com/adamchainz/flake8-comprehensions
+  "flake8-comprehensions == 3.16.0",
+  # https://github.com/PyCQA/flake8-docstrings
+  "flake8-docstrings == 1.7.0",
+  # https://github.com/adamchainz/flake8-logging
+  "flake8-logging == 1.7.0",
+  # https://pypi.org/project/Flake8-pyproject
+  # https://github.com/PyCQA/flake8/issues/234
+  "Flake8-pyproject == 1.2.3",
+  # https://pycqa.github.io/isort
+  "isort == 5.13.2",
+  # https://github.com/psf/black
+  "black == 24.10.0",
+  # http://www.pydocstyle.org
+  "pydocstyle[toml] == 6.3.0",
+  # https://github.com/dosisod/refurb
+  "refurb == 2.0.0",
+]
+
+[project.urls]
+homepage = "https://www.h-ka.de"
+documentation = "https://readthedocs.org"
+repository = "https://github.com"
+changelog = "https://github.com/juergenzimmermann/locust/blob/master/CHANGELOG.md"
+
+# https://mypy.readthedocs.io/en/stable/config_file.html
+[tool.mypy]
+python_version = "3.13"
+# https://docs.sqlalchemy.org/en/20/orm/extensions/mypy.html#installation
+# https://strawberry.rocks/docs/editors/mypy
+check_untyped_defs = true
+disallow_untyped_calls = true
+disallow_untyped_defs = true
+show_error_codes = true
+strict = true
+warn_redundant_casts = true
+warn_unused_ignores = true
+warn_return_any = true
+warn_unreachable = true
+warn_unused_configs = true
+# ohne Caching
+#incremental = "False"
+
+# https://github.com/microsoft/pyright/blob/main/docs/configuration.md#sample-pyprojecttoml-file
+[tool.pyright]
+pythonVersion = "3.13"
+include = ["src"]
+exclude = ["**/__pycache__"]
+
+# https://pylint.pycqa.org/en/latest/user_guide/configuration/all-options.html
+[tool.pylint.main]
+py-version = "3.13"
+argument-rgx = "^[a-z][a-z0-9_]*$"
+attr-rgx = "^[a-z][a-z0-9_]*$"
+confidence = []
+disable = [
+  "duplicate-code",
+  "fixme",
+  "invalid-name",
+  "missing-function-docstring",
+  "no-member",
+  "no-name-in-module",
+  "redefined-builtin",
+  "too-many-instance-attributes",
+  "wrong-import-order",
+]
+include-naming-hint = true
+jobs = 4
+#persistent = "False"
+
+[tool.pylint.format]
+expected-line-ending-format = "LF"
+indent-string = "    "
+max-line-length = 88
+
+[tool.pylint.string]
+check-quote-consistency = true
+
+[tool.pylint.variables]
+init-import = true
+
+# https://flake8.pycqa.org/en/latest/user/configuration.html
+# https://flake8.pycqa.org/en/latest/user/options.html#options-and-their-descriptions
+[tool.flake8]
+# https://black.readthedocs.io/en/stable/the_black_code_style/current_style.html#line-length
+max-line-length = 88
+# https://flake8.pycqa.org/en/latest/user/options.html#cmdoption-flake8-select
+select = ["C", "E", "F", "W", "B", "B902", "B903", "B904", "B950"]
+# https://flake8.pycqa.org/en/latest/user/options.html#cmdoption-flake8-extend-ignore
+extend-ignore = ["E203", "F821", "W503", "F722"]
+
+# https://pycqa.github.io/isort/docs/configuration/black_compatibility.html
+[tool.isort]
+profile = "black"
+py_version = 312
+
+# https://black.readthedocs.io/en/stable/usage_and_configuration/the_basics.html
+# https://black.readthedocs.io/en/stable/the_black_code_style/current_style.html#strings
+[tool.black]
+target-version = ["py313"]
+line-length = 88
+
+[tool.refurb]
+python_version = "3.13"
+enable_all = true
