@@ -11,14 +11,15 @@ Aufruf:
         Host: https://localhost:3000
 
 --------------------------------------------------------------------------------
-pyright locustfile.py
-mypy locustfile.py
-pylint locustfile.py
-flake8 locustfile.py
-isort locustfile.py
-black locustfile.py
-pydocstyle locustfile.py
-refurb locustfile.py
+Statische Codeanalyse und Formatierer:
+    pyright locustfile.py
+    mypy locustfile.py
+    pylint locustfile.py
+    flake8 locustfile.py
+    isort locustfile.py
+    black locustfile.py
+    pydocstyle locustfile.py
+    refurb locustfile.py
 
 --------------------------------------------------------------------------------
 Installation:
