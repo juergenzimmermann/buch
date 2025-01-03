@@ -61,7 +61,7 @@ class BuchRequests(HttpUser):
 
     @task(150)
     def get_isbn(self) -> None:
-        """GET-Requests mit Query-Parameter: Teilstring des ISBN-Nummer."""
+        """GET-Requests mit Query-Parameter: ISBN-Nummer."""
         isbn_list: Final = [
             "978-3-897-22583-1",
             "978-3-827-31552-6",
