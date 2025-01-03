@@ -1,5 +1,8 @@
 Aufruf:
     cd .extras\compose\buch
+    app.yml: auskommentieren
+        log.level
+        log.pretty
     docker compose up
 
     cd .extras\locust
