@@ -1,5 +1,5 @@
 Aufruf:
-    .extras\compose\buch
+    cd .extras\compose\buch
     docker compose up
 
     cd .extras\locust
