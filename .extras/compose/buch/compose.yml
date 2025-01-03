@@ -57,7 +57,7 @@ services:
         read_only: true
       - type: bind
         source: ../../../log
-        target: /opt/app/log
+        target: /tmp/log
         read_only: true
       - type: bind
         source: ../../../src/config/resources/tls/key.pem

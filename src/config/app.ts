@@ -29,6 +29,7 @@ export const BASEDIR = existsSync('src') ? 'src' : 'dist';
 export const RESOURCES_DIR = path.resolve(BASEDIR, 'config', 'resources');
 
 const configFile = path.resolve(RESOURCES_DIR, 'app.yml');
+console.debug(`configFile=${configFile}`);
 export const config = load(
     readFileSync(configFile, 'utf8'), // eslint-disable-line security/detect-non-literal-fs-filename
 ) as Record<string, any>;
