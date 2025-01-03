@@ -6,7 +6,7 @@ Aufruf:
     .\.venv\Scripts\Activate.ps1
     locust -f .\locustfile.py
     http://localhost:8089
-        Number of users: 50
+        Number of users: 100
         Ramp Up (users started/second): 5
         Host: https://localhost:3000
 
