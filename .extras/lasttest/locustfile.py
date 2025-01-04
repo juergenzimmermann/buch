@@ -19,7 +19,6 @@
 from typing import Final
 
 import urllib3
-
 from locust import HttpUser, constant_throughput, task
 
 # https://stackoverflow.com/questions/27981545/suppress-insecurerequestwarning-unverified-https-request-is-being-made-in-pytho#answer-44615889

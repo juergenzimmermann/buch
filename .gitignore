@@ -22,9 +22,9 @@ dependencies.svg
 .extras/compose/db/mysql/db_root_password.txt
 .extras/compose/db/postgres/db_password.txt
 .extras/locust/__pycache__
-.extras/locust/.venv
-.extras/locust/build
-.extras/locust/locust_buch.egg-info
+.extras/lasttest/.mypy_cache
+.extras/lasttest/.venv
+.extras/lasttest/__pycache__
 .extras/postman
 .extras/*.png
 .extras/*.jpeg
