@@ -21,8 +21,14 @@
 
 Inhalt
 
+- [Voraussetzungen](#voraussetzungen)
 - [Aufruf](#aufruf)
 - [Statische Codeanalyse und Formatierer](#statische-codeanalyse-und-formatierer)
+
+## Voraussetzungen
+
+- Python 3.13
+- uv als Package Manager
 
 ## Aufruf
 

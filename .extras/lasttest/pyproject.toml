@@ -13,6 +13,9 @@
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
+# Aufruf:   uv sync
+#           uv pip list --outdated
+
 # https://docs.astral.sh/uv/concepts/projects/init
 # https://docs.astral.sh/uv/configuration/files
 [project]
@@ -52,22 +55,22 @@ changelog = "https://github.com/juergenzimmermann/locust/blob/master/CHANGELOG.m
 # https://docs.astral.sh/uv/concepts/projects/dependencies/#dependency-groups
 [dependency-groups]
 # https://docs.astral.sh/uv/concepts/projects/dependencies/#development-dependencies
-dev = ["locust>=2.32.5"]
+dev = ["locust==2.32.5"]
 lint = [
-  "black>=24.10.0",
-  "flake8>=7.1.1",
-  "flake8-annotations>=3.1.1",
-  "flake8-bugbear>=24.12.12",
-  "flake8-builtins>=2.5.0",
-  "flake8-comprehensions>=3.16.0",
-  "flake8-docstrings>=1.7.0",
-  "flake8-logging>=1.7.0",
-  "flake8-pyproject>=1.2.3",
-  "isort>=5.13.2",
-  "mypy>=1.14.1",
-  "pydocstyle[toml]>=6.3.0",
-  "pylint>=3.3.3",
-  "refurb>=2.0.0",
+  "black==24.10.0",
+  "flake8==7.1.1",
+  "flake8-annotations==3.1.1",
+  "flake8-bugbear==24.12.12",
+  "flake8-builtins==2.5.0",
+  "flake8-comprehensions==3.16.0",
+  "flake8-docstrings==1.7.0",
+  "flake8-logging==1.7.0",
+  "flake8-pyproject==1.2.3",
+  "isort==5.13.2",
+  "mypy==1.14.1",
+  "pydocstyle[toml]==6.3.0",
+  "pylint==3.3.3",
+  "refurb==2.0.0",
 ]
 
 # https://mypy.readthedocs.io/en/stable/config_file.html
