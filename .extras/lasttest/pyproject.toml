@@ -20,10 +20,12 @@
 # https://docs.astral.sh/uv/configuration/files
 [project]
 name = "lasttest"
-version = "0.1.0"
-description = "2025.04.1"
+version = "2025.04.1"
+description = "Lasttest für buch"
 readme = "README.md"
 requires-python = ">=3.13"
+license = "GPLv3"
+license-files = ["LICENSE"]
 keywords = ["Lasttest", "Python"]
 authors = [
   { name = "Juergen Zimmermann", email = "Juergen.Zimmermann@h-ka.de" },

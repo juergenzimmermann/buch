@@ -419,7 +419,7 @@ wheels = [
 
 [[package]]
 name = "lasttest"
-version = "0.1.0"
+version = "2025.4.1"
 source = { virtual = "." }
 
 [package.dev-dependencies]
