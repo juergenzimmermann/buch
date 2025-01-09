@@ -24,10 +24,15 @@
 target "default" {
   tags = ["docker.io/juergenzimmermann/buch:2024.10.1-bookworm"]
   #dockerfile = "Dockerfile"
-  # context = "."
+  contexts = {
+    node = "docker-image://node:23.6.0-bookworm-slim"
+  }
 }
 
 target "alpine" {
   tags = ["docker.io/juergenzimmermann/buch:2024.10.1-alpine"]
   dockerfile = "Dockerfile.alpine"
+  contexts = {
+    node = "docker-image://node:23.6.0-alpine3.21"
+  }
 }

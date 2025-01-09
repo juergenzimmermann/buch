@@ -30,14 +30,10 @@
 # https://snyk.io/blog/10-best-practices-to-containerize-nodejs-web-applications-with-docker
 # https://cheatsheetseries.owasp.org/cheatsheets/NodeJS_Docker_Cheat_Sheet.html
 
-# ARG: "build-time" Variable
-# ENV: "build-time" und "runtime" Variable
-ARG NODE_VERSION=23.6.0
-
 # ---------------------------------------------------------------------------------------
 # S t a g e   d i s t
 # ---------------------------------------------------------------------------------------
-FROM node:${NODE_VERSION}-bookworm-slim AS dist
+FROM node AS dist
 
 # ggf. Python fuer Argon2
 # https://packages.debian.org/bookworm/python3.11-minimal
@@ -84,7 +80,7 @@ EOF
 # ------------------------------------------------------------------------------
 # S t a g e   d e p e n d e n c i e s
 # ------------------------------------------------------------------------------
-FROM node:${NODE_VERSION}-bookworm-slim AS dependencies
+FROM node AS dependencies
 
 RUN <<EOF
 set -eux
@@ -114,7 +110,7 @@ EOF
 # ------------------------------------------------------------------------------
 # S t a g e   f i n a l
 # ------------------------------------------------------------------------------
-FROM node:${NODE_VERSION}-bookworm-slim AS final
+FROM node AS final
 
 # Anzeige bei "docker inspect ..."
 # https://specs.opencontainers.org/image-spec/annotations
