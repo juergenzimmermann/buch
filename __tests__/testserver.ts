@@ -13,6 +13,8 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 
+import { Agent } from 'node:https';
+import path from 'node:path';
 import {
     HttpStatus,
     type INestApplication,
@@ -21,8 +23,6 @@ import {
 import { NestFactory } from '@nestjs/core';
 import { down, exec, upAll } from 'docker-compose';
 import isPortReachable from 'is-port-reachable';
-import { Agent } from 'node:https';
-import path from 'node:path';
 import { AppModule } from '../src/app.module.js';
 import { config } from '../src/config/app.js';
 import { dbType } from '../src/config/db.js';

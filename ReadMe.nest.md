@@ -569,6 +569,16 @@ folgendes npm-Skript ausgeführt:
     npm run eslint
 ```
 
+Mit dem _ESLint Config Inspector_ kann man inspizieren, welche
+
+- Plugins genutzt werden,
+- Regeln aktiviert sind,
+- aktivierten Regeln deprecated sind
+
+```powershell
+    npx @eslint/config-inspector@latest
+```
+
 ### SonarQube
 
 Für eine statische Codeanalyse durch _SonarQube_ muss zunächst der

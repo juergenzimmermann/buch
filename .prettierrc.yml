@@ -22,4 +22,3 @@ overrides:
   - files: ['*.ts', '*.mts', '*.js', '*.mjs', '*.cjs']
     options:
       tabWidth: 4
-plugins: [prettier-plugin-organize-imports]

@@ -17,7 +17,7 @@
 import { afterAll, beforeAll, describe, expect, test } from '@jest/globals';
 import { HttpStatus } from '@nestjs/common';
 import axios, { type AxiosInstance, type AxiosResponse } from 'axios';
-import Decimal from 'decimal.js'; // eslint-disable-line @typescript-eslint/naming-convention
+import { Decimal } from 'decimal.js';
 import { type BuchDTO } from '../../src/buch/controller/buchDTO.entity.js';
 import { BuchReadService } from '../../src/buch/service/buch-read.service.js';
 import {
