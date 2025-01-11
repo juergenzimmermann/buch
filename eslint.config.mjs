@@ -214,7 +214,6 @@ export default tseslint.config(
             'n/no-new-require': 'error',
             'n/no-path-concat': 'error',
             'n/no-process-env': 'error',
-            'n/no-process-exit': 'error',
             'n/no-sync': [
                 'error',
                 {
