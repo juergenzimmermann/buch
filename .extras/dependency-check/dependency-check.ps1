@@ -21,7 +21,7 @@
 
 Set-StrictMode -Version Latest
 
-$versionMinimum = [Version]'7.5.0'
+$versionMinimum = [Version]'7.6.0'
 $versionCurrent = $PSVersionTable.PSVersion
 if ($versionMinimum -gt $versionCurrent) {
   throw "PowerShell $versionMinimum statt $versionCurrent erforderlich"
