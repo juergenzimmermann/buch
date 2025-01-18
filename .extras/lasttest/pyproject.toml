@@ -15,6 +15,11 @@
 
 # Aufruf:   uv sync
 #           uv pip list --outdated
+#               .\.venv\Scripts\Activate.ps1
+#               pip list --outdated
+#
+#           uvx ruff check locustfile.py
+#           uvx ruff format locustfile.py [--diff]
 
 # https://docs.astral.sh/uv/concepts/projects/init
 # https://docs.astral.sh/uv/configuration/files
@@ -40,6 +45,7 @@ classifiers = [
   "Intended Audience :: Developers",
   "Intended Audience :: Information Technology",
   "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
+  "Operating System :: OS Independent",
   "Programming Language :: Python",
   "Programming Language :: Python :: 3.13",
   "Topic :: Software Development :: Testing",
@@ -57,101 +63,53 @@ changelog = "https://github.com/juergenzimmermann/locust/blob/master/CHANGELOG.m
 # https://docs.astral.sh/uv/concepts/projects/dependencies/#dependency-groups
 [dependency-groups]
 # https://docs.astral.sh/uv/concepts/projects/dependencies/#development-dependencies
-dev = ["locust==2.32.5"]
+dev = ["locust>=2.32.5"]
 lint = [
-  "black==24.10.0",
-  "flake8==7.1.1",
-  "flake8-annotations==3.1.1",
-  "flake8-bugbear==24.12.12",
-  "flake8-builtins==2.5.0",
-  "flake8-comprehensions==3.16.0",
-  "flake8-docstrings==1.7.0",
-  "flake8-logging==1.7.0",
-  "flake8-pyproject==1.2.3",
-  "isort==5.13.2",
-  "mypy==1.14.1",
-  "pydocstyle[toml]==6.3.0",
-  "pylint==3.3.3",
-  "refurb==2.0.0",
+  # https://docs.astral.sh/ruff
+  "ruff>=0.9.2",
 ]
 
-# https://mypy.readthedocs.io/en/stable/config_file.html
-[tool.mypy]
-python_version = "3.13"
-# https://docs.sqlalchemy.org/en/20/orm/extensions/mypy.html#installation
-# https://strawberry.rocks/docs/editors/mypy
-check_untyped_defs = true
-disallow_untyped_calls = true
-disallow_untyped_defs = true
-show_error_codes = true
-strict = true
-warn_redundant_casts = true
-warn_unused_ignores = true
-warn_return_any = true
-warn_unreachable = true
-warn_unused_configs = true
-# ohne Caching
-#incremental = "False"
+[tool.ruff]
+preview = true
+
+[tool.ruff.lint]
+# https://docs.astral.sh/ruff/rules
+select = [
+  "B",      # flake8-bugbear https://github.com/PyCQA/flake8-bugbear
+  "ASYNC",  # flake8-async https://github.com/python-trio/flake8-async
+  "S",      # flake8-bandit https://github.com/tylerwince/flake8-bandit Bandit>=1.7.1
+  "A",      # flake8-builtins https://github.com/gforcada/flake8-builtins
+  "COM",    # flake8-commas https://github.com/PyCQA/flake8-commas
+  "C4",     # flake8-comprehensions https://github.com/adamchainz/flake8-comprehensions
+  "ISC001", # flake8-implicit-str-concat https://github.com/flake8-implicit-str-concat/flake8-implicit-str-concat
+  "PIE",    # flake8-pie https://github.com/sbdchd/flake8-pie
+  "RET",    # flake8-return https://github.com/afonasev/flake8-return
+  "SIM",    # flake8-simplify https://github.com/MartinThoma/flake8-simplify
+  "I",      # isort https://github.com/PyCQA/isort
+  "N",      # pep8-naming https://github.com/PyCQA/pep8-naming
+  "PERF",   # Perflint https://github.com/tonybaloney/perflint
+  "E",      # pycodestyle https://github.com/pycqa/pycodestyle
+  "W",      # pycodestyle (warning)
+  "D",      # pydoclint https://github.com/jsh9/pydoclint
+  "F",      # Pyflakes https://github.com/PyCQA/pyflakes
+  "PL",     # Pylint https://pypi.org/project/pylint
+  "UP",     # pyupgrade https://github.com/asottile/pyupgrade
+  "FURB",   # refurb https://github.com/dosisod/refurb
+  "RUF",    # Ruff-specific rules https://docs.astral.sh/ruff/rules/#ruff-specific-rules-ruf
+]
+ignore = [
+  "D203",   # https://docs.astral.sh/ruff/rules/incorrect-blank-line-before-class
+  "D213",   # https://docs.astral.sh/ruff/rules/multi-line-summary-second-line
+  "RET503", # https://docs.astral.sh/ruff/rules/implicit-return
+  "RUF012",
+  "COM812", # https://docs.astral.sh/ruff/rules/missing-trailing-comma
+]
+
+[tool.ruff.lint.isort]
+case-sensitive = true
 
 # https://github.com/microsoft/pyright/blob/main/docs/configuration.md#sample-pyprojecttoml-file
 [tool.pyright]
 pythonVersion = "3.13"
 include = ["src"]
 exclude = ["**/__pycache__"]
-
-# https://pylint.pycqa.org/en/latest/user_guide/configuration/all-options.html
-[tool.pylint.main]
-py-version = "3.13"
-argument-rgx = "^[a-z][a-z0-9_]*$"
-attr-rgx = "^[a-z][a-z0-9_]*$"
-confidence = []
-disable = [
-  "duplicate-code",
-  "fixme",
-  "invalid-name",
-  "missing-function-docstring",
-  "no-member",
-  "no-name-in-module",
-  "redefined-builtin",
-  "too-many-instance-attributes",
-  "wrong-import-order",
-]
-include-naming-hint = true
-jobs = 4
-#persistent = "False"
-
-[tool.pylint.format]
-expected-line-ending-format = "LF"
-indent-string = "    "
-max-line-length = 88
-
-[tool.pylint.string]
-check-quote-consistency = true
-
-[tool.pylint.variables]
-init-import = true
-
-# https://flake8.pycqa.org/en/latest/user/configuration.html
-# https://flake8.pycqa.org/en/latest/user/options.html#options-and-their-descriptions
-[tool.flake8]
-# https://black.readthedocs.io/en/stable/the_black_code_style/current_style.html#line-length
-max-line-length = 88
-# https://flake8.pycqa.org/en/latest/user/options.html#cmdoption-flake8-select
-select = ["C", "E", "F", "W", "B", "B902", "B903", "B904", "B950"]
-# https://flake8.pycqa.org/en/latest/user/options.html#cmdoption-flake8-extend-ignore
-extend-ignore = ["E203", "F821", "W503", "F722"]
-
-# https://pycqa.github.io/isort/docs/configuration/black_compatibility.html
-[tool.isort]
-profile = "black"
-py_version = 312
-
-# https://black.readthedocs.io/en/stable/usage_and_configuration/the_basics.html
-# https://black.readthedocs.io/en/stable/the_black_code_style/current_style.html#strings
-[tool.black]
-target-version = ["py313"]
-line-length = 88
-
-[tool.refurb]
-python_version = "3.13"
-enable_all = true

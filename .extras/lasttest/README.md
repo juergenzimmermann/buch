@@ -62,13 +62,8 @@ Unter Verwendung von _uv_ mit _tools_:
 
 ```powershell
     cd .extras\lasttest
-    uv run mypy locustfile.py
-    uv run pylint locustfile.py
-    uv run flake8 locustfile.py
-    uv run isort locustfile.py
-    uv run black locustfile.py
-    uv run pydocstyle locustfile.py
-    uv run refurb locustfile.py
+    uvx ruff check locustfile.py
+    uvx ruff format locustfile.py
 ```
 
 Oder _pyright_ mit _venv_:
