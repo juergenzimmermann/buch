@@ -24,12 +24,12 @@
 services:
   db:
     # https://github.com/docker-library/mysql/blob/master/Dockerfile.oracle
-    image: mysql:9.1.0-oracle
+    image: mysql:9.2.0-oracle
     ports:
       - published: 3306
         target: 3306
     # /usr/sbin/mysqld --verbose --help
-    # https://dev.mysql.com/doc/refman/8.2/en/using-encrypted-connections.html
+    # https://dev.mysql.com/doc/refman/9.2/en/using-encrypted-connections.html
     # /etc/my.cnf
     # SHOW VARIABLES LIKE "ssl_key";
     # SHOW VARIABLES LIKE "ssl_cert";
