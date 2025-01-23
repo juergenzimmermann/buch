@@ -20,6 +20,7 @@
 #               ggf. --no-cache
 #           Get-Content Dockerfile | docker run --rm --interactive hadolint/hadolint:2.12.1-beta-debian
 #               Linux:   cat Dockerfile | docker run --rm --interactive hadolint/hadolint:2.12.1-beta-debian
+#           docker save juergenzimmermann/buch:2024.10.1-bookworm > buch.tar
 #           docker network ls
 
 # https://docs.docker.com/engine/reference/builder/#syntax
