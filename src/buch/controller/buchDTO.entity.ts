@@ -56,7 +56,7 @@ const number2Decimal = ({ value }: { value: Decimal.Value | undefined }) => {
     // Decimal aus decimal.js analog zu BigDecimal von Java
     // precision wie bei SQL beim Spaltentyp DECIMAL bzw. NUMERIC
     Decimal.set({ precision: 6 });
-    return new Decimal(value);
+    return Decimal(value);
 };
 
 const number2Percent = ({ value }: { value: Decimal.Value | undefined }) => {
@@ -66,7 +66,7 @@ const number2Percent = ({ value }: { value: Decimal.Value | undefined }) => {
 
     // precision wie bei SQL beim Spaltentyp DECIMAL bzw. NUMERIC
     Decimal.set({ precision: 4 });
-    return new Decimal(value);
+    return Decimal(value);
 };
 
 // https://github.com/typestack/class-validator?tab=readme-ov-file#custom-validation-classes
@@ -123,7 +123,7 @@ export class BuchDtoOhneRef {
 
     // https://github.com/typestack/class-transformer?tab=readme-ov-file#basic-usage
     @Transform(number2Decimal)
-    @Validate(DecimalMin, [new Decimal(0)], {
+    @Validate(DecimalMin, [Decimal(0)], {
         message: 'preis muss positiv sein.',
     })
     @ApiProperty({ example: 1, type: Number })
@@ -131,10 +131,10 @@ export class BuchDtoOhneRef {
     readonly preis!: Decimal;
 
     @Transform(number2Percent)
-    @Validate(DecimalMin, [new Decimal(0)], {
+    @Validate(DecimalMin, [Decimal(0)], {
         message: 'rabatt muss positiv sein.',
     })
-    @Validate(DecimalMax, [new Decimal(1)], {
+    @Validate(DecimalMax, [Decimal(1)], {
         message: 'rabatt muss kleiner 1 sein.',
     })
     @IsOptional()

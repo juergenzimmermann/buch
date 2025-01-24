@@ -37,6 +37,6 @@ export class DecimalTransformer implements ValueTransformer {
      * Transformation beim Lesen aus der DB
      */
     from(decimal?: string): Decimal | undefined {
-        return decimal === undefined ? undefined : new Decimal(decimal);
+        return decimal === undefined ? undefined : Decimal(decimal);
     }
 }

@@ -80,7 +80,7 @@ export class BuchQueryResolver {
             );
         }
         // "Nullish Coalescing" ab ES2020
-        const rabatt = buch.rabatt ?? new Decimal(0);
+        const rabatt = buch.rabatt ?? Decimal(0);
         const shortStr = short === undefined || short ? '%' : 'Prozent';
         return `${rabatt.toString()} ${shortStr}`;
     }
