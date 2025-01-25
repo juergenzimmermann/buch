@@ -16,6 +16,7 @@
 import { afterAll, beforeAll, describe, expect, test } from '@jest/globals';
 import { HttpStatus } from '@nestjs/common';
 import axios, { type AxiosInstance, type AxiosResponse } from 'axios';
+import { Decimal } from 'decimal.js';
 import { type Buch } from '../../src/buch/entity/buch.entity.js';
 import {
     host,
@@ -31,6 +32,8 @@ import { type ErrorResponse } from './error-response.js';
 // -----------------------------------------------------------------------------
 const titelVorhanden = 'a';
 const titelNichtVorhanden = 'xx';
+const ratingMin = 3;
+const preisMax = 33.5;
 const schlagwortVorhanden = 'javascript';
 const schlagwortNichtVorhanden = 'csharp';
 
@@ -112,6 +115,44 @@ describe('GET /rest', () => {
 
         expect(error).toBe('Not Found');
         expect(statusCode).toBe(HttpStatus.NOT_FOUND);
+    });
+
+    test('Buecher mit Mindest-"rating" suchen', async () => {
+        // given
+        const params = { rating: ratingMin };
+
+        // when
+        const { status, headers, data }: AxiosResponse<Buch[]> =
+            await client.get('/', { params });
+
+        // then
+        expect(status).toBe(HttpStatus.OK);
+        expect(headers['content-type']).toMatch(/json/iu);
+        expect(data).toBeDefined();
+
+        // Jedes Buch hat einen Titel mit dem Teilstring 'a'
+        data.map((buch) => buch.rating).forEach((rating) =>
+            expect(rating).toBeGreaterThanOrEqual(ratingMin),
+        );
+    });
+
+    test('Buecher mit max. Preis suchen', async () => {
+        // given
+        const params = { preis: preisMax };
+
+        // when
+        const { status, headers, data }: AxiosResponse<Buch[]> =
+            await client.get('/', { params });
+
+        // then
+        expect(status).toBe(HttpStatus.OK);
+        expect(headers['content-type']).toMatch(/json/iu);
+        expect(data).toBeDefined();
+
+        // Jedes Buch hat einen Titel mit dem Teilstring 'a'
+        data.map((buch) => Decimal(buch.preis)).forEach((preis) =>
+            expect(preis.lessThanOrEqualTo(Decimal(preisMax))).toBeTruthy(),
+        );
     });
 
     test('Mind. 1 Buch mit vorhandenem Schlagwort', async () => {

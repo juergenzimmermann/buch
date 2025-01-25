@@ -46,7 +46,7 @@ const teilTitelNichtVorhanden = 'abc';
 
 const isbnVorhanden = '978-3-897-22583-1';
 
-const ratingVorhanden = 2;
+const ratingMin = 3;
 const ratingNichtVorhanden = 99;
 
 // -----------------------------------------------------------------------------
@@ -309,13 +309,13 @@ describe('GraphQL Queries', () => {
         expect(titel?.titel).toBeDefined();
     });
 
-    test('Buecher zu vorhandenem "rating"', async () => {
+    test('Buecher mit Mindest-"rating"', async () => {
         // given
         const body: GraphQLRequest = {
             query: `
                 {
                     buecher(suchkriterien: {
-                        rating: ${ratingVorhanden},
+                        rating: ${ratingMin},
                         titel: "${teilTitelVorhanden}"
                     }) {
                         rating
@@ -345,7 +345,7 @@ describe('GraphQL Queries', () => {
         buecher.forEach((buch) => {
             const { rating, titel } = buch;
 
-            expect(rating).toBe(ratingVorhanden);
+            expect(rating).toBeGreaterThanOrEqual(ratingMin);
             expect(titel?.titel.toLowerCase()).toEqual(
                 expect.stringContaining(teilTitelVorhanden),
             );

@@ -25,7 +25,7 @@ import { type BuchArt } from './../entity/buch.entity.js';
  */
 export type Suchkriterien = {
     readonly isbn?: string;
-    readonly rating?: number;
+    readonly rating?: number | string;
     readonly art?: BuchArt;
     readonly preis?: number;
     readonly rabatt?: number;

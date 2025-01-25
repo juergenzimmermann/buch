@@ -90,14 +90,18 @@ export class QueryBuilder {
 
     /**
      * Bücher asynchron suchen.
-     * @param suchkriterien JSON-Objekt mit Suchkriterien
+     * @param suchkriterien JSON-Objekt mit Suchkriterien. Bei "titel" wird mit
+     * einem Teilstring gesucht, bei "rating" mit einem Mindestwert, bei "preis"
+     * mit der Obergrenze.
      * @returns QueryBuilder
      */
-    // z.B. { titel: 'a', rating: 5, javascript: true }
+    // z.B. { titel: 'a', rating: 5, preis: 22.5, javascript: true }
     // "rest properties" fuer anfaengliche WHERE-Klausel: ab ES 2018 https://github.com/tc39/proposal-object-rest-spread
     // eslint-disable-next-line max-lines-per-function, prettier/prettier, sonarjs/cognitive-complexity
     build({ // NOSONAR
         titel,
+        rating,
+        preis,
         javascript,
         typescript,
         java,
@@ -105,8 +109,10 @@ export class QueryBuilder {
         ...restProps
     }: Suchkriterien) {
         this.#logger.debug(
-            'build: titel=%s, javascript=%s, typescript=%s, java=%s, python=%s, restProps=%o',
+            'build: titel=%s, rating=%s, preis=%s, javascript=%s, typescript=%s, java=%s, python=%s, restProps=%o',
             titel,
+            rating,
+            preis,
             javascript,
             typescript,
             java,
@@ -137,6 +143,22 @@ export class QueryBuilder {
             useWhere = false;
         }
 
+        if (rating !== undefined) {
+            const ratingNumber = typeof rating === 'string' ? parseInt(rating) : rating;
+            queryBuilder = queryBuilder.where(
+                `${this.#buchAlias}.rating >= ${ratingNumber}`,
+            );
+            useWhere = false;
+        }
+
+        if (preis !== undefined && typeof preis === 'string') {
+            const preisNumber = Number(preis);
+            queryBuilder = queryBuilder.where(
+                `${this.#buchAlias}.preis <= ${preisNumber}`,
+            );
+            useWhere = false;
+        }
+
         if (javascript === 'true') {
             queryBuilder = useWhere
                 ? queryBuilder.where(
@@ -159,14 +181,15 @@ export class QueryBuilder {
             useWhere = false;
         }
 
+        // Bei "JAVA" sollen Ergebnisse mit "JAVASCRIPT" _nicht_ angezeigt werden
         if (java === 'true') {
             queryBuilder = useWhere
                 ? queryBuilder.where(
-                      `${this.#buchAlias}.schlagwoerter like '%JAVA%'`,
-                  )
+                    `REPLACE(${this.#buchAlias}.schlagwoerter, 'JAVASCRIPT', '') like '%JAVA%'`,
+                )
                 : queryBuilder.andWhere(
-                      `${this.#buchAlias}.schlagwoerter like '%JAVA%'`,
-                  );
+                    `REPLACE(${this.#buchAlias}.schlagwoerter, 'JAVASCRIPT', '') like '%JAVA%'`,
+                );
             useWhere = false;
         }
 
