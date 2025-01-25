@@ -24,6 +24,7 @@ export const corsOptions: CorsOptions = {
         // React mit Vite und devserver
         'http://localhost:5.1.73',
         'https://localhost:3001',
+        'http://localhost:5173',
     ],
     // origin: true,
 
