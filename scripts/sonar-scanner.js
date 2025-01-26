@@ -35,7 +35,8 @@ scan(
             'sonar.token': sonarToken,
             'sonar.scm.disabled': 'true',
             'sonar.javascript.environments': 'node',
-            'sonar.exclusions': 'node_modules/**,.extras/**,.scannerwork/*,.vscode/*,coverage/**,dist/*,log/*',
+            'sonar.exclusions':
+                'node_modules/**,.extras/**,.scannerwork/*,.vscode/*,coverage/**,dist/*,log/*',
             'sonar.javascript.lcov.reportPaths': './coverage/lcov.info',
         },
     },
