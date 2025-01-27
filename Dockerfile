@@ -65,14 +65,13 @@ USER node
 
 WORKDIR /home/node
 
-COPY src ./src
-
 # https://docs.docker.com/engine/reference/builder/#run---mounttypebind
 RUN --mount=type=bind,source=package.json,target=package.json \
     --mount=type=bind,source=package-lock.json,target=package-lock.json \
     --mount=type=bind,source=nest-cli.json,target=nest-cli.json \
     --mount=type=bind,source=tsconfig.json,target=tsconfig.json \
     --mount=type=bind,source=tsconfig.build.json,target=tsconfig.build.json \
+    --mount=type=bind,source=src,target=src \
     --mount=type=cache,target=/root/.npm <<EOF
 set -eux
 # ci (= clean install) mit package-lock.json
@@ -143,6 +142,7 @@ WORKDIR /opt/app
 
 USER node
 
+# ADD hat mehr Funktionalitaet als COPY, z.B. auch Download von externen Dateien
 COPY --chown=node:node package.json .env ./
 COPY --from=dependencies --chown=node:node /home/node/node_modules ./node_modules
 COPY --from=dist --chown=node:node /home/node/dist ./dist
