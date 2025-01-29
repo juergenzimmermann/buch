@@ -202,10 +202,7 @@ export class BuchReadService {
     #checkEnums(suchkriterien: Suchkriterien) {
         const { art } = suchkriterien;
         this.#logger.debug('#checkEnums: Suchkriterium "art=%s"', art);
-        if (art === undefined) {
-            return true;
-        }
         // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-        return art === 'EPUB' || art === 'HARDCOVER' || art === 'PAPERBACK';
+        return art === undefined || art === 'EPUB' || art === 'HARDCOVER' || art === 'PAPERBACK';
     }
 }

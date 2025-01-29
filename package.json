@@ -124,7 +124,7 @@
     "@jest/types": "29.6.3",
     "@nestjs/cli": "11.0.2",
     "@nestjs/testing": "11.0.6",
-    "@stylistic/eslint-plugin": "3.0.0",
+    "@stylistic/eslint-plugin": "3.0.1",
     "@tsconfig/node23": "23.0.0",
     "@types/compression": "1.7.5",
     "@types/eslint__js": "8.42.3",
