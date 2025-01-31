@@ -63,15 +63,14 @@ services:
         target: /var/lib/mysql/ca.pem
         read_only: true
       - type: bind
+        source: C:/Zimmermann/volumes/mysql/tmp
+        target: /tmp
+      - type: bind
         source: C:/Zimmermann/volumes/mysql/csv/buch
-        # https://dev.mysql.com/doc/refman/8.2/en/server-system-variables.html#sysvar_secure_file_priv
+        # https://dev.mysql.com/doc/refman/9.2/en/server-system-variables.html#sysvar_secure_file_priv
         # /etc/my.cnf
         # SHOW VARIABLES LIKE "secure_file_priv";
         target: /var/lib/mysql-files
-      #- type: bind
-      #  source: ...
-      #  target: /etc/phpmyadmin/config.inc.php
-      #  read_only: true
       - type: bind
         source: C:/Zimmermann/volumes/mysql/sql
         target: /sql
@@ -101,10 +100,10 @@ services:
     deploy:
       resources:
         limits:
-          cpus: '2.0'
+          cpus: "2.0"
           memory: 2G
         reservations:
-          cpus: '1.0'
+          cpus: "1.0"
           memory: 512M
 
   # ----------------------------------------------------------------------------
@@ -117,12 +116,8 @@ services:
         target: 80
     volumes:
       - type: bind
-        source: C:/Zimmermann/volumes/mysql/tls/key.pem
-        target: /var/lib/mysql-tls/key.pem
-        read_only: true
-      - type: bind
-        source: C:/Zimmermann/volumes/mysql/tls/certificate.crt
-        target: /var/lib/mysql-tls/certificate.crt
+        source: C:/Zimmermann/volumes/mysql/phpmyadmin-etc
+        target: /etc/phpmyadmin
         read_only: true
     env_file: phpmyadmin.env
     # KEIN TLS https://blog.zotorn.de/phpmyadmin-docker-image-with-ssl-tls
@@ -138,10 +133,10 @@ services:
     deploy:
       resources:
         limits:
-          cpus: '0.5'
+          cpus: "0.5"
           memory: 768M
         reservations:
-          cpus: '0.5'
+          cpus: "0.5"
           memory: 768M
 
 secrets:

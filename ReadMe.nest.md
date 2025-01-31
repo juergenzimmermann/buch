@@ -468,11 +468,11 @@ validieren:
 ```powershell
     # Debian Bookworm (12) slim
     Get-Content Dockerfile | docker run --rm --interactive hadolint/hadolint:2.12.1-beta-debian
-    docker build --tag juergenzimmermann/buch:2024.10.1-bookworm .
+    docker build --tag juergenzimmermann/buch:2025.4.1-bookworm .
 
     # Alpine
     Get-Content Dockerfile.alpine | docker run --rm --interactive hadolint/hadolint:2.12.1-beta-debian
-    docker build --tag juergenzimmermann/buch:2024.10.1-alpine --file Dockerfile.alpine .
+    docker build --tag juergenzimmermann/buch:2025.4.1-alpine --file Dockerfile.alpine .
 ```
 
 Mit Docker_Bake_:
@@ -491,8 +491,8 @@ Mit dem Unterkommando `history` kann man ein Docker-Image und die einzelnen Laye
 inspizieren:
 
 ```powershell
-    docker history juergenzimmermann/buch:2024.10.1-bookworm
-    docker history juergenzimmermann/buch:2024.10.1-alpine
+    docker history juergenzimmermann/buch:2025.4.1-bookworm
+    docker history juergenzimmermann/buch:2025.4.1-alpine
 ```
 
 #### docker inspect
@@ -501,8 +501,8 @@ Mit dem Unterkommando `inspect` kann man die Metadaten, z.B. Labels, zu einem
 Image inspizieren:
 
 ```powershell
-    docker inspect juergenzimmermann/buch:2024.10.1-bookworm
-    docker inspect juergenzimmermann/buch:2024.10.1-alpine
+    docker inspect juergenzimmermann/buch:2025.4.1-bookworm
+    docker inspect juergenzimmermann/buch:2025.4.1-alpine
 ```
 
 #### docker sbom
@@ -512,8 +512,8 @@ inspizieren, welche Bestandteilen in einem Docker-Images enthalten sind, z.B.
 npm-Packages oder Debian-Packages.
 
 ```powershell
-    docker sbom juergenzimmermann/buch:2024.10.1-bookworm
-    docker sbom juergenzimmermann/buch:2024.10.1-alpine
+    docker sbom juergenzimmermann/buch:2025.4.1-bookworm
+    docker sbom juergenzimmermann/buch:2025.4.1-alpine
 ```
 
 ### Docker Compose
@@ -656,8 +656,8 @@ groben Überblick verschaffen, wieviele Sicherheitslücken in den Bibliotheken i
 Image enthalten sind:
 
 ```powershell
-    docker scout quickview juergenzimmermann/buch:2024.10.1-bookworm
-    docker scout quickview juergenzimmermann/buch:2024.10.1-alpine
+    docker scout quickview juergenzimmermann/buch:2025.4.1-bookworm
+    docker scout quickview juergenzimmermann/buch:2025.4.1-alpine
 ```
 
 Dabei bedeutet:
@@ -674,8 +674,8 @@ Die Details zu den CVE-Records im Image kann man durch das Unterkommando `cves`
 von _Scout_ auflisten:
 
 ```powershell
-    docker scout cves juergenzimmermann/buch:2024.10.1-bookworm
-    docker scout cves --format only-packages juergenzimmermann/buch:2024.10.1-bookworm
+    docker scout cves juergenzimmermann/buch:2025.4.1-bookworm
+    docker scout cves --format only-packages juergenzimmermann/buch:2025.4.1-bookworm
 ````
 
 Statt der Kommandozeile kann man auch den Menüpunkt "Docker Scout" im
@@ -762,7 +762,7 @@ wozu es die Datei `Dockerfile.jenkins` gibt, um ein solches Image zu erstellen:
     docker build bake
 ```
 
-Das neu gebaute Image `juergenzimmermann/jenkins:2024.10.1` wird in
+Das neu gebaute Image `juergenzimmermann/jenkins:2025.4.1` wird in
 `compose.yml` beim Service `jenkins` verwendet:
 
 ```powershell

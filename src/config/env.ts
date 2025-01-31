@@ -25,7 +25,7 @@ import process from 'node:process';
 // Umgebungsvariable aus .env einlesen
 dotenv.config();
 
-const { NODE_ENV, CLIENT_SECRET, LOG_LEVEL, START_DB_SERVER } = process.env; // eslint-disable-line n/no-process-env
+const { NODE_ENV, CLIENT_SECRET, LOG_LEVEL } = process.env; // eslint-disable-line n/no-process-env
 
 // "as const" fuer readonly
 // https://www.typescriptlang.org/docs/handbook/release-notes/typescript-3-4.html#const-assertions
@@ -43,7 +43,6 @@ export const env = {
     NODE_ENV,
     CLIENT_SECRET,
     LOG_LEVEL,
-    START_DB_SERVER,
 } as const;
 /* eslint-enable @typescript-eslint/naming-convention */
 

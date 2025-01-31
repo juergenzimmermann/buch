@@ -22,5 +22,5 @@
 # https://docs.docker.com/build/bake/reference
 
 target "default" {
-  tags = ["docker.io/juergenzimmermann/jenkins:2024.10.1"]
+  tags = ["docker.io/juergenzimmermann/jenkins:2025.4.1"]
 }

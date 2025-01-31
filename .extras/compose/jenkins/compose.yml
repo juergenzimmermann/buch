@@ -67,7 +67,7 @@ services:
           memory: 4G
 
   jenkins:
-    image: juergenzimmermann/jenkins:2024.10.1
+    image: juergenzimmermann/jenkins:2025.4.1
     restart: always
     ports:
       - published: 7070

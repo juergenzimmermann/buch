@@ -49,6 +49,18 @@
 --         mysql --user=root --password=p < /sql/create-db-buch.sql
 --         exit
 --     docker compose down
+-- (10) in extras\compose\mysql\compose.yml
+--         Beim Service "phpmyadmin" und dort beim Volume fur "phpmyadmin" die Zeile mit "read_only" auskommentieren
+-- (11) PowerShell:
+--      docker compose up
+-- (12) 2. PowerShell:
+--      docker compose exec phpmyadmin bash
+--         cd /etc/phpmyadmin
+--         chmod 644 config.*.php
+--         exit
+--      docker compose down
+-- (13) in extras\compose\mysql\compose.yml
+--         Beim Service "phpmyadmin" und dort beim Volume fur "phpmyadmin" den Kommentar bei "read_only" wieder entfernen
 
 -- https://dev.mysql.com/doc/refman/9.2/en/mysql.html
 --   mysqlsh ist *NICHT* im Docker-Image enthalten
