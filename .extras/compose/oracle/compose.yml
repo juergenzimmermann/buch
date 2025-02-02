@@ -66,10 +66,10 @@ services:
     deploy:
       resources:
         limits:
-          cpus: '2.0'
+          cpus: "2.0"
           # https://www.esolution.ca/oracle-database-xe-system-requirements
           # TODO https://github.com/gvenzl/oci-oracle-xe/issues/168
           memory: 2048M
         reservations:
-          cpus: '1.0'
+          cpus: "1.0"
           memory: 512M

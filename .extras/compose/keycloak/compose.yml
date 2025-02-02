@@ -62,8 +62,8 @@ services:
     user: keycloak:1000
     # https://www.keycloak.org/server/containers#_trying_keycloak_in_development_mode
     # --features=token-exchange
-    entrypoint: ['/opt/keycloak/bin/kc.sh', 'start-dev']
-    #entrypoint: ['/opt/keycloak/bin/kc.sh', 'start-dev', '--help']
+    entrypoint: ["/opt/keycloak/bin/kc.sh", "start-dev"]
+    #entrypoint: ["/opt/keycloak/bin/kc.sh", "start-dev", "--help"]
     cap_drop: [ALL]
     # https://www.keycloak.org/server/health
     # http://localhost:8880/health/ready
@@ -71,7 +71,7 @@ services:
       # https://www.reddit.com/r/KeyCloak/comments/14a5a1y/how_to_enable_healthcheck_on_keycloak_on/
       test:
         [
-          'CMD-SHELL',
+          "CMD-SHELL",
           "exec 3<>/dev/tcp/localhost/8080 && echo -e 'GET /health/ready HTTP/1.1\\r\\nHost: localhost\\r\\nConnection: close\\r\\n\\r\\n' >&3 && cat <&3 | grep -q '200 OK'",
         ]
       interval: 30s
@@ -82,8 +82,8 @@ services:
     deploy:
       resources:
         limits:
-          cpus: '2.0'
+          cpus: "2.0"
           memory: 4G
         reservations:
-          cpus: '2.0'
+          cpus: "2.0"
           memory: 2G

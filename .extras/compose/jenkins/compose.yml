@@ -60,10 +60,10 @@ services:
     deploy:
       resources:
         limits:
-          cpus: '2.0'
+          cpus: "2.0"
           memory: 4G
         reservations:
-          cpus: '1.0'
+          cpus: "1.0"
           memory: 4G
 
   jenkins:
@@ -85,17 +85,17 @@ services:
         target: /certs/client
         read_only: true
     env_file: .env
-    user: 'jenkins:jenkins'
+    user: "jenkins:jenkins"
     container_name: jenkins
     hostname: jenkins
     cap_drop: [ALL]
     deploy:
       resources:
         limits:
-          cpus: '2.0'
+          cpus: "2.0"
           memory: 4G
         reservations:
-          cpus: '1.0'
+          cpus: "1.0"
           memory: 4G
 
 networks:
