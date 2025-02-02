@@ -15,7 +15,7 @@
 
 ---
 ignores:
-  - '@types/*'
+  - "@types/*"
   - chai*
   # siehe scripts\init-resources.ts
   - copyfiles
