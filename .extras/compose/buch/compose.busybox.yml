@@ -22,10 +22,10 @@ services:
   busybox:
     image: busybox:1.36.1
     command:
-      ['sh', '-c', 'echo Container mit busybox ist gestartet! && sleep 3600']
+      ["sh", "-c", "echo Container mit busybox ist gestartet! && sleep 3600"]
     cap_drop: [ALL]
     deploy:
       resources:
         limits:
-          cpus: '0.5'
+          cpus: "0.5"
           memory: 768M
