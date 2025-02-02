@@ -75,10 +75,3 @@ mail:
   host: fakesmtp
   port: 8025
   log: false
-
-# ==============================================================================
-# Authentifizierung
-# ==============================================================================
-auth:
-  # https://github.com/docker/compose/issues/6741: '' wegen $
-  passwordEncoded: '$argon2i$v=19$m=4096,t=3,p=1$aaxA2v/9rRSPGkwYN+NQog$27Huii1XtD3iEd62fog+04G26LRPZMHoYCI6AGKTL8M'
