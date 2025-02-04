@@ -17,6 +17,7 @@
 
 import { Injectable } from '@nestjs/common';
 import axios, {
+    AxiosError,
     type AxiosInstance,
     type AxiosResponse,
     type RawAxiosRequestHeaders,
@@ -77,6 +78,10 @@ export class KeycloakService implements KeycloakConnectOptionsFactory {
         // https://stackoverflow.com/questions/62683482/keycloak-rest-api-call-to-get-access-token-of-a-user-through-admin-username-and
         // https://stackoverflow.com/questions/65714161/keycloak-generate-access-token-for-a-user-with-keycloak-admin
         const body = `username=${username}&password=${password}&grant_type=password&client_id=${clientId}&client_secret=${secret}`;
+
+        this.#logger.debug('token: path=%s', paths.accessToken);
+        this.#logger.debug('token: headers=%o', this.#headers);
+        this.#logger.debug('token: body=%s', body);
         let response: AxiosResponse<Record<string, number | string>>;
         try {
             response = await this.#keycloakClient.post(
@@ -84,8 +89,22 @@ export class KeycloakService implements KeycloakConnectOptionsFactory {
                 body,
                 { headers: this.#headers },
             );
-        } catch {
-            this.#logger.warn('token: Fehler bei %s', paths.accessToken);
+        } catch(err: unknown) {
+            if (err instanceof AxiosError) {
+                const { code, config } = err;
+                this.#logger.warn('token: code=%s', code);
+                if (config === undefined) {
+                    this.#logger.warn('Sonstiger Axios-Fehler');
+                } else {
+                    const { baseURL, method, url, data } = config;
+                    this.#logger.warn('token: method=%s', method);
+                    this.#logger.warn('token: baseURL=%s', baseURL);
+                    this.#logger.warn('token: url=%s', url);
+                    this.#logger.warn('token: data=%s', data);
+                }
+            } else {
+                this.#logger.warn('Sonstiger Netzwerk-Fehler');
+            }
             return;
         }
 

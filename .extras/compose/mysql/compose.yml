@@ -75,6 +75,7 @@ services:
         source: C:/Zimmermann/volumes/mysql/sql
         target: /sql
         read_only: true
+    networks: [proxynet]
     env_file: .env
     environment: [MYSQL_ROOT_PASSWORD_FILE=/run/secrets/db-root-password]
     # https://docs.docker.com/compose/use-secrets
@@ -119,6 +120,7 @@ services:
         source: C:/Zimmermann/volumes/mysql/phpmyadmin-etc
         target: /etc/phpmyadmin
         read_only: true
+    networks: [proxynet]
     env_file: phpmyadmin.env
     # KEIN TLS https://blog.zotorn.de/phpmyadmin-docker-image-with-ssl-tls
     # KEIN dedizierter User im Image vorhanden
@@ -142,3 +144,7 @@ services:
 secrets:
   db-root-password:
     file: db_root_password.txt
+
+networks:
+  proxynet:
+    name: acme-network

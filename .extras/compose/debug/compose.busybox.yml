@@ -13,19 +13,33 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-# Aufruf:   docker compose -f compose.busybox.yml up
+# Aufruf:   cp ...
+#           docker compose -f compose.busybox.yml up
 #           docker compose exec busybox ash
+#               busybox
 #               nslookup postgres
+#               nslookup keycloak
+#               exit
 #           docker compose -f compose.busybox.yml down
 
 services:
   busybox:
-    image: busybox:1.36.1
+    image: busybox:1.37.0
     command:
-      ["sh", "-c", "echo Container mit busybox ist gestartet! && sleep 3600"]
+      [
+        "sh",
+        "-c",
+        "echo 'Container mit busybox ist gestartet.' && sleep infinity",
+      ]
+    networks: [proxynet]
+    hostname: busybox
     cap_drop: [ALL]
     deploy:
       resources:
         limits:
           cpus: "0.5"
           memory: 768M
+
+networks:
+  proxynet:
+    name: acme-network

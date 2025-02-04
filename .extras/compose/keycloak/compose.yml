@@ -28,14 +28,10 @@
 #     Passwort:       password
 #         Tabellen: USER_ENTITY, USER_ROLE_MAPPING, ...
 
-#include:
-#  - path: [../postgres/compose.yml]
-
 services:
   keycloak:
     image: quay.io/keycloak/keycloak:26.1.0-0
     #image: keycloak/keycloak:26.1.0-0
-    #depends_on: [db]
     ports:
       - published: 8880
         target: 8080
@@ -43,7 +39,7 @@ services:
         target: 8443
     volumes:
       - type: bind
-        source: C:/Zimmermann/volumes/keycloak
+        source: C:/Zimmermann/volumes/keycloak/data
         # mit Unterverzeichnis h2
         target: /opt/keycloak/data
       - type: bind
@@ -56,6 +52,7 @@ services:
         target: /opt/keycloak/conf/certificate.crt
         read_only: true
       # ggf. /opt/keycloak/conf/keycloak.conf
+    networks: [proxynet]
     env_file: .env
     hostname: keycloak
     container_name: keycloak
@@ -87,3 +84,7 @@ services:
         reservations:
           cpus: "2.0"
           memory: 2G
+
+networks:
+  proxynet:
+    name: acme-network

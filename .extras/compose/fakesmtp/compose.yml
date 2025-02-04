@@ -34,12 +34,8 @@ services:
       - type: bind
         source: C:/Zimmermann/volumes/fakesmtp
         target: /tmp
-    environment:
-      TZ: Europe/Berlin
-      SPRING_OUTPUT_ANSI_ENABLED: ALWAYS
-      SPRING_MAIN_BANNER-MODE: LOG
-      SPRING_LAZY-INITIALIZATION: true
-      SPRING_JPA_OPEN-IN-VIEW: true
+    networks: [proxynet]
+    env_file: .env
     hostname: fakesmtp
     container_name: fakesmtp
     cap_drop: [ALL]
@@ -53,3 +49,7 @@ services:
         reservations:
           cpus: "0.5"
           memory: 768M
+
+networks:
+  proxynet:
+    name: acme-network

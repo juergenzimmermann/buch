@@ -70,6 +70,7 @@ services:
       - type: bind
         source: ../../../src/config/resources/db/sqlite/buch.sqlite
         target: /opt/app/dist/config/resources/db/sqlite/buch.sqlite
+    networks: [proxynet]
     env_file: .env
     environment:
       # https://docs.docker.com/compose/compose-file/compose-file-v3/#variable-substitution
@@ -84,3 +85,7 @@ services:
         reservations:
           cpus: "1.0"
           memory: 1G
+
+networks:
+  proxynet:
+    name: acme-network

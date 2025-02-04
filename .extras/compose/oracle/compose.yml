@@ -25,7 +25,6 @@ services:
   db:
     # 2 statt 12 GB; u.a. genutzt fuer die Entwicklung von Hibernate und Spring Data JPA
     image: gvenzl/oracle-free:23.6-slim
-    #image: container-registry.oracle.com/database/express
     ports:
       - published: 1521
         target: 1521
@@ -44,6 +43,7 @@ services:
         source: C:/Zimmermann/volumes/oracle/csv/buch
         target: /csv
     env_file: .env
+    networks: [proxynet]
     # user: oracle:oinstall
     hostname: oracle
     container_name: oracle
@@ -73,3 +73,7 @@ services:
         reservations:
           cpus: "1.0"
           memory: 512M
+
+networks:
+  proxynet:
+    name: acme-network

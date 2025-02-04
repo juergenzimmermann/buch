@@ -26,7 +26,9 @@
 -- (2) PowerShell:
 --     cd .extras\compose\backend\postgres
 --     docker compose up db
--- (3) 2. PowerShell:
+-- (3) In Windows das Verzeichnis "C:/Zimmermann/volumes/postgres/tablespace/buch" anlegen
+--     Siehe .extras\compose\postgres\compose.yml
+-- (4) 2. PowerShell:
 --     cd .extras\compose\backend\postgres
 --     docker compose exec db bash
 --        chown postgres:postgres /var/lib/postgresql/tablespace
@@ -37,14 +39,14 @@
 --        chmod 400 /var/lib/postgresql/certificate.crt
 --        exit
 --     docker compose down
--- (3) in compose.yml die obigen Kommentare wieder entfernen, d.h.
+-- (5) in compose.yml die obigen Kommentare wieder entfernen, d.h.
 --        PostgreSQL-Server mit TLS starten
 --        key.pem und certificate.crt als readonly
 --        den Linux-User "postgres" wieder aktivieren
 --     in compose.yml die Zeile "cap_add: [...]" wieder auskommentieren
--- (4) 1. PowerShell:
+-- (6) 1. PowerShell:
 --     docker compose up db
--- (5) 2. PowerShell:
+-- (7) 2. PowerShell:
 --     docker compose exec db bash
 --        psql --dbname=postgres --username=postgres --file=/sql/create-db-buch.sql
 --        psql --dbname=buch --username=buch --file=/sql/create-schema-buch.sql
