@@ -13,19 +13,20 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-# Aufruf:   cp ...
-#           docker compose up
+# Aufruf:   docker compose up
 #           docker compose exec netshoot bash
 #               busybox
 #               nslookup postgres
 #               ping postgres
-#               openssl s_client -trace postgres:5432
-#               openssl s_client -trace keycloak:8443
-#               openssl s_client -trace buch:3000
+#               openssl s_client -tls1_3 -trace postgres:5432
+#               openssl s_client -tls1_3 -trace keycloak:8443
+#               openssl s_client -tls1_3 -trace buch:3000
+#
 #               curl --tlsv1.3 --http2 --verbose --insecure https://buch:3000/rest/1
 #               curl --tlsv1.3 --http2 --verbose --insecure --data 'username=admin&password=p' --header 'Content-Type: application/x-www-form-urlencoded' https://buch:3000/auth/token
 #               curl --verbose http://keycloak:8080/realms/nest/.well-known/openid-configuration
 #               curl --verbose --data 'username=admin&password=p&grant_type=password&client_id=nest-client&client_secret=0eoZjeaIa0SdAIdTwMRQofJ82ne3afUl' --header 'Content-Type: application/x-www-form-urlencoded' http://keycloak:8080/realms/nest/protocol/openid-connect/token
+#
 #               ip addr
 #               ifconfig
 #               ip route show
