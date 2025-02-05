@@ -43,7 +43,7 @@ services:
         source: C:/Zimmermann/volumes/oracle/csv/buch
         target: /csv
     env_file: .env
-    networks: [proxynet]
+    networks: [acme-network]
     # user: oracle:oinstall
     hostname: oracle
     container_name: oracle
@@ -75,5 +75,5 @@ services:
           memory: 512M
 
 networks:
-  proxynet:
+  acme-network:
     name: acme-network

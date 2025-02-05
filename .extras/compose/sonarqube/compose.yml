@@ -44,6 +44,7 @@ services:
         source: C:/Zimmermann/volumes/sonarqube/extensions
         target: /opt/sonarqube/lib/extensions
         read_only: true
+    networks: [sonar-network]
     env_file: .env
     hostname: sonarqube
     container_name: sonarqube
@@ -57,3 +58,7 @@ services:
         reservations:
           cpus: "2.0"
           memory: 2G
+
+networks:
+  sonar-network:
+    name: sonar-network

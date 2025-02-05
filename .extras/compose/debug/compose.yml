@@ -42,7 +42,7 @@ services:
         "-c",
         "echo 'Container mit netshoot ist gestartet.' && sleep infinity",
       ]
-    networks: [proxynet]
+    networks: [acme-network]
     hostname: netshoot
     cap_drop: [ALL]
     deploy:
@@ -53,5 +53,5 @@ services:
 
 # https://stackoverflow.com/questions/38088279/communication-between-multiple-docker-compose-projects#answer-48024244
 networks:
-  proxynet:
+  acme-network:
     name: acme-network

@@ -52,7 +52,7 @@ services:
         target: /opt/keycloak/conf/certificate.crt
         read_only: true
       # ggf. /opt/keycloak/conf/keycloak.conf
-    networks: [proxynet]
+    networks: [acme-network]
     env_file: .env
     hostname: keycloak
     container_name: keycloak
@@ -86,5 +86,5 @@ services:
           memory: 2G
 
 networks:
-  proxynet:
+  acme-network:
     name: acme-network
