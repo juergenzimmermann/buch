@@ -64,17 +64,10 @@ services:
         target: /opt/app/dist/config/resources/tls/key.pem
         read_only: true
       - type: bind
-        source: ../../../src/config/resources/jwt/private-key.pem
-        target: /opt/app/dist/config/resources/jwt/private-key.pem
-        read_only: true
-      - type: bind
-        source: ../../../src/config/resources/db/sqlite/buch.sqlite
-        target: /opt/app/dist/config/resources/db/sqlite/buch.sqlite
+        source: ../../../src/config/resources/sqlite/buch.sqlite
+        target: /opt/app/dist/config/resources/sqlite/buch.sqlite
     networks: [acme-network]
     env_file: .env
-    environment:
-      # https://docs.docker.com/compose/compose-file/compose-file-v3/#variable-substitution
-      - USER_PASSWORD_ENCODED=$$argon2i$$v=19$$m=4096,t=3,p=1$$aaxA2v/9rRSPGkwYN+NQog$$27Huii1XtD3iEd62fog+04G26LRPZMHoYCI6AGKTL8M
     #hostname: buch
     cap_drop: [ALL]
     deploy:

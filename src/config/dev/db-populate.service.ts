@@ -30,7 +30,7 @@ import { dbType } from '../db.js';
 import {
     adminDataSourceOptions,
     dbPopulate,
-    dbResourcesDir,
+    dbDir,
     typeOrmModuleOptions,
 } from '../typeormOptions.js';
 
@@ -46,7 +46,7 @@ export class DbPopulateService implements OnApplicationBootstrap {
 
     readonly #datasource: DataSource;
 
-    readonly #resourcesDir = dbResourcesDir;
+    readonly #dbDir = dbDir;
 
     readonly #logger = getLogger(DbPopulateService.name);
 
@@ -168,13 +168,13 @@ export class DbPopulateService implements OnApplicationBootstrap {
     }
 
     async #populatePostgres() {
-        const dropScript = path.resolve(this.#resourcesDir, 'drop.sql');
+        const dropScript = path.resolve(this.#dbDir, 'drop.sql');
         this.#logger.debug('dropScript = %s', dropScript); // eslint-disable-line sonarjs/no-duplicate-string
         // https://nodejs.org/api/fs.html#fs_fs_readfilesync_path_options
         const dropStatements = readFileSync(dropScript, 'utf8'); // eslint-disable-line security/detect-non-literal-fs-filename,n/no-sync
         await this.#datasource.query(dropStatements);
 
-        const createScript = path.resolve(this.#resourcesDir, 'create.sql'); // eslint-disable-line sonarjs/no-duplicate-string
+        const createScript = path.resolve(this.#dbDir, 'create.sql'); // eslint-disable-line sonarjs/no-duplicate-string
         this.#logger.debug('createScript = %s', createScript); // eslint-disable-line sonarjs/no-duplicate-string
         // https://nodejs.org/api/fs.html#fs_fs_readfilesync_path_options
         const createStatements = readFileSync(createScript, 'utf8'); // eslint-disable-line security/detect-non-literal-fs-filename,n/no-sync
@@ -201,11 +201,11 @@ export class DbPopulateService implements OnApplicationBootstrap {
 
     async #populateMySQL() {
         // repo.query() kann bei MySQL nur 1 Anweisung mit "raw SQL" ausfuehren
-        const dropScript = path.resolve(this.#resourcesDir, 'drop.sql');
+        const dropScript = path.resolve(this.#dbDir, 'drop.sql');
         this.#logger.debug('dropScript = %s', dropScript);
         await this.#executeStatements(dropScript);
 
-        const createScript = path.resolve(this.#resourcesDir, 'create.sql');
+        const createScript = path.resolve(this.#dbDir, 'create.sql');
         this.#logger.debug('createScript = %s', createScript);
         await this.#executeStatements(createScript);
 
@@ -232,11 +232,11 @@ export class DbPopulateService implements OnApplicationBootstrap {
     }
 
     async #populateOracle() {
-        const dropScript = path.resolve(this.#resourcesDir, 'drop.sql');
+        const dropScript = path.resolve(this.#dbDir, 'drop.sql');
         this.#logger.debug('dropScript = %s', dropScript);
         await this.#executeStatements(dropScript, true);
 
-        const createScript = path.resolve(this.#resourcesDir, 'create.sql');
+        const createScript = path.resolve(this.#dbDir, 'create.sql');
         this.#logger.debug('createScript = %s', createScript);
         await this.#executeStatements(createScript, true);
 
@@ -246,14 +246,14 @@ export class DbPopulateService implements OnApplicationBootstrap {
     }
 
     async #populateSQLite() {
-        const dropScript = path.resolve(this.#resourcesDir, 'drop.sql');
+        const dropScript = path.resolve(this.#dbDir, 'drop.sql');
         // repo.query() kann bei SQLite nur 1 Anweisung mit "raw SQL" ausfuehren
         await this.#executeStatements(dropScript);
 
-        const createScript = path.resolve(this.#resourcesDir, 'create.sql');
+        const createScript = path.resolve(this.#dbDir, 'create.sql');
         await this.#executeStatements(createScript);
 
-        const insertScript = path.resolve(this.#resourcesDir, 'insert.sql');
+        const insertScript = path.resolve(this.#dbDir, 'insert.sql');
         await this.#executeStatements(insertScript);
     }
 

@@ -156,3 +156,4 @@ EXPOSE 3000
 # "a simple process supervisor and init system designed to run as PID 1 inside
 # minimal container environments (such as Docker)""
 ENTRYPOINT ["dumb-init", "/usr/local/bin/node", "dist/main.js"]
+# ENTRYPOINT ["/bin/bash", "-c", "echo 'Container als bash gestartet.' && sleep infinity"]

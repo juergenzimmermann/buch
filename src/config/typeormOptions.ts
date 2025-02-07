@@ -22,7 +22,7 @@ import path from 'node:path';
 import { type DataSourceOptions } from 'typeorm';
 import { Buch } from '../buch/entity/buch.entity.js';
 import { entities } from '../buch/entity/entities.js';
-import { BASEDIR, config } from './app.js';
+import { RESOURCES_DIR, config } from './app.js';
 import { dbType } from './db.js';
 import { logLevel } from './logger.js';
 import { nodeConfig } from './node.js';
@@ -85,12 +85,8 @@ const logging =
     logLevel === 'debug';
 const logger = 'advanced-console';
 
-export const dbResourcesDir = path.resolve(
-    nodeConfig.resourcesDir,
-    'db',
-    dbType,
-);
-console.debug('dbResourcesDir = %s', dbResourcesDir);
+export const dbDir = path.resolve(nodeConfig.resourcesDir, dbType);
+console.debug('dbDir = %s', dbDir);
 
 // TODO records als "deeply immutable data structure" (Stage 2)
 // https://github.com/tc39/proposal-record-tuple
@@ -99,7 +95,7 @@ switch (dbType) {
     case 'postgres': {
         // eslint-disable-next-line security/detect-non-literal-fs-filename
         const cert = readFileSync(
-            path.resolve(dbResourcesDir, 'certificate.cer'), // eslint-disable-line sonarjs/no-duplicate-string
+            path.resolve(dbDir, 'certificate.cer'), // eslint-disable-line sonarjs/no-duplicate-string
         );
         dataSourceOptions = {
             type: 'postgres',
@@ -122,7 +118,7 @@ switch (dbType) {
     case 'mysql': {
         // eslint-disable-next-line security/detect-non-literal-fs-filename
         const cert = readFileSync(
-            path.resolve(dbResourcesDir, 'certificate.cer'),
+            path.resolve(dbDir, 'certificate.cer'),
         );
         dataSourceOptions = {
             type: 'mysql',
@@ -166,11 +162,7 @@ switch (dbType) {
     // npm i better-sqlite3
     case 'sqlite': {
         const sqliteDatabase = path.resolve(
-            BASEDIR,
-            'config',
-            'resources',
-            'db',
-            'sqlite',
+            RESOURCES_DIR,
             `${database}.sqlite`,
         );
         dataSourceOptions = {
@@ -199,7 +191,7 @@ if (logLevel === 'debug') {
 export const dbPopulate = db?.populate === true;
 let adminDataSourceOptionsTemp: DataSourceOptions | undefined;
 if (dbType === 'postgres') {
-    const cert = readFileSync(path.resolve(dbResourcesDir, 'certificate.cer')); // eslint-disable-line security/detect-non-literal-fs-filename
+    const cert = readFileSync(path.resolve(dbDir, 'certificate.cer')); // eslint-disable-line security/detect-non-literal-fs-filename
     adminDataSourceOptionsTemp = {
         type: 'postgres',
         host,
@@ -215,7 +207,7 @@ if (dbType === 'postgres') {
         extra: { ssl: { rejectUnauthorized: false } },
     };
 } else if (dbType === 'mysql') {
-    const cert = readFileSync(path.resolve(dbResourcesDir, 'certificate.cer')); // eslint-disable-line security/detect-non-literal-fs-filename
+    const cert = readFileSync(path.resolve(dbDir, 'certificate.cer')); // eslint-disable-line security/detect-non-literal-fs-filename
     adminDataSourceOptionsTemp = {
         type: 'mysql',
         host,
