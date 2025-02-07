@@ -19,15 +19,23 @@
 --              damit der MySQL-Server ohne TLS gestartet wird
 --           unterhalb von "volumes:" die kompletten Listenelemente mit server-key.pem,
 --              server-cert.pem und ca.pem auskommentieren
+--           Zeile mit "user:"
+--              damit der MySQL-Server implizit mit dem Linux-User "root" gestartet wird
 -- (2) PowerShell:
 --     cd .extras\compose\backend\mysql
 --     docker compose up db
 -- (3) 2. PowerShell:
 --     cd .extras\compose\backend\mysql
+--     docker compose exec db bash
+--        mysql
+--           ALTER USER 'root'@'localhost' IDENTIFIED BY 'p';
+--           exit
+--        exit
 --     docker compose down
 -- (4) in .extras\compose\backend\mysql\compose.yml
 --        bei den Listenelementen mit server-key.pem, server-cert.pem und ca.pem
 --           alle Kommentare entfernen *BIS AUF* die Zeilen mit "read_only"
+--        den Linux-User "mysql" wieder aktivieren, d.h. Kommentar (s.o.) wieder entfernen
 -- (5) PowerShell:
 --     docker compose up db
 -- (6) 2. PowerShell:

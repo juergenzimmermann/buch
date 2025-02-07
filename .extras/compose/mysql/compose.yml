@@ -83,6 +83,7 @@ services:
     security_opt:
       - label:user:mysql
       - no-new-privileges:true
+    user: "mysql:mysql"
     hostname: mysql
     container_name: mysql
     # https://docs.docker.com/compose/compose-file/compose-file-v3/#cap_add-cap_drop
