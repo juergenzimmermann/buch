@@ -212,6 +212,13 @@ export class DbPopulateService implements OnApplicationBootstrap {
         // LOAD DATA zum Laden von CSV-Dateien erfordert Administrationsrechte
         // https://dev.mysql.com/doc/refman/8.4/en/load-data.html
 
+        // SELECT   user,host,plugin
+        // FROM     mysql.user
+        // ORDER BY user, host;
+
+        // SELECT *
+        // FROM   mysql.db;
+
         // https://typeorm.io/data-source
         const dataSource = new DataSource(adminDataSourceOptions!);
         await dataSource.initialize();
@@ -281,6 +288,7 @@ export class DbPopulateService implements OnApplicationBootstrap {
             });
 
         for (statement of statements) {
+            this.#logger.debug('statement=%s', statement);
             await this.#datasource.query(statement);
         }
     }

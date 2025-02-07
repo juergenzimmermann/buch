@@ -27,8 +27,9 @@
 -- (3) 2. PowerShell:
 --     cd .extras\compose\backend\mysql
 --     docker compose exec db bash
---        mysql
+--        mysql --user=root --password=''
 --           ALTER USER 'root'@'localhost' IDENTIFIED BY 'p';
+--           UPDATE mysql.user SET host='%' WHERE user='root';
 --           exit
 --        exit
 --     docker compose down
