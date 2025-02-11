@@ -145,7 +145,7 @@ USER node
 # ADD hat mehr Funktionalitaet als COPY, z.B. auch Download von externen Dateien
 COPY --chown=node:node package.json .env ./
 COPY --from=dependencies --chown=node:node /home/node/node_modules ./node_modules
-COPY --from=dist --chown=node:node /home/node/dist ./dist
+COPY --from=dist --chown=node:node /home/node/dist/src ./dist
 COPY --chown=node:node src/config/resources ./dist/config/resources
 
 EXPOSE 3000

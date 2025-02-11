@@ -12,8 +12,10 @@
     // "transpileOnly": true,
     // "files": true,
   },
-  //"include": ["src/**/*", "tsconfig.cjs"],
+  "include": ["src/**/*", "__tests__"],
   "compilerOptions": {
+    "rootDir": ".",
+    "outDir": "./dist",
     "lib": ["es2023"],
     // uebersetzter JS-Code im Hinblick auf Module. "NodeNext" erfordert dasselbe fuer "moduleResolution"
     // "module": "NodeNext", // entspricht "Node16"
@@ -30,7 +32,6 @@
     // https://www.typescriptlang.org/tsconfig/#target
     "target": "es2022",
     "sourceMap": true,
-    "outDir": "./dist",
     "incremental": true,
     "skipLibCheck": true, // wegen @nestjs/graphql und @nestjs/apollo
     "allowUnreachableCode": false, // return bei then-else und try-catch
