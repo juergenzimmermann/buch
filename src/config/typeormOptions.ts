@@ -26,10 +26,7 @@ import { RESOURCES_DIR, config } from './app.js';
 import { dbType } from './db.js';
 import { logLevel } from './logger.js';
 import { nodeConfig } from './node.js';
-import {
-    OracleNamingStrategy,
-    SnakeNamingStrategy,
-} from './typeormNamingStrategy.js';
+import { SnakeNamingStrategy } from './typeormNamingStrategy.js';
 
 const { db } = config;
 
@@ -74,10 +71,7 @@ const passAdmin = (db?.passwordAdmin as string | undefined) ?? 'p';
 // https://github.com/tonivj5/typeorm-naming-strategies/blob/master/src/snake-naming.strategy.ts
 // https://github.com/typeorm/typeorm/blob/master/src/naming-strategy/DefaultNamingStrategy.ts
 // https://github.com/typeorm/typeorm/blob/master/sample/sample12-custom-naming-strategy/naming-strategy/CustomNamingStrategy.ts
-const namingStrategy =
-    dbType === 'oracle'
-        ? new OracleNamingStrategy()
-        : new SnakeNamingStrategy();
+const namingStrategy = new SnakeNamingStrategy();
 
 // logging bei TypeORM durch console.log()
 const logging =
@@ -135,24 +129,6 @@ switch (dbType) {
             logger,
             ssl: { cert },
             extra: { ssl: { rejectUnauthorized: false } },
-        };
-        break;
-    }
-    case 'oracle': {
-        dataSourceOptions = {
-            type: 'oracle',
-            host,
-            port: 1521,
-            username,
-            password: pass,
-            database: 'FREEPDB1',
-            serviceName: 'freepdb1',
-            schema: username.toUpperCase(),
-            poolSize: 10,
-            entities,
-            namingStrategy,
-            logging,
-            logger,
         };
         break;
     }

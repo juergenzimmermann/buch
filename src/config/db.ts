@@ -23,7 +23,7 @@ import { config } from './app.js';
 const dbConfig = config.db;
 console.debug('dbConfig: %o', dbConfig);
 
-type DbType = 'postgres' | 'mysql' | 'oracle' | 'sqlite';
+type DbType = 'postgres' | 'mysql' | 'sqlite';
 
 // "Optional Chaining" ab ES2020
 const type: DbType | undefined = dbConfig?.type; // eslint-disable-line @typescript-eslint/no-unsafe-assignment
@@ -32,14 +32,9 @@ const type: DbType | undefined = dbConfig?.type; // eslint-disable-line @typescr
 export const dbType =
     type === 'postgres' ||
     type === 'mysql' ||
-    type === 'oracle' ||
     type === 'sqlite'
         ? type
         : 'postgres';
 
-let binaryTypeTmp: 'bytea' | 'blob' = 'bytea';
-if (dbType === 'mysql' || dbType === 'oracle' || dbType === 'sqlite') {
-    binaryTypeTmp = 'blob';
-}
-export const binaryType = binaryTypeTmp;
+export const binaryType: 'bytea' | 'blob' = dbType === 'postgres' ? 'bytea' : 'blob';
 console.debug('binaryType: %s', binaryType);

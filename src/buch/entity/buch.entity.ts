@@ -147,7 +147,6 @@ export class Buch {
     // https://typeorm.io/entities#special-columns
     // https://typeorm.io/entities#column-types-for-postgres
     // https://typeorm.io/entities#column-types-for-mysql--mariadb
-    // https://typeorm.io/entities#column-types-for-oracle
     // https://typeorm.io/entities#column-types-for-sqlite--cordova--react-native--expo
     @CreateDateColumn({
         type: dbType === 'sqlite' ? 'datetime' : 'timestamp',
