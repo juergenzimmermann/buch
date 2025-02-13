@@ -82,7 +82,10 @@ export class BuchReadService {
      * @throws NotFoundException falls kein Buch mit der ID existiert
      */
     // https://2ality.com/2015/01/es6-destructuring.html#simulating-named-parameters-in-javascript
-    async findById({ id, mitAbbildungen = false }: FindByIdParams): Promise<Readonly<Buch>> {
+    async findById({
+        id,
+        mitAbbildungen = false,
+    }: FindByIdParams): Promise<Readonly<Buch>> {
         this.#logger.debug('findById: id=%d', id);
 
         // https://typeorm.io/working-with-repository
@@ -119,7 +122,9 @@ export class BuchReadService {
      * @param buchId ID des zugehörigen Buchs.
      * @returns Binärdatei oder undefined als Promise.
      */
-    async findFileByBuchId(buchId: number): Promise<Readonly<BuchFile> | undefined> {
+    async findFileByBuchId(
+        buchId: number,
+    ): Promise<Readonly<BuchFile> | undefined> {
         this.#logger.debug('findFileByBuchId: buchId=%s', buchId);
         const buchFile = await this.#fileRepo
             .createQueryBuilder('buch_file')
@@ -203,6 +208,11 @@ export class BuchReadService {
         const { art } = suchkriterien;
         this.#logger.debug('#checkEnums: Suchkriterium "art=%s"', art);
         // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-        return art === undefined || art === 'EPUB' || art === 'HARDCOVER' || art === 'PAPERBACK';
+        return (
+            art === undefined ||
+            art === 'EPUB' ||
+            art === 'HARDCOVER' ||
+            art === 'PAPERBACK'
+        );
     }
 }

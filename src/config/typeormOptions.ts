@@ -111,9 +111,7 @@ switch (dbType) {
     }
     case 'mysql': {
         // eslint-disable-next-line security/detect-non-literal-fs-filename
-        const cert = readFileSync(
-            path.resolve(dbDir, 'certificate.cer'),
-        );
+        const cert = readFileSync(path.resolve(dbDir, 'certificate.cer'));
         dataSourceOptions = {
             type: 'mysql',
             host,

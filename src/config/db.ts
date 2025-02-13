@@ -30,11 +30,10 @@ const type: DbType | undefined = dbConfig?.type; // eslint-disable-line @typescr
 
 // 'better-sqlite3' erfordert node-gyp, wenn das Docker-Image gebaut wird
 export const dbType =
-    type === 'postgres' ||
-    type === 'mysql' ||
-    type === 'sqlite'
+    type === 'postgres' || type === 'mysql' || type === 'sqlite'
         ? type
         : 'postgres';
 
-export const binaryType: 'bytea' | 'blob' = dbType === 'postgres' ? 'bytea' : 'blob';
+export const binaryType: 'bytea' | 'blob' =
+    dbType === 'postgres' ? 'bytea' : 'blob';
 console.debug('binaryType: %s', binaryType);

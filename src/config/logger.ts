@@ -89,5 +89,7 @@ const options: pino.TransportMultiOptions | pino.TransportSingleOptions = pretty
 const transports = pino.transport(options); // eslint-disable-line @typescript-eslint/no-unsafe-assignment
 
 // https://github.com/pinojs/pino/issues/1160#issuecomment-944081187
-export const parentLogger: pino.Logger<string> =
-    pino({ level: logLevel }, transports); // eslint-disable-line @typescript-eslint/no-unsafe-argument
+export const parentLogger: pino.Logger<string> = pino(
+    { level: logLevel },
+    transports,
+); // eslint-disable-line @typescript-eslint/no-unsafe-argument

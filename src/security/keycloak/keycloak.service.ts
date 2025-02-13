@@ -89,7 +89,7 @@ export class KeycloakService implements KeycloakConnectOptionsFactory {
                 body,
                 { headers: this.#headers },
             );
-        } catch(err: unknown) {
+        } catch (err: unknown) {
             if (err instanceof AxiosError) {
                 const { code, config } = err;
                 this.#logger.warn('token: code=%s', code);

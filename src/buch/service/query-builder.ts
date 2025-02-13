@@ -98,7 +98,8 @@ export class QueryBuilder {
     // z.B. { titel: 'a', rating: 5, preis: 22.5, javascript: true }
     // "rest properties" fuer anfaengliche WHERE-Klausel: ab ES 2018 https://github.com/tc39/proposal-object-rest-spread
     // eslint-disable-next-line max-lines-per-function, prettier/prettier, sonarjs/cognitive-complexity
-    build({ // NOSONAR
+    build({
+        // NOSONAR
         titel,
         rating,
         preis,
@@ -144,7 +145,8 @@ export class QueryBuilder {
         }
 
         if (rating !== undefined) {
-            const ratingNumber = typeof rating === 'string' ? parseInt(rating) : rating;
+            const ratingNumber =
+                typeof rating === 'string' ? parseInt(rating) : rating;
             queryBuilder = queryBuilder.where(
                 `${this.#buchAlias}.rating >= ${ratingNumber}`,
             );
@@ -185,11 +187,11 @@ export class QueryBuilder {
         if (java === 'true') {
             queryBuilder = useWhere
                 ? queryBuilder.where(
-                    `REPLACE(${this.#buchAlias}.schlagwoerter, 'JAVASCRIPT', '') like '%JAVA%'`,
-                )
+                      `REPLACE(${this.#buchAlias}.schlagwoerter, 'JAVASCRIPT', '') like '%JAVA%'`,
+                  )
                 : queryBuilder.andWhere(
-                    `REPLACE(${this.#buchAlias}.schlagwoerter, 'JAVASCRIPT', '') like '%JAVA%'`,
-                );
+                      `REPLACE(${this.#buchAlias}.schlagwoerter, 'JAVASCRIPT', '') like '%JAVA%'`,
+                  );
             useWhere = false;
         }
 
