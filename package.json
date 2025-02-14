@@ -132,7 +132,7 @@
     "@types/jest": "29.5.14",
     "@types/js-yaml": "4.0.9",
     "@types/multer": "1.4.12",
-    "@types/node": "22.13.2",
+    "@types/node": "22.13.4",
     "@types/nodemailer": "6.4.17",
     "@types/nodemailer-direct-transport": "1.0.35",
     "@types/nodemailer-smtp-transport": "2.7.8",
