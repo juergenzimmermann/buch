@@ -50,7 +50,10 @@ import { paths } from '../../config/paths.js';
 import { getLogger } from '../../logger/logger.js';
 import { ResponseTimeInterceptor } from '../../logger/response-time.interceptor.js';
 import { type Buch, type BuchArt } from '../entity/buch.entity.js';
+import { DEFAULT_PAGE_SIZE } from '../service/pageable.js';
+import { type Page } from './page.js';
 import { BuchReadService } from '../service/buch-read.service.js';
+import { type Pageable } from '../service/pageable.js';
 import { type Suchkriterien } from '../service/suchkriterien.js';
 
 /**
@@ -96,6 +99,12 @@ export class BuchQuery implements Suchkriterien {
 
     @ApiProperty({ required: false })
     declare readonly titel: string;
+
+    @ApiProperty({ required: false })
+    declare size?: string;
+
+    @ApiProperty({ required: false })
+    declare page?: string;
 }
 
 /**
@@ -230,10 +239,31 @@ export class BuchGetController {
             return res.sendStatus(HttpStatus.NOT_ACCEPTABLE);
         }
 
-        const buecher = await this.#service.find(query);
-        this.#logger.debug('get: %o', buecher);
+        const { page, size } = query;
+        delete query['page'];
+        delete query['size'];
 
-        return res.json(buecher).send();
+        const pageable: Pageable = {
+            size: Math.floor(Number(size)) || undefined,
+            number: Math.floor(Number(page)) || undefined,
+        };
+
+        const buecherSlice = await this.#service.find(query, pageable);
+        const buchPage: Page<Buch> = {
+            content: buecherSlice.content,
+            page: {
+                size: pageable.size,
+                number: pageable.number,
+                totalElements: buecherSlice.totalElements,
+                totalPages: Math.ceil(
+                    buecherSlice.totalElements /
+                        (pageable.size ?? DEFAULT_PAGE_SIZE),
+                ),
+            },
+        };
+        this.#logger.debug('get: %o', buchPage);
+
+        return res.json(buchPage).send();
     }
 
     @Get('/file/:id')

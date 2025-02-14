@@ -25,6 +25,8 @@ import { typeOrmModuleOptions } from '../../config/typeormOptions.js';
 import { getLogger } from '../../logger/logger.js';
 import { Abbildung } from '../entity/abbildung.entity.js';
 import { Buch } from '../entity/buch.entity.js';
+import { DEFAULT_PAGE_NUMBER, DEFAULT_PAGE_SIZE } from './pageable.js';
+import { type Pageable } from './pageable.js';
 import { Titel } from '../entity/titel.entity.js';
 import { type Suchkriterien } from './suchkriterien.js';
 
@@ -93,24 +95,28 @@ export class QueryBuilder {
      * @param suchkriterien JSON-Objekt mit Suchkriterien. Bei "titel" wird mit
      * einem Teilstring gesucht, bei "rating" mit einem Mindestwert, bei "preis"
      * mit der Obergrenze.
+     * @param pageable Maximale Anzahl an Datensätzen und Seitennummer.
      * @returns QueryBuilder
      */
     // z.B. { titel: 'a', rating: 5, preis: 22.5, javascript: true }
     // "rest properties" fuer anfaengliche WHERE-Klausel: ab ES 2018 https://github.com/tc39/proposal-object-rest-spread
     // eslint-disable-next-line max-lines-per-function, prettier/prettier, sonarjs/cognitive-complexity
-    build({
-        // NOSONAR
-        titel,
-        rating,
-        preis,
-        javascript,
-        typescript,
-        java,
-        python,
-        ...restProps
-    }: Suchkriterien) {
+    build(
+        {
+            // NOSONAR
+            titel,
+            rating,
+            preis,
+            javascript,
+            typescript,
+            java,
+            python,
+            ...restProps
+        }: Suchkriterien,
+        pageable: Pageable,
+    ) {
         this.#logger.debug(
-            'build: titel=%s, rating=%s, preis=%s, javascript=%s, typescript=%s, java=%s, python=%s, restProps=%o',
+            'build: titel=%s, rating=%s, preis=%s, javascript=%s, typescript=%s, java=%s, python=%s, restProps=%o, pageable=%o',
             titel,
             rating,
             preis,
@@ -119,6 +125,7 @@ export class QueryBuilder {
             java,
             python,
             restProps,
+            pageable,
         );
 
         let queryBuilder = this.#repo.createQueryBuilder(this.#buchAlias);
@@ -223,6 +230,14 @@ export class QueryBuilder {
         });
 
         this.#logger.debug('build: sql=%s', queryBuilder.getSql());
-        return queryBuilder;
+
+        if (pageable?.size === 0) {
+            return queryBuilder;
+        }
+        const size = pageable?.size ?? DEFAULT_PAGE_SIZE;
+        const number = pageable?.number ?? DEFAULT_PAGE_NUMBER;
+        const skip = number * size;
+        this.#logger.debug('take=%s, skip=%s', size, skip);
+        return queryBuilder.take(size).skip(skip);
     }
 }

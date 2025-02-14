@@ -21,6 +21,7 @@ import { getLogger } from '../../logger/logger.js';
 import { ResponseTimeInterceptor } from '../../logger/response-time.interceptor.js';
 import { Buch } from '../entity/buch.entity.js';
 import { BuchReadService } from '../service/buch-read.service.js';
+import { type Pageable } from '../service/pageable.js';
 import { type Suchkriterien } from '../service/suchkriterien.js';
 import { HttpExceptionFilter } from './http-exception.filter.js';
 
@@ -65,9 +66,15 @@ export class BuchQueryResolver {
     @Public()
     async find(@Args() input: SuchkriterienInput | undefined) {
         this.#logger.debug('find: input=%o', input);
-        const buecher = await this.#service.find(input?.suchkriterien);
-        this.#logger.debug('find: buecher=%o', buecher);
-        return buecher;
+        const pageable: Pageable = {
+            size: 0,
+        };
+        const buecherSlice = await this.#service.find(
+            input?.suchkriterien,
+            pageable,
+        );
+        this.#logger.debug('find: buecherSlice=%o', buecherSlice);
+        return buecherSlice.content;
     }
 
     @ResolveField('rabatt')
