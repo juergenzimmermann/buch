@@ -2,6 +2,7 @@
   // https://typestrong.org/ts-node/docs/configuration
   // https://github.com/tsconfig/bases/#node-22-tsconfigjson
   // https://stackoverflow.com/questions/63742790/unable-to-import-esm-ts-module-in-node/65163089#65163089
+  // https://2ality.com/2025/01/tsconfig-json.html
   // NICHT "strictest" wegen "experimentalDecorators"
   // "extends": ["@tsconfig/strictest/tsconfig", "@tsconfig/node22/tsconfig"],
   "extends": ["@tsconfig/node23/tsconfig"],
