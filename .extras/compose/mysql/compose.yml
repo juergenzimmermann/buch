@@ -112,6 +112,7 @@ services:
   # p h p M y A d m i n
   # ----------------------------------------------------------------------------
   phpmyadmin:
+    # ghcr.io/linuxserver/mysql-workbench hat Download-Zahlen < 30.000
     image: phpmyadmin:5.2.2
     ports:
       - published: 8889
