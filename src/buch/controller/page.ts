@@ -19,8 +19,8 @@ import { Slice } from '../service/slice.js';
 export type Page<T> = {
     readonly content: T[];
     readonly page: {
-        readonly size?: number;
-        readonly number?: number;
+        readonly size: number;
+        readonly number: number;
         readonly totalElements: number;
         readonly totalPages: number;
     };
