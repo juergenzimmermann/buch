@@ -15,5 +15,5 @@
 
 export type Slice<T> = {
     readonly content: T[];
-    totalElements: number;
+    readonly totalElements: number;
 };
