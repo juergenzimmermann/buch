@@ -25,7 +25,7 @@
 # https://docs.astral.sh/uv/configuration/files
 [project]
 name = "lasttest"
-version = "2025.04.1"
+version = "2025.4.1"
 description = "Lasttest für buch"
 readme = "README.md"
 requires-python = ">=3.13"
