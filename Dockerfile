@@ -31,7 +31,7 @@
 # https://snyk.io/blog/10-best-practices-to-containerize-nodejs-web-applications-with-docker
 # https://cheatsheetseries.owasp.org/cheatsheets/NodeJS_Docker_Cheat_Sheet.html
 
-ARG NODE_VERSION=23.7.0
+ARG NODE_VERSION=23.8.0
 
 # ---------------------------------------------------------------------------------------
 # S t a g e   d i s t
@@ -78,6 +78,7 @@ set -eux
 npm ci --no-audit --no-fund
 npm run build
 EOF
+# ENTRYPOINT ["/bin/bash", "-c", "echo 'Container als bash gestartet.' && sleep infinity"]
 
 # ------------------------------------------------------------------------------
 # S t a g e   d e p e n d e n c i e s
@@ -108,6 +109,7 @@ set -eux
 # --omit=dev: ohne devDependencies
 npm ci --no-audit --no-fund --omit=dev --omit=peer
 EOF
+# ENTRYPOINT ["/bin/bash", "-c", "echo 'Container als bash gestartet.' && sleep infinity"]
 
 # ------------------------------------------------------------------------------
 # S t a g e   f i n a l
@@ -145,7 +147,7 @@ USER node
 # ADD hat mehr Funktionalitaet als COPY, z.B. auch Download von externen Dateien
 COPY --chown=node:node package.json .env ./
 COPY --from=dependencies --chown=node:node /home/node/node_modules ./node_modules
-COPY --from=dist --chown=node:node /home/node/dist/src ./dist
+COPY --from=dist --chown=node:node /home/node/dist ./dist
 COPY --chown=node:node src/config/resources ./dist/config/resources
 
 EXPOSE 3000
