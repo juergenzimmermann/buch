@@ -14,9 +14,27 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 export const DEFAULT_PAGE_SIZE = 5;
+export const MAX_PAGE_SIZE = 100;
 export const DEFAULT_PAGE_NUMBER = 0;
 
 export type Pageable = {
-    readonly size?: number;
-    readonly number?: number;
+    readonly number: number;
+    readonly size: number;
 };
+
+type PageableProps = {
+    readonly number?: string | undefined;
+    readonly size?: string | undefined;
+};
+
+export function getPageable({ number, size }: PageableProps): Pageable {
+    let numberInt = Math.floor(Number(number)) || DEFAULT_PAGE_NUMBER;
+    if (numberInt < 0) {
+        numberInt = DEFAULT_PAGE_NUMBER;
+    }
+    let sizeInt = Math.floor(Number(size)) || DEFAULT_PAGE_SIZE;
+    if (sizeInt < 0 || sizeInt > MAX_PAGE_SIZE) {
+        sizeInt = DEFAULT_PAGE_SIZE;
+    }
+    return { number: numberInt, size: sizeInt };
+}

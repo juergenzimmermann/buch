@@ -13,6 +13,9 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 
+import { Pageable } from '../service/pageable.js';
+import { Slice } from '../service/slice.js';
+
 export type Page<T> = {
     readonly content: T[];
     readonly page: {
@@ -22,3 +25,17 @@ export type Page<T> = {
         readonly totalPages: number;
     };
 };
+
+export function getPage<T>(slice: Slice<T>, pageable: Pageable): Page<T> {
+    const { content, totalElements } = slice;
+    const { size, number } = pageable;
+    return {
+        content,
+        page: {
+            size,
+            number,
+            totalElements,
+            totalPages: Math.ceil(totalElements / size),
+        },
+    };
+}

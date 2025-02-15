@@ -13,14 +13,14 @@
     // "transpileOnly": true,
     // "files": true,
   },
-  "include": ["src/**/*", "__tests__"],
+  "include": ["src/**/*", "__tests__/**/*"],
   "compilerOptions": {
-    "rootDir": ".",
+    // "rootDir": ".",
     "outDir": "./dist",
-    "lib": ["es2023"],
+    "lib": ["ES2024"],
     // uebersetzter JS-Code im Hinblick auf Module. "NodeNext" erfordert dasselbe fuer "moduleResolution"
     // "module": "NodeNext", // entspricht "Node16"
-    "module": "es2022",
+    "module": "ES2022",
     // Wie werden zu importierende Module im Dateisystem gefunden?
     // "moduleResolution": "nodenext",
     "moduleResolution": "node",
@@ -31,7 +31,8 @@
     "experimentalDecorators": true,
     "allowSyntheticDefaultImports": true,
     // https://www.typescriptlang.org/tsconfig/#target
-    "target": "es2022",
+    "target": "es2024",
+    // "target": "es2022",
     "sourceMap": true,
     "incremental": true,
     "skipLibCheck": true, // wegen @nestjs/graphql und @nestjs/apollo

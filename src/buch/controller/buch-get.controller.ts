@@ -46,15 +46,14 @@ import {
 import { Request, Response } from 'express';
 import { Public } from 'nest-keycloak-connect';
 import { Readable } from 'node:stream';
-import { paths } from '../../config/paths.js';
-import { getLogger } from '../../logger/logger.js';
 import { ResponseTimeInterceptor } from '../../logger/response-time.interceptor.js';
 import { type Buch, type BuchArt } from '../entity/buch.entity.js';
-import { DEFAULT_PAGE_SIZE } from '../service/pageable.js';
-import { type Page } from './page.js';
 import { BuchReadService } from '../service/buch-read.service.js';
-import { type Pageable } from '../service/pageable.js';
 import { type Suchkriterien } from '../service/suchkriterien.js';
+import { getLogger } from '../../logger/logger.js';
+import { getPage } from './page.js';
+import { getPageable } from '../service/pageable.js';
+import { paths } from '../../config/paths.js';
 
 /**
  * Klasse für `BuchGetController`, um Queries in _OpenAPI_ bzw. Swagger zu
@@ -243,25 +242,10 @@ export class BuchGetController {
         delete query['page'];
         delete query['size'];
 
-        const pageable: Pageable = {
-            size: Math.floor(Number(size)) || undefined,
-            number: Math.floor(Number(page)) || undefined,
-        };
-
+        const pageable = getPageable({ number: page, size });
         const buecherSlice = await this.#service.find(query, pageable);
-        const buchPage: Page<Buch> = {
-            content: buecherSlice.content,
-            page: {
-                size: pageable.size,
-                number: pageable.number,
-                totalElements: buecherSlice.totalElements,
-                totalPages: Math.ceil(
-                    buecherSlice.totalElements /
-                        (pageable.size ?? DEFAULT_PAGE_SIZE),
-                ),
-            },
-        };
-        this.#logger.debug('get: %o', buchPage);
+        const buchPage = getPage(buecherSlice, pageable);
+        this.#logger.debug('get: buchPage=%o', buchPage);
 
         return res.json(buchPage).send();
     }

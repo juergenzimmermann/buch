@@ -160,20 +160,11 @@ export class BuchReadService {
 
         // Keine Suchkriterien?
         if (suchkriterien === undefined) {
-            const queryBuilder = this.#queryBuilder.build({}, pageable);
-            const buecher = await queryBuilder.getMany();
-            const totalElements = await queryBuilder.getCount();
-            return this.#createSlice(buecher, totalElements);
+            return await this.#findAll(pageable);
         }
         const keys = Object.keys(suchkriterien);
         if (keys.length === 0) {
-            const queryBuilder = this.#queryBuilder.build(
-                suchkriterien,
-                pageable,
-            );
-            const buecher = await queryBuilder.getMany();
-            const totalElements = await queryBuilder.getCount();
-            return this.#createSlice(buecher, totalElements);
+            return await this.#findAll(pageable);
         }
 
         // Falsche Namen fuer Suchkriterien?
@@ -189,11 +180,22 @@ export class BuchReadService {
         if (buecher.length === 0) {
             this.#logger.debug('find: Keine Buecher gefunden');
             throw new NotFoundException(
-                `Keine Buecher gefunden: ${JSON.stringify(suchkriterien)}`,
+                `Keine Buecher gefunden: ${JSON.stringify(suchkriterien)}, Seite ${pageable.number}}`,
             );
         }
         const totalElements = await queryBuilder.getCount();
         return this.#createSlice(buecher, totalElements);
+    }
+
+    async #findAll(pageable: Pageable) {
+        const queryBuilder = this.#queryBuilder.build({}, pageable);
+        const buecher = await queryBuilder.getMany();
+        if (buecher.length === 0) {
+            throw new NotFoundException(`Ungueltige Seite "${pageable.number}"`);
+        }
+        const totalElements = await queryBuilder.getCount();
+        return this.#createSlice(buecher, totalElements);
+
     }
 
     #createSlice(buecher: Buch[], totalElements: number) {
