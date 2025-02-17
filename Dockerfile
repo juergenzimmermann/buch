@@ -46,7 +46,9 @@ FROM node:${NODE_VERSION}-bookworm-slim AS dist
 RUN <<EOF
 # https://explainshell.com/explain?cmd=set+-eux
 set -eux
+# Die "Package Index"-Dateien neu synchronisieren
 apt-get update
+# Die neuesten Versionen der bereits installierten Packages installieren
 apt-get upgrade --yes
 
 # Debian Bookworm bietet nur Packages fuer Python 3.11; Ubuntu Jammy LTS nur fuer Python 3.10
@@ -87,7 +89,9 @@ FROM node:${NODE_VERSION}-bookworm-slim AS dependencies
 
 RUN <<EOF
 set -eux
+# Die "Package Index"-Dateien neu synchronisieren
 apt-get update
+# Die neuesten Versionen der bereits installierten Packages installieren
 apt-get upgrade --yes
 # https://packages.debian.org/bookworm/python3.11-minimal
 # https://packages.debian.org/bookworm/python3.11-dev
@@ -128,7 +132,9 @@ LABEL org.opencontainers.image.title="buch" \
 
 RUN <<EOF
 set -eux
+# Die "Package Index"-Dateien neu synchronisieren
 apt-get update
+# Die neuesten Versionen der bereits installierten Packages installieren
 apt-get upgrade --yes
 # https://github.com/Yelp/dumb-init
 # https://packages.debian.org/bookworm/dumb-init
