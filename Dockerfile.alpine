@@ -51,6 +51,7 @@ apk update
 # Die neuesten Versionen der bereits installierten Packages installieren
 apk upgrade
 
+# ggf. Python fuer pg, better-sqlite3
 # https://dl-cdn.alpinelinux.org/alpine/v3.21/main/x86_64
 # https://dl-cdn.alpinelinux.org/alpine/v3.21/community/x86_64
 # https://pkgs.alpinelinux.org/package/v3.21/main/x86_64/python3

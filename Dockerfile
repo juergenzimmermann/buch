@@ -38,7 +38,7 @@ ARG NODE_VERSION=23.8.0
 # ---------------------------------------------------------------------------------------
 FROM node:${NODE_VERSION}-bookworm-slim AS dist
 
-# ggf. Python fuer Argon2
+# ggf. Python fuer pg, better-sqlite3
 # https://packages.debian.org/bookworm/python3.11-minimal
 # https://packages.debian.org/trixie/python3.12-minimal
 # "python3-dev" enthaelt "multiprocessing"
@@ -46,10 +46,11 @@ FROM node:${NODE_VERSION}-bookworm-slim AS dist
 RUN <<EOF
 # https://explainshell.com/explain?cmd=set+-eux
 set -eux
+# https://manpages.debian.org/bookworm/apt/apt-get.8.en.html
 # Die "Package Index"-Dateien neu synchronisieren
-apt-get update
+apt-get update --no-show-upgraded
 # Die neuesten Versionen der bereits installierten Packages installieren
-apt-get upgrade --yes
+apt-get upgrade --yes --no-show-upgraded
 
 # Debian Bookworm bietet nur Packages fuer Python 3.11; Ubuntu Jammy LTS nur fuer Python 3.10
 # https://packages.debian.org/bookworm/python3.11-minimal
