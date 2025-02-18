@@ -71,13 +71,13 @@
   "dependencies": {
     "@apollo/server": "4.11.3",
     "@js-temporal/polyfill": "0.4.4",
-    "@nestjs/apollo": "13.0.2",
+    "@nestjs/apollo": "13.0.3",
     "@nestjs/axios": "4.0.0",
-    "@nestjs/common": "11.0.9",
-    "@nestjs/core": "11.0.9",
-    "@nestjs/graphql": "13.0.2",
-    "@nestjs/microservices": "11.0.9",
-    "@nestjs/platform-express": "11.0.9",
+    "@nestjs/common": "11.0.10",
+    "@nestjs/core": "11.0.10",
+    "@nestjs/graphql": "13.0.3",
+    "@nestjs/microservices": "11.0.10",
+    "@nestjs/platform-express": "11.0.10",
     "@nestjs/swagger": "11.0.3",
     "@nestjs/terminus": "11.0.0",
     "@nestjs/typeorm": "11.0.0",
@@ -121,8 +121,8 @@
     "@graphql-eslint/eslint-plugin": "4.3.0",
     "@jest/globals": "29.7.0",
     "@jest/types": "29.6.3",
-    "@nestjs/cli": "11.0.2",
-    "@nestjs/testing": "11.0.9",
+    "@nestjs/cli": "11.0.3",
+    "@nestjs/testing": "11.0.10",
     "@stylistic/eslint-plugin": "3.1.0",
     "@tsconfig/node23": "23.0.0",
     "@types/compression": "1.7.5",
@@ -154,7 +154,7 @@
     "eslint-plugin-security": "3.0.1",
     "eslint-plugin-security-node": "1.1.4",
     "eslint-plugin-sonarjs": "3.0.2",
-    "eslint-plugin-unicorn": "56.0.1",
+    "eslint-plugin-unicorn": "57.0.0",
     "globals": "15.15.0",
     "jest": "29.7.0",
     "jest-config": "29.7.0",
@@ -178,13 +178,13 @@
     "tsconfig-paths": "4.2.0",
     "typedoc": "0.27.7",
     "typescript": "5.7.3",
-    "typescript-eslint": "8.24.0",
+    "typescript-eslint": "8.24.1",
     "unified": "11.0.5",
     "weak-napi": "2.0.2"
   },
   "overrides": {
     "node-gyp": "11.1.0",
-    "@nestjs/common": "11.0.9",
-    "@nestjs/core": "11.0.9"
+    "@nestjs/common": "11.0.10",
+    "@nestjs/core": "11.0.10"
   }
 }

@@ -29,8 +29,8 @@ export default tseslint.config(
             // https://github.com/typescript-eslint/typescript-eslint/blob/main/packages/eslint-plugin/src/configs/strict-type-checked.ts
             ...tseslint.configs.strictTypeChecked,
             ...tseslint.configs.stylistic,
-            // https://github.com/sindresorhus/eslint-plugin-unicorn/blob/main/configs/recommended.js
-            unicorn.configs['flat/recommended'],
+            // https://github.com/sindresorhus/eslint-plugin-unicorn/tree/main?tab=readme-ov-file#rules
+            unicorn.configs.recommended,
             // https://github.com/SonarSource/eslint-plugin-sonarjs
             // https://github.com/SonarSource/eslint-plugin-sonarjs/blob/master/src/index.ts
             sonarjs.configs.recommended,
