@@ -50,9 +50,9 @@ import { ResponseTimeInterceptor } from '../../logger/response-time.interceptor.
 import { type Buch, type BuchArt } from '../entity/buch.entity.js';
 import { BuchReadService } from '../service/buch-read.service.js';
 import { type Suchkriterien } from '../service/suchkriterien.js';
+import { createPage } from './page.js';
+import { createPageable } from '../service/pageable.js';
 import { getLogger } from '../../logger/logger.js';
-import { getPage } from './page.js';
-import { getPageable } from '../service/pageable.js';
 import { paths } from '../../config/paths.js';
 
 /**
@@ -242,9 +242,9 @@ export class BuchGetController {
         delete query['page'];
         delete query['size'];
 
-        const pageable = getPageable({ number: page, size });
+        const pageable = createPageable({ number: page, size });
         const buecherSlice = await this.#service.find(query, pageable);
-        const buchPage = getPage(buecherSlice, pageable);
+        const buchPage = createPage(buecherSlice, pageable);
         this.#logger.debug('get: buchPage=%o', buchPage);
 
         return res.json(buchPage).send();

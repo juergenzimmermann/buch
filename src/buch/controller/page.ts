@@ -26,7 +26,7 @@ export type Page<T> = {
     };
 };
 
-export function getPage<T>(slice: Slice<T>, pageable: Pageable): Page<T> {
+export function createPage<T>(slice: Slice<T>, pageable: Pageable): Page<T> {
     const { content, totalElements } = slice;
     const { size, number } = pageable;
     return {

@@ -27,7 +27,7 @@ type PageableProps = {
     readonly size?: string | undefined;
 };
 
-export function getPageable({ number, size }: PageableProps): Pageable {
+export function createPageable({ number, size }: PageableProps): Pageable {
     let numberInt = Math.floor(Number(number)) || DEFAULT_PAGE_NUMBER;
     if (numberInt < 0) {
         numberInt = DEFAULT_PAGE_NUMBER;
