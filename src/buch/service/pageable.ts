@@ -28,13 +28,27 @@ type PageableProps = {
 };
 
 export function createPageable({ number, size }: PageableProps): Pageable {
-    let numberInt = Math.floor(Number(number)) || DEFAULT_PAGE_NUMBER;
-    if (numberInt < 0) {
+    let numberFloat = Number(number);
+    let numberInt: number;
+    if (isNaN(numberFloat) || !Number.isInteger(numberFloat)) {
         numberInt = DEFAULT_PAGE_NUMBER;
+    } else {
+        numberInt = numberFloat - 1;
+        if (numberInt < 0) {
+            numberInt = DEFAULT_PAGE_NUMBER;
+        }
     }
-    let sizeInt = Math.floor(Number(size)) || DEFAULT_PAGE_SIZE;
-    if (sizeInt < 0 || sizeInt > MAX_PAGE_SIZE) {
+
+    let sizeFloat = Number(size);
+    let sizeInt: number;
+    if (isNaN(sizeFloat) || !Number.isInteger(sizeFloat)) {
         sizeInt = DEFAULT_PAGE_SIZE;
+    } else {
+        sizeInt = sizeFloat;
+        if (sizeInt < 1 || sizeInt > MAX_PAGE_SIZE) {
+            sizeInt = DEFAULT_PAGE_NUMBER;
+        }
     }
+
     return { number: numberInt, size: sizeInt };
 }

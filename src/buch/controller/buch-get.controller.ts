@@ -241,6 +241,15 @@ export class BuchGetController {
         const { page, size } = query;
         delete query['page'];
         delete query['size'];
+        this.#logger.debug('get: page=%s, size=%s', page, size);
+
+        const keys = Object.keys(query) as (keyof BuchQuery)[];
+        keys.forEach((key) => {
+            if (query[key] === undefined) {
+                delete query[key];
+            }
+        });
+        this.#logger.debug('get: query=%o', query);
 
         const pageable = createPageable({ number: page, size });
         const buecherSlice = await this.#service.find(query, pageable);

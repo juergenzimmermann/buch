@@ -23,7 +23,7 @@ import { type BuchArt } from './../entity/buch.entity.js';
 /**
  * Typdefinition für `find` in `buch-read.service` und `QueryBuilder.build()`.
  */
-export type Suchkriterien = {
+export interface Suchkriterien {
     readonly isbn?: string;
     readonly rating?: number | string;
     readonly art?: BuchArt;
@@ -37,4 +37,4 @@ export type Suchkriterien = {
     readonly java?: string;
     readonly python?: string;
     readonly titel?: string;
-};
+}
