@@ -67,37 +67,37 @@ import { paths } from '../../config/paths.js';
  */
 export class BuchQuery implements Suchkriterien {
     @ApiProperty({ required: false })
-    declare readonly isbn: string;
+    declare readonly isbn?: string;
 
     @ApiProperty({ required: false })
-    declare readonly rating: number;
+    declare readonly rating?: number;
 
     @ApiProperty({ required: false })
-    declare readonly art: BuchArt;
+    declare readonly art?: BuchArt;
 
     @ApiProperty({ required: false })
-    declare readonly preis: number;
+    declare readonly preis?: number;
 
     @ApiProperty({ required: false })
-    declare readonly rabatt: number;
+    declare readonly rabatt?: number;
 
     @ApiProperty({ required: false })
-    declare readonly lieferbar: boolean;
+    declare readonly lieferbar?: boolean;
 
     @ApiProperty({ required: false })
-    declare readonly datum: string;
+    declare readonly datum?: string;
 
     @ApiProperty({ required: false })
-    declare readonly homepage: string;
+    declare readonly homepage?: string;
 
     @ApiProperty({ required: false })
-    declare readonly javascript: string;
+    declare readonly javascript?: string;
 
     @ApiProperty({ required: false })
-    declare readonly typescript: string;
+    declare readonly typescript?: string;
 
     @ApiProperty({ required: false })
-    declare readonly titel: string;
+    declare readonly titel?: string;
 
     @ApiProperty({ required: false })
     declare size?: string;
