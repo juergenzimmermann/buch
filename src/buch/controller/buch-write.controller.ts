@@ -61,7 +61,7 @@ import { type Buch } from '../entity/buch.entity.js';
 import { type Titel } from '../entity/titel.entity.js';
 import { BuchWriteService } from '../service/buch-write.service.js';
 import { BuchDTO, BuchDtoOhneRef } from './buchDTO.entity.js';
-import { getBaseUri } from './getBaseUri.js';
+import { createBaseUri } from './createBaseUri.js';
 
 const MSG_FORBIDDEN = 'Kein Token mit ausreichender Berechtigung vorhanden';
 /**
@@ -113,7 +113,7 @@ export class BuchWriteController {
         const buch = this.#buchDtoToBuch(buchDTO);
         const id = await this.#service.create(buch);
 
-        const location = `${getBaseUri(req)}/${id}`;
+        const location = `${createBaseUri(req)}/${id}`;
         this.#logger.debug('post: location=%s', location);
         return res.location(location).send();
     }
@@ -169,7 +169,7 @@ export class BuchWriteController {
             file.mimetype,
         );
 
-        const location = `${getBaseUri(req)}/file/${id}`;
+        const location = `${createBaseUri(req)}/file/${id}`;
         this.#logger.debug('addFile: location=%s', location);
         return res.location(location).send();
     }
