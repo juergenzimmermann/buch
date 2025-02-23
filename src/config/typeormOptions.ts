@@ -130,7 +130,7 @@ switch (dbType) {
         };
         break;
     }
-    // 'better-sqlite3' erfordert Python zum Uebersetzen, wenn das Docker-Image gebaut wird
+    // 'better-sqlite3' erfordert node-gyp zum Uebersetzen, wenn das Docker-Image gebaut wird
     // ${env:LOCALAPPDATA}\node-gyp\Cache\<Node_Version>\include\node\v8config.h
     // npm rebuild better-sqlite3 --update-binary
     // npm i better-sqlite3

@@ -182,8 +182,9 @@
     "weak-napi": "2.0.2"
   },
   "overrides": {
-    "node-gyp": "11.1.0",
-    "@nestjs/common": "11.0.10",
-    "@nestjs/core": "11.0.10"
+    "nest-keycloak-connect": {
+      "@nestjs/common": "$@nestjs/common",
+      "@nestjs/core": "$@nestjs/core"
+    }
   }
 }
