@@ -15,7 +15,7 @@
 
 // https://docs.microsoft.com/en-us/powershell/scripting/developer/cmdlet/approved-verbs-for-windows-powershell-commands?view=powershell-7
 
-// Aufruf:      .extras\dependency-check
+// Aufruf:      scripts
 //              node dependency-check.js
 // ggf. z.B.    npm ls express
 
@@ -31,7 +31,7 @@ const project = 'buch';
 
 const execPath = resolve('C:/Zimmermann', 'dependency-check', 'bin');
 const dataPath = resolve('C:\\Zimmermann', 'dependency-check-data');
-const packageLockPath = '..\\..\\package-lock.json';
+const packageLockPath = '..\\package-lock.json';
 const reportPath = '.';
 let options = `--nvdApiKey ${nvdApiKey} --project ${project} --scan ${packageLockPath} --suppression suppression.xml --out ${reportPath} --data ${dataPath}`;
 // dependency-check.bat --advancedHelp
