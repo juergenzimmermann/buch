@@ -15,7 +15,7 @@
 
 // https://docs.microsoft.com/en-us/powershell/scripting/developer/cmdlet/approved-verbs-for-windows-powershell-commands?view=powershell-7
 
-// Aufruf:      scripts
+// Aufruf:      cd scripts
 //              node dependency-check.js
 // ggf. z.B.    npm ls express
 
@@ -29,10 +29,27 @@ import { resolve } from 'node:path';
 const nvdApiKey = '47fbc0a4-9240-4fda-9a26-d7d5624c16bf';
 const project = 'buch';
 
-const execPath = resolve('C:/Zimmermann', 'dependency-check', 'bin');
-const dataPath = resolve('C:\\Zimmermann', 'dependency-check-data');
-const packageLockPath = '..\\package-lock.json';
+let baseExecPath;
+let baseScript = 'dependency-check';
+let baseDataPath;
+
+// https://nodejs.org/api/os.html#osplatform
+const betriebssystem = platform(); // win32, linux, ...
+if (betriebssystem === 'win32') {
+    baseExecPath = resolve('C:/', 'Zimmermann');
+    baseDataPath = resolve('C:/', 'Zimmermann');
+    baseScript += '.bat';
+} else {
+    baseExecPath = resolve('/', 'Zimmermann');
+    baseDataPath = resolve('/', 'Zimmermann');
+}
+const script = resolve(baseExecPath, 'dependency-check', 'bin', baseScript);
+console.log(`script=${script}`);
+
+const dataPath = resolve(baseDataPath, 'dependency-check-data');
+const packageLockPath = resolve('..', 'package-lock.json');
 const reportPath = '.';
+
 let options = `--nvdApiKey ${nvdApiKey} --project ${project} --scan ${packageLockPath} --suppression suppression.xml --out ${reportPath} --data ${dataPath}`;
 // dependency-check.bat --advancedHelp
 options += ' --nodeAuditSkipDevDependencies';
@@ -65,19 +82,11 @@ options += ' --disableRubygems';
 options += ' --disableSwiftPackageManagerAnalyzer';
 options += ' --disableSwiftPackageResolvedAnalyzer';
 options += ' --disableYarnAudit';
-
-// https://nodejs.org/api/os.html#osplatform
-const betriebssystem = platform(); // win32, linux, ...
-let extension;
-if (betriebssystem === 'win32') {
-    extension = 'bat';
-}
-const baseScript = `dependency-check.${extension}`;
-const script = `${resolve(execPath, baseScript)} ${options}`;
-console.log(`skript=${script}`);
+console.log(`options=${options}`);
+console.log('');
 
 // https://nodejs.org/api/child_process.html#spawning-bat-and-cmd-files-on-windows
-exec(script, (err, stdout, stderr) => {
+exec(`${script} ${options}`, (err, stdout, stderr) => {
     if (err) {
         console.error(err);
         return;

@@ -73,8 +73,8 @@
     - [type-coverage](#type-coverage)
   - [Sicherheitslücken](#sicherheitslücken)
     - [npm audit](#npm-audit)
-    - [Docker Scout](#docker-scout)
     - [OWASP Dependency Check](#owasp-dependency-check)
+    - [Docker Scout](#docker-scout)
     - [Snyk](#snyk)
   - [AsciiDoctor und PlantUML](#asciidoctor-und-plantuml)
     - [Preview von PlantUML-Dateien](#preview-von-plantuml-dateien)
@@ -649,6 +649,21 @@ weg:
     npm audit --omit dev
 ```
 
+### OWASP Dependency Check
+
+Mit _OWASP Dependency Check_ werden alle in `node_modules` installierten
+npm-Packages mit den _CVE_-Nummern der NIST-Datenbank abgeglichen.
+
+Von https://nvd.nist.gov/developers/request-an-api-key fordert man einen "API Key"
+an, um im Laufe des Semesters mit _OWASP Dependency Check_ die benutzte Software
+("3rd Party Libraries") auf Sicherheitslücken zu prüfen. Diesen API Key trägt
+man im Skript `scripts\dependency-check.js` als Wert der Variablen `nvdApiKey` ein.
+
+```powershell
+    cd scripts
+    node dependency-check.js
+```
+
 ### Docker Scout
 
 Mit dem Unterkommando `quickview` von _Scout_ kann man sich zunächst einen
@@ -680,25 +695,6 @@ von _Scout_ auflisten:
 
 Statt der Kommandozeile kann man auch den Menüpunkt "Docker Scout" im
 _Docker Dashboard_ verwenden.
-
-### OWASP Dependency Check
-
-Mit _OWASP Dependency Check_ werden alle in `node_modules` installierten
-npm-Packages mit den _CVE_-Nummern der NIST-Datenbank abgeglichen, d.h. auch
-die Packages, die nur als `devDependencies` installiert wurden. Da es insgesamt
-zwischen 25.000 und 30.000 Packages sind, dauert dieser Abgleich 30 bis 45
-Minuten.
-
-Von https://nvd.nist.gov/developers/request-an-api-key fordert man einen "API Key"
-an, um im Laufe des Semesters mit _OWASP Dependency Check_ die benutzte Software
-("3rd Party Libraries") auf Sicherheitslücken zu prüfen. Diesen API Key trägt
-man im Skript `.extras\dependency-check\dependency-check.ps1` als Wert der
-Variablen `$nvdApiKey` ein.
-
-```powershell
-    cd .extras\compose\dependency-check
-    docker compose up
-```
 
 ### Snyk
 
