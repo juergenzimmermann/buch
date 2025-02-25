@@ -17,6 +17,12 @@
 
 import { env } from 'node:process';
 
+const SLEEP_IN_MILLIS = 50;
+
+function sleep(millis) {
+    return new Promise((resolve) => setTimeout(resolve, millis));
+}
+
 // selbst-signiertes Zertifikat ignorieren
 // https://github.com/orgs/nodejs/discussions/44038
 env.NODE_TLS_REJECT_UNAUTHORIZED = 0; // DevSkim: ignore DS125134
@@ -49,4 +55,6 @@ for (let index = 1; ; index++) {
     if (response.status !== 200) {
         console.error(`Fehler bei id=${id}`);
     }
+
+    sleep(SLEEP_IN_MILLIS);
 }
