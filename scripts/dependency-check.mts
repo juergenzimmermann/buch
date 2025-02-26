@@ -13,10 +13,8 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-// https://docs.microsoft.com/en-us/powershell/scripting/developer/cmdlet/approved-verbs-for-windows-powershell-commands?view=powershell-7
-
 // Aufruf:      cd scripts
-//              node dependency-check.js
+//              node dependency-check.mts
 // ggf. z.B.    npm ls express
 
 // TODO dset https://github.com/lukeed/dset/issues/44#issuecomment-2122866311
@@ -50,38 +48,41 @@ const dataPath = resolve(baseDataPath, 'dependency-check-data');
 const packageLockPath = resolve('..', 'package-lock.json');
 const reportPath = '.';
 
-let options = `--nvdApiKey ${nvdApiKey} --project ${project} --scan ${packageLockPath} --suppression suppression.xml --out ${reportPath} --data ${dataPath}`;
-// dependency-check.bat --advancedHelp
-options += ' --nodeAuditSkipDevDependencies';
-options += ' --disableArchive';
-options += ' --disableAssembly';
-options += ' --disableAutoconf';
-options += ' --disableBundleAudit';
-options += ' --disableCarthageAnalyzer';
-options += ' --disableCentral';
-options += ' --disableCentralCache';
-options += ' --disableCmake';
-options += ' --disableCocoapodsAnalyzer';
-options += ' --disableComposer';
-options += ' --disableCpan';
-options += ' --disableDart';
-options += ' --disableGolangDep';
-options += ' --disableGolangMod';
-options += ' --disableJar';
-options += ' --disableMavenInstall';
-options += ' --disableMSBuild';
-options += ' --disableNugetconf';
-options += ' --disableNuspec';
-options += ' --disablePip';
-options += ' --disablePipfile';
-options += ' --disablePnpmAudit';
-options += ' --disablePoetry';
-options += ' --disablePyDist';
-options += ' --disablePyPkg';
-options += ' --disableRubygems';
-options += ' --disableSwiftPackageManagerAnalyzer';
-options += ' --disableSwiftPackageResolvedAnalyzer';
-options += ' --disableYarnAudit';
+let options = `--nvdApiKey ${nvdApiKey} --project ${project} `.concat(
+    `--scan ${packageLockPath} --suppression suppression.xml `,
+    `--out ${reportPath} --data ${dataPath} `,
+    // dependency-check.bat --advancedHelp
+    '--nodeAuditSkipDevDependencies ',
+    '--disableArchive ',
+    '--disableAssembly ',
+    '--disableAutoconf ',
+    '--disableBundleAudit ',
+    '--disableCarthageAnalyzer ',
+    '--disableCentral ',
+    '--disableCentralCache ',
+    '--disableCmake ',
+    '--disableCocoapodsAnalyzer ',
+    '--disableComposer ',
+    '--disableCpan ',
+    '--disableDart ',
+    '--disableGolangDep ',
+    '--disableGolangMod ',
+    '--disableJar ',
+    '--disableMavenInstall ',
+    '--disableMSBuild ',
+    '--disableNugetconf ',
+    '--disableNuspec ',
+    '--disablePip ',
+    '--disablePipfile ',
+    '--disablePnpmAudit ',
+    '--disablePoetry ',
+    '--disablePyDist ',
+    '--disablePyPkg ',
+    '--disableRubygems ',
+    '--disableSwiftPackageManagerAnalyzer ',
+    '--disableSwiftPackageResolvedAnalyzer ',
+    '--disableYarnAudit',
+);
 console.log(`options=${options}`);
 console.log('');
 

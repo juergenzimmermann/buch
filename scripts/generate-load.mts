@@ -13,21 +13,21 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-// Aufruf:   node generate-load.js
+// Aufruf:   node scripts/generate-load.mts
 
 import { env } from 'node:process';
 
 const SLEEP_IN_MILLIS = 50;
 
-function sleep(millis) {
+function sleep(millis: number) {
     return new Promise((resolve) => setTimeout(resolve, millis));
 }
 
 // selbst-signiertes Zertifikat ignorieren
 // https://github.com/orgs/nodejs/discussions/44038
-env.NODE_TLS_REJECT_UNAUTHORIZED = 0; // DevSkim: ignore DS125134
+env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
 
-const options = {
+const options: RequestInit = {
     headers: {
         Accept: 'application/json',
     },

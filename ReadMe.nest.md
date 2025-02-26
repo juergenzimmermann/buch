@@ -603,8 +603,7 @@ nun die folgende Eingaben:
 - _Expires in_: z.B. _90 days_ auswählen
 
 Abschließend klickt man auf den Button _Generate_ und trägt den generierten
-Token in der Datei `.env` für die Umgebungsvariable `SONAR_TOKEN` ein, damit
-der Token im Skript `scripts\sonar-scanner.js` verwendet werden kann.
+Token im Skript `scripts\sonar-scanner.mts` ein.
 
 Nachdem der Server gestartet ist, wird der SonarQube-Scanner in einer zweiten
 PowerShell mit `npm run sonar` gestartet. Das Resultat kann dann in der
@@ -657,11 +656,11 @@ npm-Packages mit den _CVE_-Nummern der NIST-Datenbank abgeglichen.
 Von https://nvd.nist.gov/developers/request-an-api-key fordert man einen "API Key"
 an, um im Laufe des Semesters mit _OWASP Dependency Check_ die benutzte Software
 ("3rd Party Libraries") auf Sicherheitslücken zu prüfen. Diesen API Key trägt
-man im Skript `scripts\dependency-check.js` als Wert der Variablen `nvdApiKey` ein.
+man im Skript `scripts\dependency-check.mts` als Wert der Variablen `nvdApiKey` ein.
 
 ```powershell
     cd scripts
-    node dependency-check.js
+    node dependency-check.mts
 ```
 
 ### Docker Scout

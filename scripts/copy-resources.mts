@@ -14,11 +14,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-import fs from 'node:fs';
-import path from 'node:path';
-
-const { cpSync, existsSync, mkdirSync } = fs;
-const { join } = path
+import { cpSync, existsSync, mkdirSync } from 'node:fs';
+import { join } from 'node:path';
 
 // BEACHTE: "assets" innerhalb von nest-cli.json werden bei "--watch" NICHT beruecksichtigt
 // https://docs.nestjs.com/cli/monorepo#global-compiler-options
