@@ -154,10 +154,12 @@ export class QueryBuilder {
         if (rating !== undefined) {
             const ratingNumber =
                 typeof rating === 'string' ? parseInt(rating) : rating;
-            queryBuilder = queryBuilder.where(
-                `${this.#buchAlias}.rating >= ${ratingNumber}`,
-            );
-            useWhere = false;
+            if (!isNaN(ratingNumber)) {
+                queryBuilder = queryBuilder.where(
+                    `${this.#buchAlias}.rating >= ${ratingNumber}`,
+                );
+                useWhere = false;
+            }
         }
 
         if (preis !== undefined && typeof preis === 'string') {
