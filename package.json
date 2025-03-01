@@ -182,6 +182,9 @@
     "typescript-eslint": {
       "typescript": "$typescript"
     },
+    "@typescript-eslint/parser": {
+      "typescript": "$typescript"
+    },
     "eslint-plugin-jest": {
       "typescript": "$typescript"
     }
