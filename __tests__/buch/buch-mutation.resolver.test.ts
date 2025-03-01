@@ -65,7 +65,7 @@ describe('GraphQL Mutations', () => {
                 mutation {
                     create(
                         input: {
-                            isbn: "978-0-321-19368-1",
+                            isbn: "978-1-491-95035-7",
                             rating: 1,
                             art: EPUB,
                             preis: 99.99,
