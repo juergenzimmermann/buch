@@ -72,12 +72,12 @@
     "@js-temporal/polyfill": "0.4.4",
     "@nestjs/apollo": "13.0.3",
     "@nestjs/axios": "4.0.0",
-    "@nestjs/common": "11.0.10",
-    "@nestjs/core": "11.0.10",
+    "@nestjs/common": "11.0.11",
+    "@nestjs/core": "11.0.11",
     "@nestjs/graphql": "13.0.3",
-    "@nestjs/microservices": "11.0.10",
-    "@nestjs/platform-express": "11.0.10",
-    "@nestjs/swagger": "11.0.5",
+    "@nestjs/microservices": "11.0.11",
+    "@nestjs/platform-express": "11.0.11",
+    "@nestjs/swagger": "11.0.6",
     "@nestjs/terminus": "11.0.0",
     "@nestjs/typeorm": "11.0.0",
     "axios": "1.8.1",
@@ -120,7 +120,7 @@
     "@jest/globals": "29.7.0",
     "@jest/types": "29.6.3",
     "@nestjs/cli": "11.0.5",
-    "@nestjs/testing": "11.0.10",
+    "@nestjs/testing": "11.0.11",
     "@stylistic/eslint-plugin": "4.1.0",
     "@tsconfig/node23": "23.0.0",
     "@types/compression": "1.7.5",
@@ -130,7 +130,7 @@
     "@types/jest": "29.5.14",
     "@types/js-yaml": "4.0.9",
     "@types/multer": "1.4.12",
-    "@types/node": "22.13.5",
+    "@types/node": "22.13.7",
     "@types/nodemailer": "6.4.17",
     "@types/nodemailer-direct-transport": "1.0.35",
     "@types/nodemailer-smtp-transport": "2.7.8",
@@ -167,7 +167,7 @@
     "ts-node": "10.9.2",
     "tsconfig-paths": "4.2.0",
     "typedoc": "0.27.9",
-    "typescript": "5.7.3",
+    "typescript": "5.8.2",
     "typescript-eslint": "8.25.0",
     "weak-napi": "2.0.2"
   },
@@ -175,6 +175,15 @@
     "nest-keycloak-connect": {
       "@nestjs/common": "$@nestjs/common",
       "@nestjs/core": "$@nestjs/core"
+    },
+    "@nestjs/cli": {
+      "typescript": "$typescript"
+    },
+    "typescript-eslint": {
+      "typescript": "$typescript"
+    },
+    "eslint-plugin-jest": {
+      "typescript": "$typescript"
     }
   }
 }
