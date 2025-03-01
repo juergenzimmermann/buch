@@ -185,6 +185,15 @@
     "@typescript-eslint/parser": {
       "typescript": "$typescript"
     },
+    "@typescript-eslint/typescript-estree": {
+      "typescript": "$typescript"
+    },
+    "@typescript-eslint/type-utils": {
+      "typescript": "$typescript"
+    },
+    "@typescript-eslint/eslint-plugin": {
+      "typescript": "$typescript"
+    },
     "eslint-plugin-jest": {
       "typescript": "$typescript"
     }
