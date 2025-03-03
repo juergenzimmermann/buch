@@ -65,4 +65,4 @@ EOF
 USER jenkins
 # https://plugins.jenkins.io/blueocean
 # https://plugins.jenkins.io/docker-workflow
-RUN jenkins-plugin-cli --plugins "blueocean:1.27.16 docker-workflow:596.v3e6972b_46b_e2"
+RUN jenkins-plugin-cli --plugins "blueocean:1.27.16 docker-workflow:603.va_6964865a_9b_9"
