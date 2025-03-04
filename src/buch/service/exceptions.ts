@@ -27,11 +27,14 @@ import { HttpException, HttpStatus } from '@nestjs/common';
  * Exception-Klasse für eine bereits existierende ISBN-Nummer.
  */
 export class IsbnExistsException extends HttpException {
-    constructor(readonly isbn: string) {
+    readonly isbn: string;
+
+    constructor(isbn: string) {
         super(
             `Die ISBN-Nummer ${isbn} existiert bereits.`,
             HttpStatus.UNPROCESSABLE_ENTITY,
         );
+        this.isbn = isbn;
     }
 }
 
@@ -39,11 +42,14 @@ export class IsbnExistsException extends HttpException {
  * Exception-Klasse für eine ungültige Versionsnummer beim Ändern.
  */
 export class VersionInvalidException extends HttpException {
-    constructor(readonly version: string | undefined) {
+    readonly version: string | undefined;
+
+    constructor(version: string | undefined) {
         super(
             `Die Versionsnummer ${version} ist ungueltig.`,
             HttpStatus.PRECONDITION_FAILED,
         );
+        this.version = version;
     }
 }
 
@@ -51,11 +57,14 @@ export class VersionInvalidException extends HttpException {
  * Exception-Klasse für eine veraltete Versionsnummer beim Ändern.
  */
 export class VersionOutdatedException extends HttpException {
-    constructor(readonly version: number) {
+    readonly version: number;
+
+    constructor(version: number) {
         super(
             `Die Versionsnummer ${version} ist nicht aktuell.`,
             HttpStatus.PRECONDITION_FAILED,
         );
+        this.version = version;
     }
 }
 
