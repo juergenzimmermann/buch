@@ -229,7 +229,7 @@ pipeline {
             steps {
                 echo 'Docker-Image bauen'
                 // https://www.jenkins.io/doc/book/pipeline/docker/#building-containers
-                def image = docker.build("juergenzimmermann/buch:${env.BUILD_ID}")
+                docker.build("juergenzimmermann/buch:${env.BUILD_ID}")
 
                 echo 'TODO: Docker-Image veroeffentlichen'
                 // image.push()
