@@ -229,13 +229,11 @@ pipeline {
             steps {
                 echo 'Docker-Image bauen'
                 // https://www.jenkins.io/doc/book/pipeline/docker/#building-containers
-                def app = docker.build("juergenzimmermann/buch")
+                def image = docker.build("juergenzimmermann/buch:${env.BUILD_ID}")
 
                 echo 'TODO: Docker-Image veroeffentlichen'
-                // docker.withRegistry('https://registry.hub.docker.com', 'docker-hub-credentials') {
-                // app.push("${env.BUILD_NUMBER}")
-                // app.push("latest")
-        }
+                // image.push()
+                // image.push('latest')
             }
         }
 
