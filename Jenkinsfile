@@ -180,34 +180,34 @@ pipeline {
 
             post {
                 always {
-                  echo 'TODO: Links fuer Coverage und TypeDoc'
-                  //publishHTML target : [
-                  //  reportDir: 'coverage',
-                  //  reportFiles: 'index.html',
-                  //  reportName: 'Coverage (Istanbul)',
-                  //  reportTitles: 'Coverage'
-                  //]
+                    echo 'TODO: Links fuer Coverage und TypeDoc'
+                    //publishHTML target : [
+                    //  reportDir: 'coverage',
+                    //  reportFiles: 'index.html',
+                    //  reportName: 'Coverage (Istanbul)',
+                    //  reportTitles: 'Coverage'
+                    //]
 
-                  publishHTML (target : [
-                      reportDir: '.extras/doc/projekthandbuch/html',
-                      reportFiles: 'projekthandbuch.html',
-                      reportName: 'Projekthandbuch',
-                      reportTitles: 'Projekthandbuch'
-                  ])
+                    publishHTML (target : [
+                        reportDir: '.extras/doc/projekthandbuch/html',
+                        reportFiles: 'projekthandbuch.html',
+                        reportName: 'Projekthandbuch',
+                        reportTitles: 'Projekthandbuch'
+                    ])
 
-                  publishHTML target : [
-                      reportDir: '.extras/doc/folien',
-                      reportFiles: 'folien.html',
-                      reportName: 'Folien (reveal.js)',
-                      reportTitles: 'reveal.js'
-                  ]
+                    publishHTML target : [
+                        reportDir: '.extras/doc/folien',
+                        reportFiles: 'folien.html',
+                        reportName: 'Folien (reveal.js)',
+                        reportTitles: 'reveal.js'
+                    ]
 
-                  publishHTML target : [
-                      reportDir: '.extras/doc/api',
-                      reportFiles: 'index.html',
-                      reportName: 'TypeDoc',
-                      reportTitles: 'TypeDoc'
-                  ]
+                    publishHTML target : [
+                        reportDir: '.extras/doc/api',
+                        reportFiles: 'index.html',
+                        reportName: 'TypeDoc',
+                        reportTitles: 'TypeDoc'
+                    ]
                 }
 
                 success {
@@ -225,13 +225,27 @@ pipeline {
         }
 
         stage('Docker Image bauen') {
+            agent any
             steps {
-                echo 'TODO: Docker-Image bauen und veroeffentlichen'
-                // sh 'docker buildx bake'
+                echo 'TODO: Docker-Image bauen'
+                // https://www.jenkins.io/doc/book/pipeline/docker/#building-containers
+                sh 'docker buildx bake'
+            }
+        }
+
+        stage('Docker Push') {
+            agent any
+            steps {
+                echo 'TODO: Docker-Image veroeffentlichen'
+                // withCredentials([usernamePassword(credentialsId: 'dockerHub', passwordVariable: 'dockerHubPassword', usernameVariable: 'dockerHubUser')]) {
+                //     sh "docker login -u ${env.dockerHubUser} -p ${env.dockerHubPassword}"
+                //     sh 'docker push juergenzimmermann/buch:latest'
+                // }
             }
         }
 
         stage('Deployment fuer Kubernetes') {
+            agent any
             steps {
                 echo 'TODO: Deployment fuer Kubernetes mit z.B. Ansible, Terraform'
             }

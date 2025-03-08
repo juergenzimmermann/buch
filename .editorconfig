@@ -13,7 +13,7 @@ trim_trailing_whitespace = true
 [*.{ts,mts,js,mjs,cjs,puml}]
 indent_size = 4
 
-[Dockerfile]
+[Dockerfile,Jenkinsfile]
 indent_size = 4
 
 [*.md]
