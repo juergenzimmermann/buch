@@ -227,20 +227,15 @@ pipeline {
         stage('Docker Image bauen') {
             agent any
             steps {
-                echo 'TODO: Docker-Image bauen'
+                echo 'Docker-Image bauen'
                 // https://www.jenkins.io/doc/book/pipeline/docker/#building-containers
-                sh 'docker buildx bake'
-            }
-        }
+                def app = docker.build("juergenzimmermann/buch")
 
-        stage('Docker Push') {
-            agent any
-            steps {
                 echo 'TODO: Docker-Image veroeffentlichen'
-                // withCredentials([usernamePassword(credentialsId: 'dockerHub', passwordVariable: 'dockerHubPassword', usernameVariable: 'dockerHubUser')]) {
-                //     sh "docker login -u ${env.dockerHubUser} -p ${env.dockerHubPassword}"
-                //     sh 'docker push juergenzimmermann/buch:latest'
-                // }
+                // docker.withRegistry('https://registry.hub.docker.com', 'docker-hub-credentials') {
+                // app.push("${env.BUILD_NUMBER}")
+                // app.push("latest")
+        }
             }
         }
 
