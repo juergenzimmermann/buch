@@ -172,15 +172,16 @@
     "weak-napi": "2.0.2"
   },
   "overrides": {
-    "nest-keycloak-connect": {
-      "@nestjs/common": "$@nestjs/common",
-      "@nestjs/core": "$@nestjs/core"
-    },
     "@nestjs/cli": {
       "typescript": "$typescript"
     },
     "eslint-plugin-jest": {
       "typescript": "$typescript"
+    },
+    "nest-keycloak-connect": {
+      "@nestjs/common": "$@nestjs/common",
+      "@nestjs/core": "$@nestjs/core",
+      "rxjs": "7.8.2"
     }
   }
 }
