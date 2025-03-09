@@ -225,20 +225,16 @@ pipeline {
         }
 
         stage('Docker Image bauen') {
-            agent any
             steps {
-                echo 'Docker-Image bauen'
+                echo 'TODO: Docker-Image bauen'
                 // https://www.jenkins.io/doc/book/pipeline/docker/#building-containers
-                docker.build("juergenzimmermann/buch:${env.BUILD_ID}")
-
-                echo 'TODO: Docker-Image veroeffentlichen'
+                // def image = docker.build("juergenzimmermann/buch:${env.BUILD_ID}")
                 // image.push()
                 // image.push('latest')
             }
         }
 
         stage('Deployment fuer Kubernetes') {
-            agent any
             steps {
                 echo 'TODO: Deployment fuer Kubernetes mit z.B. Ansible, Terraform'
             }
