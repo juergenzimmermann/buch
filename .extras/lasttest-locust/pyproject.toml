@@ -13,10 +13,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-# Aufruf:   uv sync
-#           uv pip list --outdated
-#               .\.venv\Scripts\Activate.ps1
-#               pip list --outdated
+# Aufruf:   uv sync --all-groups
 #
 #           uvx ruff check locustfile.py
 #           uvx ruff format locustfile.py [--diff]
@@ -63,10 +60,10 @@ changelog = "https://github.com/juergenzimmermann/locust/blob/master/CHANGELOG.m
 # https://docs.astral.sh/uv/concepts/projects/dependencies/#dependency-groups
 [dependency-groups]
 # https://docs.astral.sh/uv/concepts/projects/dependencies/#development-dependencies
-dev = ["locust>=2.32.5"]
+dev = ["locust>=2.33.1"]
 lint = [
   # https://docs.astral.sh/ruff
-  "ruff>=0.9.2",
+  "ruff>=0.9.10",
 ]
 
 [tool.ruff]
