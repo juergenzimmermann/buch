@@ -31,7 +31,7 @@
 # https://snyk.io/blog/10-best-practices-to-containerize-nodejs-web-applications-with-docker
 # https://cheatsheetseries.owasp.org/cheatsheets/NodeJS_Docker_Cheat_Sheet.html
 
-ARG NODE_VERSION=23.9.0
+ARG NODE_VERSION=23.10.0
 
 # ---------------------------------------------------------------------------------------
 # S t a g e   d i s t
@@ -70,12 +70,12 @@ WORKDIR /home/node
 
 # https://docs.docker.com/engine/reference/builder/#run---mounttypebind
 RUN --mount=type=bind,source=package.json,target=package.json \
-    --mount=type=bind,source=package-lock.json,target=package-lock.json \
-    --mount=type=bind,source=nest-cli.json,target=nest-cli.json \
-    --mount=type=bind,source=tsconfig.json,target=tsconfig.json \
-    --mount=type=bind,source=tsconfig.build.json,target=tsconfig.build.json \
-    --mount=type=bind,source=src,target=src \
-    --mount=type=cache,target=/root/.npm <<EOF
+  --mount=type=bind,source=package-lock.json,target=package-lock.json \
+  --mount=type=bind,source=nest-cli.json,target=nest-cli.json \
+  --mount=type=bind,source=tsconfig.json,target=tsconfig.json \
+  --mount=type=bind,source=tsconfig.build.json,target=tsconfig.build.json \
+  --mount=type=bind,source=src,target=src \
+  --mount=type=cache,target=/root/.npm <<EOF
 set -eux
 # ci (= clean install) mit package-lock.json
 npm ci --no-audit --no-fund
@@ -107,8 +107,8 @@ USER node
 WORKDIR /home/node
 
 RUN --mount=type=bind,source=package.json,target=package.json \
-    --mount=type=bind,source=package-lock.json,target=package-lock.json \
-    --mount=type=cache,target=/root/.npm <<EOF
+  --mount=type=bind,source=package-lock.json,target=package-lock.json \
+  --mount=type=cache,target=/root/.npm <<EOF
 set -eux
 # ci (= clean install) mit package-lock.json
 # --omit=dev: ohne devDependencies
@@ -126,10 +126,10 @@ FROM node:${NODE_VERSION}-bookworm-slim AS final
 # https://spdx.org/licenses
 # MAINTAINER ist deprecated https://docs.docker.com/engine/reference/builder/#maintainer-deprecated
 LABEL org.opencontainers.image.title="buch" \
-    org.opencontainers.image.description="Appserver buch mit Basis-Image Debian Bookworm" \
-    org.opencontainers.image.version="2025.4.1-bookworm" \
-    org.opencontainers.image.licenses="GPL-3.0-or-later" \
-    org.opencontainers.image.authors="Juergen.Zimmermann@h-ka.de"
+  org.opencontainers.image.description="Appserver buch mit Basis-Image Debian Bookworm" \
+  org.opencontainers.image.version="2025.4.1-bookworm" \
+  org.opencontainers.image.licenses="GPL-3.0-or-later" \
+  org.opencontainers.image.authors="Juergen.Zimmermann@h-ka.de"
 
 RUN <<EOF
 set -eux

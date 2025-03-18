@@ -21,10 +21,8 @@ dependencies.svg
 # Sensible Daten (Passwort, Token, private Schluessel)
 .extras/compose/db/mysql/db_root_password.txt
 .extras/compose/db/postgres/db_password.txt
-.extras/locust/__pycache__
-.extras/lasttest/.mypy_cache
-.extras/lasttest/.venv
-.extras/lasttest/__pycache__
+.extras/lasttest-locust/__pycache__
+.extras/lasttest-locust/.venv
 .extras/postman
 .extras/*.png
 .extras/*.jpeg
