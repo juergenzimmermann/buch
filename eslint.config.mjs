@@ -415,7 +415,6 @@ export default tseslint.config(
             // https://eslint.style/guide/config-presets
             // https://github.com/eslint-stylistic/eslint-stylistic/blob/main/packages/eslint-plugin/configs/customize.ts
             ...stylistic.configs.customize({
-                flat: false,
                 indent: 4,
                 jsx: false,
             }).rules,
