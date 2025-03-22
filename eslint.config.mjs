@@ -44,7 +44,7 @@ export default tseslint.config(
             regexp.configs['flat/recommended'],
             // https://github.com/eslint-community/eslint-plugin-promise#rules
             promise.configs['flat/recommended'],
-            stylistic.configs['recommended-flat'],
+            stylistic.configs.recommended,
             importPlugin.flatConfigs.recommended,
             importPlugin.flatConfigs.typescript,
             jest.configs['flat/recommended'],
