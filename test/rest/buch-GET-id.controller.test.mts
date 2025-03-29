@@ -1,4 +1,4 @@
-// Copyright (C) 2016 - present Juergen Zimmermann, Hochschule Karlsruhe
+// Copyright (C) 2025 - present Juergen Zimmermann, Hochschule Karlsruhe
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -14,6 +14,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 // Tests mit
+//  * Vitest    https://vitest.dev
 //  * jest      https://jestjs.io
 //  * Mocha     https://mochajs.org
 //  * node:test ab Node 18 https://nodejs.org/download/rc/v18.0.0-rc.1/docs/api/test.html
@@ -31,18 +32,12 @@
 //    needle      https://github.com/tomas/needle
 //    ky          https://github.com/sindresorhus/ky
 
-import { afterAll, beforeAll, describe, expect, test } from '@jest/globals';
+import { beforeAll, describe, expect, test } from 'vitest';
 import { HttpStatus } from '@nestjs/common';
 import axios, { type AxiosInstance, type AxiosResponse } from 'axios';
 import { type Buch } from '../../src/buch/entity/buch.entity.js';
-import {
-    host,
-    httpsAgent,
-    port,
-    shutdownServer,
-    startServer,
-} from '../testserver.js';
-import { type ErrorResponse } from './error-response.js';
+import { baseURL, httpsAgent } from '../constants.mjs';
+import { type ErrorResponse } from './error-response.mjs';
 
 // -----------------------------------------------------------------------------
 // T e s t d a t e n
@@ -56,26 +51,20 @@ const idFalsch = 'xy';
 // T e s t s
 // -----------------------------------------------------------------------------
 // Test-Suite
-// eslint-disable-next-line max-lines-per-function
 describe('GET /rest/:id', () => {
     let client: AxiosInstance;
 
-    // Testserver starten und dabei mit der DB verbinden
+    // Axios initialisieren
     beforeAll(async () => {
-        await startServer();
-        const baseURL = `https://${host}:${port}/rest`;
+        const restUrl = `${baseURL}/rest`;
         client = axios.create({
-            baseURL,
+            baseURL: restUrl,
             httpsAgent,
-            validateStatus: (status) => status < 500, // eslint-disable-line @typescript-eslint/no-magic-numbers
+            validateStatus: (status) => status < 500,
         });
     });
 
-    afterAll(async () => {
-        await shutdownServer();
-    });
-
-    test('Buch zu vorhandener ID', async () => {
+    test.concurrent('Buch zu vorhandener ID', async () => {
         // given
         const url = `/${idVorhanden}`;
 
@@ -92,7 +81,7 @@ describe('GET /rest/:id', () => {
         expect(id?.toString()).toBe(idVorhanden);
     });
 
-    test('Kein Buch zu nicht-vorhandener ID', async () => {
+    test.concurrent('Kein Buch zu nicht-vorhandener ID', async () => {
         // given
         const url = `/${idNichtVorhanden}`;
 
@@ -106,11 +95,11 @@ describe('GET /rest/:id', () => {
         const { error, message, statusCode } = data;
 
         expect(error).toBe('Not Found');
-        expect(message).toEqual(expect.stringContaining(message));
+        expect(message).toStrictEqual(expect.stringContaining(message));
         expect(statusCode).toBe(HttpStatus.NOT_FOUND);
     });
 
-    test('Kein Buch zu falscher ID', async () => {
+    test.concurrent('Kein Buch zu falscher ID', async () => {
         // given
         const url = `/${idFalsch}`;
 
@@ -127,13 +116,13 @@ describe('GET /rest/:id', () => {
         expect(statusCode).toBe(HttpStatus.NOT_FOUND);
     });
 
-    test('Buch zu vorhandener ID mit ETag', async () => {
+    test.concurrent('Buch zu vorhandener ID mit ETag', async () => {
         // given
         const url = `/${idVorhandenETag}`;
 
         // when
         const { status, data }: AxiosResponse<string> = await client.get(url, {
-            headers: { 'If-None-Match': '"0"' }, // eslint-disable-line @typescript-eslint/naming-convention
+            headers: { 'If-None-Match': '"0"' },
         });
 
         // then

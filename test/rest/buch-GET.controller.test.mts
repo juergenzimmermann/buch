@@ -1,4 +1,4 @@
-// Copyright (C) 2016 - present Juergen Zimmermann, Hochschule Karlsruhe
+// Copyright (C) 2025 - present Juergen Zimmermann, Hochschule Karlsruhe
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -13,20 +13,14 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-import { afterAll, beforeAll, describe, expect, test } from '@jest/globals';
+import { beforeAll, describe, expect, test } from 'vitest';
 import { HttpStatus } from '@nestjs/common';
 import axios, { type AxiosInstance, type AxiosResponse } from 'axios';
 import { Decimal } from 'decimal.js';
 import { type Buch } from '../../src/buch/entity/buch.entity.js';
 import { type Page } from '../../src/buch/controller/page.js';
-import {
-    host,
-    httpsAgent,
-    port,
-    shutdownServer,
-    startServer,
-} from '../testserver.js';
-import { type ErrorResponse } from './error-response.js';
+import { baseURL, httpsAgent } from '../constants.mjs';
+import { type ErrorResponse } from './error-response.mjs';
 
 // -----------------------------------------------------------------------------
 // T e s t d a t e n
@@ -42,26 +36,21 @@ const schlagwortNichtVorhanden = 'csharp';
 // T e s t s
 // -----------------------------------------------------------------------------
 // Test-Suite
-// eslint-disable-next-line max-lines-per-function
 describe('GET /rest', () => {
-    let baseURL: string;
+    let restUrl: string;
     let client: AxiosInstance;
 
+    // Axios initialisieren
     beforeAll(async () => {
-        await startServer();
-        baseURL = `https://${host}:${port}/rest`;
+        restUrl = `${baseURL}/rest`;
         client = axios.create({
-            baseURL,
+            baseURL: restUrl,
             httpsAgent,
             validateStatus: () => true,
         });
     });
 
-    afterAll(async () => {
-        await shutdownServer();
-    });
-
-    test('Alle Buecher', async () => {
+    test.concurrent('Alle Buecher', async () => {
         // given
 
         // when
@@ -80,7 +69,7 @@ describe('GET /rest', () => {
             });
     });
 
-    test('Buecher mit einem Teil-Titel suchen', async () => {
+    test.concurrent('Buecher mit einem Teil-Titel suchen', async () => {
         // given
         const params = { titel: titelVorhanden };
 
@@ -97,32 +86,33 @@ describe('GET /rest', () => {
         data.content
             .map((buch) => buch.titel)
             .forEach((titel) =>
-                expect(titel?.titel.toLowerCase()).toEqual(
+                expect(titel?.titel?.toLowerCase()).toStrictEqual(
                     expect.stringContaining(titelVorhanden),
                 ),
             );
     });
 
-    test('Buecher zu einem nicht vorhandenen Teil-Titel suchen', async () => {
-        // given
-        const params = { titel: titelNichtVorhanden };
+    test.concurrent(
+        'Buecher zu einem nicht vorhandenen Teil-Titel suchen',
+        async () => {
+            // given
+            const params = { titel: titelNichtVorhanden };
 
-        // when
-        const { status, data }: AxiosResponse<ErrorResponse> = await client.get(
-            '/',
-            { params },
-        );
+            // when
+            const { status, data }: AxiosResponse<ErrorResponse> =
+                await client.get('/', { params });
 
-        // then
-        expect(status).toBe(HttpStatus.NOT_FOUND);
+            // then
+            expect(status).toBe(HttpStatus.NOT_FOUND);
 
-        const { error, statusCode } = data;
+            const { error, statusCode } = data;
 
-        expect(error).toBe('Not Found');
-        expect(statusCode).toBe(HttpStatus.NOT_FOUND);
-    });
+            expect(error).toBe('Not Found');
+            expect(statusCode).toBe(HttpStatus.NOT_FOUND);
+        },
+    );
 
-    test('Buecher mit Mindest-"rating" suchen', async () => {
+    test.concurrent('Buecher mit Mindest-"rating" suchen', async () => {
         // given
         const params = { rating: ratingMin };
 
@@ -143,7 +133,7 @@ describe('GET /rest', () => {
             );
     });
 
-    test('Buecher mit max. Preis suchen', async () => {
+    test.concurrent('Buecher mit max. Preis suchen', async () => {
         // given
         const params = { preis: preisMax };
 
@@ -158,13 +148,13 @@ describe('GET /rest', () => {
 
         // Jedes Buch hat einen Titel mit dem Teilstring 'a'
         data.content
-            .map((buch) => Decimal(buch.preis))
+            .map((buch) => Decimal(buch?.preis ?? 0))
             .forEach((preis) =>
-                expect(preis.lessThanOrEqualTo(Decimal(preisMax))).toBeTruthy(),
+                expect(preis.lessThanOrEqualTo(Decimal(preisMax))).toBe(true),
             );
     });
 
-    test('Mind. 1 Buch mit vorhandenem Schlagwort', async () => {
+    test.concurrent('Mind. 1 Buch mit vorhandenem Schlagwort', async () => {
         // given
         const params = { [schlagwortVorhanden]: 'true' };
 
@@ -182,47 +172,49 @@ describe('GET /rest', () => {
         data.content
             .map((buch) => buch.schlagwoerter)
             .forEach((schlagwoerter) =>
-                expect(schlagwoerter).toEqual(
+                expect(schlagwoerter).toStrictEqual(
                     expect.arrayContaining([schlagwortVorhanden.toUpperCase()]),
                 ),
             );
     });
 
-    test('Keine Buecher zu einem nicht vorhandenen Schlagwort', async () => {
-        // given
-        const params = { [schlagwortNichtVorhanden]: 'true' };
+    test.concurrent(
+        'Keine Buecher zu einem nicht vorhandenen Schlagwort',
+        async () => {
+            // given
+            const params = { [schlagwortNichtVorhanden]: 'true' };
 
-        // when
-        const { status, data }: AxiosResponse<ErrorResponse> = await client.get(
-            '/',
-            { params },
-        );
+            // when
+            const { status, data }: AxiosResponse<ErrorResponse> =
+                await client.get('/', { params });
 
-        // then
-        expect(status).toBe(HttpStatus.NOT_FOUND);
+            // then
+            expect(status).toBe(HttpStatus.NOT_FOUND);
 
-        const { error, statusCode } = data;
+            const { error, statusCode } = data;
 
-        expect(error).toBe('Not Found');
-        expect(statusCode).toBe(HttpStatus.NOT_FOUND);
-    });
+            expect(error).toBe('Not Found');
+            expect(statusCode).toBe(HttpStatus.NOT_FOUND);
+        },
+    );
 
-    test('Keine Buecher zu einer nicht-vorhandenen Property', async () => {
-        // given
-        const params = { foo: 'bar' };
+    test.concurrent(
+        'Keine Buecher zu einer nicht-vorhandenen Property',
+        async () => {
+            // given
+            const params = { foo: 'bar' };
 
-        // when
-        const { status, data }: AxiosResponse<ErrorResponse> = await client.get(
-            '/',
-            { params },
-        );
+            // when
+            const { status, data }: AxiosResponse<ErrorResponse> =
+                await client.get('/', { params });
 
-        // then
-        expect(status).toBe(HttpStatus.NOT_FOUND);
+            // then
+            expect(status).toBe(HttpStatus.NOT_FOUND);
 
-        const { error, statusCode } = data;
+            const { error, statusCode } = data;
 
-        expect(error).toBe('Not Found');
-        expect(statusCode).toBe(HttpStatus.NOT_FOUND);
-    });
+            expect(error).toBe('Not Found');
+            expect(statusCode).toBe(HttpStatus.NOT_FOUND);
+        },
+    );
 });

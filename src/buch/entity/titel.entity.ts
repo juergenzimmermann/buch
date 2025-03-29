@@ -28,8 +28,8 @@ export class Titel {
     @PrimaryGeneratedColumn()
     id: number | undefined;
 
-    @Column()
-    readonly titel!: string;
+    @Column('varchar')
+    readonly titel: string | undefined;
 
     @Column('varchar')
     readonly untertitel: string | undefined;

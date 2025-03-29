@@ -19,6 +19,7 @@ import { type GraphQLFormattedError } from 'graphql';
 export type GraphQLQuery = Pick<GraphQLRequest, 'query'>;
 
 export type GraphQLResponseBody = {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     data?: Record<string, any> | null;
     errors?: readonly [GraphQLFormattedError];
 };

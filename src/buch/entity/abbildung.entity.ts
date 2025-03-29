@@ -29,8 +29,8 @@ export class Abbildung {
     @PrimaryGeneratedColumn()
     id: number | undefined;
 
-    @Column()
-    readonly beschriftung!: string;
+    @Column('varchar')
+    readonly beschriftung: string | undefined;
 
     @Column('varchar')
     readonly contentType: string | undefined;

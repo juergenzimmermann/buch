@@ -1,5 +1,4 @@
-/* eslint-disable @typescript-eslint/no-magic-numbers */
-// Copyright (C) 2016 - present Juergen Zimmermann, Hochschule Karlsruhe
+// Copyright (C) 2025 - present Juergen Zimmermann, Hochschule Karlsruhe
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -14,20 +13,15 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-import { afterAll, beforeAll, describe, expect, test } from '@jest/globals';
+import { beforeAll, describe, expect, inject, test } from 'vitest';
 import { HttpStatus } from '@nestjs/common';
 import axios, { type AxiosInstance, type AxiosResponse } from 'axios';
 import { Decimal } from 'decimal.js';
 import { type BuchDtoOhneRef } from '../../src/buch/controller/buchDTO.entity.js';
-import {
-    host,
-    httpsAgent,
-    port,
-    shutdownServer,
-    startServer,
-} from '../testserver.js';
-import { tokenRest } from '../token.js';
-import { type ErrorResponse } from './error-response.js';
+import { baseURL, httpsAgent } from '../constants.mjs';
+import { type ErrorResponse } from './error-response.mjs';
+
+const token = inject('tokenRest');
 
 // -----------------------------------------------------------------------------
 // T e s t d a t e n
@@ -75,7 +69,6 @@ const geaendertesBuchInvalid: Record<string, unknown> = {
     rabatt: 2,
     lieferbar: true,
     datum: '12345-123-123',
-    titel: '?!',
     homepage: 'anyHomepage',
 };
 
@@ -95,17 +88,14 @@ const veraltesBuch: BuchDtoOhneRef = {
 // T e s t s
 // -----------------------------------------------------------------------------
 // Test-Suite
-// eslint-disable-next-line max-lines-per-function
 describe('PUT /rest/:id', () => {
     let client: AxiosInstance;
     const headers: Record<string, string> = {
-        'Content-Type': 'application/json', // eslint-disable-line @typescript-eslint/naming-convention
+        'Content-Type': 'application/json',
     };
 
-    // Testserver starten und dabei mit der DB verbinden
+    // Axios initialisieren
     beforeAll(async () => {
-        await startServer();
-        const baseURL = `https://${host}:${port}`;
         client = axios.create({
             baseURL,
             headers,
@@ -114,14 +104,9 @@ describe('PUT /rest/:id', () => {
         });
     });
 
-    afterAll(async () => {
-        await shutdownServer();
-    });
-
     test('Vorhandenes Buch aendern', async () => {
         // given
         const url = `/rest/${idVorhanden}`;
-        const token = await tokenRest(client);
         headers.Authorization = `Bearer ${token}`;
         headers['If-Match'] = '"0"';
 
@@ -140,7 +125,6 @@ describe('PUT /rest/:id', () => {
     test('Nicht-vorhandenes Buch aendern', async () => {
         // given
         const url = `/rest/${idNichtVorhanden}`;
-        const token = await tokenRest(client);
         headers.Authorization = `Bearer ${token}`;
         headers['If-Match'] = '"0"';
 
@@ -158,7 +142,6 @@ describe('PUT /rest/:id', () => {
     test('Vorhandenes Buch aendern, aber mit ungueltigen Daten', async () => {
         // given
         const url = `/rest/${idVorhanden}`;
-        const token = await tokenRest(client);
         headers.Authorization = `Bearer ${token}`;
         headers['If-Match'] = '"0"';
         const expectedMsg = [
@@ -176,19 +159,18 @@ describe('PUT /rest/:id', () => {
             await client.put(url, geaendertesBuchInvalid, { headers });
 
         // then
-        expect(status).toBe(HttpStatus.UNPROCESSABLE_ENTITY);
+        expect(status).toBe(HttpStatus.BAD_REQUEST);
 
         const messages = data.message as string[];
 
         expect(messages).toBeDefined();
         expect(messages).toHaveLength(expectedMsg.length);
-        expect(messages).toEqual(expect.arrayContaining(expectedMsg));
+        expect(messages).toStrictEqual(expect.arrayContaining(expectedMsg));
     });
 
     test('Vorhandenes Buch aendern, aber ohne Versionsnummer', async () => {
         // given
         const url = `/rest/${idVorhanden}`;
-        const token = await tokenRest(client);
         headers.Authorization = `Bearer ${token}`;
         delete headers['If-Match'];
 
@@ -207,7 +189,6 @@ describe('PUT /rest/:id', () => {
     test('Vorhandenes Buch aendern, aber mit alter Versionsnummer', async () => {
         // given
         const url = `/rest/${idVorhanden}`;
-        const token = await tokenRest(client);
         headers.Authorization = `Bearer ${token}`;
         headers['If-Match'] = '"-1"';
 
@@ -261,4 +242,3 @@ describe('PUT /rest/:id', () => {
         expect(response.status).toBe(HttpStatus.UNAUTHORIZED);
     });
 });
-/* eslint-enable @typescript-eslint/no-magic-numbers */

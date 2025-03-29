@@ -1,5 +1,5 @@
-/* eslint-disable max-lines, @typescript-eslint/no-non-null-assertion */
-// Copyright (C) 2016 - present Juergen Zimmermann, Hochschule Karlsruhe
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
+// Copyright (C) 2025 - present Juergen Zimmermann, Hochschule Karlsruhe
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -15,18 +15,12 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 import { type GraphQLRequest } from '@apollo/server';
-import { afterAll, beforeAll, describe, expect, test } from '@jest/globals';
+import { beforeAll, describe, expect, test } from 'vitest';
 import { HttpStatus } from '@nestjs/common';
 import axios, { type AxiosInstance, type AxiosResponse } from 'axios';
 import { type Buch, type BuchArt } from '../../src/buch/entity/buch.entity.js';
-import { type GraphQLResponseBody } from '../graphql.js';
-import {
-    host,
-    httpsAgent,
-    port,
-    shutdownServer,
-    startServer,
-} from '../testserver.js';
+import { type GraphQLResponseBody } from './graphql.mjs';
+import { baseURL, httpsAgent } from '../constants.mjs';
 
 type BuchDTO = Omit<
     Buch,
@@ -53,17 +47,15 @@ const ratingNichtVorhanden = 99;
 // T e s t s
 // -----------------------------------------------------------------------------
 // Test-Suite
-// eslint-disable-next-line max-lines-per-function
 describe('GraphQL Queries', () => {
     let client: AxiosInstance;
     const graphqlPath = 'graphql';
 
-    // Testserver starten und dabei mit der DB verbinden
+    // Axios initialisieren
     beforeAll(async () => {
-        await startServer();
-        const baseURL = `https://${host}:${port}/`;
+        const baseUrlGraphQL = `${baseURL}/`;
         client = axios.create({
-            baseURL,
+            baseURL: baseUrlGraphQL,
             httpsAgent,
             // auch Statuscode 400 als gueltigen Request akzeptieren, wenn z.B.
             // ein Enum mit einem falschen String getestest wird
@@ -71,11 +63,7 @@ describe('GraphQL Queries', () => {
         });
     });
 
-    afterAll(async () => {
-        await shutdownServer();
-    });
-
-    test('Buch zu vorhandener ID', async () => {
+    test.concurrent('Buch zu vorhandener ID', async () => {
         // given
         const body: GraphQLRequest = {
             query: `
@@ -116,7 +104,7 @@ describe('GraphQL Queries', () => {
         expect(buch.id).toBeUndefined();
     });
 
-    test('Buch zu nicht-vorhandener ID', async () => {
+    test.concurrent('Buch zu nicht-vorhandener ID', async () => {
         // given
         const id = '999999';
         const body: GraphQLRequest = {
@@ -154,7 +142,7 @@ describe('GraphQL Queries', () => {
         expect(extensions!.code).toBe('BAD_USER_INPUT');
     });
 
-    test('Buch zu vorhandenem Titel', async () => {
+    test.concurrent('Buch zu vorhandenem Titel', async () => {
         // given
         const body: GraphQLRequest = {
             query: `
@@ -191,7 +179,7 @@ describe('GraphQL Queries', () => {
         expect(buch!.titel?.titel).toBe(titelVorhanden);
     });
 
-    test('Buch zu vorhandenem Teil-Titel', async () => {
+    test.concurrent('Buch zu vorhandenem Teil-Titel', async () => {
         // given
         const body: GraphQLRequest = {
             query: `
@@ -224,13 +212,13 @@ describe('GraphQL Queries', () => {
         buecher
             .map((buch) => buch.titel)
             .forEach((titel) =>
-                expect(titel?.titel.toLowerCase()).toEqual(
+                expect(titel?.titel?.toLowerCase()).toStrictEqual(
                     expect.stringContaining(teilTitelVorhanden),
                 ),
             );
     });
 
-    test('Buch zu nicht vorhandenem Titel', async () => {
+    test.concurrent('Buch zu nicht vorhandenem Titel', async () => {
         // given
         const body: GraphQLRequest = {
             query: `
@@ -270,7 +258,7 @@ describe('GraphQL Queries', () => {
         expect(extensions!.code).toBe('BAD_USER_INPUT');
     });
 
-    test('Buch zu vorhandener ISBN-Nummer', async () => {
+    test.concurrent('Buch zu vorhandener ISBN-Nummer', async () => {
         // given
         const body: GraphQLRequest = {
             query: `
@@ -309,7 +297,7 @@ describe('GraphQL Queries', () => {
         expect(titel?.titel).toBeDefined();
     });
 
-    test('Buecher mit Mindest-"rating"', async () => {
+    test.concurrent('Buecher mit Mindest-"rating"', async () => {
         // given
         const body: GraphQLRequest = {
             query: `
@@ -346,13 +334,13 @@ describe('GraphQL Queries', () => {
             const { rating, titel } = buch;
 
             expect(rating).toBeGreaterThanOrEqual(ratingMin);
-            expect(titel?.titel.toLowerCase()).toEqual(
+            expect(titel?.titel?.toLowerCase()).toStrictEqual(
                 expect.stringContaining(teilTitelVorhanden),
             );
         });
     });
 
-    test('Kein Buch zu nicht-vorhandenem "rating"', async () => {
+    test.concurrent('Kein Buch zu nicht-vorhandenem "rating"', async () => {
         // given
         const body: GraphQLRequest = {
             query: `
@@ -391,7 +379,7 @@ describe('GraphQL Queries', () => {
         expect(extensions!.code).toBe('BAD_USER_INPUT');
     });
 
-    test('Buecher zur Art "EPUB"', async () => {
+    test.concurrent('Buecher zur Art "EPUB"', async () => {
         // given
         const buchArt: BuchArt = 'EPUB';
         const body: GraphQLRequest = {
@@ -431,7 +419,7 @@ describe('GraphQL Queries', () => {
         });
     });
 
-    test('Buecher zur einer ungueltigen Art', async () => {
+    test.concurrent('Buecher zur einer ungueltigen Art', async () => {
         // given
         const buchArt = 'UNGUELTIG';
         const body: GraphQLRequest = {
@@ -468,7 +456,7 @@ describe('GraphQL Queries', () => {
         expect(extensions!.code).toBe('GRAPHQL_VALIDATION_FAILED');
     });
 
-    test('Buecher mit lieferbar=true', async () => {
+    test.concurrent('Buecher mit lieferbar=true', async () => {
         // given
         const body: GraphQLRequest = {
             query: `
@@ -508,4 +496,4 @@ describe('GraphQL Queries', () => {
     });
 });
 
-/* eslint-enable max-lines, , @typescript-eslint/no-non-null-assertion */
+/* eslint-enable @typescript-eslint/no-non-null-assertion */

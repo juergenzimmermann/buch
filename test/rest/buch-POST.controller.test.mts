@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-magic-numbers */
 // Copyright (C) 2016 - present Juergen Zimmermann, Hochschule Karlsruhe
 //
 // This program is free software: you can redistribute it and/or modify
@@ -14,21 +13,16 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-import { afterAll, beforeAll, describe, expect, test } from '@jest/globals';
+import { beforeAll, describe, expect, inject, test } from 'vitest';
 import { HttpStatus } from '@nestjs/common';
 import axios, { type AxiosInstance, type AxiosResponse } from 'axios';
 import { Decimal } from 'decimal.js';
 import { type BuchDTO } from '../../src/buch/controller/buchDTO.entity.js';
 import { BuchReadService } from '../../src/buch/service/buch-read.service.js';
-import {
-    host,
-    httpsAgent,
-    port,
-    shutdownServer,
-    startServer,
-} from '../testserver.js';
-import { tokenRest } from '../token.js';
-import { type ErrorResponse } from './error-response.js';
+import { baseURL, httpsAgent } from '../constants.mjs';
+import { type ErrorResponse } from './error-response.mjs';
+
+const token = inject('tokenRest');
 
 // -----------------------------------------------------------------------------
 // T e s t d a t e n
@@ -85,43 +79,36 @@ const neuesBuchIsbnExistiert: BuchDTO = {
         titel: 'Titelpostisbn',
         untertitel: 'Untertitelpostisbn',
     },
-    abbildungen: undefined,
+    abbildungen: [],
 };
 
 // -----------------------------------------------------------------------------
 // T e s t s
 // -----------------------------------------------------------------------------
 // Test-Suite
-// eslint-disable-next-line max-lines-per-function
 describe('POST /rest', () => {
     let client: AxiosInstance;
+    const restURL = `${baseURL}/rest`;
     const headers: Record<string, string> = {
-        'Content-Type': 'application/json', // eslint-disable-line @typescript-eslint/naming-convention
+        'Content-Type': 'application/json',
     };
 
-    // Testserver starten und dabei mit der DB verbinden
+    // Axios initialisieren
     beforeAll(async () => {
-        await startServer();
-        const baseURL = `https://${host}:${port}`;
         client = axios.create({
-            baseURL,
+            baseURL: restURL,
             httpsAgent,
             validateStatus: (status) => status < 500,
         });
     });
 
-    afterAll(async () => {
-        await shutdownServer();
-    });
-
     test('Neues Buch', async () => {
         // given
-        const token = await tokenRest(client);
         headers.Authorization = `Bearer ${token}`;
 
         // when
         const response: AxiosResponse<string> = await client.post(
-            '/rest',
+            '',
             neuesBuch,
             { headers },
         );
@@ -148,9 +135,8 @@ describe('POST /rest', () => {
         expect(data).toBe('');
     });
 
-    test('Neues Buch mit ungueltigen Daten', async () => {
+    test.concurrent('Neues Buch mit ungueltigen Daten', async () => {
         // given
-        const token = await tokenRest(client);
         headers.Authorization = `Bearer ${token}`;
         const expectedMsg = [
             expect.stringMatching(/^isbn /u),
@@ -165,7 +151,7 @@ describe('POST /rest', () => {
 
         // when
         const response: AxiosResponse<Record<string, any>> = await client.post(
-            '/rest',
+            '',
             neuesBuchInvalid,
             { headers },
         );
@@ -173,23 +159,22 @@ describe('POST /rest', () => {
         // then
         const { status, data } = response;
 
-        expect(status).toBe(HttpStatus.UNPROCESSABLE_ENTITY);
+        expect(status).toBe(HttpStatus.BAD_REQUEST);
 
         const messages = data.message as string[];
 
         expect(messages).toBeDefined();
         expect(messages).toHaveLength(expectedMsg.length);
-        expect(messages).toEqual(expect.arrayContaining(expectedMsg));
+        expect(messages).toStrictEqual(expect.arrayContaining(expectedMsg));
     });
 
-    test('Neues Buch, aber die ISBN existiert bereits', async () => {
+    test.concurrent('Neues Buch, aber die ISBN existiert bereits', async () => {
         // given
-        const token = await tokenRest(client);
         headers.Authorization = `Bearer ${token}`;
 
         // when
         const response: AxiosResponse<ErrorResponse> = await client.post(
-            '/rest',
+            '',
             neuesBuchIsbnExistiert,
             { headers },
         );
@@ -199,14 +184,14 @@ describe('POST /rest', () => {
 
         const { message, statusCode } = data;
 
-        expect(message).toEqual(expect.stringContaining('ISBN'));
+        expect(message).toStrictEqual(expect.stringContaining('ISBN'));
         expect(statusCode).toBe(HttpStatus.UNPROCESSABLE_ENTITY);
     });
 
-    test('Neues Buch, aber ohne Token', async () => {
+    test.concurrent('Neues Buch, aber ohne Token', async () => {
         // when
         const response: AxiosResponse<Record<string, any>> = await client.post(
-            '/rest',
+            '',
             neuesBuch,
         );
 
@@ -214,14 +199,14 @@ describe('POST /rest', () => {
         expect(response.status).toBe(HttpStatus.UNAUTHORIZED);
     });
 
-    test('Neues Buch, aber mit falschem Token', async () => {
+    test.concurrent('Neues Buch, aber mit falschem Token', async () => {
         // given
         const token = 'FALSCH';
         headers.Authorization = `Bearer ${token}`;
 
         // when
         const response: AxiosResponse<Record<string, any>> = await client.post(
-            '/rest',
+            '',
             neuesBuch,
             { headers },
         );
@@ -230,6 +215,5 @@ describe('POST /rest', () => {
         expect(response.status).toBe(HttpStatus.UNAUTHORIZED);
     });
 
-    test.todo('Abgelaufener Token');
+    test.concurrent.todo('Abgelaufener Token');
 });
-/* eslint-enable @typescript-eslint/no-magic-numbers */

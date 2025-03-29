@@ -1,4 +1,4 @@
-// Copyright (C) 2016 - present Juergen Zimmermann, Hochschule Karlsruhe
+// Copyright (C) 2025 - present Juergen Zimmermann, Hochschule Karlsruhe
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -13,17 +13,13 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-import { afterAll, beforeAll, describe, expect, test } from '@jest/globals';
+import { beforeAll, describe, expect, inject, test } from 'vitest';
 import { HttpStatus } from '@nestjs/common';
 import axios, { type AxiosInstance, type AxiosResponse } from 'axios';
-import {
-    host,
-    httpsAgent,
-    port,
-    shutdownServer,
-    startServer,
-} from '../testserver.js';
-import { tokenRest } from '../token.js';
+import { baseURL, httpsAgent } from '../constants.mjs';
+
+const token = inject('tokenRest');
+const tokenUser = inject('tokenRestUser');
 
 // -----------------------------------------------------------------------------
 // T e s t d a t e n
@@ -34,31 +30,24 @@ const id = '50';
 // T e s t s
 // -----------------------------------------------------------------------------
 // Test-Suite
-// eslint-disable-next-line max-lines-per-function
-describe('DELETE /rest/buecher', () => {
+describe('DELETE /rest', () => {
     let client: AxiosInstance;
 
-    // Testserver starten und dabei mit der DB verbinden
+    // Axios initialisieren
     beforeAll(async () => {
-        await startServer();
-        const baseURL = `https://${host}:${port}`;
+        const restURL = `${baseURL}/rest`;
         client = axios.create({
-            baseURL,
+            baseURL: restURL,
             httpsAgent,
-            validateStatus: (status) => status < 500, // eslint-disable-line @typescript-eslint/no-magic-numbers
+            validateStatus: (status) => status < 500,
         });
     });
 
-    afterAll(async () => {
-        await shutdownServer();
-    });
-
-    test('Vorhandenes Buch loeschen', async () => {
+    test.concurrent('Vorhandenes Buch loeschen', async () => {
         // given
-        const url = `/rest/${id}`;
-        const token = await tokenRest(client);
+        const url = `/${id}`;
         const headers: Record<string, string> = {
-            Authorization: `Bearer ${token}`, // eslint-disable-line @typescript-eslint/naming-convention
+            Authorization: `Bearer ${token}`,
         };
 
         // when
@@ -72,9 +61,9 @@ describe('DELETE /rest/buecher', () => {
         expect(data).toBeDefined();
     });
 
-    test('Buch loeschen, aber ohne Token', async () => {
+    test.concurrent('Buch loeschen, aber ohne Token', async () => {
         // given
-        const url = `/rest/${id}`;
+        const url = `/${id}`;
 
         // when
         const response: AxiosResponse<Record<string, any>> =
@@ -84,12 +73,12 @@ describe('DELETE /rest/buecher', () => {
         expect(response.status).toBe(HttpStatus.UNAUTHORIZED);
     });
 
-    test('Buch loeschen, aber mit falschem Token', async () => {
+    test.concurrent('Buch loeschen, aber mit falschem Token', async () => {
         // given
-        const url = `/rest/${id}`;
+        const url = `/${id}`;
         const token = 'FALSCH';
         const headers: Record<string, string> = {
-            Authorization: `Bearer ${token}`, // eslint-disable-line @typescript-eslint/naming-convention
+            Authorization: `Bearer ${token}`,
         };
 
         // when
@@ -100,12 +89,11 @@ describe('DELETE /rest/buecher', () => {
         expect(response.status).toBe(HttpStatus.UNAUTHORIZED);
     });
 
-    test('Vorhandenes Buch als "user" loeschen', async () => {
+    test.concurrent('Vorhandenes Buch als "user" loeschen', async () => {
         // given
-        const url = `/rest/60`;
-        const token = await tokenRest(client, 'user', 'p');
+        const url = `/60`;
         const headers: Record<string, string> = {
-            Authorization: `Bearer ${token}`, // eslint-disable-line @typescript-eslint/naming-convention
+            Authorization: `Bearer ${tokenUser}`,
         };
 
         // when

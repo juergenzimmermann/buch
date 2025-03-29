@@ -1,4 +1,4 @@
-/* eslint-disable max-lines,  @typescript-eslint/no-non-null-assertion */
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 // Copyright (C) 2016 - present Juergen Zimmermann, Hochschule Karlsruhe
 //
 // This program is free software: you can redistribute it and/or modify
@@ -14,18 +14,14 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-import { afterAll, beforeAll, describe, expect, test } from '@jest/globals';
+import { beforeAll, describe, expect, inject, test } from 'vitest';
 import { HttpStatus } from '@nestjs/common';
 import axios, { type AxiosInstance, type AxiosResponse } from 'axios';
-import { type GraphQLQuery, type GraphQLResponseBody } from '../graphql.js';
-import {
-    host,
-    httpsAgent,
-    port,
-    shutdownServer,
-    startServer,
-} from '../testserver.js';
-import { tokenGraphQL } from '../token.js';
+import { type GraphQLQuery, type GraphQLResponseBody } from './graphql.mjs';
+import { baseURL, httpsAgent } from '../constants.mjs';
+
+const token = inject('tokenGraphql');
+const tokenUser = inject('tokenGraphqlUser');
 
 // -----------------------------------------------------------------------------
 // T e s t d a t e n
@@ -36,30 +32,22 @@ const idLoeschen = '60';
 // T e s t s
 // -----------------------------------------------------------------------------
 // Test-Suite
-// eslint-disable-next-line max-lines-per-function
 describe('GraphQL Mutations', () => {
     let client: AxiosInstance;
     const graphqlPath = 'graphql';
 
-    // Testserver starten und dabei mit der DB verbinden
+    // Axios initialisieren
     beforeAll(async () => {
-        await startServer();
-        const baseURL = `https://${host}:${port}/`;
         client = axios.create({
             baseURL,
             httpsAgent,
         });
     });
 
-    afterAll(async () => {
-        await shutdownServer();
-    });
-
     // -------------------------------------------------------------------------
     test('Neues Buch', async () => {
         // given
-        const token = await tokenGraphQL(client);
-        const authorization = { Authorization: `Bearer ${token}` }; // eslint-disable-line @typescript-eslint/naming-convention
+        const authorization = { Authorization: `Bearer ${token}` };
         const body: GraphQLQuery = {
             query: `
                 mutation {
@@ -107,11 +95,9 @@ describe('GraphQL Mutations', () => {
     });
 
     // -------------------------------------------------------------------------
-    // eslint-disable-next-line max-lines-per-function
     test('Buch mit ungueltigen Werten neu anlegen', async () => {
         // given
-        const token = await tokenGraphQL(client);
-        const authorization = { Authorization: `Bearer ${token}` }; // eslint-disable-line @typescript-eslint/naming-convention
+        const authorization = { Authorization: `Bearer ${token}` };
         const body: GraphQLQuery = {
             query: `
                 mutation {
@@ -167,14 +153,13 @@ describe('GraphQL Mutations', () => {
 
         expect(messages).toBeDefined();
         expect(messages).toHaveLength(expectedMsg.length);
-        expect(messages).toEqual(expect.arrayContaining(expectedMsg));
+        expect(messages).toStrictEqual(expect.arrayContaining(expectedMsg));
     });
 
     // -------------------------------------------------------------------------
     test('Buch aktualisieren', async () => {
         // given
-        const token = await tokenGraphQL(client);
-        const authorization = { Authorization: `Bearer ${token}` }; // eslint-disable-line @typescript-eslint/naming-convention
+        const authorization = { Authorization: `Bearer ${token}` };
         const body: GraphQLQuery = {
             query: `
                 mutation {
@@ -217,8 +202,7 @@ describe('GraphQL Mutations', () => {
     // -------------------------------------------------------------------------
     test('Buch mit ungueltigen Werten aktualisieren', async () => {
         // given
-        const token = await tokenGraphQL(client);
-        const authorization = { Authorization: `Bearer ${token}` }; // eslint-disable-line @typescript-eslint/naming-convention
+        const authorization = { Authorization: `Bearer ${token}` };
         const id = '40';
         const body: GraphQLQuery = {
             query: `
@@ -271,14 +255,13 @@ describe('GraphQL Mutations', () => {
 
         expect(messages).toBeDefined();
         expect(messages).toHaveLength(expectedMsg.length);
-        expect(messages).toEqual(expect.arrayContaining(expectedMsg));
+        expect(messages).toStrictEqual(expect.arrayContaining(expectedMsg));
     });
 
     // -------------------------------------------------------------------------
     test('Nicht-vorhandenes Buch aktualisieren', async () => {
         // given
-        const token = await tokenGraphQL(client);
-        const authorization = { Authorization: `Bearer ${token}` }; // eslint-disable-line @typescript-eslint/naming-convention
+        const authorization = { Authorization: `Bearer ${token}` };
         const id = '999999';
         const body: GraphQLQuery = {
             query: `
@@ -335,8 +318,7 @@ describe('GraphQL Mutations', () => {
     // -------------------------------------------------------------------------
     test('Buch loeschen', async () => {
         // given
-        const token = await tokenGraphQL(client);
-        const authorization = { Authorization: `Bearer ${token}` }; // eslint-disable-line @typescript-eslint/naming-convention
+        const authorization = { Authorization: `Bearer ${token}` };
         const body: GraphQLQuery = {
             query: `
                 mutation {
@@ -363,8 +345,7 @@ describe('GraphQL Mutations', () => {
     // -------------------------------------------------------------------------
     test('Buch loeschen als "user"', async () => {
         // given
-        const token = await tokenGraphQL(client, 'user', 'p');
-        const authorization = { Authorization: `Bearer ${token}` }; // eslint-disable-line @typescript-eslint/naming-convention
+        const authorization = { Authorization: `Bearer ${tokenUser}` };
         const body: GraphQLQuery = {
             query: `
                 mutation {
@@ -395,4 +376,4 @@ describe('GraphQL Mutations', () => {
         expect(data.data.delete).toBeNull();
     });
 });
-/* eslint-enable max-lines, @typescript-eslint/no-non-null-assertion */
+/* eslint-enable @typescript-eslint/no-non-null-assertion */

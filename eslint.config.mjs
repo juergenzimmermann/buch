@@ -4,7 +4,7 @@ import eslint from '@eslint/js';
 import stylistic from '@stylistic/eslint-plugin';
 // @ts-expect-error
 import importPlugin from 'eslint-plugin-import';
-import jest from 'eslint-plugin-jest';
+import vitest from '@vitest/eslint-plugin';
 import nodePlugin from 'eslint-plugin-n';
 import preferArrow from 'eslint-plugin-prefer-arrow';
 import prettierRecommended from 'eslint-plugin-prettier/recommended';
@@ -20,7 +20,7 @@ import tseslint from 'typescript-eslint';
 export default tseslint.config(
     // https://github.com/prettier/eslint-plugin-prettier?tab=readme-ov-file#configuration-new-eslintconfigjs
     {
-        files: ['src/*.ts', '__tests__/**/*.ts'],
+        files: ['src/*.ts'],
 
         extends: [
             // https://eslint.org/docs/latest/rules
@@ -47,8 +47,6 @@ export default tseslint.config(
             stylistic.configs.recommended,
             importPlugin.flatConfigs.recommended,
             importPlugin.flatConfigs.typescript,
-            jest.configs['flat/recommended'],
-            jest.configs['flat/style'],
         ],
 
         plugins: {
@@ -476,47 +474,44 @@ export default tseslint.config(
         },
     },
     {
-        files: ['__tests__/**/*.ts'],
+        files: ['test/**/*.mts'],
 
-        extends: [jest.configs['flat/recommended'], jest.configs['flat/style']],
+        extends: [
+            eslint.configs.recommended,
+            ...tseslint.configs.strict,
+            ...tseslint.configs.stylistic,
+            vitest.configs.all,
+        ],
 
         languageOptions: {
             ecmaVersion: 2024,
             sourceType: 'module',
             parserOptions: {
-                project: true,
+                // project: true,
                 ecmaFeatures: {
                     impliedStrict: true,
                 },
             },
             globals: {
                 ...globals.node,
-                ...jest.environments.globals.globals,
             },
         },
 
         rules: {
-            // https://github.com/jest-community/eslint-plugin-jest/blob/main/src/index.ts
-            'jest/consistent-test-it': [
+            '@typescript-eslint/consistent-type-definitions': ['error', 'type'],
+            '@typescript-eslint/no-explicit-any': 'off',
+            // https://github.com/vitest-dev/eslint-plugin-vitest/blob/main/src/index.ts
+            // https://github.com/vitest-dev/eslint-plugin-vitest/tree/main/docs/rules
+            'vitest/consistent-test-it': [
                 'error',
                 {
-                    fn: 'test',
                     withinDescribe: 'test',
                 },
             ],
-            'jest/no-conditional-in-test': 'error',
-            'jest/no-duplicate-hooks': 'error',
-            'jest/no-restricted-matchers': 'error',
-            'jest/no-test-return-statement': 'error',
-            'jest/prefer-comparison-matcher': 'error',
-            'jest/prefer-equality-matcher': 'error',
-            'jest/prefer-expect-resolves': 'error',
-            'jest/prefer-hooks-in-order': 'error',
-            'jest/prefer-hooks-on-top': 'error',
-            'jest/prefer-mock-promise-shorthand': 'error',
-            'jest/prefer-snapshot-hint': 'error',
-            'jest/prefer-todo': 'error',
-            'jest/require-top-level-describe': 'error',
+            'vitest/max-expects': 'off',
+            'vitest/no-hooks': 'off',
+            'vitest/prefer-expect-assertions': 'off',
+            'vitest/prefer-lowercase-title': 'off',
         },
     },
 

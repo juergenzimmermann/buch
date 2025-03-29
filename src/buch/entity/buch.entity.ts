@@ -78,9 +78,9 @@ export class Buch {
     @VersionColumn()
     readonly version: number | undefined;
 
-    @Column()
+    @Column('varchar')
     @ApiProperty({ example: '0-0070-0644-6', type: String })
-    readonly isbn!: string;
+    readonly isbn: string | undefined;
 
     @Column('int')
     @ApiProperty({ example: 5, type: Number })
@@ -99,7 +99,7 @@ export class Buch {
     })
     @ApiProperty({ example: 1, type: Number })
     // Decimal aus decimal.js analog zu BigDecimal von Java
-    readonly preis!: Decimal;
+    readonly preis: Decimal | undefined;
 
     @Column('decimal', {
         precision: 4,
