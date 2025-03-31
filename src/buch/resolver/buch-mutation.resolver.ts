@@ -70,7 +70,7 @@ export class BuchMutationResolver {
     }
 
     @Mutation()
-    @Roles({ roles: ['admin', 'user'] })
+    @Roles('admin', 'user')
     async create(@Args('input') buchDTO: BuchDTO) {
         this.#logger.debug('create: buchDTO=%o', buchDTO);
 
@@ -82,7 +82,7 @@ export class BuchMutationResolver {
     }
 
     @Mutation()
-    @Roles({ roles: ['admin', 'user'] })
+    @Roles('admin', 'user')
     async update(@Args('input') buchDTO: BuchUpdateDTO) {
         this.#logger.debug('update: buch=%o', buchDTO);
 
@@ -101,7 +101,7 @@ export class BuchMutationResolver {
     }
 
     @Mutation()
-    @Roles({ roles: ['admin'] })
+    @Roles('admin')
     async delete(@Args() id: IdInput) {
         const idStr = id.id;
         this.#logger.debug('delete: id=%s', idStr);

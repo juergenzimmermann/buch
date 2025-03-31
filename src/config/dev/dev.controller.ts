@@ -43,7 +43,7 @@ import { DbPopulateService } from './db-populate.service.js';
  */
 @Controller('dev')
 @UseGuards(AuthGuard)
-@Roles({ roles: ['admin'] })
+@Roles('admin')
 @UseInterceptors(ResponseTimeInterceptor)
 @ApiTags('Dev')
 export class DevController {

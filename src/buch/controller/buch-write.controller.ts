@@ -98,7 +98,7 @@ export class BuchWriteController {
      * @returns Leeres Promise-Objekt.
      */
     @Post()
-    @Roles({ roles: ['admin', 'user'] })
+    @Roles('admin', 'user')
     @ApiOperation({ summary: 'Ein neues Buch anlegen' })
     @ApiCreatedResponse({ description: 'Erfolgreich neu angelegt' })
     @ApiBadRequestResponse({ description: 'Fehlerhafte Buchdaten' })
@@ -201,7 +201,7 @@ export class BuchWriteController {
      */
     // eslint-disable-next-line max-params
     @Put(':id')
-    @Roles({ roles: ['admin', 'user'] })
+    @Roles('admin', 'user')
     @HttpCode(HttpStatus.NO_CONTENT)
     @ApiOperation({ summary: 'Ein vorhandenes Buch aktualisieren' })
     @ApiHeader({
@@ -259,7 +259,7 @@ export class BuchWriteController {
      * @returns Leeres Promise-Objekt.
      */
     @Delete(':id')
-    @Roles({ roles: ['admin'] })
+    @Roles('admin')
     @HttpCode(HttpStatus.NO_CONTENT)
     @ApiOperation({ summary: 'Buch mit der ID löschen' })
     @ApiNoContentResponse({
