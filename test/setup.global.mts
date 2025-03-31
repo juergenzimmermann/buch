@@ -13,12 +13,14 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 
+// https://vitest.dev/config/#globalsetup
+
 import axios, { type AxiosInstance, type AxiosResponse } from 'axios';
 import {
     type GraphQLQuery,
     type GraphQLResponseBody,
 } from './graphql/graphql.mjs';
-import type { TestProject } from 'vitest/node';
+import { TestProject } from 'vitest/node';
 import { baseURL, httpsAgent, tokenPath } from './constants.mjs';
 
 const client = axios.create({
@@ -125,6 +127,7 @@ export default async function setup(project: TestProject) {
     await dbPopulate(client, accessTokenRest);
 }
 
+// https://www.typescriptlang.org/docs/handbook/declaration-merging.html#module-augmentation
 declare module 'vitest' {
     // eslint-disable-next-line @typescript-eslint/consistent-type-definitions
     export interface ProvidedContext {
