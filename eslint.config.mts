@@ -2,7 +2,6 @@
 import comments from '@eslint-community/eslint-plugin-eslint-comments/configs';
 import eslint from '@eslint/js';
 import stylistic from '@stylistic/eslint-plugin';
-// @ts-expect-error
 import importPlugin from 'eslint-plugin-import';
 import vitest from '@vitest/eslint-plugin';
 import nodePlugin from 'eslint-plugin-n';
