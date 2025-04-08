@@ -93,7 +93,7 @@ export class BuchWriteController {
      * existieren.
      *
      * @param buchDTO JSON-Daten für ein Buch im Request-Body.
-     * @param req: Request-Objekt von Express für den Location-Header.
+     * @param req Request-Objekt von Express für den Location-Header.
      * @param res Leeres Response-Objekt von Express.
      * @returns Leeres Promise-Objekt.
      */
@@ -125,7 +125,7 @@ export class BuchWriteController {
      * Postman: Body mit "form-data", key: "file" und "File" im Dropdown-Menü
      * @param id ID des vorhandenen Buches
      * @param file Binärdatei als `File`-Objekt von _Multer_.
-     * @param req: Request-Objekt von Express für den Location-Header.
+     * @param req Request-Objekt von Express für den Location-Header.
      * @param res Leeres Response-Objekt von Express.
      * @returns Leeres Promise-Objekt.
      */
