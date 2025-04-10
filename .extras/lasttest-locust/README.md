@@ -48,7 +48,7 @@ starten:
 Danach startet man den Lasttest mit _Locust_:
 
 ```powershell
-    cd .extras\lasttest
+    cd .extras\lasttest-locust
     uv run locust -f locustfile.py
     http://localhost:8089
         Number of users: 100
@@ -61,7 +61,7 @@ Danach startet man den Lasttest mit _Locust_:
 Unter Verwendung von _uv_ mit _tools_:
 
 ```powershell
-    cd .extras\lasttest
+    cd .extras\lasttest-locust
     uvx ruff check locustfile.py
     uvx ruff format locustfile.py
 ```
@@ -69,6 +69,7 @@ Unter Verwendung von _uv_ mit _tools_:
 Oder _pyright_ mit _venv_:
 
 ```powershell
+    cd .extras\lasttest-locust
     .\.venv\Scripts\Activate.ps1
     pyright locustfile.py
 ```
