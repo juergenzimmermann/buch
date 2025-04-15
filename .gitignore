@@ -19,8 +19,9 @@ tmp
 dependencies.svg
 
 # Sensible Daten (Passwort, Token, private Schluessel)
-.extras/compose/db/mysql/db_root_password.txt
-.extras/compose/db/postgres/db_password.txt
+.extras/compose/buch/.env
+.extras/compose/mysql/db_root_password.txt
+.extras/compose/postgres/db_password.txt
 .extras/lasttest-locust/__pycache__
 .extras/lasttest-locust/.venv
 .extras/postman

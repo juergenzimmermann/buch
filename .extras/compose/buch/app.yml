@@ -58,6 +58,7 @@ keycloak:
 # ==============================================================================
 log:
   #dir: /tmp
+  # Auskommentieren fuer Lasttests mit k6 oder locust
   level: debug
   pretty: true
 

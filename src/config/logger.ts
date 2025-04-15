@@ -93,3 +93,5 @@ export const parentLogger: pino.Logger<string> = pino(
     { level: logLevel },
     transports,
 ); // eslint-disable-line @typescript-eslint/no-unsafe-argument
+
+export const nestLogger: boolean = logLevel === 'info' ? false : true;

@@ -19,7 +19,11 @@
 
 // Modul in JS = Datei
 // Pfad innerhalb von Packages in node_modules ("nicht-relative Imports")
-import { type INestApplication, ValidationPipe } from '@nestjs/common';
+import {
+    type INestApplication,
+    type NestApplicationOptions,
+    ValidationPipe,
+} from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import {
     DocumentBuilder,
@@ -30,6 +34,7 @@ import compression from 'compression';
 // relativer Import
 import { AppModule } from './app.module.js';
 import { corsOptions } from './config/cors.js';
+import { nestLogger } from './config/logger.js';
 import { nodeConfig } from './config/node.js';
 import { paths } from './config/paths.js';
 import { helmetHandlers } from './security/http/helmet.handler.js';
@@ -53,8 +58,13 @@ const setupSwagger = (app: INestApplication) => {
 // Promise ab ES 2015, vgl: Future in Java
 // async/await ab ES 2017, vgl: C#
 const bootstrap = async () => {
+    // Kein Logging bei Lasttests mit k6 oder locust
     // https://expressjs.com/en/advanced/best-practice-security.html#use-tls
-    const app = await NestFactory.create(AppModule, { httpsOptions }); // "Shorthand Properties" ab ES 2015
+    const options: NestApplicationOptions =
+        nestLogger === false
+            ? { httpsOptions, logger: false }
+            : { httpsOptions };
+    const app = await NestFactory.create(AppModule, options); // "Shorthand Properties" ab ES 2015
 
     // Beispiele fuer "Middleware" bei Express:
     //  * Authentifizierung und Autorisierung

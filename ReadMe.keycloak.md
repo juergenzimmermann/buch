@@ -66,12 +66,43 @@ Konfigurationsschritte _sorgfältig_ durchzuführen, nachdem man in einem
 Webbrowser `http://localhost:8880` oder `https://localhost:8843` aufgerufen hat:
 
 ```text
-    Username    admin
+    Username    tmp
     Password    p
-        siehe .env in .extras\compose\keycloak
+        siehe .env in extras\compose\keycloak
 
-    Realm "master" ist voreingestellt
-        Drop-Down Menü: <Create realm> anklicken
+    Menüpunkt "Users"
+        Button <Add user> anklicken
+            Username    admin
+            Email       admin@acme.com
+            Last name   admin
+            <Create> anklicken
+        Tab "Credentials" anklicken
+            Button <Set password> anklicken
+                Password                p
+                Password confirmation   p
+                Temporary               Off
+                Button <Save> anklicken
+                Button <Save password> anklicken
+        Tab "Role mapping" anklicken
+            Button <Assign role> anklicken
+                Drop-Down-Menü "Filter by realm roles" auswählen
+                Checkbox "admin" anklicken
+                Button <Assign> anklicken
+        Drop-Down-Menü in der rechten oberen Ecke
+            "Sign-Out" anklicken
+
+    Einloggen
+        Username    admin
+        Password    p
+
+    Menüpunkt "Users"
+        "tmp" anklicken
+            Drop-Down-Menü rechts "Action"
+                "Delete" anklicken
+                Button <Delete> anklicken
+
+    Menüpunkt "Manage realms" anklicken
+        Button <Create realm> anklicken
             Realm name      nest
             <Create> anklicken
 
@@ -110,7 +141,7 @@ Webbrowser `http://localhost:8880` oder `https://localhost:8843` aufgerufen hat:
 
     # https://www.keycloak.org/docs/latest/server_admin/index.html#assigning-permissions-using-roles-and-groups
     Menüpunkt "Users"
-        <Create new user> anklicken
+        <Add user> anklicken
             Required User Actions:      Überprüfen, dass nichts ausgewählt ist
             Username                    admin
             Email                       admin@acme.com
@@ -131,7 +162,7 @@ Webbrowser `http://localhost:8880` oder `https://localhost:8843` aufgerufen hat:
             Tab "Details"
                 Required user actions       Überprüfen, dass nichts ausgewählt ist
                 <Save> anklicken
-        <Create new user> anklicken
+        <Add user> anklicken
             Required User Actions:      Überprüfen, dass nichts ausgewählt ist
             Username                    user
             Email                       user@acme.com
