@@ -22,7 +22,7 @@ import { BuchReadService } from '../../src/buch/service/buch-read.service.js';
 import { baseURL, httpsAgent } from '../constants.mjs';
 import { type ErrorResponse } from './error-response.mjs';
 
-const token = inject('tokenRest');
+const token: string = inject('tokenRest');
 
 // -----------------------------------------------------------------------------
 // T e s t d a t e n

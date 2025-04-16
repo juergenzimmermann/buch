@@ -24,6 +24,8 @@
 import http, { RefinedResponseBody, type ResponseType } from 'k6/http';
 import { check, sleep } from 'k6';
 import { type Options } from 'k6/options';
+import { BuchDTO } from '../../src/buch/controller/buchDTO.entity.ts';
+import { generateISBN } from './isbn_generate.ts';
 
 const baseUrl = 'https://localhost:3000';
 const restUrl = `${baseUrl}/rest`;
@@ -43,8 +45,31 @@ const isbns = [
     '978-3-540-43081-0',
 ]
 const schlagwoerter = ['javascript', 'typescript', 'java', 'python'];
+const neuesBuch: Omit<BuchDTO, 'preis' | 'rabatt'> & {
+    preis: number;
+    rabatt: number;
+} = {
+    isbn: 'TBD',
+    rating: 1,
+    art: 'HARDCOVER',
+    preis: 111.11,
+    rabatt: 0.011,
+    lieferbar: true,
+    datum: '2025-02-28',
+    homepage: 'https://post.rest',
+    schlagwoerter: [],
+    titel: {
+        titel: 'Titelk6',
+        untertitel: 'untertitelk6',
+    },
+    abbildungen: [
+        {
+            beschriftung: 'Abb. 1: k6',
+            contentType: 'img/png',
+        },
+    ],
+};
 
-let token: string;
 const tlsDir = '../../src/config/resources/tls';
 const cert = open(`${tlsDir}/certificate.crt`);
 const key = open(`${tlsDir}/key.pem`);
@@ -52,17 +77,29 @@ const key = open(`${tlsDir}/key.pem`);
 // https://grafana.com/docs/k6/latest/using-k6/test-lifecycle
 export function setup() {
     let headers: { [name: string]: string } = { 'Content-Type': 'application/x-www-form-urlencoded' };
-    const body = 'username=admin&password=p';
-    let response = http.post(tokenUrl, body, { headers });
-    token = JSON.parse(response.body as string).access_token;
-    console.log(`token=${token}`);
+
+    let body = 'username=admin&password=p';
+    let res = http.post<'text'>(tokenUrl, body, { headers });
+    let token: string;
+    if (res.status === 200) {
+        token = JSON.parse(res.body).access_token;
+        console.log(`token=${token}`);
+    } else {
+        throw new Error(`setup fuer adminToken: status=${res.status}, body=${res.body}`);
+    }
 
     headers = { Authorization: `Bearer ${token}` };
-    response = http.post(dbPopulateUrl, undefined, { headers });
-    if (response.status === 200) {
+    res = http.post(dbPopulateUrl, undefined, { headers });
+    if (res.status === 200) {
         console.log('DB neu geladen');
+    } else {
+        throw new Error(`setup fuer db_populate: status=${res.status}, body=${res.body}`);
     }
 }
+
+const rampUpDuration = '5s';
+const steadyDuration = '22s';
+const rampDownDuration = '3s';
 
 export const options: Options = {
     batchPerHost: 50,
@@ -71,72 +108,73 @@ export const options: Options = {
     scenarios: {
         get_id: {
             executor: 'ramping-vus', // "Ramp up" zu Beginn und "Ramp down" am Ende des Testintervalls
-            // executor: 'constant-arrival-rate', // Fixe Anzahl von Requests waehrend des Testintervalls
-            startVUs: 0, // "virtual user": simulierte, konkurierende User
             stages: [
-                { duration: '5s', target: 5 }, // "traffic ramp-up": von 0 auf 15 User in 5 Sek
-                { duration: '20s', target: 5 }, // 15 User für 20 Sek
-                { duration: '5s', target: 0 }, // "ramp-down" auf 0 User
+                { target: 5, duration: rampUpDuration }, // "traffic ramp-up": schrittweise von 0 auf 5 User in 5 Sek
+                { target: 5, duration: steadyDuration }, // 5 User fuer den eigentlichen Lasttest
+                { target: 0, duration: rampDownDuration }, // "ramp-down": schrittweise auf 0 User
             ],
             exec: 'getById',
         },
         get_titel: {
             executor: 'ramping-vus',
-            startVUs: 0,
             stages: [
-                { duration: '5s', target: 20 },
-                { duration: '20s', target: 20 },
-                { duration: '5s', target: 0 },
+                { target: 20, duration: rampUpDuration },
+                { target: 20, duration: '22s' },
+                { target: 0, duration: rampDownDuration },
             ],
             exec: 'getByTitel',
         },
         get_isbn: {
             executor: 'ramping-vus',
-            startVUs: 0,
             stages: [
-                { duration: '5s', target: 10 },
-                { duration: '20s', target: 10 },
-                { duration: '5s', target: 0 },
+                { target: 10, duration: rampUpDuration },
+                { target: 10, duration: '22s' },
+                { target: 0, duration: rampDownDuration },
             ],
             exec: 'getByISBN',
         },
         get_schlagwort: {
             executor: 'ramping-vus',
-            startVUs: 0,
             stages: [
-                { duration: '5s', target: 15 },
-                { duration: '20s', target: 15 },
-                { duration: '5s', target: 0 },
+                { target: 15, duration: rampUpDuration },
+                { target: 15, duration: '22s' },
+                { target: 0, duration: rampDownDuration },
             ],
             exec: 'getBySchlagwort',
         },
+        post_buch: {
+            executor: 'ramping-vus',
+            stages: [
+                { target: 3, duration: rampUpDuration },
+                { target: 3, duration: '22s' },
+                { target: 0, duration: rampDownDuration },
+            ],
+            exec: 'postBuch',
+        },
         query_buch: {
             executor: 'ramping-vus',
-            startVUs: 0,
             stages: [
-                { duration: '5s', target: 3 },
-                { duration: '20s', target: 3 },
-                { duration: '5s', target: 0 },
+                { target: 3, duration: rampUpDuration },
+                { target: 3, duration: '22s' },
+                { target: 0, duration: rampDownDuration },
             ],
             exec: 'queryBuch',
         },
         query_buecher: {
             executor: 'ramping-vus',
-            startVUs: 0,
             stages: [
-                { duration: '5s', target: 5 },
-                { duration: '20s', target: 5 },
-                { duration: '5s', target: 0 },
+                { target: 5, duration: rampUpDuration },
+                { target: 5, duration: '22s' },
+                { target: 0, duration: rampDownDuration },
             ],
             exec: 'queryBuecher',
         },
         query_buecher_nicht_vorhanden: {
             executor: 'ramping-vus',
-            startVUs: 0,
             stages: [
-                { duration: '5s', target: 2 },
-                { duration: '20s', target: 2 },
-                { duration: '5s', target: 2 },
+                { target: 2, duration: rampUpDuration },
+                { target: 2, duration: '22s' },
+                { target: 0, duration: rampDownDuration },
             ],
             exec: 'queryBuecherNichtVorhanden',
         },
@@ -145,11 +183,10 @@ export const options: Options = {
         // https://community.grafana.com/t/http-req-failed-reporting-passes-as-failures/94807/3
         get_titel_nicht_vorhanden: {
             executor: 'ramping-vus',
-            startVUs: 0,
             stages: [
-                { duration: '5s', target: 3 },
-                { duration: '20s', target: 3 },
-                { duration: '5s', target: 0 },
+                { target: 3, duration: rampUpDuration },
+                { target: 3, duration: '22s' },
+                { target: 0, duration: rampDownDuration },
             ],
             exec: 'getByTitelNichtVorhanden',
         },
@@ -226,6 +263,31 @@ export function getBySchlagwort() {
         'GET schlagwort: OK': (r) => r.status === 200,
         'GET schlagwort: application/json': (r) => r.headers['Content-Type'].startsWith('application/json'),
      });
+    sleep(1);
+}
+
+// POST /rest
+export function postBuch() {
+    const schlagwort = schlagwoerter[Math.floor(Math.random() * schlagwoerter.length)];
+    const buch = { ...neuesBuch };
+    buch.isbn = generateISBN();
+    buch.schlagwoerter = [schlagwort.toUpperCase()];
+
+    let headers: { [name: string]: string } = { 'Content-Type': 'application/x-www-form-urlencoded' };
+    let body = 'username=admin&password=p';
+    let res = http.post<'text'>(tokenUrl, body, { headers });
+    check(res, { 'POST /auth/token: OK': (r) => r.status === 200 });
+    const token = JSON.parse(res.body).access_token;
+
+    headers = {
+        Authorization: `Bearer ${token}` ,
+        'Content-Type': 'application/json',
+    };
+    res = http.post(restUrl, JSON.stringify(buch), { headers });
+    check(res, {
+        'POST "buch": Created': (r) => r.status === 201,
+        // 'POST "buch": location': (r) => r.headers.location.startsWith(restUrl),
+    });
     sleep(1);
 }
 
