@@ -43,7 +43,7 @@ const isbns = [
     '978-0-007-09732-6',
     '978-3-824-40481-0',
     '978-3-540-43081-0',
-]
+];
 const schlagwoerter = ['javascript', 'typescript', 'java', 'python'];
 const neuesBuch: Omit<BuchDTO, 'preis' | 'rabatt'> & {
     preis: number;
@@ -76,7 +76,9 @@ const key = open(`${tlsDir}/key.pem`);
 
 // https://grafana.com/docs/k6/latest/using-k6/test-lifecycle
 export function setup() {
-    let headers: { [name: string]: string } = { 'Content-Type': 'application/x-www-form-urlencoded' };
+    let headers: { [name: string]: string } = {
+        'Content-Type': 'application/x-www-form-urlencoded',
+    };
 
     let body = 'username=admin&password=p';
     let res = http.post<'text'>(tokenUrl, body, { headers });
@@ -85,7 +87,9 @@ export function setup() {
         token = JSON.parse(res.body).access_token;
         console.log(`token=${token}`);
     } else {
-        throw new Error(`setup fuer adminToken: status=${res.status}, body=${res.body}`);
+        throw new Error(
+            `setup fuer adminToken: status=${res.status}, body=${res.body}`,
+        );
     }
 
     headers = { Authorization: `Bearer ${token}` };
@@ -93,7 +97,9 @@ export function setup() {
     if (res.status === 200) {
         console.log('DB neu geladen');
     } else {
-        throw new Error(`setup fuer db_populate: status=${res.status}, body=${res.body}`);
+        throw new Error(
+            `setup fuer db_populate: status=${res.status}, body=${res.body}`,
+        );
     }
 }
 
@@ -213,7 +219,8 @@ export function getById() {
 
     check(res, {
         'GET id: OK': (r) => r.status === 200,
-        'GET id: application/json': (r) => r.headers['Content-Type'].startsWith('application/json'),
+        'GET id: application/json': (r) =>
+            r.headers['Content-Type'].startsWith('application/json'),
     });
     sleep(1); // Denkzeit simulieren
 }
@@ -225,8 +232,9 @@ export function getByTitel() {
 
     check(res, {
         'GET titel: OK': (r) => r.status === 200,
-        'GET titel: application/json': (r) => r.headers['Content-Type'].startsWith('application/json'),
-     });
+        'GET titel: application/json': (r) =>
+            r.headers['Content-Type'].startsWith('application/json'),
+    });
     sleep(1);
 }
 
@@ -235,7 +243,10 @@ export function getByTitel() {
 // https://grafana.com/docs/k6/latest/using-k6/metrics/create-custom-metrics
 // https://grafana.com/docs/k6/latest/javascript-api/k6-metrics/counter
 export function getByTitelNichtVorhanden() {
-    const titel = titelNichtVorhanden[Math.floor(Math.random() * titelNichtVorhanden.length)];
+    const titel =
+        titelNichtVorhanden[
+            Math.floor(Math.random() * titelNichtVorhanden.length)
+        ];
     const res = http.get(`${restUrl}?titel=${titel}`);
 
     check(res, { 'GET titel: NOT_FOUND': (r) => r.status === 404 });
@@ -249,38 +260,44 @@ export function getByISBN() {
 
     check(res, {
         'GET isbn: OK': (r) => r.status === 200,
-        'GET isbn: application/json': (r) => r.headers['Content-Type'].startsWith('application/json'),
-     });
+        'GET isbn: application/json': (r) =>
+            r.headers['Content-Type'].startsWith('application/json'),
+    });
     sleep(1);
 }
 
 // GET /rest?<schlagwort>=true
 export function getBySchlagwort() {
-    const schlagwort = schlagwoerter[Math.floor(Math.random() * schlagwoerter.length)];
+    const schlagwort =
+        schlagwoerter[Math.floor(Math.random() * schlagwoerter.length)];
     const res = http.get(`${restUrl}?${schlagwort}=true`);
 
     check(res, {
         'GET schlagwort: OK': (r) => r.status === 200,
-        'GET schlagwort: application/json': (r) => r.headers['Content-Type'].startsWith('application/json'),
-     });
+        'GET schlagwort: application/json': (r) =>
+            r.headers['Content-Type'].startsWith('application/json'),
+    });
     sleep(1);
 }
 
 // POST /rest
 export function postBuch() {
-    const schlagwort = schlagwoerter[Math.floor(Math.random() * schlagwoerter.length)];
+    const schlagwort =
+        schlagwoerter[Math.floor(Math.random() * schlagwoerter.length)];
     const buch = { ...neuesBuch };
     buch.isbn = generateISBN();
     buch.schlagwoerter = [schlagwort.toUpperCase()];
 
-    let headers: { [name: string]: string } = { 'Content-Type': 'application/x-www-form-urlencoded' };
+    let headers: { [name: string]: string } = {
+        'Content-Type': 'application/x-www-form-urlencoded',
+    };
     let body = 'username=admin&password=p';
     let res = http.post<'text'>(tokenUrl, body, { headers });
     check(res, { 'POST /auth/token: OK': (r) => r.status === 200 });
     const token = JSON.parse(res.body).access_token;
 
     headers = {
-        Authorization: `Bearer ${token}` ,
+        Authorization: `Bearer ${token}`,
         'Content-Type': 'application/json',
     };
     res = http.post(restUrl, JSON.stringify(buch), { headers });
@@ -321,8 +338,9 @@ export function queryBuch() {
 
     check(res, {
         'Query "buch": OK': (r) => r.status === 200,
-        'Query "buch": application/json': (r) => r.headers['Content-Type'].startsWith('application/json'),
-     });
+        'Query "buch": application/json': (r) =>
+            r.headers['Content-Type'].startsWith('application/json'),
+    });
     sleep(1);
 }
 
@@ -350,8 +368,9 @@ export function queryBuecher() {
 
     check(res, {
         'Query "buecher": OK': (r) => r.status === 200,
-        'Query "buecher": application/json': (r) => r.headers['Content-Type'].startsWith('application/json'),
-     });
+        'Query "buecher": application/json': (r) =>
+            r.headers['Content-Type'].startsWith('application/json'),
+    });
     sleep(1);
 }
 
@@ -372,6 +391,8 @@ export function queryBuecherNichtVorhanden() {
 
     const res = http.post(graphqlUrl, JSON.stringify(body), { headers });
 
-    check(res, { 'Query "buecher (nicht vorhanden)": OK': (r) => r.status === 200 });
+    check(res, {
+        'Query "buecher (nicht vorhanden)": OK': (r) => r.status === 200,
+    });
     sleep(1);
 }
