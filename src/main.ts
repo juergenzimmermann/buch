@@ -34,7 +34,7 @@ import compression from 'compression';
 // relativer Import
 import { AppModule } from './app.module.js';
 import { corsOptions } from './config/cors.js';
-import { nestLogger } from './config/logger.js';
+import { logLevel } from './config/logger.js';
 import { nodeConfig } from './config/node.js';
 import { paths } from './config/paths.js';
 import { helmetHandlers } from './security/http/helmet.handler.js';
@@ -61,9 +61,9 @@ const bootstrap = async () => {
     // Kein Logging bei Lasttests mit k6 oder locust
     // https://expressjs.com/en/advanced/best-practice-security.html#use-tls
     const options: NestApplicationOptions =
-        nestLogger === false
-            ? { httpsOptions, logger: false }
-            : { httpsOptions };
+        logLevel === 'debug'
+            ? { httpsOptions }
+            : { httpsOptions, logger: false };
     const app = await NestFactory.create(AppModule, options); // "Shorthand Properties" ab ES 2015
 
     // Beispiele fuer "Middleware" bei Express:
