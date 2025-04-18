@@ -14,12 +14,13 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 import { Agent } from 'node:https';
-import { nodeConfig } from '../src/config/node.js';
-import { paths } from '../src/config/paths.js';
+import { nodeConfig } from '../../src/config/node.js';
+import { paths } from '../../src/config/paths.js';
 
 const { host, port } = nodeConfig;
 
 export const baseURL = `https://${host}:${port}`;
+export const restURL = `${baseURL}/rest`;
 
 export const tokenPath = `${paths.auth}/${paths.token}`;
 

@@ -19,7 +19,6 @@
     "dev": "nest start --watch",
     "debug": "npm run dev -- --debug",
     "test:ORIG": "jest",
-    "pretest": "npm run copy-resources",
     "test": "set LOG_LEVEL=info&& vitest",
     "asciidoctor": "node scripts/asciidoctor.mts",
     "audit": "npm audit --omit dev",

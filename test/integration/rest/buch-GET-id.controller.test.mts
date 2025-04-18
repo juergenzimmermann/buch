@@ -35,8 +35,8 @@
 import { beforeAll, describe, expect, test } from 'vitest';
 import { HttpStatus } from '@nestjs/common';
 import axios, { type AxiosInstance, type AxiosResponse } from 'axios';
-import { type Buch } from '../../src/buch/entity/buch.entity.js';
-import { baseURL, httpsAgent } from '../constants.mjs';
+import { type Buch } from '../../../src/buch/entity/buch.entity.js';
+import { httpsAgent, restURL } from '../constants.mjs';
 import { type ErrorResponse } from './error-response.mjs';
 
 // -----------------------------------------------------------------------------
@@ -56,9 +56,8 @@ describe('GET /rest/:id', () => {
 
     // Axios initialisieren
     beforeAll(async () => {
-        const restUrl = `${baseURL}/rest`;
         client = axios.create({
-            baseURL: restUrl,
+            baseURL: restURL,
             httpsAgent,
             validateStatus: (status) => status < 500,
         });

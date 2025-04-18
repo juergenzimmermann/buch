@@ -14,14 +14,12 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-import { beforeAll, describe, expect, inject, test } from 'vitest';
+import { beforeAll, describe, expect, test } from 'vitest';
 import { HttpStatus } from '@nestjs/common';
 import axios, { type AxiosInstance, type AxiosResponse } from 'axios';
 import { type GraphQLQuery, type GraphQLResponseBody } from './graphql.mjs';
 import { baseURL, httpsAgent } from '../constants.mjs';
-
-const token = inject('tokenGraphql');
-const tokenUser = inject('tokenGraphqlUser');
+import { getToken } from './token.mjs';
 
 // -----------------------------------------------------------------------------
 // T e s t d a t e n
@@ -35,6 +33,8 @@ const idLoeschen = '60';
 describe('GraphQL Mutations', () => {
     let client: AxiosInstance;
     const graphqlPath = 'graphql';
+    let token: string;
+    let tokenUser: string;
 
     // Axios initialisieren
     beforeAll(async () => {
@@ -42,6 +42,8 @@ describe('GraphQL Mutations', () => {
             baseURL,
             httpsAgent,
         });
+        token = await getToken(client, 'admin', 'p');
+        tokenUser = await getToken(client, 'user', 'p');
     });
 
     // -------------------------------------------------------------------------

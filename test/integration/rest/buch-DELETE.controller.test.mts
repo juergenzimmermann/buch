@@ -13,13 +13,11 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-import { beforeAll, describe, expect, inject, test } from 'vitest';
+import { beforeAll, describe, expect, test } from 'vitest';
 import { HttpStatus } from '@nestjs/common';
 import axios, { type AxiosInstance, type AxiosResponse } from 'axios';
-import { baseURL, httpsAgent } from '../constants.mjs';
-
-const token = inject('tokenRest');
-const tokenUser = inject('tokenRestUser');
+import { baseURL, httpsAgent, restURL } from '../constants.mjs';
+import { getToken } from '../token.mjs';
 
 // -----------------------------------------------------------------------------
 // T e s t d a t e n
@@ -32,10 +30,18 @@ const id = '50';
 // Test-Suite
 describe('DELETE /rest', () => {
     let client: AxiosInstance;
+    let token: string;
+    let tokenUser: string;
 
     // Axios initialisieren
     beforeAll(async () => {
-        const restURL = `${baseURL}/rest`;
+        const tokenClient = axios.create({
+            baseURL,
+            httpsAgent,
+        });
+        token = await getToken(tokenClient, 'admin', 'p');
+        tokenUser = await getToken(tokenClient, 'user', 'p');
+
         client = axios.create({
             baseURL: restURL,
             httpsAgent,

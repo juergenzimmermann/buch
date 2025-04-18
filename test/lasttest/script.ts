@@ -107,88 +107,88 @@ export const options: Options = {
 
     scenarios: {
         get_id: {
+            exec: 'getById',
             executor: 'ramping-vus', // "Ramp up" zu Beginn und "Ramp down" am Ende des Testintervalls
             stages: [
                 { target: 5, duration: rampUpDuration }, // "traffic ramp-up": schrittweise von 0 auf 5 User in 5 Sek
                 { target: 5, duration: steadyDuration }, // 5 User fuer den eigentlichen Lasttest
                 { target: 0, duration: rampDownDuration }, // "ramp-down": schrittweise auf 0 User
             ],
-            exec: 'getById',
         },
         get_titel: {
+            exec: 'getByTitel',
             executor: 'ramping-vus',
             stages: [
                 { target: 20, duration: rampUpDuration },
                 { target: 20, duration: '22s' },
                 { target: 0, duration: rampDownDuration },
             ],
-            exec: 'getByTitel',
         },
         get_isbn: {
+            exec: 'getByISBN',
             executor: 'ramping-vus',
             stages: [
                 { target: 10, duration: rampUpDuration },
                 { target: 10, duration: '22s' },
                 { target: 0, duration: rampDownDuration },
             ],
-            exec: 'getByISBN',
         },
         get_schlagwort: {
+            exec: 'getBySchlagwort',
             executor: 'ramping-vus',
             stages: [
                 { target: 15, duration: rampUpDuration },
                 { target: 15, duration: '22s' },
                 { target: 0, duration: rampDownDuration },
             ],
-            exec: 'getBySchlagwort',
         },
         post_buch: {
+            exec: 'postBuch',
             executor: 'ramping-vus',
             stages: [
                 { target: 3, duration: rampUpDuration },
                 { target: 3, duration: '22s' },
                 { target: 0, duration: rampDownDuration },
             ],
-            exec: 'postBuch',
         },
         query_buch: {
+            exec: 'queryBuch',
             executor: 'ramping-vus',
             stages: [
                 { target: 3, duration: rampUpDuration },
                 { target: 3, duration: '22s' },
                 { target: 0, duration: rampDownDuration },
             ],
-            exec: 'queryBuch',
         },
         query_buecher: {
+            exec: 'queryBuecher',
             executor: 'ramping-vus',
             stages: [
                 { target: 5, duration: rampUpDuration },
                 { target: 5, duration: '22s' },
                 { target: 0, duration: rampDownDuration },
             ],
-            exec: 'queryBuecher',
         },
         query_buecher_nicht_vorhanden: {
+            exec: 'queryBuecherNichtVorhanden',
             executor: 'ramping-vus',
             stages: [
                 { target: 2, duration: rampUpDuration },
                 { target: 2, duration: '22s' },
                 { target: 0, duration: rampDownDuration },
             ],
-            exec: 'queryBuecherNichtVorhanden',
         },
 
         // Scenarios mit 404 NOT_FOUND -> http_req_failed
         // https://community.grafana.com/t/http-req-failed-reporting-passes-as-failures/94807/3
         get_titel_nicht_vorhanden: {
+            exec: 'getByTitelNichtVorhanden',
             executor: 'ramping-vus',
             stages: [
                 { target: 3, duration: rampUpDuration },
                 { target: 3, duration: '22s' },
                 { target: 0, duration: rampDownDuration },
             ],
-            exec: 'getByTitelNichtVorhanden',
         },
     },
 
@@ -215,7 +215,7 @@ export function getById() {
         'GET id: OK': (r) => r.status === 200,
         'GET id: application/json': (r) => r.headers['Content-Type'].startsWith('application/json'),
     });
-    sleep(1);
+    sleep(1); // Denkzeit simulieren
 }
 
 // GET /rest?title=<value>

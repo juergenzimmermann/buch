@@ -22,9 +22,6 @@ dependencies.svg
 .extras/compose/buch/.env
 .extras/compose/mysql/db_root_password.txt
 .extras/compose/postgres/db_password.txt
-.extras/lasttest-locust/__pycache__
-.extras/lasttest-locust/.venv
-.extras/postman
 .extras/*.png
 .extras/*.jpeg
 .extras/*.gif
@@ -35,6 +32,9 @@ dependencies.svg
 .extras/*.ogg
 .extras/*.webm
 src/config/resources/tls/key.pem
+test/lasttest-locust/__pycache__
+test/lasttest-locust/.venv
+test/postman
 sonar-project.properties
 
 # Logs

@@ -13,15 +13,14 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-import { beforeAll, describe, expect, inject, test } from 'vitest';
+import { beforeAll, describe, expect, test } from 'vitest';
 import { HttpStatus } from '@nestjs/common';
 import axios, { type AxiosInstance, type AxiosResponse } from 'axios';
 import { Decimal } from 'decimal.js';
-import { type BuchDtoOhneRef } from '../../src/buch/controller/buchDTO.entity.js';
-import { baseURL, httpsAgent } from '../constants.mjs';
+import { type BuchDtoOhneRef } from '../../../src/buch/controller/buchDTO.entity.js';
+import { baseURL, httpsAgent, restURL } from '../constants.mjs';
 import { type ErrorResponse } from './error-response.mjs';
-
-const token = inject('tokenRest');
+import { getToken } from '../token.mjs';
 
 // -----------------------------------------------------------------------------
 // T e s t d a t e n
@@ -93,11 +92,17 @@ describe('PUT /rest/:id', () => {
     const headers: Record<string, string> = {
         'Content-Type': 'application/json',
     };
+    let token: string;
 
     // Axios initialisieren
     beforeAll(async () => {
-        client = axios.create({
+        const tokenClient = axios.create({
             baseURL,
+            httpsAgent,
+        });
+        token = await getToken(tokenClient, 'admin', 'p');
+        client = axios.create({
+            baseURL: restURL,
             headers,
             httpsAgent,
             validateStatus: (status) => status < 500,
@@ -106,7 +111,7 @@ describe('PUT /rest/:id', () => {
 
     test('Vorhandenes Buch aendern', async () => {
         // given
-        const url = `/rest/${idVorhanden}`;
+        const url = `/${idVorhanden}`;
         headers.Authorization = `Bearer ${token}`;
         headers['If-Match'] = '"0"';
 
@@ -124,7 +129,7 @@ describe('PUT /rest/:id', () => {
 
     test('Nicht-vorhandenes Buch aendern', async () => {
         // given
-        const url = `/rest/${idNichtVorhanden}`;
+        const url = `/${idNichtVorhanden}`;
         headers.Authorization = `Bearer ${token}`;
         headers['If-Match'] = '"0"';
 
@@ -141,7 +146,7 @@ describe('PUT /rest/:id', () => {
 
     test('Vorhandenes Buch aendern, aber mit ungueltigen Daten', async () => {
         // given
-        const url = `/rest/${idVorhanden}`;
+        const url = `/${idVorhanden}`;
         headers.Authorization = `Bearer ${token}`;
         headers['If-Match'] = '"0"';
         const expectedMsg = [
@@ -170,7 +175,7 @@ describe('PUT /rest/:id', () => {
 
     test('Vorhandenes Buch aendern, aber ohne Versionsnummer', async () => {
         // given
-        const url = `/rest/${idVorhanden}`;
+        const url = `/${idVorhanden}`;
         headers.Authorization = `Bearer ${token}`;
         delete headers['If-Match'];
 
@@ -188,7 +193,7 @@ describe('PUT /rest/:id', () => {
 
     test('Vorhandenes Buch aendern, aber mit alter Versionsnummer', async () => {
         // given
-        const url = `/rest/${idVorhanden}`;
+        const url = `/${idVorhanden}`;
         headers.Authorization = `Bearer ${token}`;
         headers['If-Match'] = '"-1"';
 
@@ -210,7 +215,7 @@ describe('PUT /rest/:id', () => {
 
     test('Vorhandenes Buch aendern, aber ohne Token', async () => {
         // given
-        const url = `/rest/${idVorhanden}`;
+        const url = `/${idVorhanden}`;
         delete headers.Authorization;
         headers['If-Match'] = '"0"';
 
@@ -227,7 +232,7 @@ describe('PUT /rest/:id', () => {
 
     test('Vorhandenes Buch aendern, aber mit falschem Token', async () => {
         // given
-        const url = `/rest/${idVorhanden}`;
+        const url = `/${idVorhanden}`;
         const token = 'FALSCH';
         headers.Authorization = `Bearer ${token}`;
 

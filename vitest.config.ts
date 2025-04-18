@@ -21,11 +21,14 @@ export default defineConfig({
     test: {
         name: 'Beispiel',
          // default ist ['**\/*.{test,spec}.?(c|m)[jt]s?(x)']
-        include: ['test/**/*.test.mts'],
+        include: [
+            'test/integration/rest/*.controller.test.mts',
+            'test/integration/graphql/*.test.mts',
+        ],
         globals: true,
         environment: 'node',
         // https://vitest.dev/config/#globalsetup
-        globalSetup: './test/setup.global.mts',
+        globalSetup: './test/integration/setup.global.mts',
         testTimeout: 10_000,
         // https://vitest.dev/guide/coverage
         // https://vitest.dev/config/#coverage

@@ -13,16 +13,15 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-import { beforeAll, describe, expect, inject, test } from 'vitest';
+import { beforeAll, describe, expect, test } from 'vitest';
 import { HttpStatus } from '@nestjs/common';
 import axios, { type AxiosInstance, type AxiosResponse } from 'axios';
 import { Decimal } from 'decimal.js';
-import { type BuchDTO } from '../../src/buch/controller/buchDTO.entity.js';
-import { BuchReadService } from '../../src/buch/service/buch-read.service.js';
-import { baseURL, httpsAgent } from '../constants.mjs';
+import { type BuchDTO } from '../../../src/buch/controller/buchDTO.entity.js';
+import { BuchReadService } from '../../../src/buch/service/buch-read.service.js';
+import { baseURL, httpsAgent, restURL } from '../constants.mjs';
 import { type ErrorResponse } from './error-response.mjs';
-
-const token: string = inject('tokenRest');
+import { getToken } from '../token.mjs';
 
 // -----------------------------------------------------------------------------
 // T e s t d a t e n
@@ -88,13 +87,19 @@ const neuesBuchIsbnExistiert: BuchDTO = {
 // Test-Suite
 describe('POST /rest', () => {
     let client: AxiosInstance;
-    const restURL = `${baseURL}/rest`;
     const headers: Record<string, string> = {
         'Content-Type': 'application/json',
     };
+    let token: string;
 
     // Axios initialisieren
     beforeAll(async () => {
+        const tokenClient = axios.create({
+            baseURL,
+            httpsAgent,
+        });
+        token = await getToken(tokenClient, 'admin', 'p');
+
         client = axios.create({
             baseURL: restURL,
             httpsAgent,

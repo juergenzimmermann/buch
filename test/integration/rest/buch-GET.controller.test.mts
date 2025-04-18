@@ -17,9 +17,9 @@ import { beforeAll, describe, expect, test } from 'vitest';
 import { HttpStatus } from '@nestjs/common';
 import axios, { type AxiosInstance, type AxiosResponse } from 'axios';
 import { Decimal } from 'decimal.js';
-import { type Buch } from '../../src/buch/entity/buch.entity.js';
-import { type Page } from '../../src/buch/controller/page.js';
-import { baseURL, httpsAgent } from '../constants.mjs';
+import { type Buch } from '../../../src/buch/entity/buch.entity.js';
+import { type Page } from '../../../src/buch/controller/page.js';
+import { httpsAgent, restURL } from '../constants.mjs';
 import { type ErrorResponse } from './error-response.mjs';
 
 // -----------------------------------------------------------------------------
@@ -37,14 +37,12 @@ const schlagwortNichtVorhanden = 'csharp';
 // -----------------------------------------------------------------------------
 // Test-Suite
 describe('GET /rest', () => {
-    let restUrl: string;
     let client: AxiosInstance;
 
     // Axios initialisieren
     beforeAll(async () => {
-        restUrl = `${baseURL}/rest`;
         client = axios.create({
-            baseURL: restUrl,
+            baseURL: restURL,
             httpsAgent,
             validateStatus: () => true,
         });
