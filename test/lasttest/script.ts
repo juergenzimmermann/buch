@@ -227,6 +227,7 @@ export const options: Options = {
 // GET /rest/<id>
 export function getById() {
     // https://stackoverflow.com/questions/4550505/getting-a-random-value-from-a-javascript-array
+    // alternativ: https://jslib.k6.io und https://grafana.com/docs/k6/latest/javascript-api/jslib/utils
     const id = ids[Math.floor(Math.random() * ids.length)]; // zwischen 0 und 1
     const res = http.get(`${restUrl}/${id}`);
 
