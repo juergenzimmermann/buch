@@ -42,9 +42,9 @@ import { type ErrorResponse } from './error-response.mjs';
 // -----------------------------------------------------------------------------
 // T e s t d a t e n
 // -----------------------------------------------------------------------------
-const idVorhanden = '1';
-const idNichtVorhanden = '999999';
-const idVorhandenETag = '1';
+const ids = [1, 20];
+const idNichtVorhanden = 999999;
+const idsETag = [1, 20];
 const idFalsch = 'xy';
 
 // -----------------------------------------------------------------------------
@@ -63,9 +63,9 @@ describe('GET /rest/:id', () => {
         });
     });
 
-    test.concurrent('Buch zu vorhandener ID', async () => {
+    test.concurrent.each(ids)('Buch zu vorhandener ID %i', async (id) => {
         // given
-        const url = `/${idVorhanden}`;
+        const url = `/${id}`;
 
         // when
         const { status, headers, data }: AxiosResponse<Buch> =
@@ -75,9 +75,7 @@ describe('GET /rest/:id', () => {
         expect(status).toBe(HttpStatus.OK);
         expect(headers['content-type']).toMatch(/json/iu);
 
-        const { id } = data;
-
-        expect(id?.toString()).toBe(idVorhanden);
+        expect(data.id).toBe(id);
     });
 
     test.concurrent('Kein Buch zu nicht-vorhandener ID', async () => {
@@ -115,9 +113,9 @@ describe('GET /rest/:id', () => {
         expect(statusCode).toBe(HttpStatus.NOT_FOUND);
     });
 
-    test.concurrent('Buch zu vorhandener ID mit ETag', async () => {
+    test.concurrent.each(idsETag)('Buch zu ID %i mit ETag', async (id) => {
         // given
-        const url = `/${idVorhandenETag}`;
+        const url = `/${id}`;
 
         // when
         const { status, data }: AxiosResponse<string> = await client.get(url, {

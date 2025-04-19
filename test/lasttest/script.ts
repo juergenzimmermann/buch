@@ -38,8 +38,8 @@ const tokenUrl = `${baseUrl}/auth/token`;
 const dbPopulateUrl = `${baseUrl}/dev/db_populate`;
 
 const ids = [1, 20, 30, 40, 50, 60, 70, 80, 90];
-const titelNichtVorhanden = ['qqq', 'xxx', 'yyy', 'zzz'];
 const titelArray = ['a', 'l', 't', 'i', 'p'];
+const titelNichtVorhanden = ['qqq', 'xxx', 'yyy', 'zzz'];
 const isbns = [
     '978-3-897-22583-1',
     '978-3-827-31552-6',

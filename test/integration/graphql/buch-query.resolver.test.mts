@@ -35,15 +35,12 @@ type BuchDTO = Omit<
 // -----------------------------------------------------------------------------
 // T e s t d a t e n
 // -----------------------------------------------------------------------------
-const idVorhanden = '1';
+const ids = [1, 20];
 
-const titelVorhanden = 'Alpha';
-const teilTitelVorhanden = 'a';
-const teilTitelNichtVorhanden = 'abc';
-
-const isbnVorhanden = '978-3-897-22583-1';
-
-const ratingMin = 3;
+const titelArray = ['a', 'l', 't'];
+const titelNichtVorhanden = ['xxx', 'yyy', 'zzz'];
+const isbns = ['978-3-897-22583-1', '978-3-827-31552-6', '978-0-201-63361-0'];
+const ratingMin = [3, 4];
 const ratingNichtVorhanden = 99;
 
 // -----------------------------------------------------------------------------
@@ -66,12 +63,12 @@ describe('GraphQL Queries', () => {
         });
     });
 
-    test.concurrent('Buch zu vorhandener ID', async () => {
+    test.concurrent.each(ids)('Buch zu ID %i', async (id) => {
         // given
         const body: GraphQLRequest = {
             query: `
                 {
-                    buch(id: "${idVorhanden}") {
+                    buch(id: "${id}") {
                         version
                         isbn
                         rating
@@ -145,203 +142,203 @@ describe('GraphQL Queries', () => {
         expect(extensions!.code).toBe('BAD_USER_INPUT');
     });
 
-    test.concurrent('Buch zu vorhandenem Titel', async () => {
-        // given
-        const body: GraphQLRequest = {
-            query: `
-                {
-                    buecher(suchkriterien: {
-                        titel: "${titelVorhanden}"
-                    }) {
-                        art
-                        titel {
-                            titel
+    test.concurrent.each(titelArray)(
+        'Buecher zu Teil-Titel %s',
+        async (titel) => {
+            // given
+            const body: GraphQLRequest = {
+                query: `
+                    {
+                        buecher(suchkriterien: {
+                            titel: "${titel}"
+                        }) {
+                            titel {
+                                titel
+                            }
                         }
                     }
-                }
-            `,
-        };
+                `,
+            };
 
-        // when
-        const { status, headers, data }: AxiosResponse<GraphQLResponseBody> =
-            await client.post(graphqlPath, body);
+            // when
+            const {
+                status,
+                headers,
+                data,
+            }: AxiosResponse<GraphQLResponseBody> = await client.post(
+                graphqlPath,
+                body,
+            );
 
-        // then
-        expect(status).toBe(HttpStatus.OK);
-        expect(headers['content-type']).toMatch(/json/iu);
-        expect(data.errors).toBeUndefined();
-        expect(data.data).toBeDefined();
+            // then
+            expect(status).toBe(HttpStatus.OK);
+            expect(headers['content-type']).toMatch(/json/iu);
+            expect(data.errors).toBeUndefined();
+            expect(data.data).toBeDefined();
 
-        const { buecher } = data.data! as { buecher: BuchDTO[] };
+            const { buecher } = data.data! as { buecher: BuchDTO[] };
 
-        expect(buecher).not.toHaveLength(0);
-        expect(buecher).toHaveLength(1);
+            expect(buecher).not.toHaveLength(0);
 
-        const [buch] = buecher;
+            buecher
+                .map((buch) => buch.titel)
+                .forEach((t) =>
+                    expect(t?.titel?.toLowerCase()).toStrictEqual(
+                        expect.stringContaining(titel),
+                    ),
+                );
+        },
+    );
 
-        expect(buch!.titel?.titel).toBe(titelVorhanden);
-    });
-
-    test.concurrent('Buch zu vorhandenem Teil-Titel', async () => {
-        // given
-        const body: GraphQLRequest = {
-            query: `
-                {
-                    buecher(suchkriterien: {
-                        titel: "${teilTitelVorhanden}"
-                    }) {
-                        titel {
-                            titel
+    test.concurrent.each(titelNichtVorhanden)(
+        'Buch zu nicht vorhandenem Titel %s',
+        async (titel) => {
+            // given
+            const body: GraphQLRequest = {
+                query: `
+                    {
+                        buecher(suchkriterien: {
+                            titel: "${titel}"
+                        }) {
+                            art
+                            titel {
+                                titel
+                            }
                         }
                     }
-                }
-            `,
-        };
+                `,
+            };
 
-        // when
-        const { status, headers, data }: AxiosResponse<GraphQLResponseBody> =
-            await client.post(graphqlPath, body);
+            // when
+            const {
+                status,
+                headers,
+                data,
+            }: AxiosResponse<GraphQLResponseBody> = await client.post(
+                graphqlPath,
+                body,
+            );
 
-        // then
-        expect(status).toBe(HttpStatus.OK);
-        expect(headers['content-type']).toMatch(/json/iu);
-        expect(data.errors).toBeUndefined();
-        expect(data.data).toBeDefined();
+            // then
+            expect(status).toBe(HttpStatus.OK);
+            expect(headers['content-type']).toMatch(/json/iu);
+            expect(data.data!.buecher).toBeNull();
 
-        const { buecher } = data.data! as { buecher: BuchDTO[] };
+            const { errors } = data;
 
-        expect(buecher).not.toHaveLength(0);
+            expect(errors).toHaveLength(1);
 
-        buecher
-            .map((buch) => buch.titel)
-            .forEach((titel) =>
+            const [error] = errors!;
+            const { message, path, extensions } = error;
+
+            expect(message).toMatch(/^Keine Buecher gefunden:/u);
+            expect(path).toBeDefined();
+            expect(path![0]).toBe('buecher');
+            expect(extensions).toBeDefined();
+            expect(extensions!.code).toBe('BAD_USER_INPUT');
+        },
+    );
+
+    test.concurrent.each(isbns)(
+        'Buch zu ISBN-Nummer %s',
+        async (isbnExpected) => {
+            // given
+            const body: GraphQLRequest = {
+                query: `
+                    {
+                        buecher(suchkriterien: {
+                            isbn: "${isbnExpected}"
+                        }) {
+                            isbn
+                            titel {
+                                titel
+                            }
+                        }
+                    }
+                `,
+            };
+
+            // when
+            const {
+                status,
+                headers,
+                data,
+            }: AxiosResponse<GraphQLResponseBody> = await client.post(
+                graphqlPath,
+                body,
+            );
+
+            // then
+            expect(status).toBe(HttpStatus.OK);
+            expect(headers['content-type']).toMatch(/json/iu);
+            expect(data.errors).toBeUndefined();
+            expect(data.data).toBeDefined();
+
+            const { buecher } = data.data! as { buecher: BuchDTO[] };
+
+            expect(buecher).not.toHaveLength(0);
+            expect(buecher).toHaveLength(1);
+
+            const [buch] = buecher;
+            const { titel, isbn } = buch!;
+
+            expect(isbn).toBe(isbnExpected);
+            expect(titel?.titel).toBeDefined();
+        },
+    );
+
+    test.concurrent.each(ratingMin)(
+        'Buecher mit Mindest-"rating" %i',
+        async (ratingExpected) => {
+            // given
+            const teilTitel = 'a';
+            const body: GraphQLRequest = {
+                query: `
+                    {
+                        buecher(suchkriterien: {
+                            rating: ${ratingExpected},
+                            titel: "${teilTitel}"
+                        }) {
+                            rating
+                            titel {
+                                titel
+                            }
+                        }
+                    }
+                `,
+            };
+
+            // when
+            const {
+                status,
+                headers,
+                data,
+            }: AxiosResponse<GraphQLResponseBody> = await client.post(
+                graphqlPath,
+                body,
+            );
+
+            // then
+            expect(status).toBe(HttpStatus.OK);
+            expect(headers['content-type']).toMatch(/json/iu);
+            expect(data.errors).toBeUndefined();
+
+            expect(data.data).toBeDefined();
+
+            const { buecher } = data.data! as { buecher: BuchDTO[] };
+
+            expect(buecher).not.toHaveLength(0);
+
+            buecher.forEach((buch) => {
+                const { rating, titel } = buch;
+
+                expect(rating).toBeGreaterThanOrEqual(ratingExpected);
                 expect(titel?.titel?.toLowerCase()).toStrictEqual(
-                    expect.stringContaining(teilTitelVorhanden),
-                ),
-            );
-    });
-
-    test.concurrent('Buch zu nicht vorhandenem Titel', async () => {
-        // given
-        const body: GraphQLRequest = {
-            query: `
-                {
-                    buecher(suchkriterien: {
-                        titel: "${teilTitelNichtVorhanden}"
-                    }) {
-                        art
-                        titel {
-                            titel
-                        }
-                    }
-                }
-            `,
-        };
-
-        // when
-        const { status, headers, data }: AxiosResponse<GraphQLResponseBody> =
-            await client.post(graphqlPath, body);
-
-        // then
-        expect(status).toBe(HttpStatus.OK);
-        expect(headers['content-type']).toMatch(/json/iu);
-        expect(data.data!.buecher).toBeNull();
-
-        const { errors } = data;
-
-        expect(errors).toHaveLength(1);
-
-        const [error] = errors!;
-        const { message, path, extensions } = error;
-
-        expect(message).toMatch(/^Keine Buecher gefunden:/u);
-        expect(path).toBeDefined();
-        expect(path![0]).toBe('buecher');
-        expect(extensions).toBeDefined();
-        expect(extensions!.code).toBe('BAD_USER_INPUT');
-    });
-
-    test.concurrent('Buch zu vorhandener ISBN-Nummer', async () => {
-        // given
-        const body: GraphQLRequest = {
-            query: `
-                {
-                    buecher(suchkriterien: {
-                        isbn: "${isbnVorhanden}"
-                    }) {
-                        isbn
-                        titel {
-                            titel
-                        }
-                    }
-                }
-            `,
-        };
-
-        // when
-        const { status, headers, data }: AxiosResponse<GraphQLResponseBody> =
-            await client.post(graphqlPath, body);
-
-        // then
-        expect(status).toBe(HttpStatus.OK);
-        expect(headers['content-type']).toMatch(/json/iu);
-        expect(data.errors).toBeUndefined();
-        expect(data.data).toBeDefined();
-
-        const { buecher } = data.data! as { buecher: BuchDTO[] };
-
-        expect(buecher).not.toHaveLength(0);
-        expect(buecher).toHaveLength(1);
-
-        const [buch] = buecher;
-        const { isbn, titel } = buch!;
-
-        expect(isbn).toBe(isbnVorhanden);
-        expect(titel?.titel).toBeDefined();
-    });
-
-    test.concurrent('Buecher mit Mindest-"rating"', async () => {
-        // given
-        const body: GraphQLRequest = {
-            query: `
-                {
-                    buecher(suchkriterien: {
-                        rating: ${ratingMin},
-                        titel: "${teilTitelVorhanden}"
-                    }) {
-                        rating
-                        titel {
-                            titel
-                        }
-                    }
-                }
-            `,
-        };
-
-        // when
-        const { status, headers, data }: AxiosResponse<GraphQLResponseBody> =
-            await client.post(graphqlPath, body);
-
-        // then
-        expect(status).toBe(HttpStatus.OK);
-        expect(headers['content-type']).toMatch(/json/iu);
-        expect(data.errors).toBeUndefined();
-
-        expect(data.data).toBeDefined();
-
-        const { buecher } = data.data! as { buecher: BuchDTO[] };
-
-        expect(buecher).not.toHaveLength(0);
-
-        buecher.forEach((buch) => {
-            const { rating, titel } = buch;
-
-            expect(rating).toBeGreaterThanOrEqual(ratingMin);
-            expect(titel?.titel?.toLowerCase()).toStrictEqual(
-                expect.stringContaining(teilTitelVorhanden),
-            );
-        });
-    });
+                    expect.stringContaining(teilTitel),
+                );
+            });
+        },
+    );
 
     test.concurrent('Kein Buch zu nicht-vorhandenem "rating"', async () => {
         // given
