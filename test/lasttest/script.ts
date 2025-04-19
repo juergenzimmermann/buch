@@ -21,6 +21,10 @@
 // k6 ist weder Node noch ein Webbrowser, d.h. keine Unterstützung für
 // z.B. die Node-Module "os" oder "fs" oder das "window"-Objekt
 
+// BEACHTE:
+// http_req_failed bezieht sich auf Statuscodes zwischen 4xx und 5xx
+// https://github.com/grafana/k6-learn/blob/main/Modules/II-k6-Foundations/03-Understanding-k6-results.md#error-rate
+
 import http, { RefinedResponseBody, type ResponseType } from 'k6/http';
 import { check, sleep } from 'k6';
 import { type Options } from 'k6/options';
@@ -116,9 +120,18 @@ export const options: Options = {
             exec: 'getById',
             executor: 'ramping-vus', // "Ramp up" zu Beginn und "Ramp down" am Ende des Testintervalls
             stages: [
-                { target: 5, duration: rampUpDuration }, // "traffic ramp-up": schrittweise von 0 auf 5 User in 5 Sek
-                { target: 5, duration: steadyDuration }, // 5 User fuer den eigentlichen Lasttest
+                { target: 2, duration: rampUpDuration }, // "traffic ramp-up": schrittweise von 0 auf 2 User in 5 Sek
+                { target: 2, duration: steadyDuration }, // 2 User fuer den eigentlichen Lasttest
                 { target: 0, duration: rampDownDuration }, // "ramp-down": schrittweise auf 0 User
+            ],
+        },
+        get_id_not_modified: {
+            exec: 'getByIdNotModified',
+            executor: 'ramping-vus', // "Ramp up" zu Beginn und "Ramp down" am Ende des Testintervalls
+            stages: [
+                { target: 5, duration: rampUpDuration },
+                { target: 5, duration: steadyDuration },
+                { target: 0, duration: rampDownDuration },
             ],
         },
         get_titel: {
@@ -223,6 +236,21 @@ export function getById() {
             r.headers['Content-Type'].startsWith('application/json'),
     });
     sleep(1); // Denkzeit simulieren
+}
+
+// GET /rest/<id> mit If-None-Match
+export function getByIdNotModified() {
+    // https://stackoverflow.com/questions/4550505/getting-a-random-value-from-a-javascript-array
+    const id = ids[Math.floor(Math.random() * ids.length)]; // zwischen 0 und 1
+    let headers: { [name: string]: string } = {
+        'If-None-Match': '"0"',
+    };
+    const res = http.get(`${restUrl}/${id}`, { headers });
+
+    check(res, {
+        'GET id: NOT_MODIFIED': (r) => r.status === 304,
+    });
+    sleep(1);
 }
 
 // GET /rest?title=<value>
