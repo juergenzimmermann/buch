@@ -96,7 +96,7 @@
     "mysql2": "3.14.0",
     "nest-keycloak-connect": "2.0.0-alpha.1",
     "nodemailer": "6.10.1",
-    "pg": "8.15.5",
+    "pg": "8.15.6",
     "pino": "9.6.0",
     "pino-pretty": "13.0.0",
     "prom-client": "15.1.3",
