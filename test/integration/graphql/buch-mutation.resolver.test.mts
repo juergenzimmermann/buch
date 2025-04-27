@@ -93,7 +93,10 @@ describe('GraphQL Mutations', () => {
 
         // Der Wert der Mutation ist die generierte ID
         expect(create).toBeDefined();
-        expect(create.id).toBeGreaterThan(0);
+
+        const { id } = create;
+
+        expect(parseInt(id, 10)).toBeGreaterThan(0);
     });
 
     // -------------------------------------------------------------------------
@@ -324,7 +327,9 @@ describe('GraphQL Mutations', () => {
         const body: GraphQLQuery = {
             query: `
                 mutation {
-                    delete(id: "${idLoeschen}")
+                    delete(id: "${idLoeschen}") {
+                        success
+                    }
                 }
             `,
         };
@@ -338,10 +343,10 @@ describe('GraphQL Mutations', () => {
         expect(headers['content-type']).toMatch(/json/iu);
         expect(data.errors).toBeUndefined();
 
-        const deleteMutation = data.data!.delete as boolean;
+        const success = data.data!.delete.success as boolean;
 
         // Der Wert der Mutation ist true (falls geloescht wurde) oder false
-        expect(deleteMutation).toBe(true);
+        expect(success).toBe(true);
     });
 
     // -------------------------------------------------------------------------
@@ -351,7 +356,9 @@ describe('GraphQL Mutations', () => {
         const body: GraphQLQuery = {
             query: `
                 mutation {
-                    delete(id: "60")
+                    delete(id: "${idLoeschen}") {
+                        success
+                    }
                 }
             `,
         };

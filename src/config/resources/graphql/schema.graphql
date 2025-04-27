@@ -33,29 +33,21 @@ type Mutation {
 
   update(input: BuchUpdateInput!): UpdatePayload
 
-  delete(id: ID!): Boolean
+  delete(id: ID!): DeletePayload
 
-  # Mutation, wenn z.B. der Login-Zeitpunkt im IDM-System gespeichert wird
-  token(username: String!, password: String!): TokenResult
-  refresh(refresh_token: String!): TokenResult
+  token(username: String!, password: String!): TokenPayload # Mutation, wenn z.B. der Login-Zeitpunkt im IDM-System gespeichert wird
+  refresh(refreshToken: String!): TokenPayload
 }
 
 "Daten zum Titel eines Buches"
 type Titel {
-  titel: String!
+  titel: String! # eslint-disable-line @graphql-eslint/no-typename-prefix
   untertitel: String
-}
-
-"Daten zum Titel eines Buches"
-type Abbildung {
-  beschriftung: String!
-  contentType: String
 }
 
 "Datenschema zu einem Buch, das gelesen wird"
 type Buch {
-  # ID ist bei Apollo ein String
-  id: Int!
+  id: ID! # ID ist bei Apollo ein String
   version: Int!
   isbn: String!
   rating: Int
@@ -65,10 +57,8 @@ type Buch {
   datum: String
   homepage: String
   schlagwoerter: [String]
-  # 1:1-Beziehung
-  titel: Titel!
-  # field mit @ResolveField
-  rabatt(short: Boolean): String!
+  titel: Titel! # 1:1-Beziehung
+  rabatt(short: Boolean): String! # field mit @ResolveField
 }
 
 "Enum-Typ für die Art eines Buches"
@@ -114,8 +104,9 @@ input BuchInput {
   abbildungen: [AbbildungInput!]
 }
 
+"Generierte ID bei erfolgreichem Neuanlegen"
 type CreatePayload {
-  id: Int
+  id: ID
 }
 
 "Daten für ein zu änderndes Buch"
@@ -133,13 +124,20 @@ input BuchUpdateInput {
   schlagwoerter: [String]
 }
 
+"Neue Versionsnummer als Resultat bei erfolgreichem Aktualisieren"
 type UpdatePayload {
   version: Int
 }
 
-type TokenResult {
-  access_token: String!
-  expires_in: Int!
-  refresh_token: String!
-  refresh_expires_in: Int!
+"Flag, ob das Loeschen durchgefuehrt wurde"
+type DeletePayload {
+  success: Boolean
+}
+
+"Access- und Refresh-Token einschliesslich Ablauf-Zeitstempel"
+type TokenPayload {
+  access_token: String! # eslint-disable-line @graphql-eslint/naming-convention
+  expires_in: Int! # eslint-disable-line @graphql-eslint/naming-convention
+  refresh_token: String! # eslint-disable-line @graphql-eslint/naming-convention
+  refresh_expires_in: Int! # eslint-disable-line @graphql-eslint/naming-convention
 }

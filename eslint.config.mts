@@ -1,6 +1,7 @@
 // @ts-check
 import comments from '@eslint-community/eslint-plugin-eslint-comments/configs';
 import eslint from '@eslint/js';
+import graphql from '@graphql-eslint/eslint-plugin';
 import stylistic from '@stylistic/eslint-plugin';
 import importPlugin from 'eslint-plugin-import';
 import vitest from '@vitest/eslint-plugin';
@@ -472,6 +473,39 @@ export default tseslint.config(
             ],
         },
     },
+
+    // -------------------------------------------------------------------------
+    // G r a p h Q L   S c h e m a
+    // -------------------------------------------------------------------------
+    {
+        // https://the-guild.dev/graphql/eslint
+        files: ['src/config/resources/graphql/*.graphql'],
+        languageOptions: {
+            parser: graphql.parser,
+            // https://the-guild.dev/graphql/eslint/docs/usage#providing-schema
+            parserOptions: {
+                graphQLConfig: {
+                    schema: 'src/config/resources/graphql/schema.graphql',
+                },
+            },
+        },
+        plugins: {
+            '@graphql-eslint': graphql,
+        },
+        extends: [
+            graphql.configs['flat/schema-recommended'],
+        ],
+        // https://the-guild.dev/graphql/eslint/rules
+        rules: {
+            '@graphql-eslint/description-style': ['error', { style: 'inline' }],
+            '@graphql-eslint/no-scalar-result-type-on-mutation': 'error',
+            '@graphql-eslint/strict-id-in-types': 'off',
+        }
+      },
+
+    // -------------------------------------------------------------------------
+    // T e s t s
+    // -------------------------------------------------------------------------
     {
         files: ['test/**/*.mts'],
 

@@ -47,6 +47,10 @@ export type UpdatePayload = {
     readonly version: number;
 };
 
+export type DeletePayload = {
+    readonly success: boolean;
+};
+
 export class BuchUpdateDTO extends BuchDTO {
     @IsNumberString()
     readonly id!: string;
@@ -107,7 +111,8 @@ export class BuchMutationResolver {
         this.#logger.debug('delete: id=%s', idStr);
         const deletePerformed = await this.#service.delete(idStr);
         this.#logger.debug('deleteBuch: deletePerformed=%s', deletePerformed);
-        return deletePerformed;
+        const payload: DeletePayload = { success: deletePerformed };
+        return payload;
     }
 
     #buchDtoToBuch(buchDTO: BuchDTO): Buch {
