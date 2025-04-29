@@ -712,7 +712,13 @@ Mit AsciiDoctor und PlantUML ist die Dokumentation geschrieben.
 
 ### Preview von PlantUML-Dateien
 
-Durch das Tastaturkürzel `<Alt>d`. Dazu ist eine Internet-Verbindung notwendig.
+Um in VS Code die Erweiterung für PlantUML zu nutzen, wird eine Java-Installation
+benötigt, d.h. die Umgebungsvariable `JAVA_HOME` muss auf das Wurzelverzeichnis
+der Java-Installation verweisen und die Umgebugnsvariable `PATH` muss dieses
+Verzeichnis einschließlich dem Unterverzeichnis `bin` enthalten.
+
+Durch das Tastaturkürzel `<Alt>d` erhält man eine Preview-Sicht vom jeweiligen
+UML-Diagramm. Dazu ist eine Internet-Verbindung notwendig.
 Beispiele für PlantUML und AsciiDoctor sind im Unterverzeichnis `.extras\doc`.
 
 ### Einstellungen für Preview von AsciiDoctor-Dateien
