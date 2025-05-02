@@ -135,7 +135,7 @@
     "@types/shelljs": "0.8.15",
     "@types/uuid": "10.0.0",
     "@vitest/coverage-v8": "3.1.2",
-    "@vitest/eslint-plugin": "1.1.43",
+    "@vitest/eslint-plugin": "1.1.44",
     "asciidoctor-kroki": "0.18.1",
     "chalk": "5.4.1",
     "depcheck": "1.4.7",
