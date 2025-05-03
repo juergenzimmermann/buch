@@ -95,12 +95,6 @@ Webbrowser `http://localhost:8880` oder `https://localhost:8843` aufgerufen hat:
         Username    admin
         Password    p
 
-    Menüpunkt "Users"
-        "tmp" anklicken
-            Drop-Down-Menü rechts "Action"
-                "Delete" anklicken
-                Button <Delete> anklicken
-
     Menüpunkt "Manage realms" anklicken
         Button <Create realm> anklicken
             Realm name      nest
@@ -119,8 +113,8 @@ Webbrowser `http://localhost:8880` oder `https://localhost:8843` aufgerufen hat:
         <Next> anklicken
             Root URL                https://localhost:3000
             Valid redirect URIs     https://localhost:3000
-                                    https://buch:3000
-                                    https://oauth.pstmn.io/v1/callback
+                                    https://buch:3000                       Docker Container
+                                    https://oauth.pstmn.io/v1/callback      Postman
             Web origins             +
         <Save> anklicken
 
@@ -228,15 +222,15 @@ für _Keycloak_ folgendermaßen erzeugt:
 
 Im Development-Modus verwaltet Keycloak seine Daten in einer H2-Datenbank. Um
 die _H2 Console_ als DB-Browser zu starten, lädt man zunächst die JAR-Datei
-von `https://repo.maven.apache.org/maven2/com/h2database/h2/2.2.224/h2-2.2.224.jar`.
+von `https://repo.maven.apache.org/maven2/com/h2database/h2/2.3.230/h2-2.3.230.jar`.
 herunter und speichert sie z.B. im Verzeichnis `.extras\compose\keycloak`.
 
-Mit dem Kommando `java -jar h2-2.2.224.jar` startet man nun die H2 Console, wobei
+Mit dem Kommando `java -jar h2-2.3.230.jar` startet man nun die H2 Console, wobei
 ein Webbrowser gestartet wird. Dort gibt man folgende Werte ein:
 
 - JDBC URL: `jdbc:h2:tcp://localhost/C:/Zimmermann/volumes/keycloak/h2/keycloakdb`
 - Benutzername: `sa`
-- Passwort: `password`
+- Passwort: `password` _Stimmt nicht mehr seit Keycloak 26.2.2_
 
 Danach kann man z.B. die Tabellen `USER_ENTITY` und `USER_ROLE_MAPPING` inspizieren.
 

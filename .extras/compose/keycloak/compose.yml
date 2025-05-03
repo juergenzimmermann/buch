@@ -15,23 +15,28 @@
 
 # Aufruf:   docker compose up
 #           docker compose exec keycloak bash
-#             ls /opt/keycloak/data
 #             ls -l /opt/keycloak/data/h2/keycloakdb.mv.db
 #           docker compose down
 
-# java -jar h2-2.2.224.jar
-#     https://github.com/keycloak/keycloak/blob/main/pom.xml#L95
-#     https://repo.maven.apache.org/maven2/com/h2database/h2/2.2.224/h2-2.2.224.jar
+# https://github.com/keycloak/keycloak/blob/main/quarkus/runtime/src/main/resources/application.properties
+# https://www.keycloak.org/server/db
+# https://www.keycloak.org/docs/latest/upgrading/index.html
+# /opt/keycloak/lib/lib/com.h2database.h2-VERSION.jar
+# /opt/keycloak/conf/keycloak.conf
+# java -jar h2-2.3.230.jar
+#     https://github.com/keycloak/keycloak/blob/main/pom.xml#L97
+#     https://github.com/keycloak/keycloak/blob/main/quarkus/runtime/src/main/java/org/keycloak/quarkus/runtime/configuration/mappers/DatabasePropertyMappers.java#L110
+#     https://repo.maven.apache.org/maven2/com/h2database/h2/VERSION/h2-VERSION.jar
 #     Generic H2 (Embedded)
-#     JDBC URL:       jdbc:h2:tcp://localhost/C:/Zimmermann/volumes/keycloak/h2/keycloakdb
+#     JDBC URL:       jdbc:h2:tcp://localhost/C:/Zimmermann/volumes/keycloak/data/h2/keycloakdb
 #     Benutzername:   sa
-#     Passwort:       password
+#     Passwort:       ??? (weder "sa" noch "password" noch "secret" funktioniert)
 #         Tabellen: USER_ENTITY, USER_ROLE_MAPPING, ...
 
 services:
   keycloak:
-    image: quay.io/keycloak/keycloak:26.2.1-0
-    #image: keycloak/keycloak:26.2.1-0
+    image: quay.io/keycloak/keycloak:26.2.2-0
+    #image: keycloak/keycloak:26.2.2-0
     ports:
       - published: 8880
         target: 8080
