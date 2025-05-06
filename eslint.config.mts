@@ -156,6 +156,7 @@ export default tseslint.config(
             '@typescript-eslint/no-unnecessary-parameter-property-assignment':
                 'error',
             '@typescript-eslint/no-unnecessary-qualifier': 'error',
+            '@typescript-eslint/no-unnecessary-type-conversion': 'error',
             '@typescript-eslint/no-unsafe-member-access': 'off',
             '@typescript-eslint/no-unused-vars': [
                 'off',
