@@ -46,12 +46,12 @@ const { httpsOptions, port } = nodeConfig;
 const setupSwagger = (app: INestApplication) => {
     const config = new DocumentBuilder()
         .setTitle('Buch')
-        .setDescription('Beispiel für Software Engineering')
-        .setVersion('2025.4.1')
+        .setDescription('Beispiel mit Nest')
+        .setVersion('2025.10.1')
         .addBearerAuth()
         .build();
     const document = SwaggerModule.createDocument(app, config);
-    const options: SwaggerCustomOptions = { customSiteTitle: 'SWE 24/25' };
+    const options: SwaggerCustomOptions = { customSiteTitle: 'Buch 2025.10.1' };
     SwaggerModule.setup(paths.swagger, app, document, options);
 };
 
