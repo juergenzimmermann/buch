@@ -107,7 +107,7 @@
     "typeorm": "0.3.24",
     "ws": "8.18.2",
     "xss": "1.0.15",
-    "yaml": "2.7.1"
+    "yaml": "2.8.0"
   },
   "devDependencies": {
     "@asciidoctor/core": "3.0.4",
