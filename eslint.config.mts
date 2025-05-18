@@ -3,8 +3,8 @@ import comments from '@eslint-community/eslint-plugin-eslint-comments/configs';
 import eslint from '@eslint/js';
 import graphql from '@graphql-eslint/eslint-plugin';
 import stylistic from '@stylistic/eslint-plugin';
-import importPlugin from 'eslint-plugin-import';
 import vitest from '@vitest/eslint-plugin';
+import importPlugin from 'eslint-plugin-import';
 import nodePlugin from 'eslint-plugin-n';
 import preferArrow from 'eslint-plugin-prefer-arrow';
 import prettierRecommended from 'eslint-plugin-prettier/recommended';
@@ -362,6 +362,7 @@ export default tseslint.config(
             // siehe @typescript-eslint/only-throw-error
             'no-throw-literal': 'off',
             'no-undef-init': 'error',
+            'no-unassigned-vars': 'error',
             'no-underscore-dangle': 'error',
             'no-unmodified-loop-condition': 'error',
             'no-unneeded-ternary': 'error',
@@ -493,16 +494,14 @@ export default tseslint.config(
         plugins: {
             '@graphql-eslint': graphql,
         },
-        extends: [
-            graphql.configs['flat/schema-recommended'],
-        ],
+        extends: [graphql.configs['flat/schema-recommended']],
         // https://the-guild.dev/graphql/eslint/rules
         rules: {
             '@graphql-eslint/description-style': ['error', { style: 'inline' }],
             '@graphql-eslint/no-scalar-result-type-on-mutation': 'error',
             '@graphql-eslint/strict-id-in-types': 'off',
-        }
-      },
+        },
+    },
 
     // -------------------------------------------------------------------------
     // T e s t s

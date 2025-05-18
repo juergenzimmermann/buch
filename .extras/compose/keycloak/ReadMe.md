@@ -27,7 +27,6 @@
 - [JWT](#jwt)
 - [Installation](#installation)
 - [Konfiguration](#konfiguration)
-- [Initial Access Token](#initial-access-token)
 - [Inspektion der H2-Datenbank](#inspektion-der-h2-datenbank)
 
 ## JWT
@@ -209,15 +208,6 @@ Umgebungsvariable `CLIENT_SECRET` auf folgenden Wert aus _Keycloak_ setzen:
 Diese Zeichenkette muss man auch in Postman als Wert für die dortige
 Umgebungsvariable `client_secret` eintragen.
 
-## Initial Access Token
-
-Ein _Initial Access Token_ für z.B. _Postman_ wurde bei der obigen Konfiguration
-für _Keycloak_ folgendermaßen erzeugt:
-
-- Menüpunkt `Clients`
-- Tab `Initial access token` anklicken
-- Button `Create` anklicken und eine hinreichend lange Gültigkeitsdauer einstellen.
-
 ## Inspektion der H2-Datenbank
 
 Im Development-Modus verwaltet Keycloak seine Daten in einer H2-Datenbank. Um
@@ -229,8 +219,8 @@ Mit dem Kommando `java -jar h2-2.3.230.jar` startet man nun die H2 Console, wobe
 ein Webbrowser gestartet wird. Dort gibt man folgende Werte ein:
 
 - JDBC URL: `jdbc:h2:tcp://localhost/C:/Zimmermann/volumes/keycloak/h2/keycloakdb`
-- Benutzername: `sa`
-- Passwort: `password` _Stimmt nicht mehr seit Keycloak 26.2.2_
+- Benutzername: ``
+- Passwort: ``
 
 Danach kann man z.B. die Tabellen `USER_ENTITY` und `USER_ROLE_MAPPING` inspizieren.
 
