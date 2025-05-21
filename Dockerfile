@@ -81,8 +81,8 @@ set -eux
 npm ci --no-audit --no-fund
 npm run build
 EOF
-# ENTRYPOINT ["/bin/bash", "-c", "echo 'Container als bash gestartet.' && sleep infinity"]
 
+# ENTRYPOINT ["/bin/bash", "-c", "echo 'Container als bash gestartet.' && sleep infinity"]
 # ------------------------------------------------------------------------------
 # S t a g e   d e p e n d e n c i e s
 # ------------------------------------------------------------------------------
@@ -114,8 +114,8 @@ set -eux
 # --omit=dev: ohne devDependencies
 npm ci --no-audit --no-fund --omit=dev --omit=peer
 EOF
-# ENTRYPOINT ["/bin/bash", "-c", "echo 'Container als bash gestartet.' && sleep infinity"]
 
+# ENTRYPOINT ["/bin/bash", "-c", "echo 'Container als bash gestartet.' && sleep infinity"]
 # ------------------------------------------------------------------------------
 # S t a g e   f i n a l
 # ------------------------------------------------------------------------------
@@ -165,4 +165,4 @@ EXPOSE 3000
 # "a simple process supervisor and init system designed to run as PID 1 inside
 # minimal container environments (such as Docker)""
 ENTRYPOINT ["dumb-init", "/usr/local/bin/node", "dist/main.js"]
-# ENTRYPOINT ["/bin/bash", "-c", "echo 'Container als bash gestartet.' && sleep infinity"]
+#ENTRYPOINT ["/bin/bash", "-c", "echo 'Container als bash gestartet.' && sleep infinity"]
