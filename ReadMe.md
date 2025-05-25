@@ -20,11 +20,7 @@
 [Juergen Zimmermann](mailto:Juergen.Zimmermann@h-ka.de)
 
 > Diese Datei ist in Markdown geschrieben und kann mit `<Strg><Shift>v` in
-> Visual Studio Code leicht gelesen werden. Dazu wird die Extension
-> _Markdown Preview Mermaid Support_ empfohlen, um UML-Diagramme in der Syntax
-> von _Mermaid_ (wie bei PlantUML) visualisieren zu können. Durch den Aufruf
-> `npm run readme2html` wird diese Markdown-Datei in eine HTML-Datei im
-> Verzeichnis `.extras\doc` konvertiert.
+> Visual Studio Code leicht gelesen werden.
 >
 > Näheres zu Markdown gibt es z.B. bei [Markdown Guide](https://www.markdownguide.org/)
 >
