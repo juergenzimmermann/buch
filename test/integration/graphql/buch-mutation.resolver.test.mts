@@ -14,11 +14,11 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-import { beforeAll, describe, expect, test } from 'vitest';
 import { HttpStatus } from '@nestjs/common';
 import axios, { type AxiosInstance, type AxiosResponse } from 'axios';
-import { type GraphQLQuery, type GraphQLResponseBody } from './graphql.mjs';
+import { beforeAll, describe, expect, test } from 'vitest';
 import { baseURL, httpsAgent } from '../constants.mjs';
+import { type GraphQLQuery, type GraphQLResponseBody } from './graphql.mjs';
 import { getToken } from './token.mjs';
 
 // -----------------------------------------------------------------------------
@@ -32,9 +32,14 @@ const idLoeschen = '60';
 // Test-Suite
 describe('GraphQL Mutations', () => {
     let client: AxiosInstance;
-    const graphqlPath = 'graphql';
     let token: string;
     let tokenUser: string;
+
+    const requestHeaders: Record<string, string> = {
+        'Content-Type': 'application/json',
+        Accept: 'application/graphql-response+json',
+    };
+    const graphqlPath = 'graphql';
 
     // Axios initialisieren
     beforeAll(async () => {
@@ -49,7 +54,7 @@ describe('GraphQL Mutations', () => {
     // -------------------------------------------------------------------------
     test('Neues Buch', async () => {
         // given
-        const authorization = { Authorization: `Bearer ${token}` };
+        requestHeaders.Authorization = `Bearer ${token}`;
         const body: GraphQLQuery = {
             query: `
                 mutation {
@@ -82,7 +87,7 @@ describe('GraphQL Mutations', () => {
 
         // when
         const { status, headers, data }: AxiosResponse<GraphQLResponseBody> =
-            await client.post(graphqlPath, body, { headers: authorization });
+            await client.post(graphqlPath, body, { headers: requestHeaders });
 
         // then
         expect(status).toBe(HttpStatus.OK);
@@ -102,7 +107,7 @@ describe('GraphQL Mutations', () => {
     // -------------------------------------------------------------------------
     test('Buch mit ungueltigen Werten neu anlegen', async () => {
         // given
-        const authorization = { Authorization: `Bearer ${token}` };
+        requestHeaders.Authorization = `Bearer ${token}`;
         const body: GraphQLQuery = {
             query: `
                 mutation {
@@ -138,7 +143,7 @@ describe('GraphQL Mutations', () => {
 
         // when
         const { status, headers, data }: AxiosResponse<GraphQLResponseBody> =
-            await client.post(graphqlPath, body, { headers: authorization });
+            await client.post(graphqlPath, body, { headers: requestHeaders });
 
         // then
         expect(status).toBe(HttpStatus.OK);
@@ -164,7 +169,7 @@ describe('GraphQL Mutations', () => {
     // -------------------------------------------------------------------------
     test('Buch aktualisieren', async () => {
         // given
-        const authorization = { Authorization: `Bearer ${token}` };
+        requestHeaders.Authorization = `Bearer ${token}`;
         const body: GraphQLQuery = {
             query: `
                 mutation {
@@ -191,7 +196,7 @@ describe('GraphQL Mutations', () => {
 
         // when
         const { status, headers, data }: AxiosResponse<GraphQLResponseBody> =
-            await client.post(graphqlPath, body, { headers: authorization });
+            await client.post(graphqlPath, body, { headers: requestHeaders });
 
         // then
         expect(status).toBe(HttpStatus.OK);
@@ -207,7 +212,7 @@ describe('GraphQL Mutations', () => {
     // -------------------------------------------------------------------------
     test('Buch mit ungueltigen Werten aktualisieren', async () => {
         // given
-        const authorization = { Authorization: `Bearer ${token}` };
+        requestHeaders.Authorization = `Bearer ${token}`;
         const id = '40';
         const body: GraphQLQuery = {
             query: `
@@ -243,7 +248,7 @@ describe('GraphQL Mutations', () => {
 
         // when
         const { status, headers, data }: AxiosResponse<GraphQLResponseBody> =
-            await client.post(graphqlPath, body, { headers: authorization });
+            await client.post(graphqlPath, body, { headers: requestHeaders });
 
         // then
         expect(status).toBe(HttpStatus.OK);
@@ -266,7 +271,7 @@ describe('GraphQL Mutations', () => {
     // -------------------------------------------------------------------------
     test('Nicht-vorhandenes Buch aktualisieren', async () => {
         // given
-        const authorization = { Authorization: `Bearer ${token}` };
+        requestHeaders.Authorization = `Bearer ${token}`;
         const id = '999999';
         const body: GraphQLQuery = {
             query: `
@@ -294,7 +299,7 @@ describe('GraphQL Mutations', () => {
 
         // when
         const { status, headers, data }: AxiosResponse<GraphQLResponseBody> =
-            await client.post(graphqlPath, body, { headers: authorization });
+            await client.post(graphqlPath, body, { headers: requestHeaders });
 
         // then
         expect(status).toBe(HttpStatus.OK);
@@ -323,7 +328,7 @@ describe('GraphQL Mutations', () => {
     // -------------------------------------------------------------------------
     test('Buch loeschen', async () => {
         // given
-        const authorization = { Authorization: `Bearer ${token}` };
+        requestHeaders.Authorization = `Bearer ${token}`;
         const body: GraphQLQuery = {
             query: `
                 mutation {
@@ -336,7 +341,7 @@ describe('GraphQL Mutations', () => {
 
         // when
         const { status, headers, data }: AxiosResponse<GraphQLResponseBody> =
-            await client.post(graphqlPath, body, { headers: authorization });
+            await client.post(graphqlPath, body, { headers: requestHeaders });
 
         // then
         expect(status).toBe(HttpStatus.OK);
@@ -352,7 +357,7 @@ describe('GraphQL Mutations', () => {
     // -------------------------------------------------------------------------
     test('Buch loeschen als "user"', async () => {
         // given
-        const authorization = { Authorization: `Bearer ${tokenUser}` };
+        requestHeaders.Authorization = `Bearer ${tokenUser}`;
         const body: GraphQLQuery = {
             query: `
                 mutation {
@@ -371,7 +376,7 @@ describe('GraphQL Mutations', () => {
         }: AxiosResponse<Record<'errors' | 'data', any>> = await client.post(
             graphqlPath,
             body,
-            { headers: authorization },
+            { headers: requestHeaders },
         );
 
         // then

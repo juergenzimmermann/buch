@@ -16,14 +16,18 @@
 // https://vitest.dev/config/#globalsetup
 
 import { type AxiosInstance, type AxiosResponse } from 'axios';
-import { type GraphQLQuery, type GraphQLResponseBody } from './graphql.mjs';
 import { httpsAgent } from '../constants.mjs';
+import { type GraphQLQuery, type GraphQLResponseBody } from './graphql.mjs';
 
 export const getToken = async (
     axiosInstance: AxiosInstance,
     username: string,
     password: string,
 ): Promise<string> => {
+    const headers: Record<string, string> = {
+        'Content-Type': 'application/json',
+        Accept: 'application/graphql-response+json',
+    };
     const body: GraphQLQuery = {
         query: `
             mutation {
@@ -38,7 +42,7 @@ export const getToken = async (
     };
 
     const response: AxiosResponse<GraphQLResponseBody> =
-        await axiosInstance.post('graphql', body, { httpsAgent });
+        await axiosInstance.post('graphql', body, { headers, httpsAgent });
 
     const data = response.data.data!; // eslint-disable-line @typescript-eslint/no-non-null-assertion
     const { access_token } = data.token;

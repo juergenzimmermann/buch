@@ -13,14 +13,14 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-import { beforeAll, describe, expect, test } from 'vitest';
 import { HttpStatus } from '@nestjs/common';
 import axios, { type AxiosInstance, type AxiosResponse } from 'axios';
 import { Decimal } from 'decimal.js';
+import { beforeAll, describe, expect, test } from 'vitest';
 import { type BuchDtoOhneRef } from '../../../src/buch/controller/buchDTO.entity.js';
 import { baseURL, httpsAgent, restURL } from '../constants.mjs';
-import { type ErrorResponse } from './error-response.mjs';
 import { getToken } from '../token.mjs';
+import { type ErrorResponse } from './error-response.mjs';
 
 // -----------------------------------------------------------------------------
 // T e s t d a t e n

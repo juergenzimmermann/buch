@@ -15,15 +15,15 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 import { type GraphQLRequest } from '@apollo/server';
-import { beforeAll, describe, expect, test } from 'vitest';
 import { HttpStatus } from '@nestjs/common';
 import axios, { type AxiosInstance, type AxiosResponse } from 'axios';
+import { beforeAll, describe, expect, test } from 'vitest';
 import {
     type Buch,
     type BuchArt,
 } from '../../../src/buch/entity/buch.entity.js';
-import { type GraphQLResponseBody } from './graphql.mjs';
 import { baseURL, httpsAgent } from '../constants.mjs';
+import { type GraphQLResponseBody } from './graphql.mjs';
 
 type BuchDTO = Omit<
     Buch,
@@ -49,6 +49,11 @@ const ratingNichtVorhanden = 99;
 // Test-Suite
 describe('GraphQL Queries', () => {
     let client: AxiosInstance;
+
+    const requestHeaders: Record<string, string> = {
+        'Content-Type': 'application/json',
+        Accept: 'application/graphql-response+json',
+    };
     const graphqlPath = 'graphql';
 
     // Axios initialisieren
@@ -89,7 +94,7 @@ describe('GraphQL Queries', () => {
 
         // when
         const { status, headers, data }: AxiosResponse<GraphQLResponseBody> =
-            await client.post(graphqlPath, body);
+            await client.post(graphqlPath, body, { headers: requestHeaders });
 
         // then
         expect(status).toBe(HttpStatus.OK);
@@ -121,7 +126,7 @@ describe('GraphQL Queries', () => {
 
         // when
         const { status, headers, data }: AxiosResponse<GraphQLResponseBody> =
-            await client.post(graphqlPath, body);
+            await client.post(graphqlPath, body, { headers: requestHeaders });
 
         // then
         expect(status).toBe(HttpStatus.OK);
@@ -168,6 +173,7 @@ describe('GraphQL Queries', () => {
             }: AxiosResponse<GraphQLResponseBody> = await client.post(
                 graphqlPath,
                 body,
+                { headers: requestHeaders },
             );
 
             // then
@@ -217,6 +223,7 @@ describe('GraphQL Queries', () => {
             }: AxiosResponse<GraphQLResponseBody> = await client.post(
                 graphqlPath,
                 body,
+                { headers: requestHeaders },
             );
 
             // then
@@ -266,6 +273,7 @@ describe('GraphQL Queries', () => {
             }: AxiosResponse<GraphQLResponseBody> = await client.post(
                 graphqlPath,
                 body,
+                { headers: requestHeaders },
             );
 
             // then
@@ -316,6 +324,7 @@ describe('GraphQL Queries', () => {
             }: AxiosResponse<GraphQLResponseBody> = await client.post(
                 graphqlPath,
                 body,
+                { headers: requestHeaders },
             );
 
             // then
@@ -358,7 +367,7 @@ describe('GraphQL Queries', () => {
 
         // when
         const { status, headers, data }: AxiosResponse<GraphQLResponseBody> =
-            await client.post(graphqlPath, body);
+            await client.post(graphqlPath, body, { headers: requestHeaders });
 
         // then
         expect(status).toBe(HttpStatus.OK);
@@ -399,7 +408,7 @@ describe('GraphQL Queries', () => {
 
         // when
         const { status, headers, data }: AxiosResponse<GraphQLResponseBody> =
-            await client.post(graphqlPath, body);
+            await client.post(graphqlPath, body, { headers: requestHeaders });
 
         // then
         expect(status).toBe(HttpStatus.OK);
@@ -438,7 +447,7 @@ describe('GraphQL Queries', () => {
 
         // when
         const { status, headers, data }: AxiosResponse<GraphQLResponseBody> =
-            await client.post(graphqlPath, body);
+            await client.post(graphqlPath, body, { headers: requestHeaders });
 
         // then
         expect(status).toBe(HttpStatus.BAD_REQUEST);
@@ -475,7 +484,7 @@ describe('GraphQL Queries', () => {
 
         // when
         const { status, headers, data }: AxiosResponse<GraphQLResponseBody> =
-            await client.post(graphqlPath, body);
+            await client.post(graphqlPath, body, { headers: requestHeaders });
 
         // then
         expect(status).toBe(HttpStatus.OK);

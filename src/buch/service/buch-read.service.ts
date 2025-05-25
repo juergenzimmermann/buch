@@ -25,8 +25,8 @@ import { getLogger } from '../../logger/logger.js';
 import { BuchFile } from '../entity/buchFile.entity.js';
 import { Buch } from './../entity/buch.entity.js';
 import { type Pageable } from './pageable.js';
-import { type Slice } from './slice.js';
 import { QueryBuilder } from './query-builder.js';
+import { type Slice } from './slice.js';
 import { type Suchkriterien } from './suchkriterien.js';
 
 /**
@@ -97,6 +97,7 @@ export class BuchReadService {
             .buildId({ id, mitAbbildungen })
             .getOne();
         if (buch === null) {
+            this.#logger.debug('Es gibt kein Buch mit der ID %d', id);
             throw new NotFoundException(`Es gibt kein Buch mit der ID ${id}.`);
         }
         if (buch.schlagwoerter === null) {
@@ -169,6 +170,7 @@ export class BuchReadService {
 
         // Falsche Namen fuer Suchkriterien?
         if (!this.#checkKeys(keys) || !this.#checkEnums(suchkriterien)) {
+            this.#logger.debug('Ungueltige Suchkriterien');
             throw new NotFoundException('Ungueltige Suchkriterien');
         }
 
@@ -191,6 +193,7 @@ export class BuchReadService {
         const queryBuilder = this.#queryBuilder.build({}, pageable);
         const buecher = await queryBuilder.getMany();
         if (buecher.length === 0) {
+            this.#logger.debug('#findAll: Keine Buecher gefunden');
             throw new NotFoundException(
                 `Ungueltige Seite "${pageable.number}"`,
             );

@@ -43,6 +43,9 @@ services:
         target: 8080
       - published: 8843
         target: 8443
+      # 9000 ist der Port von SonarQube, 9090 ist der Port von Prometheus
+      - published: 9990
+        target: 9000
     volumes:
       - type: bind
         source: C:/Zimmermann/volumes/keycloak/data
@@ -71,11 +74,12 @@ services:
     # https://www.keycloak.org/server/health
     # http://localhost:8880/health/ready
     healthcheck:
+      # https://gist.github.com/sarath-soman/5d9aec06953bbd0990c648605d4dba07
       # https://www.reddit.com/r/KeyCloak/comments/14a5a1y/how_to_enable_healthcheck_on_keycloak_on/
       test:
         [
-          "CMD-SHELL",
-          "exec 3<>/dev/tcp/localhost/8080 && echo -e 'GET /health/ready HTTP/1.1\\r\\nHost: localhost\\r\\nConnection: close\\r\\n\\r\\n' >&3 && cat <&3 | grep -q '200 OK'",
+          CMD,
+          "exec 3<>/dev/tcp/127.0.0.1/9000;echo -e 'GET /health/ready HTTP/1.1\r\nhost: http://localhost\r\nConnection: close\r\n\r\n' >&3;if [ $? -eq 0 ]; then echo 'Healthcheck Successful';exit 0;else echo 'Healthcheck Failed';exit 1;fi;",
         ]
       interval: 30s
       timeout: 5s
