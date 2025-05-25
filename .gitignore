@@ -74,7 +74,7 @@ snyk-*.log
 # IDEs and editors
 .idea
 *.iml
-/.env
+.env
 .project
 .classpath
 .c9/
@@ -82,6 +82,7 @@ snyk-*.log
 .settings/
 .sonarlint
 *.sublime-workspace
+.extras/compose/buch/.env
 
 # IDE - VSCode
 .vscode/*

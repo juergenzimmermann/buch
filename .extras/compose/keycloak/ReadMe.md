@@ -127,10 +127,6 @@ Webbrowser `http://localhost:8880` oder `https://localhost:8843` aufgerufen hat:
                 <Create Role> anklicken
                 Role name       user
                 <Save> anklicken
-            Breadcrumb "Clients" anklicken
-                Tab "Initial access token"
-                    <Create> anklicken
-                        Eine hinreichend lange Zeitdauer verwenden
 
     # https://www.keycloak.org/docs/latest/server_admin/index.html#assigning-permissions-using-roles-and-groups
     Menüpunkt "Users"
@@ -197,7 +193,8 @@ kann man in einem Webbrowser die Konfiguration als JSON-Datensatz erhalten.
 ## Client Secret
 
 Im Wurzelverzeichnis des Projekts in der Datei `.env` muss man die
-Umgebungsvariable `CLIENT_SECRET` auf folgenden Wert aus _Keycloak_ setzen:
+Umgebungsvariable `CLIENT_SECRET` auf folgenden Wert aus _Keycloak_ setzen
+und ebenso in `.extras\compose\buch\.env`:
 
 - Menüpunkt `Clients`
 - `nest-client` aus der Liste beim voreingestellten Tab `Clients list` auswählen
