@@ -30,7 +30,7 @@
 # https://snyk.io/blog/10-best-practices-to-containerize-nodejs-web-applications-with-docker
 # https://cheatsheetseries.owasp.org/cheatsheets/NodeJS_Docker_Cheat_Sheet.html
 
-ARG NODE_VERSION=24.0.2
+ARG NODE_VERSION=24.1.0
 
 # ---------------------------------------------------------------------------------------
 # S t a g e   d i s t
@@ -60,7 +60,7 @@ apk upgrade
 # https://pkgs.alpinelinux.org/package/v3.21/main/x86_64/gcc
 # https://pkgs.alpinelinux.org/package/v3.21/main/x86_64/g++
 # https://pkgs.alpinelinux.org/package/v3.21/main/x86_64/build-base
-apk add --update --no-cache python3=3.12.10-r0 py3-pip=24.3.1-r0 make=4.4.1-r2 gcc=14.2.0-r4 g++=14.2.0-r4 build-base=0.5-r3
+apk add --update --no-cache python3=3.12.10-r1 py3-pip=24.3.1-r0 make=4.4.1-r2 gcc=14.2.0-r4 g++=14.2.0-r4 build-base=0.5-r3
 ln -sf python3 /usr/bin/python
 
 npm i -g --no-audit --no-fund npm
@@ -95,7 +95,7 @@ set -eux
 apk update
 # Die neuesten Versionen der bereits installierten Packages installieren
 apk upgrade
-apk add --update --no-cache python3=3.12.10-r0 py3-pip=24.3.1-r0 make=4.4.1-r2 gcc=14.2.0-r4 g++=14.2.0-r4 build-base=0.5-r3
+apk add --update --no-cache python3=3.12.10-r1 py3-pip=24.3.1-r0 make=4.4.1-r2 gcc=14.2.0-r4 g++=14.2.0-r4 build-base=0.5-r3
 ln -sf python3 /usr/bin/python
 npm i -g --no-audit --no-fund npm
 EOF
