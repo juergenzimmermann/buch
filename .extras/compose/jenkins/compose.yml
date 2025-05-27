@@ -67,7 +67,7 @@ services:
           memory: 4G
 
   jenkins:
-    image: jenkins:2.512-jdk21
+    image: jenkins/jenkins:2.512-jdk21
     restart: always
     ports:
       - published: 7070
