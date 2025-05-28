@@ -72,17 +72,6 @@ pipeline {
                 // https://stackoverflow.com/questions/51416409/jenkins-env-node-no-such-file-or-directory
                 // https://github.com/nodesource/distributions/blob/master/README.md#installation-instructions
                 // https://www.debian.org/distrib/packages
-                // https://packages.debian.org/buster/nodejs
-                sh 'id'
-                sh 'cat /etc/passwd'
-                sh 'echo $PATH'
-                sh 'pwd'
-                sh 'uname -a'
-                //sh 'lsb_release -a'
-                sh 'cat /etc/os-release'
-                sh 'cat /etc/debian_version'
-
-                sh 'apt-cache policy nodejs'
                 // https://github.com/nodesource/distributions#installation-instructions
                 // https://packages.debian.org/stable/python/python3
                 // https://packages.debian.org/bookworm/python3
@@ -92,25 +81,28 @@ pipeline {
                 // https://cloudcone.com/docs/article/how-to-install-python-3-10-on-debian-11
                 // https://linuxhint.com/install-python-debian-10
                 // https://computingforgeeks.com/how-to-install-python-on-debian-linux
-                // sh 'apt-get install --no-install-recommends --yes --show-progress gcc=4:12.2.0-3 g++=4:12.2.0-3 make=4.3-4.1 python3.11-minimal=3.11.2-6+deb12u4'
-                // sh 'apt show python3.11-minimal'
-                // sh 'apt-get install --no-install-recommends --yes --show-progress ca-certificates=20230311 curl=7.88.1-10+deb12u8 gnupg=2.2.40-1.1'
-                sh 'apt-get update --yes'
-                sh 'apt-get upgrade --yes'
-                sh 'python3 --version'
 
-                // https://www.debian.org/releases: Bookworm = Debian 12
-                // https://deb.nodesource.com hat nur node_20.x
-                // sh 'mkdir -p /etc/apt/keyrings'
-                // sh 'curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key | gpg --dearmor -o /etc/apt/keyrings/nodesource.gpg'
-                // sh 'echo "deb [signed-by=/etc/apt/keyrings/nodesource.gpg] https://deb.nodesource.com/node_20.x nodistro main" | tee /etc/apt/sources.list.d/nodesource.list'
-                // sh 'apt-get update'
-                // sh 'apt-get install nodejs --no-install-recommends --yes --show-progress'
-                // sh 'apt-cache policy nodejs'
+                    // # apt-get install --no-install-recommends --yes --show-progress gcc=4:12.2.0-3 g++=4:12.2.0-3 make=4.3-4.1 python3.11-minimal=3.11.2-6+deb12u4
+                    // # apt show python3.11-minimal'
+                    // # apt-get install --no-install-recommends --yes --show-progress ca-certificates=20230311 curl=7.88.1-10+deb12u8 gnupg=2.2.40-1.1
 
-                sh 'node --version'
-                sh 'npm i -g npm'
-                sh 'npm --version'
+                sh '''
+                    id
+                    cat /etc/passwd
+                    echo $PATH
+                    pwd
+                    uname -a
+                    cat /etc/os-release
+                    cat /etc/debian_version
+                    node --version
+                    npm i -g npm
+                    npm --version
+
+                    apt-get update --yes
+                    apt-get upgrade --yes
+                    sudo apt-get install -y python3 python3-pip
+                    python3 --version
+                '''
 
                 script {
                     if (!fileExists("${env.WORKSPACE}/package.json")) {
@@ -120,18 +112,20 @@ pipeline {
 
                 // /var/jenkins_home ist das Homedirectory vom User "jenkins"
                 // /var/jenkins_home/workspace/buch (siehe "pwd" oben)
-                sh 'cat package.json'
-
-                // Konfigurationsverzeichnis /root/.npm
-                sh 'npm ci --no-fund --no-audit'
+                sh '''
+                    cat package.json
+                    npm ci --no-fund --no-audit
+                '''
             }
         }
 
         stage('Compile') {
             steps {
-                sh 'npx tsc --version'
                 // TODO Warum funktioniert npx nicht?
-                sh './node_modules/.bin/tsc'
+                sh '''
+                    npx tsc --version
+                    ./node_modules/.bin/tsc
+                '''
             }
         }
 
@@ -143,24 +137,32 @@ pipeline {
                         //sh 'npm run test:coverage'
                     },
                     'ESLint': {
-                        sh 'npx eslint --version'
-                        sh 'npm run eslint'
+                        sh '''
+                            npx eslint --version
+                            npm run eslint
+                        '''
                     },
                     'Security Audit': {
                         echo 'TODO: "npm audit" schlaegt fehl: @nestjs/graphql -> subscriptions-transport-ws -> ws'
                         //sh 'npm audit --omit=dev'
                     },
                     'AsciiDoctor': {
-                        sh 'npx asciidoctor --version'
-                        sh 'npm run asciidoctor'
+                        sh '''
+                            npx asciidoctor --version
+                            npm run asciidoctor
+                        '''
                     },
                     'reveal.js': {
-                        sh 'npx asciidoctor-revealjs --version'
-                        sh 'npm run revealjs'
+                        sh '''
+                            npx asciidoctor-revealjs --version
+                            npm run revealjs
+                        '''
                     },
                     'TypeDoc': {
-                        sh 'npx typedoc --version'
-                        sh 'npm run typedoc'
+                        sh '''
+                            npx typedoc --version
+                            npm run typedoc
+                        '''
                     }
                 )
             }
