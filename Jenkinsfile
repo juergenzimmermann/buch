@@ -17,24 +17,11 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-// https://www.jenkins.io/doc/tutorials/create-a-pipeline-in-blue-ocean
-
 pipeline {
-    // agent any
-    agent {
-        docker {
-            // image 'node:24.1.0-bookworm'
-            image 'node:24.0.2-bookworm'
-            // https://stackoverflow.com/questions/62330354/jenkins-pipeline-alpine-agent-apk-update-error-unable-to-lock-database-permis
-            // https://stackoverflow.com/questions/42630894/jenkins-docker-how-to-control-docker-user-when-using-image-inside-command/51986870#51986870
-            // https://stackoverflow.com/questions/42743201/npm-install-fails-in-jenkins-pipeline-in-docker
-            args '--publish 3000:3000 --publish 5000:5000'
-            // fuer "apt-get install ..."
-            args '--user root:root'
-
-            // node:...-bookworm : in /etc/passwd gibt es "node" mit uid=1000
-            //args '--user 1000:1000'
-        }
+    agent any
+    agent any
+    tools {
+        nodejs 'node-24.1.0'
     }
 
     // Umgebungsvariable:

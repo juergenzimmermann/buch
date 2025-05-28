@@ -14,12 +14,6 @@
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 # Aufruf:   docker compose up
-#           docker compose exec docker ash
-#               cat /etc/os-release
-#                   Alpine Linux
-#               cat /proc/version
-#                   Kernel 5.10.102.1-microsoft-standard-WSL2
-#               uname -r
 #           docker compose exec jenkins bash
 #               cat /etc/os-release
 #                   ID=debian
@@ -32,44 +26,9 @@
 # https://docs.docker.com/compose/compose-file/compose-file-v3
 
 services:
-  docker:
-    #image: docker:28.2.0-rc.2-dind
-    image: docker:28.1.1-dind
-    restart: always
-    ports:
-      - published: 3000
-        target: 3000
-      - published: 5000
-        target: 5000
-      - published: 2376
-        target: 2376
-    networks:
-      jenkins-network:
-        # alternative hostnames im virtuellen Netzwerk
-        aliases: [docker]
-    volumes:
-      - type: bind
-        source: C:/Zimmermann/volumes/jenkins/certs
-        target: /certs/client
-      - type: bind
-        source: C:/Zimmermann/volumes/jenkins/jenkins_home
-        target: /var/jenkins_home
-    privileged: true
-    env_file: docker.env
-    container_name: docker
-    cap_drop: [ALL]
-    deploy:
-      resources:
-        limits:
-          cpus: "2.0"
-          memory: 4G
-        reservations:
-          cpus: "1.0"
-          memory: 4G
-
   jenkins:
-    #image: jenkins/jenkins:2.512-jdk21
-    image: jenkins/jenkins:2.506-jdk21
+    image: jenkins/jenkins:2.512-jdk21
+    #image: jenkins/jenkins:2.506-jdk21
     restart: always
     ports:
       - published: 7070
