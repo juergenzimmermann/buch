@@ -98,8 +98,8 @@ pipeline {
                     npm i -g npm
                     npm --version
 
-                    apt-get update --yes
-                    apt-get upgrade --yes
+                    sudo apt-get update --yes
+                    sudo apt-get upgrade --yes
                     sudo apt-get install -y python3 python3-pip
                     python3 --version
                 '''
