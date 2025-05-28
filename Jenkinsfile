@@ -19,7 +19,6 @@
 
 pipeline {
     agent any
-    agent any
     tools {
         nodejs 'node-24.1.0'
     }
