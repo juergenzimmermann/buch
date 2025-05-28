@@ -87,7 +87,7 @@ console.log(`options=${options}`);
 console.log('');
 
 // https://nodejs.org/api/child_process.html#spawning-bat-and-cmd-files-on-windows
-exec(`${script} ${options}`, (err, stdout, stderr) => {
+exec(`${script} ${options}`, (err, stdout) => {
     if (err) {
         console.error(err);
         return;
