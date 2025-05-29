@@ -46,14 +46,14 @@ import {
 import { Request, Response } from 'express';
 import { Public } from 'nest-keycloak-connect';
 import { Readable } from 'node:stream';
+import { paths } from '../../config/paths.js';
+import { getLogger } from '../../logger/logger.js';
 import { ResponseTimeInterceptor } from '../../logger/response-time.interceptor.js';
 import { type Buch, type BuchArt } from '../entity/buch.entity.js';
 import { BuchReadService } from '../service/buch-read.service.js';
+import { createPageable } from '../service/pageable.js';
 import { type Suchkriterien } from '../service/suchkriterien.js';
 import { createPage } from './page.js';
-import { createPageable } from '../service/pageable.js';
-import { getLogger } from '../../logger/logger.js';
-import { paths } from '../../config/paths.js';
 
 /**
  * Klasse für `BuchGetController`, um Queries in _OpenAPI_ bzw. Swagger zu
@@ -259,6 +259,14 @@ export class BuchGetController {
         return res.json(buchPage).send();
     }
 
+    /**
+     * Zu einem Buch mit gegebener ID wird die zugehörige Binärdatei, z.B.
+     * ein Bild oder ein Video, heruntergeladen.
+     *
+     * @param id Pfad-Parameter `id`.
+     * @param res Leeres Response-Objekt von Express.
+     * @returns Leeres Promise-Objekt.
+     */
     @Get('/file/:id')
     @Public()
     @ApiOperation({ description: 'Suche nach Datei mit der Buch-ID' })
