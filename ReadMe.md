@@ -61,7 +61,7 @@
       - [docker inspect](#docker-inspect)
       - [docker sbom](#docker-sbom)
     - [Docker Compose](#docker-compose)
-  - [Statische Codeanalyse und Formattierer](#statische-codeanalyse-und-formattierer)
+  - [Statische Codeanalyse und Formattierer](#statische-codeanalyse-und-formatierer)
     - [Prettier](#prettier)
     - [ESLint](#eslint)
     - [SonarQube](#sonarqube)
@@ -173,7 +173,7 @@ _TypeORM_ unterstützt nur SQLite 9, aber nicht SQLite 11: https://github.com/ty
 Vor dem Start des Appservers muss man den DB-Server und ggf. den DB-Browser starten.
 Falls man _PostgreSQL_ oder _MySQL_ und nicht _SQLite_ als "Embedded Database" nutzt:
 
-```powershell
+```txt
     # PostgreSQL mit pgAdmin
     cd .\extras\compose\postgres
     docker compose up
@@ -406,14 +406,14 @@ beim Skript `test` in `package.json` die Property `log.default` auf `true`
 gesetzt, um nicht zu detailliert zu protokollieren bzw. damit die Log-Ausgabe
 übersichtlich bleibt.
 
-```powershell
+```shell
     npm t
 ```
 
 Bei der Fehlersuche ist es ratsam, nur eine einzelnen Testdatei aufzurufen,
 z.B.:
 
-```powershell
+```shell
     npm exec jest --detectOpenHandles --errorOnDeprecated `
       --forceExit --runTestsByPath '__tests__\buch\buch-GET.controller.test.ts'
 ```
@@ -461,7 +461,7 @@ erstellt wurde, kann man mit _Hadolint_ überprüfen.
 Je nach Basis-Image kann man ein Image folgendermaßen erstellen und mit Hadolint
 validieren:
 
-```powershell
+```shell
     # Debian Bookworm (12) slim
     Get-Content Dockerfile | docker run --rm --interactive hadolint/hadolint:2.12.1-beta-debian
     docker build --tag juergenzimmermann/buch:2025.10.1-bookworm .
@@ -471,9 +471,9 @@ validieren:
     docker build --tag juergenzimmermann/buch:2025.10.1-alpine --file Dockerfile.alpine .
 ```
 
-Mit Docker_Bake_:
+Mit Docker _Bake_:
 
-```powershell
+```shell
     # Debian als default
     docker buildx bake
     docker buildx bake alpine
@@ -486,7 +486,7 @@ Mit Docker_Bake_:
 Mit dem Unterkommando `history` kann man ein Docker-Image und die einzelnen Layer
 inspizieren:
 
-```powershell
+```shell
     docker history juergenzimmermann/buch:2025.10.1-bookworm
     docker history juergenzimmermann/buch:2025.10.1-alpine
 ```
@@ -496,7 +496,7 @@ inspizieren:
 Mit dem Unterkommando `inspect` kann man die Metadaten, z.B. Labels, zu einem
 Image inspizieren:
 
-```powershell
+```shell
     docker inspect juergenzimmermann/buch:2025.10.1-bookworm
     docker inspect juergenzimmermann/buch:2025.10.1-alpine
 ```
@@ -507,7 +507,7 @@ Mit dem Unterkommando `sbom` (Software Bill of Materials) von `docker` kann man
 inspizieren, welche Bestandteilen in einem Docker-Images enthalten sind, z.B.
 npm-Packages oder Debian-Packages.
 
-```powershell
+```shell
     docker sbom juergenzimmermann/buch:2025.10.1-bookworm
     docker sbom juergenzimmermann/buch:2025.10.1-alpine
 ```
@@ -519,7 +519,7 @@ Mit _Docker Compose_ und der Konfigurationsdatei `compose.yml` im Verzeichnis
 Bookworm (12) Slim_ folgendermaßen starten und später in einer weiteren
 PowerShell herunterfahren.
 
-```powershell
+```shell
     cd .extras\compose\buch
 
     # PowerShell fuer buch-Server mit Bookworm-Image zzgl. DB-Server und Mailserver
@@ -545,14 +545,14 @@ PowerShell herunterfahren.
 
 ---
 
-## Statische Codeanalyse und Formattierer
+## Statische Codeanalyse und Formatierer
 
 ### Prettier
 
 `Prettier` ist ein Formatierer, der durch `.prettierrc.yml` (rc = run command)
 konfiguriert und durch folgendes npm-Skript ausgeführt wird:
 
-```powershell
+```shell
     npm run prettier
 ```
 
@@ -561,7 +561,7 @@ konfiguriert und durch folgendes npm-Skript ausgeführt wird:
 _ESLint_ wird durch `.eslintrc.yml` (rc = run command) konfiguriert und durch
 folgendes npm-Skript ausgeführt:
 
-```powershell
+```shell
     npm run eslint
 ```
 
@@ -571,7 +571,7 @@ Mit dem _ESLint Config Inspector_ kann man inspizieren, welche
 - Regeln aktiviert sind,
 - aktivierten Regeln deprecated sind
 
-```powershell
+```shell
     npx @eslint/config-inspector@latest
 ```
 
@@ -580,7 +580,7 @@ Mit dem _ESLint Config Inspector_ kann man inspizieren, welche
 Für eine statische Codeanalyse durch _SonarQube_ muss zunächst der
 SonarQube-Server mit _Docker Compose_ als Docker-Container gestartet werden:
 
-```powershell
+```shell
     cd .extras\compose\sonarqube
     docker compose up
 ```
@@ -610,7 +610,7 @@ aufrufen.
 
 Abschließend wird der oben gestartete Server heruntergefahren.
 
-```powershell
+```shell
     cd .extras\compose\sonarqube
     docker compose down
 ```
@@ -626,7 +626,7 @@ Mit `npm run madge:dep` kann man sämtliche Abhängigkeiten in einer SVG-Datei
 Mit `type-coverage` kann man ermitteln, wo im TypeScript-Code `any` verwendet
 wurde:
 
-```powershell
+```shell
     npm run type-coverage
 ```
 
@@ -640,7 +640,7 @@ Mit dem Unterkommando `audit` von _npm_ kann man `npm_modules` auf Sicherheitsl�
 analysieren. Dabei lässt man sinnvollerweise die `devDependencies` aus `package.json`
 weg:
 
-```powershell
+```shell
     npm audit --omit dev
 ```
 
@@ -654,7 +654,7 @@ an, um im Laufe des Semesters mit _OWASP Dependency Check_ die benutzte Software
 ("3rd Party Libraries") auf Sicherheitslücken zu prüfen. Diesen API Key trägt
 man im Skript `scripts\dependency-check.mts` als Wert der Variablen `nvdApiKey` ein.
 
-```powershell
+```shell
     cd scripts
     node dependency-check.mts
 ```
@@ -665,7 +665,7 @@ Mit dem Unterkommando `quickview` von _Scout_ kann man sich zunächst einen
 groben Überblick verschaffen, wieviele Sicherheitslücken in den Bibliotheken im
 Image enthalten sind:
 
-```powershell
+```shell
     docker scout quickview juergenzimmermann/buch:2025.10.1-bookworm
     docker scout quickview juergenzimmermann/buch:2025.10.1-alpine
 ```
@@ -683,7 +683,7 @@ katalogisiert: https://www.cve.org (ursprünglich: https://cve.mitre.org/cve).
 Die Details zu den CVE-Records im Image kann man durch das Unterkommando `cves`
 von _Scout_ auflisten:
 
-```powershell
+```shell
     docker scout cves juergenzimmermann/buch:2025.10.1-bookworm
     docker scout cves --format only-packages juergenzimmermann/buch:2025.10.1-bookworm
 ````
@@ -697,7 +697,7 @@ Zunächst muss man sich bei https://app.snyk.io/account registrieren und dort
 auch einen Token besorgen. Danach kann man sich folgendermaßen authentifizieren
 und das Projekt auf Sicherheitslücken überprüfen
 
-```powershell
+```shell
     synk auth <MEIN_TOKEN>
     snyk test
 ```
@@ -742,7 +742,7 @@ notwendig.
 Die Dokumentation im Format HTML wird in einer Powershell folgendermaßen
 im Verzeichnis `.extras\doc\html` erstellt:
 
-```powershell
+```shell
     npm run asciidoc
 ```
 
@@ -751,7 +751,7 @@ im Verzeichnis `.extras\doc\html` erstellt:
 Jenkins wird direkt mit _Docker Compose_ genutzt. Dadurch muss Jenkins nicht
 immer laufen und kann bei Bedarf gestartet und wieder heruntergefahren werden.
 
-```powershell
+```shell
     cd .extras\compose\jenkins
     docker compose up
 
@@ -767,7 +767,7 @@ Jenkins-Container zugreifen. Der Benutzername ist `admin` und das Passwort
 
 ### Bash zur evtl. Fehlersuche im laufenden Jenkins-Container
 
-```powershell
+```shell
     docker compose exec jenkins bash
 ```
 
@@ -782,8 +782,8 @@ Tipps:
 - `<F1>`: Die Kommandopalette erscheint
 - `<Strg><Shift>v`: Vorschau für MarkDown und AsciiDoctor
 - `<Alt>d`: Vorschau für PlantUml
-- _https://vscodecandothat.com_: Kurze Videos zu VS Code
-- _https://www.youtube.com/watch?v=beNIDKgdzwQ_: Video für Debugging
+- https://vscodecandothat.com: Kurze Videos zu VS Code
+- https://www.youtube.com/watch?v=beNIDKgdzwQ: Video für Debugging
 
 ## Empfohlene Code-Konventionen
 
@@ -802,4 +802,4 @@ In Anlehnung an die
 - `undefined` verwenden und nicht `null`
 - Geschweifte Klammern bei if-Anweisungen
 - Maximale Dateigröße: 400 Zeilen
-- Maximale Funktionsgröße: 75 Zeilen
+- Maximale Funktionslänge: 75 Zeilen

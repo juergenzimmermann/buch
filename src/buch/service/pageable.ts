@@ -22,7 +22,7 @@ export type Pageable = {
     readonly size: number;
 };
 
-type PageableProps = {
+export type PageableProps = {
     readonly number?: string;
     readonly size?: string;
 };

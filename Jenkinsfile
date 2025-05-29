@@ -82,8 +82,8 @@ pipeline {
                 // https://linuxhint.com/install-python-debian-10
                 // https://computingforgeeks.com/how-to-install-python-on-debian-linux
 
-                // apt show python3.11-minimal'
-                // apt-get install --no-install-recommends --yes --show-progress ca-certificates=20230311 curl=7.88.1-10+deb12u8 gnupg=2.2.40-1.1
+                // apt show python3.11-minimal
+                // apt list
 
                 sh '''
                     id
