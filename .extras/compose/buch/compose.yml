@@ -44,13 +44,9 @@ services:
   buch:
     image: juergenzimmermann/buch:2025.10.1-bookworm
     #image: juergenzimmermann/buch:2025.10.1-alpine
-    #entrypoint:
-    #  [
-    #    "/bin/bash",
-    #    "/bin/ash",
-    #    "-c",
-    #    "echo 'Container als bash/ash gestartet.' && sleep infinity",
-    #  ]
+    #entrypoint: ["/bin/bash", "-c", "echo 'Container als bash gestartet.' && sleep infinity"]
+    # (d)ash = (Debian) Almquist Shell
+    #entrypoint: ["/bin/ash", "-c", "echo 'Container als ash gestartet.' && sleep infinity"]
     depends_on:
       db:
         condition: service_healthy

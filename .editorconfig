@@ -16,6 +16,9 @@ indent_size = 4
 [Dockerfile,Jenkinsfile]
 indent_size = 4
 
+[compose.yml]
+max_line_length = 120
+
 [*.md]
 max_line_length = 0
 
