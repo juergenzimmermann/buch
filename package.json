@@ -168,8 +168,8 @@
     "weak-napi": "2.0.2"
   },
   "overrides": {
-    "@nestjs/cli": {
-      "typescript": "$typescript"
+    "sqlite3": {
+      "node-gyp": "$node-gyp"
     }
   }
 }
