@@ -39,7 +39,7 @@ apt-get upgrade --yes
 # LSB = Linux Standard Base
 # lsb-release: benutzte Linux-Distribution identifizieren und Einhaltung der Linux Standard Base zu pruefen
 # https://packages.debian.org/bookworm/lsb-release
-# apt-get install --no-install-recommends --yes --show-progress lsb-release=12.0-1
+apt-get install --no-install-recommends --yes --show-progress lsb-release=12.0-1
 
 # https://packages.debian.org/stable/python/python3
 # https://packages.debian.org/bookworm/python3

@@ -93,6 +93,7 @@ pipeline {
                     uname -a
                     cat /etc/os-release
                     cat /etc/debian_version
+                    lsb_release -a
                     node --version
                     npm i -g npm
                     npm --version
