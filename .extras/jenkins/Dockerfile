@@ -1,4 +1,5 @@
-# syntax=docker/dockerfile:1.10.0
+# syntax=docker/dockerfile:1.16.0
+# check=error=true
 
 # Copyright (C) 2022 - present Juergen Zimmermann, Hochschule Karlsruhe
 #
