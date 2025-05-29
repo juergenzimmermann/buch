@@ -82,9 +82,8 @@ pipeline {
                 // https://linuxhint.com/install-python-debian-10
                 // https://computingforgeeks.com/how-to-install-python-on-debian-linux
 
-                    // # apt-get install --no-install-recommends --yes --show-progress gcc=4:12.2.0-3 g++=4:12.2.0-3 make=4.3-4.1 python3.11-minimal=3.11.2-6+deb12u4
-                    // # apt show python3.11-minimal'
-                    // # apt-get install --no-install-recommends --yes --show-progress ca-certificates=20230311 curl=7.88.1-10+deb12u8 gnupg=2.2.40-1.1
+                // apt show python3.11-minimal'
+                // apt-get install --no-install-recommends --yes --show-progress ca-certificates=20230311 curl=7.88.1-10+deb12u8 gnupg=2.2.40-1.1
 
                 sh '''
                     id
@@ -94,14 +93,11 @@ pipeline {
                     uname -a
                     cat /etc/os-release
                     cat /etc/debian_version
+                    lsb_release -a
                     node --version
                     npm i -g npm
                     npm --version
-
-                    sudo apt-get update --yes
-                    sudo apt-get upgrade --yes
-                    sudo apt-get install -y python3 python3-pip
-                    python3 --version
+                    python --version
                 '''
 
                 script {
