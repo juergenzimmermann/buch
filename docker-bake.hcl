@@ -24,9 +24,11 @@
 target "default" {
   tags = ["docker.io/juergenzimmermann/buch:2025.10.1-bookworm"]
   #dockerfile = "Dockerfile"
+  #no-cache = true
 }
 
 target "alpine" {
   tags = ["docker.io/juergenzimmermann/buch:2025.10.1-alpine"]
   dockerfile = "Dockerfile.alpine"
+  #no-cache = true
 }
