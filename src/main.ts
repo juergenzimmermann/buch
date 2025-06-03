@@ -32,12 +32,12 @@ import {
 } from '@nestjs/swagger';
 import compression from 'compression';
 // relativer Import
-import { AppModule } from './app.module.js';
 import { corsOptions } from './config/cors.js';
 import { logLevel } from './config/logger.js';
 import { nodeConfig } from './config/node.js';
 import { paths } from './config/paths.js';
-import { helmetHandlers } from './security/http/helmet.handler.js';
+import { AppModule } from './module.js';
+import { helmetHandlers } from './security/http/helmet.js';
 
 // Destructuring ab ES 2015
 const { httpsOptions, port } = nodeConfig;

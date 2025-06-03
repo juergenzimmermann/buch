@@ -41,9 +41,9 @@ import {
     type ValidatorConstraintInterface,
 } from 'class-validator';
 import Decimal from 'decimal.js'; // eslint-disable-line @typescript-eslint/naming-convention
-import { type BuchArt } from '../entity/buch.entity.js';
-import { AbbildungDTO } from './abbildungDTO.entity.js';
-import { TitelDTO } from './titelDTO.entity.js';
+import { type BuchArt } from '../entity/buch.js';
+import { AbbildungDTO } from './abbildungDTO.js';
+import { TitelDTO } from './titelDTO.js';
 
 export const MAX_RATING = 5;
 

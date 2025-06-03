@@ -35,7 +35,7 @@
 import { HttpStatus } from '@nestjs/common';
 import axios, { type AxiosInstance, type AxiosResponse } from 'axios';
 import { beforeAll, describe, expect, test } from 'vitest';
-import { type Buch } from '../../../src/buch/entity/buch.entity.js';
+import { type Buch } from '../../../src/buch/entity/buch.js';
 import { httpsAgent, restURL } from '../constants.mjs';
 import { type ErrorResponse } from './error-response.mjs';
 

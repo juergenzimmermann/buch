@@ -41,8 +41,8 @@ import { Response } from 'express';
 import { Public } from 'nest-keycloak-connect';
 import { paths } from '../../config/paths.js';
 import { getLogger } from '../../logger/logger.js';
-import { ResponseTimeInterceptor } from '../../logger/response-time.interceptor.js';
-import { KeycloakService } from './keycloak.service.js';
+import { ResponseTimeInterceptor } from '../../logger/response-time.js';
+import { KeycloakService } from './service.js';
 
 /** Entity-Klasse für Token-Daten. */
 export class TokenData {

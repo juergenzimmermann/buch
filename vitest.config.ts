@@ -20,9 +20,9 @@ import { defineConfig } from 'vite';
 export default defineConfig({
     test: {
         name: 'Beispiel',
-         // default ist ['**\/*.{test,spec}.?(c|m)[jt]s?(x)']
+        // default ist ['**\/*.{test,spec}.?(c|m)[jt]s?(x)']
         include: [
-            'test/integration/rest/*.controller.test.mts',
+            'test/integration/rest/*.test.mts',
             'test/integration/graphql/*.test.mts',
         ],
         globals: true,
@@ -42,4 +42,4 @@ export default defineConfig({
             // provider: 'istanbul',
         },
     },
-})
+});

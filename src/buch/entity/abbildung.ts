@@ -1,4 +1,4 @@
-// Copyright (C) 2024 - present Juergen Zimmermann, Hochschule Karlsruhe
+// Copyright (C) 2023 - present Juergen Zimmermann, Hochschule Karlsruhe
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -17,34 +17,32 @@ import {
     Column,
     Entity,
     JoinColumn,
-    OneToOne,
+    ManyToOne,
     PrimaryGeneratedColumn,
 } from 'typeorm';
-import { binaryType } from '../../config/db.js';
-import { Buch } from './buch.entity.js';
+import { Buch } from './buch.js';
 
 @Entity()
-export class BuchFile {
+export class Abbildung {
+    // https://typeorm.io/entities#primary-columns
+    // CAVEAT: zuerst @Column() und erst dann @PrimaryGeneratedColumn()
     @PrimaryGeneratedColumn()
     id: number | undefined;
 
     @Column('varchar')
-    filename: string | undefined;
+    readonly beschriftung: string | undefined;
 
     @Column('varchar')
-    mimetype: string | undefined;
+    readonly contentType: string | undefined;
 
-    @OneToOne(() => Buch, (buch) => buch.file)
+    @ManyToOne(() => Buch, (buch) => buch.abbildungen)
     @JoinColumn({ name: 'buch_id' })
     buch: Buch | undefined;
-
-    @Column({ type: binaryType })
-    data: Uint8Array | undefined;
 
     public toString = (): string =>
         JSON.stringify({
             id: this.id,
-            filename: this.filename,
-            mimetype: this.mimetype,
+            beschriftung: this.beschriftung,
+            contentType: this.contentType,
         });
 }

@@ -23,11 +23,11 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { typeOrmModuleOptions } from '../../config/typeormOptions.js';
 import { getLogger } from '../../logger/logger.js';
-import { Abbildung } from '../entity/abbildung.entity.js';
-import { Buch } from '../entity/buch.entity.js';
+import { Abbildung } from '../entity/abbildung.js';
+import { Buch } from '../entity/buch.js';
 import { DEFAULT_PAGE_NUMBER, DEFAULT_PAGE_SIZE } from './pageable.js';
 import { type Pageable } from './pageable.js';
-import { Titel } from '../entity/titel.entity.js';
+import { Titel } from '../entity/titel.js';
 import { type Suchkriterien } from './suchkriterien.js';
 
 /** Typdefinitionen für die Suche mit der Buch-ID. */

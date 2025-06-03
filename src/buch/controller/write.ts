@@ -55,13 +55,13 @@ import { Express, Request, Response } from 'express';
 import { AuthGuard, Public, Roles } from 'nest-keycloak-connect';
 import { paths } from '../../config/paths.js';
 import { getLogger } from '../../logger/logger.js';
-import { ResponseTimeInterceptor } from '../../logger/response-time.interceptor.js';
-import { type Abbildung } from '../entity/abbildung.entity.js';
-import { type Buch } from '../entity/buch.entity.js';
-import { type Titel } from '../entity/titel.entity.js';
-import { BuchWriteService } from '../service/buch-write.service.js';
-import { BuchDTO, BuchDtoOhneRef } from './buchDTO.entity.js';
-import { createBaseUri } from './createBaseUri.js';
+import { ResponseTimeInterceptor } from '../../logger/response-time.js';
+import { type Abbildung } from '../entity/abbildung.js';
+import { type Buch } from '../entity/buch.js';
+import { type Titel } from '../entity/titel.js';
+import { BuchWriteService } from '../service/write.js';
+import { BuchDTO, BuchDtoOhneRef } from './buchDTO.js';
+import { createBaseUri } from './create-base-uri.js';
 
 const MSG_FORBIDDEN = 'Kein Token mit ausreichender Berechtigung vorhanden';
 /**

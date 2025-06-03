@@ -15,15 +15,15 @@
 
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { MailModule } from '../mail/mail.module.js';
-import { KeycloakModule } from '../security/keycloak/keycloak.module.js';
-import { BuchGetController } from './controller/buch-get.controller.js';
-import { BuchWriteController } from './controller/buch-write.controller.js';
+import { MailModule } from '../mail/module.js';
+import { KeycloakModule } from '../security/keycloak/module.js';
+import { BuchGetController } from './controller/get.js';
+import { BuchWriteController } from './controller/write.js';
 import { entities } from './entity/entities.js';
-import { BuchMutationResolver } from './resolver/buch-mutation.resolver.js';
-import { BuchQueryResolver } from './resolver/buch-query.resolver.js';
-import { BuchReadService } from './service/buch-read.service.js';
-import { BuchWriteService } from './service/buch-write.service.js';
+import { BuchMutationResolver } from './resolver/mutation.js';
+import { BuchQueryResolver } from './resolver/query.js';
+import { BuchReadService } from './service/read.js';
+import { BuchWriteService } from './service/write.js';
 import { QueryBuilder } from './service/query-builder.js';
 
 /**

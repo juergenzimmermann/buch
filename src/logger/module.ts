@@ -13,14 +13,21 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-import { HttpModule } from '@nestjs/axios';
-import { Module } from '@nestjs/common';
-import { TerminusModule } from '@nestjs/terminus';
-import { HealthController } from './health.controller.js';
-import { PrometheusController } from './prometheus.controller.js';
+import { Global, Module } from '@nestjs/common';
+import { BannerService } from './banner.js';
+import { ResponseTimeInterceptor } from './response-time.js';
 
+/**
+ * Das Modul besteht aus allgemeinen Services, z.B. MailService.
+ * @packageDocumentation
+ */
+
+/**
+ * Die dekorierte Modul-Klasse mit den Service-Klassen.
+ */
+@Global()
 @Module({
-    imports: [TerminusModule, HttpModule],
-    controllers: [HealthController, PrometheusController],
+    providers: [BannerService, ResponseTimeInterceptor],
+    exports: [BannerService, ResponseTimeInterceptor],
 })
-export class AdminModule {}
+export class LoggerModule {}

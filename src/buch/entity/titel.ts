@@ -17,32 +17,31 @@ import {
     Column,
     Entity,
     JoinColumn,
-    ManyToOne,
+    OneToOne,
     PrimaryGeneratedColumn,
 } from 'typeorm';
-import { Buch } from './buch.entity.js';
+import { Buch } from './buch.js';
 
 @Entity()
-export class Abbildung {
+export class Titel {
     // https://typeorm.io/entities#primary-columns
-    // CAVEAT: zuerst @Column() und erst dann @PrimaryGeneratedColumn()
     @PrimaryGeneratedColumn()
     id: number | undefined;
 
     @Column('varchar')
-    readonly beschriftung: string | undefined;
+    readonly titel: string | undefined;
 
     @Column('varchar')
-    readonly contentType: string | undefined;
+    readonly untertitel: string | undefined;
 
-    @ManyToOne(() => Buch, (buch) => buch.abbildungen)
+    @OneToOne(() => Buch, (buch) => buch.titel)
     @JoinColumn({ name: 'buch_id' })
     buch: Buch | undefined;
 
     public toString = (): string =>
         JSON.stringify({
             id: this.id,
-            beschriftung: this.beschriftung,
-            contentType: this.contentType,
+            titel: this.titel,
+            untertitel: this.untertitel,
         });
 }

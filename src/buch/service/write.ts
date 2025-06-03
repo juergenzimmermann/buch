@@ -23,17 +23,17 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { type DeleteResult, Repository } from 'typeorm';
 import { getLogger } from '../../logger/logger.js';
-import { MailService } from '../../mail/mail.service.js';
-import { Abbildung } from '../entity/abbildung.entity.js';
-import { Buch } from '../entity/buch.entity.js';
-import { BuchFile } from '../entity/buchFile.entity.js';
-import { Titel } from '../entity/titel.entity.js';
-import { BuchReadService } from './buch-read.service.js';
+import { MailService } from '../../mail/service.js';
+import { Abbildung } from '../entity/abbildung.js';
+import { Buch } from '../entity/buch.js';
+import { BuchFile } from '../entity/file.js';
+import { Titel } from '../entity/titel.js';
 import {
     IsbnExistsException,
     VersionInvalidException,
     VersionOutdatedException,
 } from './exceptions.js';
+import { BuchReadService } from './read.js';
 
 /** Typdefinitionen zum Aktualisieren eines Buches mit `update`. */
 export type UpdateParams = {

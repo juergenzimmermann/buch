@@ -68,7 +68,7 @@
     "k6"
   ],
   "dependencies": {
-    "@apollo/server": "4.12.1",
+    "@apollo/server": "4.12.2",
     "@js-temporal/polyfill": "0.5.1",
     "@nestjs/apollo": "13.1.0",
     "@nestjs/axios": "4.0.0",
@@ -162,7 +162,7 @@
     "tsconfig-paths": "4.2.0",
     "typedoc": "0.28.5",
     "typescript": "5.8.3",
-    "typescript-eslint": "8.33.0",
+    "typescript-eslint": "8.33.1",
     "vite": "6.3.5",
     "vitest": "3.2.0",
     "weak-napi": "2.0.2"

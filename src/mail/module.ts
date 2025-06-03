@@ -14,16 +14,18 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 import { Module } from '@nestjs/common';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { Buch } from '../../buch/entity/buch.entity.js';
-import { KeycloakModule } from '../../security/keycloak/keycloak.module.js';
-import { DbPopulateService } from './db-populate.service.js';
-import { DevController } from './dev.controller.js';
+import { MailService } from './service.js';
 
+/**
+ * Das Modul besteht aus Services für Mail.
+ * @packageDocumentation
+ */
+
+/**
+ * Die dekorierte Modul-Klasse mit den Service-Klassen.
+ */
 @Module({
-    imports: [KeycloakModule, TypeOrmModule.forFeature([Buch])],
-    controllers: [DevController],
-    providers: [DbPopulateService],
-    exports: [DbPopulateService],
+    providers: [MailService],
+    exports: [MailService],
 })
-export class DevModule {}
+export class MailModule {}

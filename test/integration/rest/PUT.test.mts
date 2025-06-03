@@ -17,7 +17,7 @@ import { HttpStatus } from '@nestjs/common';
 import axios, { type AxiosInstance, type AxiosResponse } from 'axios';
 import { Decimal } from 'decimal.js';
 import { beforeAll, describe, expect, test } from 'vitest';
-import { type BuchDtoOhneRef } from '../../../src/buch/controller/buchDTO.entity.js';
+import { type BuchDtoOhneRef } from '../../../src/buch/controller/buchDTO.js';
 import { baseURL, httpsAgent, restURL } from '../constants.mjs';
 import { getToken } from '../token.mjs';
 import { type ErrorResponse } from './error-response.mjs';

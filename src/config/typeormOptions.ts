@@ -20,7 +20,7 @@
 import { readFileSync } from 'node:fs';
 import path from 'node:path';
 import { type DataSourceOptions } from 'typeorm';
-import { Buch } from '../buch/entity/buch.entity.js';
+import { Buch } from '../buch/entity/buch.js';
 import { entities } from '../buch/entity/entities.js';
 import { RESOURCES_DIR, config } from './app.js';
 import { dbType } from './db.js';

@@ -50,10 +50,10 @@ import {
     VersionColumn,
 } from 'typeorm';
 import { dbType } from '../../config/db.js';
-import { Abbildung } from './abbildung.entity.js';
-import { BuchFile } from './buchFile.entity.js';
+import { Abbildung } from './abbildung.js';
+import { BuchFile } from './file.js';
 import { DecimalTransformer } from './decimal-transformer.js';
-import { Titel } from './titel.entity.js';
+import { Titel } from './titel.js';
 
 /**
  * Alias-Typ für gültige Strings bei der Art eines Buches.

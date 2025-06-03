@@ -13,10 +13,10 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-import { Abbildung } from './abbildung.entity.js';
-import { Buch } from './buch.entity.js';
-import { BuchFile } from './buchFile.entity.js';
-import { Titel } from './titel.entity.js';
+import { Abbildung } from './abbildung.js';
+import { Buch } from './buch.js';
+import { BuchFile } from './file.js';
+import { Titel } from './titel.js';
 
 // erforderlich in src/config/db.ts und src/buch/buch.module.ts
 export const entities = [Abbildung, Buch, BuchFile, Titel];
