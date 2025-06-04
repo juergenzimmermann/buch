@@ -62,7 +62,7 @@ apk upgrade
 # https://pkgs.alpinelinux.org/package/v3.22/main/x86_64/g++
 # https://pkgs.alpinelinux.org/package/v3.22/main/x86_64/build-base
 # apk info python3
-apk add --update --no-cache python3=3.12.10-r1 py3-pip=25.1.1-r0 make=4.4.1-r3 gcc=14.2.0-r6 g++=14.2.0-r6 build-base=0.5-r3
+apk add --update --no-cache python3=3.12.11-r0 py3-pip=25.1.1-r0 make=4.4.1-r3 gcc=14.2.0-r6 g++=14.2.0-r6 build-base=0.5-r3
 ln -sf python3 /usr/bin/python
 
 npm i -g --no-audit --no-fund npm
@@ -97,7 +97,7 @@ set -eux
 apk update
 # Die neuesten Versionen der bereits installierten Packages installieren
 apk upgrade
-apk add --update --no-cache python3=3.12.10-r1 py3-pip=25.1.1-r0 make=4.4.1-r3 gcc=14.2.0-r6 g++=14.2.0-r6 build-base=0.5-r3
+apk add --update --no-cache python3=3.12.11-r0 py3-pip=25.1.1-r0 make=4.4.1-r3 gcc=14.2.0-r6 g++=14.2.0-r6 build-base=0.5-r3
 ln -sf python3 /usr/bin/python
 npm i -g --no-audit --no-fund npm
 EOF
