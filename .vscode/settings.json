@@ -37,5 +37,6 @@
   "peacock.color": "#215732",
   "postman.telemetry.enabled": false,
   "postman.account.region": "EU",
-  "asciidoc.antora.showEnableAntoraPrompt": false
+  "asciidoc.antora.showEnableAntoraPrompt": false,
+  "typescript.experimental.useTsgo": true
 }
