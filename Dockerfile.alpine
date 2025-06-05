@@ -136,6 +136,8 @@ set -eux
 apk update
 # Die neuesten Versionen der bereits installierten Packages installieren
 apk upgrade
+# https://pkgs.alpinelinux.org/package/v3.22/main/x86_64/wget
+apk add --update --no-cache wget=1.25.0-r1
 apk cache clean
 rm -rf /tmp/*
 EOF
@@ -153,7 +155,7 @@ COPY --chown=node:node src/config/resources ./dist/config/resources
 EXPOSE 3000
 
 HEALTHCHECK --interval=30s --timeout=3s --retries=1 \
-  CMD wget -qO- --no-check-certificate https://localhost:3000/healt/readiness/ | grep ok || exit 1
+  CMD wget -qO- --no-check-certificate https://localhost:3000/health/readiness/ | grep ok || exit 1
 
 # Bei CMD statt ENTRYPOINT kann das Kommando bei "docker run ..." ueberschrieben werden
 # "Array Syntax" damit auch <Strg>C funktioniert

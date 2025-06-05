@@ -138,7 +138,8 @@ apt-get update
 apt-get upgrade --yes
 # https://github.com/Yelp/dumb-init
 # https://packages.debian.org/bookworm/dumb-init
-apt-get install --no-install-recommends --yes dumb-init=1.2.5-2
+# https://packages.debian.org/bookworm/wget
+apt-get install --no-install-recommends --yes dumb-init=1.2.5-2 wget=1.21.3-1+deb12u1
 
 apt-get autoremove --yes
 apt-get clean --yes
@@ -159,7 +160,7 @@ COPY --chown=node:node src/config/resources ./dist/config/resources
 EXPOSE 3000
 
 HEALTHCHECK --interval=30s --timeout=3s --retries=1 \
-  CMD wget -qO- --no-check-certificate https://localhost:3000/healt/readiness/ | grep ok || exit 1
+  CMD wget -qO- --no-check-certificate https://localhost:3000/health/readiness/ | grep ok || exit 1
 
 # Bei CMD statt ENTRYPOINT kann das Kommando bei "docker run ..." ueberschrieben werden
 # "Array Syntax" damit auch <Strg>C funktioniert
