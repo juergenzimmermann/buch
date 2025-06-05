@@ -158,6 +158,9 @@ COPY --chown=node:node src/config/resources ./dist/config/resources
 
 EXPOSE 3000
 
+HEALTHCHECK --interval=30s --timeout=3s --retries=1 \
+  CMD wget -qO- --no-check-certificate https://localhost:3000/healt/readiness/ | grep ok || exit 1
+
 # Bei CMD statt ENTRYPOINT kann das Kommando bei "docker run ..." ueberschrieben werden
 # "Array Syntax" damit auch <Strg>C funktioniert
 # https://github.com/Yelp/dumb-init:
