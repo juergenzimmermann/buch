@@ -51,7 +51,7 @@ import {
     ApiTags,
 } from '@nestjs/swagger';
 import Decimal from 'decimal.js'; // eslint-disable-line @typescript-eslint/naming-convention
-import { Express, Request, Response } from 'express';
+import { Request, Response } from 'express';
 import { AuthGuard, Public, Roles } from 'nest-keycloak-connect';
 import { paths } from '../../config/paths.js';
 import { getLogger } from '../../logger/logger.js';
@@ -153,21 +153,15 @@ export class BuchWriteController {
         @Req() req: Request,
         @Res() res: Response,
     ): Promise<Response> {
+        const { buffer, originalname, size } = file;
         this.#logger.debug(
-            'addFile: id: %d, originalname=%s, mimetype=%s',
+            'addFile: id: %d, originalname=%s, size=%d',
             id,
-            file.originalname,
-            file.mimetype,
+            originalname,
+            size,
         );
 
-        // TODO Dateigroesse pruefen
-
-        await this.#service.addFile(
-            id,
-            file.buffer,
-            file.originalname,
-            file.mimetype,
-        );
+        await this.#service.addFile(id, buffer, originalname, size);
 
         const location = `${createBaseUri(req)}/file/${id}`;
         this.#logger.debug('addFile: location=%s', location);

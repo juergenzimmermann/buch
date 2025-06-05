@@ -21,6 +21,7 @@
 
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { fileTypeFromBuffer } from 'file-type';
 import { type DeleteResult, Repository } from 'typeorm';
 import { getLogger } from '../../logger/logger.js';
 import { MailService } from '../../mail/service.js';
@@ -103,7 +104,7 @@ export class BuchWriteService {
      * @param buchId ID des vorhandenen Buches
      * @param data Bytes der Datei
      * @param filename Dateiname
-     * @param mimetype MIME-Type
+     * @param size Dateigröße in Bytes
      * @returns Entity-Objekt für `BuchFile`
      */
     // eslint-disable-next-line max-params
@@ -111,14 +112,16 @@ export class BuchWriteService {
         buchId: number,
         data: Buffer,
         filename: string,
-        mimetype: string,
+        size: number,
     ): Promise<Readonly<BuchFile>> {
         this.#logger.debug(
-            'addFile: buchId: %d, filename:%s, mimetype: %s',
+            'addFile: buchId: %d, filename: %s, size: %d',
             buchId,
             filename,
-            mimetype,
+            size,
         );
+
+        // TODO Dateigroesse pruefen
 
         // Buch ermitteln, falls vorhanden
         const buch = await this.#readService.findById({ id: buchId });
@@ -130,6 +133,9 @@ export class BuchWriteService {
             .where('buch_id = :id', { id: buchId })
             .execute();
 
+        const fileType = await fileTypeFromBuffer(data);
+        const mimetype = fileType?.mime;
+        this.#logger.debug('mimetype: %s', mimetype);
         // Entity-Objekt aufbauen, um es spaeter in der DB zu speichern (s.u.)
         const buchFile = this.#fileRepo.create({
             filename,
