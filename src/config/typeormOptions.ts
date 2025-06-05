@@ -27,6 +27,9 @@ import { dbType } from './db.js';
 import { logLevel } from './logger.js';
 import { nodeConfig } from './node.js';
 import { SnakeNamingStrategy } from './typeormNamingStrategy.js';
+import { MysqlConnectionOptions } from 'typeorm/driver/mysql/MysqlConnectionOptions.js';
+import { PostgresConnectionOptions } from 'typeorm/driver/postgres/PostgresConnectionOptions.js';
+import { SqliteConnectionOptions } from 'typeorm/driver/sqlite/SqliteConnectionOptions.js';
 
 const { db } = config;
 
@@ -152,7 +155,10 @@ switch (dbType) {
     }
 }
 Object.freeze(dataSourceOptions);
-export const typeOrmModuleOptions = dataSourceOptions;
+export const typeOrmModuleOptions:
+    | MysqlConnectionOptions
+    | PostgresConnectionOptions
+    | SqliteConnectionOptions = dataSourceOptions;
 
 if (logLevel === 'debug') {
     // "rest properties" ab ES 2018: https://github.com/tc39/proposal-object-rest-spread

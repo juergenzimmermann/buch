@@ -40,7 +40,8 @@
     "snyk": "snyk test",
     "sonar": "node scripts/sonar-scanner.mts",
     "typedoc": "typedoc",
-    "tsc": "tsc --pretty"
+    "tsc": "tsc --pretty",
+    "tsgo": "npx tsgo --project tsconfig.json"
   },
   "keywords": [
     "Node",
@@ -134,6 +135,7 @@
     "@types/nodemailer-smtp-transport": "2.7.8",
     "@types/shelljs": "0.8.16",
     "@types/uuid": "10.0.0",
+    "@typescript/native-preview": "7.0.0-dev.20250605.1",
     "@vitest/coverage-v8": "3.2.1",
     "@vitest/eslint-plugin": "1.2.1",
     "asciidoctor-kroki": "0.18.1",
