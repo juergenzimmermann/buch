@@ -54,7 +54,7 @@ export default tseslint.config(
         },
 
         languageOptions: {
-            ecmaVersion: 2024,
+            ecmaVersion: 2025,
             sourceType: 'module',
             parserOptions: {
                 project: true,
@@ -517,7 +517,7 @@ export default tseslint.config(
         ],
 
         languageOptions: {
-            ecmaVersion: 2024,
+            ecmaVersion: 2025,
             sourceType: 'module',
             parserOptions: {
                 // project: true,
@@ -543,11 +543,13 @@ export default tseslint.config(
             ],
             'vitest/max-expects': 'off',
             'vitest/no-hooks': 'off',
+            'vitest/no-importing-vitest-globals': 'off',
             'vitest/prefer-expect-assertions': 'off',
             'vitest/prefer-lowercase-title': 'off',
         },
     },
 
     // prettier ueberschreibt vorherige Konfigurationseinstellungen
+    // @ts-expect-error
     prettierRecommended,
 );
