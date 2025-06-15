@@ -139,8 +139,7 @@ pipeline {
                         '''
                     },
                     'Security Audit': {
-                        echo 'TODO: "npm audit" schlaegt fehl: @nestjs/graphql -> subscriptions-transport-ws -> ws'
-                        //sh 'npm audit --omit=dev'
+                        sh 'npm audit --omit=dev'
                     },
                     'AsciiDoctor': {
                         sh '''
