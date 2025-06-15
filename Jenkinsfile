@@ -164,14 +164,6 @@ pipeline {
 
             post {
                 always {
-                    echo 'TODO: Links fuer Coverage und TypeDoc'
-                    //publishHTML target : [
-                    //  reportDir: 'coverage',
-                    //  reportFiles: 'index.html',
-                    //  reportName: 'Coverage (Istanbul)',
-                    //  reportTitles: 'Coverage'
-                    //]
-
                     publishHTML (target : [
                         reportDir: '.extras/doc/projekthandbuch/html',
                         reportFiles: 'projekthandbuch.html',
