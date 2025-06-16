@@ -71,9 +71,8 @@ services:
     entrypoint: ["/opt/keycloak/bin/kc.sh", "start-dev"]
     #entrypoint: ["/opt/keycloak/bin/kc.sh", "start-dev", "--help"]
     cap_drop: [ALL]
-    # https://www.keycloak.org/server/health
-    # http://localhost:8880/health/ready
     healthcheck:
+      # https://www.keycloak.org/server/health
       # https://gist.github.com/sarath-soman/5d9aec06953bbd0990c648605d4dba07
       # https://www.reddit.com/r/KeyCloak/comments/14a5a1y/how_to_enable_healthcheck_on_keycloak_on/
       test:
