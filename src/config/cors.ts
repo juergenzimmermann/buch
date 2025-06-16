@@ -22,6 +22,8 @@ export const corsOptions: CorsOptions = {
         'http://localhost:4200',
         // React mit Vite und devserver
         'http://localhost:5173',
+        // Keycloak
+        'http://localhost:8880',
         'https://studio.apollographql.com',
         'https://localhost:3001',
     ],
