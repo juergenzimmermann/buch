@@ -17,6 +17,7 @@
 // NICHT: Enum, Parameter Properties, Namespace
 // https://devblogs.microsoft.com/typescript/a-proposal-for-type-syntax-in-javascript
 
+import process from 'node:process';
 // Modul in JS = Datei
 // Pfad innerhalb von Packages in node_modules ("nicht-relative Imports")
 import {
@@ -58,6 +59,9 @@ const setupSwagger = (app: INestApplication) => {
 // Promise ab ES 2015, vgl: Future in Java
 // async/await ab ES 2017, vgl: C#
 const bootstrap = async () => {
+    // Der Keycloak-Server verwendet ein selbstsigniertes Zertifikat
+    process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0'; // eslint-disable-line n/no-process-env
+
     // Kein Logging bei Lasttests mit k6 oder locust
     // https://expressjs.com/en/advanced/best-practice-security.html#use-tls
     const options: NestApplicationOptions =

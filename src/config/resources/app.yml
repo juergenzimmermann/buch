@@ -47,9 +47,9 @@ db:
 # ==============================================================================
 # "Client Secret" muss durch die Umgebungsvariable CLIENT_SECRET gesetzt werden
 keycloak:
-  #schema: http
+  #schema: https
   host: localhost
-  port: 8880
+  port: 8843
   #realm: nest
   # siehe Keycloak Menuepunkt "Clients" > Tab "Clients list" > Spalte "Client ID"
   #clientId: nest-client
@@ -77,7 +77,6 @@ mail:
   host: localhost
   port: 8025
   log: false
-
 # ==============================================================================
 # T e s t s
 # ==============================================================================
