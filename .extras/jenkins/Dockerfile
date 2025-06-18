@@ -1,4 +1,4 @@
-# syntax=docker/dockerfile:1.16.0
+# syntax=docker/dockerfile:1.17.0
 # check=error=true
 
 # Copyright (C) 2022 - present Juergen Zimmermann, Hochschule Karlsruhe
@@ -25,7 +25,7 @@
 
 # https://manpages.debian.org/bullseye/apt/apt-get.8.en.html
 
-ARG JENKINS_VERSION=2.514-jdk21
+ARG JENKINS_VERSION=2.515-jdk21
 
 FROM jenkins/jenkins:${JENKINS_VERSION}
 
