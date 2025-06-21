@@ -67,6 +67,10 @@ export default tseslint.config(
             },
         },
 
+        settings: {
+            'import/node-version': '24.2.0',
+        },
+
         rules: {
             // https://github.com/typescript-eslint/typescript-eslint/tree/main/packages/eslint-plugin#supported-rules
             // https://github.com/typescript-eslint/typescript-eslint/tree/main/packages/eslint-plugin/docs/rules
@@ -438,6 +442,7 @@ export default tseslint.config(
                 'error',
                 'prefer-inline',
             ],
+            'import/enforce-node-protocol-usage': ['error', 'always'],
             'import/extensions': 'off',
             'import/first': 'error',
             'import/newline-after-import': 'error',
