@@ -28,7 +28,7 @@
 import http, { RefinedResponseBody, type ResponseType } from 'k6/http';
 import { check, sleep } from 'k6';
 import { type Options } from 'k6/options';
-import { BuchDTO } from '../../src/buch/controller/buchDTO.entity.ts';
+import { BuchDTO } from '../../src/buch/controller/buchDTO.ts';
 import { generateISBN } from './isbn_generate.ts';
 
 const baseUrl = 'https://localhost:3000';
