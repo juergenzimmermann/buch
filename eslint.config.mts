@@ -555,6 +555,5 @@ export default tseslint.config(
     },
 
     // prettier ueberschreibt vorherige Konfigurationseinstellungen
-    // @ts-expect-error
     prettierRecommended,
 );
