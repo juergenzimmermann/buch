@@ -15,25 +15,25 @@
 
 // https://vitest.dev/config/#globalsetup
 
-import axios, { type AxiosInstance, type AxiosResponse } from 'axios';
-import { baseURL, httpsAgent } from './constants.mjs';
+import { AUTHORIZATION, BEARER, POST, baseURL } from './constants.mjs';
 import { getToken } from './token.mjs';
 
-type DbPopulateResult = {
-    db_populate: string;
-};
+// selbst-signiertes Zertifikat beim Server
+// https://nodejs.org/api/cli.html
+// TODO Warning bzgl. NODE_TLS_REJECT_UNAUTHORIZED unterdruecken
+process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
 
-const dbPopulate = async (axiosInstance: AxiosInstance, token: string) => {
-    const headers: Record<string, string> = {
-        Authorization: `Bearer ${token}`,
-    };
+const dbPopulate = async (token: string) => {
+    const url = `${baseURL}/dev/db_populate`;
+    const headers = new Headers();
+    headers.append(AUTHORIZATION, `${BEARER} ${token}`);
 
-    const response: AxiosResponse<DbPopulateResult> = await axiosInstance.post(
-        '/dev/db_populate',
-        '',
-        { headers },
-    );
-    const { db_populate } = response.data;
+    const response = await fetch(url, {
+        method: POST,
+        headers,
+    });
+
+    const { db_populate } = await response.json();
     if (db_populate !== 'success') {
         throw new Error('Fehler bei POST /dev/db_populate');
     }
@@ -42,11 +42,7 @@ const dbPopulate = async (axiosInstance: AxiosInstance, token: string) => {
 
 // https://vitest.dev/config/#globalsetup
 export default async function setup() {
-    const client = axios.create({
-        baseURL,
-        httpsAgent,
-    });
-    const token = await getToken(client, 'admin', 'p');
+    const token = await getToken('admin', 'p');
     console.log(`setup: token=${token}`);
-    await dbPopulate(client, token);
+    await dbPopulate(token);
 }

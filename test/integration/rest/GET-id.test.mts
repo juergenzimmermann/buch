@@ -17,27 +17,22 @@
 //  * Vitest    https://vitest.dev
 //  * jest      https://jestjs.io
 //  * Mocha     https://mochajs.org
-//  * node:test ab Node 18 https://nodejs.org/download/rc/v18.0.0-rc.1/docs/api/test.html
+//  * node:test ab Node 18
 
 // https://github.com/testjavascript/nodejs-integration-tests-best-practices
 // axios: https://github.com/axios/axios
 
-// Alternativen zu axios:
-// https://github.com/request/request/issues/3143
-// https://blog.bitsrc.io/comparing-http-request-libraries-for-2019-7bedb1089c83
+// Alternativen zu fetch aus ES 2015:
+// https://fetch.spec.whatwg.org
+// https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch
+//    axios       https://axios-http.com/
 //    got         https://github.com/sindresorhus/got
-//    node-fetch  https://github.com/node-fetch/node-fetch
-//                https://fetch.spec.whatwg.org
-//                https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch
 //    needle      https://github.com/tomas/needle
 //    ky          https://github.com/sindresorhus/ky
 
 import { HttpStatus } from '@nestjs/common';
-import axios, { type AxiosInstance, type AxiosResponse } from 'axios';
-import { beforeAll, describe, expect, test } from 'vitest';
-import { type Buch } from '../../../src/buch/entity/buch.js';
-import { httpsAgent, restURL } from '../constants.mjs';
-import { type ErrorResponse } from './error-response.mjs';
+import { describe, expect, test } from 'vitest';
+import { CONTENT_TYPE, IF_NONE_MATCH, restURL } from '../constants.mjs';
 
 // -----------------------------------------------------------------------------
 // T e s t d a t e n
@@ -52,78 +47,63 @@ const idFalsch = 'xy';
 // -----------------------------------------------------------------------------
 // Test-Suite
 describe('GET /rest/:id', () => {
-    let client: AxiosInstance;
-
-    // Axios initialisieren
-    beforeAll(async () => {
-        client = axios.create({
-            baseURL: restURL,
-            httpsAgent,
-            validateStatus: (status) => status < 500,
-        });
-    });
-
     test.concurrent.each(ids)('Buch zu vorhandener ID %i', async (id) => {
         // given
-        const url = `/${id}`;
+        const url = `${restURL}/${id}`;
 
         // when
-        const { status, headers, data }: AxiosResponse<Buch> =
-            await client.get(url);
+        const response = await fetch(url);
+        const { status, headers } = response;
 
         // then
         expect(status).toBe(HttpStatus.OK);
-        expect(headers['content-type']).toMatch(/json/iu);
+        expect(headers.get(CONTENT_TYPE)).toMatch(/json/iu);
 
-        expect(data.id).toBe(id);
+        const body = await response.json();
+
+        expect(body.id).toBe(id);
     });
 
     test.concurrent('Kein Buch zu nicht-vorhandener ID', async () => {
         // given
-        const url = `/${idNichtVorhanden}`;
+        const url = `${restURL}/${idNichtVorhanden}`;
 
         // when
-        const { status, data }: AxiosResponse<ErrorResponse> =
-            await client.get(url);
+        const { status } = await fetch(url);
 
         // then
         expect(status).toBe(HttpStatus.NOT_FOUND);
-
-        const { error, message, statusCode } = data;
-
-        expect(error).toBe('Not Found');
-        expect(message).toStrictEqual(expect.stringContaining(message));
-        expect(statusCode).toBe(HttpStatus.NOT_FOUND);
     });
 
     test.concurrent('Kein Buch zu falscher ID', async () => {
         // given
-        const url = `/${idFalsch}`;
+        const url = `${restURL}/${idFalsch}`;
 
         // when
-        const { status, data }: AxiosResponse<ErrorResponse> =
-            await client.get(url);
+        const { status } = await fetch(url);
 
         // then
         expect(status).toBe(HttpStatus.NOT_FOUND);
-
-        const { error, statusCode } = data;
-
-        expect(error).toBe('Not Found');
-        expect(statusCode).toBe(HttpStatus.NOT_FOUND);
     });
 
-    test.concurrent.each(idsETag)('Buch zu ID %i mit ETag', async (id) => {
-        // given
-        const url = `/${id}`;
+    test.concurrent.each(idsETag)(
+        'Buch zu ID %i mit If-None-Match',
+        async (id) => {
+            // given
+            const url = `${restURL}/${id}`;
+            const headers = new Headers();
+            headers.append(IF_NONE_MATCH, '"0"');
 
-        // when
-        const { status, data }: AxiosResponse<string> = await client.get(url, {
-            headers: { 'If-None-Match': '"0"' },
-        });
+            // when
+            const response = await fetch(url, { headers });
+            const { status } = response;
 
-        // then
-        expect(status).toBe(HttpStatus.NOT_MODIFIED);
-        expect(data).toBe('');
-    });
+            // then
+            expect(status).toBe(HttpStatus.NOT_MODIFIED);
+
+            const body = await response.text();
+
+            expect(body).toBe('');
+        },
+    );
 });

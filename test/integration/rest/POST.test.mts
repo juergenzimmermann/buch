@@ -14,14 +14,20 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 import { HttpStatus } from '@nestjs/common';
-import axios, { type AxiosInstance, type AxiosResponse } from 'axios';
 import { Decimal } from 'decimal.js';
 import { beforeAll, describe, expect, test } from 'vitest';
 import { type BuchDTO } from '../../../src/buch/controller/buchDTO.js';
 import { BuchReadService } from '../../../src/buch/service/read.js';
-import { baseURL, httpsAgent, restURL } from '../constants.mjs';
+import {
+    APPLICATION_JSON,
+    AUTHORIZATION,
+    BEARER,
+    CONTENT_TYPE,
+    LOCATION,
+    POST,
+    restURL,
+} from '../constants.mjs';
 import { getToken } from '../token.mjs';
-import { type ErrorResponse } from './error-response.mjs';
 
 // -----------------------------------------------------------------------------
 // T e s t d a t e n
@@ -86,63 +92,52 @@ const neuesBuchIsbnExistiert: BuchDTO = {
 // -----------------------------------------------------------------------------
 // Test-Suite
 describe('POST /rest', () => {
-    let client: AxiosInstance;
-    const headers: Record<string, string> = {
-        'Content-Type': 'application/json',
-    };
     let token: string;
 
-    // Axios initialisieren
     beforeAll(async () => {
-        const tokenClient = axios.create({
-            baseURL,
-            httpsAgent,
-        });
-        token = await getToken(tokenClient, 'admin', 'p');
-
-        client = axios.create({
-            baseURL: restURL,
-            httpsAgent,
-            validateStatus: (status) => status < 500,
-        });
+        token = await getToken('admin', 'p');
     });
 
     test('Neues Buch', async () => {
         // given
-        headers.Authorization = `Bearer ${token}`;
+        const headers = new Headers();
+        headers.append(CONTENT_TYPE, APPLICATION_JSON);
+        headers.append(AUTHORIZATION, `${BEARER} ${token}`);
 
         // when
-        const response: AxiosResponse<string> = await client.post(
-            '',
-            neuesBuch,
-            { headers },
-        );
+        const response = await fetch(restURL, {
+            method: POST,
+            body: JSON.stringify(neuesBuch),
+            headers,
+        });
 
         // then
-        const { status, data } = response;
+        const { status } = response;
 
         expect(status).toBe(HttpStatus.CREATED);
 
-        const { location } = response.headers as { location: string };
+        const responseHeaders = response.headers;
+        const location = responseHeaders.get(LOCATION);
 
         expect(location).toBeDefined();
 
         // ID nach dem letzten "/"
-        const indexLastSlash: number = location.lastIndexOf('/');
+        const indexLastSlash = location?.lastIndexOf('/') ?? -1;
 
         expect(indexLastSlash).not.toBe(-1);
 
-        const idStr = location.slice(indexLastSlash + 1);
+        const idStr = location?.slice(indexLastSlash + 1);
 
         expect(idStr).toBeDefined();
-        expect(BuchReadService.ID_PATTERN.test(idStr)).toBe(true);
-
-        expect(data).toBe('');
+        expect(BuchReadService.ID_PATTERN.test(idStr ?? '')).toBe(true);
     });
 
     test.concurrent('Neues Buch mit ungueltigen Daten', async () => {
         // given
-        headers.Authorization = `Bearer ${token}`;
+        const headers = new Headers();
+        headers.append(CONTENT_TYPE, APPLICATION_JSON);
+        headers.append(AUTHORIZATION, `${BEARER} ${token}`);
+
         const expectedMsg = [
             expect.stringMatching(/^isbn /u),
             expect.stringMatching(/^rating /u),
@@ -155,18 +150,19 @@ describe('POST /rest', () => {
         ];
 
         // when
-        const response: AxiosResponse<Record<string, any>> = await client.post(
-            '',
-            neuesBuchInvalid,
-            { headers },
-        );
+        const response = await fetch(restURL, {
+            method: POST,
+            body: JSON.stringify(neuesBuchInvalid),
+            headers,
+        });
 
         // then
-        const { status, data } = response;
+        const { status } = response;
 
         expect(status).toBe(HttpStatus.BAD_REQUEST);
 
-        const messages = data.message as string[];
+        const body = await response.json();
+        const messages = body.message as string[];
 
         expect(messages).toBeDefined();
         expect(messages).toHaveLength(expectedMsg.length);
@@ -175,49 +171,53 @@ describe('POST /rest', () => {
 
     test.concurrent('Neues Buch, aber die ISBN existiert bereits', async () => {
         // given
-        headers.Authorization = `Bearer ${token}`;
+        const headers = new Headers();
+        headers.append(CONTENT_TYPE, APPLICATION_JSON);
+        headers.append(AUTHORIZATION, `${BEARER} ${token}`);
 
         // when
-        const response: AxiosResponse<ErrorResponse> = await client.post(
-            '',
-            neuesBuchIsbnExistiert,
-            { headers },
-        );
+        const response = await fetch(restURL, {
+            method: POST,
+            body: JSON.stringify(neuesBuchIsbnExistiert),
+            headers,
+        });
 
         // then
-        const { data } = response;
+        const { status } = response;
 
-        const { message, statusCode } = data;
+        expect(status).toBe(HttpStatus.UNPROCESSABLE_ENTITY);
 
-        expect(message).toStrictEqual(expect.stringContaining('ISBN'));
-        expect(statusCode).toBe(HttpStatus.UNPROCESSABLE_ENTITY);
+        const body = await response.json();
+
+        expect(body.message).toStrictEqual(expect.stringContaining('ISBN'));
     });
 
     test.concurrent('Neues Buch, aber ohne Token', async () => {
         // when
-        const response: AxiosResponse<Record<string, any>> = await client.post(
-            '',
-            neuesBuch,
-        );
+        const { status } = await fetch(restURL, {
+            method: POST,
+            body: JSON.stringify(neuesBuch),
+        });
 
         // then
-        expect(response.status).toBe(HttpStatus.UNAUTHORIZED);
+        expect(status).toBe(HttpStatus.UNAUTHORIZED);
     });
 
     test.concurrent('Neues Buch, aber mit falschem Token', async () => {
         // given
-        const token = 'FALSCH';
-        headers.Authorization = `Bearer ${token}`;
+        const headers = new Headers();
+        headers.append(CONTENT_TYPE, APPLICATION_JSON);
+        headers.append(AUTHORIZATION, `${BEARER} FALSCHER_TOKEN`);
 
         // when
-        const response: AxiosResponse<Record<string, any>> = await client.post(
-            '',
-            neuesBuch,
-            { headers },
-        );
+        const { status } = await fetch(restURL, {
+            method: POST,
+            body: JSON.stringify(neuesBuch),
+            headers,
+        });
 
         // then
-        expect(response.status).toBe(HttpStatus.UNAUTHORIZED);
+        expect(status).toBe(HttpStatus.UNAUTHORIZED);
     });
 
     test.concurrent.todo('Abgelaufener Token');

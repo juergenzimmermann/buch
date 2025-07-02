@@ -13,37 +13,33 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-import { type AxiosInstance, type AxiosResponse } from 'axios';
-import { httpsAgent, tokenPath } from './constants.mjs';
+import {
+    CONTENT_TYPE,
+    POST,
+    X_WWW_FORM_URL_ENCODED,
+    baseURL,
+    tokenPath,
+} from './constants.mjs';
 
-type TokenResult = {
-    access_token: string;
-};
+export const getToken = async (username: string, password: string) => {
+    const headers = new Headers();
+    headers.append(CONTENT_TYPE, X_WWW_FORM_URL_ENCODED);
+    const response = await fetch(`${baseURL}/${tokenPath}`, {
+        method: POST,
+        body: `username=${username}&password=${password}`,
+        headers,
+    });
 
-export const getToken = async (
-    axiosInstance: AxiosInstance,
-    username: string,
-    password: string,
-) => {
-    const headers: Record<string, string> = {
-        'Content-Type': 'application/x-www-form-urlencoded',
-    };
-    const response: AxiosResponse<TokenResult> = await axiosInstance.post(
-        tokenPath,
-        `username=${username}&password=${password}`,
-        { headers, httpsAgent },
-    );
-
-    const { access_token } = response.data;
+    const body = await response.json();
     if (
         response.status !== 200 ||
-        access_token === undefined ||
-        typeof access_token !== 'string'
+        body.access_token === undefined ||
+        typeof body.access_token !== 'string'
     ) {
-        console.log(`!!!username=${username}, password=${password}`);
-        console.log(`!!!response=${JSON.stringify(response.status)}`);
-        console.log(`!!!response=${JSON.stringify(response.data)}`);
+        console.error(`!!!username=${username}, password=${password}`);
+        console.error(`!!!status=${JSON.stringify(response.status)}`);
+        console.error(`!!!response=${JSON.stringify(body)}`);
         throw new Error('Statuscode ist nicht 200 oder kein String als Token');
     }
-    return access_token;
+    return body.access_token;
 };

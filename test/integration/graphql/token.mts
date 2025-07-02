@@ -15,20 +15,25 @@
 
 // https://vitest.dev/config/#globalsetup
 
-import { type AxiosInstance, type AxiosResponse } from 'axios';
-import { httpsAgent } from '../constants.mjs';
-import { type GraphQLQuery, type GraphQLResponseBody } from './graphql.mjs';
+import { type GraphQLQuery } from './graphql.mjs';
+import {
+    ACCEPT,
+    APPLICATION_JSON,
+    CONTENT_TYPE,
+    GRAPHQL_RESPONSE_JSON,
+    POST,
+    graphqlURL,
+} from '../constants.mjs';
 
 export const getToken = async (
-    axiosInstance: AxiosInstance,
     username: string,
     password: string,
 ): Promise<string> => {
-    const headers: Record<string, string> = {
-        'Content-Type': 'application/json',
-        Accept: 'application/graphql-response+json',
-    };
-    const body: GraphQLQuery = {
+    const headers = new Headers();
+    headers.append(CONTENT_TYPE, APPLICATION_JSON);
+    headers.append(ACCEPT, GRAPHQL_RESPONSE_JSON);
+
+    const query: GraphQLQuery = {
         query: `
             mutation {
                 token(
@@ -41,11 +46,14 @@ export const getToken = async (
         `,
     };
 
-    const response: AxiosResponse<GraphQLResponseBody> =
-        await axiosInstance.post('graphql', body, { headers, httpsAgent });
+    const response = await fetch(graphqlURL, {
+        method: POST,
+        body: JSON.stringify(query),
+        headers,
+    });
 
-    const data = response.data.data!; // eslint-disable-line @typescript-eslint/no-non-null-assertion
-    const { access_token } = data.token;
+    const body = await response.json();
+    const { access_token } = body.data.token;
     if (access_token === undefined || typeof access_token !== 'string') {
         throw new Error('Der Token fuer GraphQL ist kein String');
     }

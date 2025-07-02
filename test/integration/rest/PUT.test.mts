@@ -14,13 +14,19 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 import { HttpStatus } from '@nestjs/common';
-import axios, { type AxiosInstance, type AxiosResponse } from 'axios';
 import { Decimal } from 'decimal.js';
 import { beforeAll, describe, expect, test } from 'vitest';
 import { type BuchDtoOhneRef } from '../../../src/buch/controller/buchDTO.js';
-import { baseURL, httpsAgent, restURL } from '../constants.mjs';
+import {
+    APPLICATION_JSON,
+    AUTHORIZATION,
+    BEARER,
+    CONTENT_TYPE,
+    IF_MATCH,
+    PUT,
+    restURL,
+} from '../constants.mjs';
 import { getToken } from '../token.mjs';
-import { type ErrorResponse } from './error-response.mjs';
 
 // -----------------------------------------------------------------------------
 // T e s t d a t e n
@@ -88,57 +94,46 @@ const veraltesBuch: BuchDtoOhneRef = {
 // -----------------------------------------------------------------------------
 // Test-Suite
 describe('PUT /rest/:id', () => {
-    let client: AxiosInstance;
-    const headers: Record<string, string> = {
-        'Content-Type': 'application/json',
-    };
     let token: string;
 
     // Axios initialisieren
     beforeAll(async () => {
-        const tokenClient = axios.create({
-            baseURL,
-            httpsAgent,
-        });
-        token = await getToken(tokenClient, 'admin', 'p');
-        client = axios.create({
-            baseURL: restURL,
-            headers,
-            httpsAgent,
-            validateStatus: (status) => status < 500,
-        });
+        token = await getToken('admin', 'p');
     });
 
     test('Vorhandenes Buch aendern', async () => {
         // given
-        const url = `/${idVorhanden}`;
-        headers.Authorization = `Bearer ${token}`;
-        headers['If-Match'] = '"0"';
+        const url = `${restURL}/${idVorhanden}`;
+        const headers = new Headers();
+        headers.append(CONTENT_TYPE, APPLICATION_JSON);
+        headers.append(IF_MATCH, '"0"');
+        headers.append(AUTHORIZATION, `${BEARER} ${token}`);
 
         // when
-        const { status, data }: AxiosResponse<string> = await client.put(
-            url,
-            geaendertesBuch,
-            { headers },
-        );
+        const { status } = await fetch(url, {
+            method: PUT,
+            body: JSON.stringify(geaendertesBuch),
+            headers,
+        });
 
         // then
         expect(status).toBe(HttpStatus.NO_CONTENT);
-        expect(data).toBe('');
     });
 
     test('Nicht-vorhandenes Buch aendern', async () => {
         // given
-        const url = `/${idNichtVorhanden}`;
-        headers.Authorization = `Bearer ${token}`;
-        headers['If-Match'] = '"0"';
+        const url = `${restURL}/${idNichtVorhanden}`;
+        const headers = new Headers();
+        headers.append(CONTENT_TYPE, APPLICATION_JSON);
+        headers.append(IF_MATCH, '"0"');
+        headers.append(AUTHORIZATION, `${BEARER} ${token}`);
 
         // when
-        const { status }: AxiosResponse<string> = await client.put(
-            url,
-            geaendertesBuchIdNichtVorhanden,
-            { headers },
-        );
+        const { status } = await fetch(url, {
+            method: PUT,
+            body: JSON.stringify(geaendertesBuchIdNichtVorhanden),
+            headers,
+        });
 
         // then
         expect(status).toBe(HttpStatus.NOT_FOUND);
@@ -146,9 +141,11 @@ describe('PUT /rest/:id', () => {
 
     test('Vorhandenes Buch aendern, aber mit ungueltigen Daten', async () => {
         // given
-        const url = `/${idVorhanden}`;
-        headers.Authorization = `Bearer ${token}`;
-        headers['If-Match'] = '"0"';
+        const url = `${restURL}/${idVorhanden}`;
+        const headers = new Headers();
+        headers.append(CONTENT_TYPE, APPLICATION_JSON);
+        headers.append(IF_MATCH, '"0"');
+        headers.append(AUTHORIZATION, `${BEARER} ${token}`);
         const expectedMsg = [
             expect.stringMatching(/^isbn /u),
             expect.stringMatching(/^rating /u),
@@ -160,13 +157,17 @@ describe('PUT /rest/:id', () => {
         ];
 
         // when
-        const { status, data }: AxiosResponse<Record<string, any>> =
-            await client.put(url, geaendertesBuchInvalid, { headers });
+        const response = await fetch(url, {
+            method: PUT,
+            body: JSON.stringify(geaendertesBuchInvalid),
+            headers,
+        });
 
         // then
-        expect(status).toBe(HttpStatus.BAD_REQUEST);
+        expect(response.status).toBe(HttpStatus.BAD_REQUEST);
 
-        const messages = data.message as string[];
+        const body = await response.json();
+        const messages = body.message as string[];
 
         expect(messages).toBeDefined();
         expect(messages).toHaveLength(expectedMsg.length);
@@ -175,39 +176,45 @@ describe('PUT /rest/:id', () => {
 
     test('Vorhandenes Buch aendern, aber ohne Versionsnummer', async () => {
         // given
-        const url = `/${idVorhanden}`;
-        headers.Authorization = `Bearer ${token}`;
-        delete headers['If-Match'];
+        const url = `${restURL}/${idVorhanden}`;
+        const headers = new Headers();
+        headers.append(CONTENT_TYPE, APPLICATION_JSON);
+        headers.append(AUTHORIZATION, `${BEARER} ${token}`);
 
         // when
-        const { status, data }: AxiosResponse<string> = await client.put(
-            url,
-            geaendertesBuch,
-            { headers },
-        );
+        const response = await fetch(url, {
+            method: PUT,
+            body: JSON.stringify(geaendertesBuch),
+            headers,
+        });
 
         // then
-        expect(status).toBe(HttpStatus.PRECONDITION_REQUIRED);
-        expect(data).toBe('Header "If-Match" fehlt');
+        expect(response.status).toBe(HttpStatus.PRECONDITION_REQUIRED);
+
+        const body = await response.text();
+
+        expect(body).toBe(`Header "${IF_MATCH}" fehlt`);
     });
 
     test('Vorhandenes Buch aendern, aber mit alter Versionsnummer', async () => {
         // given
-        const url = `/${idVorhanden}`;
-        headers.Authorization = `Bearer ${token}`;
-        headers['If-Match'] = '"-1"';
+        const url = `${restURL}/${idVorhanden}`;
+        const headers = new Headers();
+        headers.append(CONTENT_TYPE, APPLICATION_JSON);
+        headers.append(IF_MATCH, '"-1"');
+        headers.append(AUTHORIZATION, `${BEARER} ${token}`);
 
         // when
-        const { status, data }: AxiosResponse<ErrorResponse> = await client.put(
-            url,
-            veraltesBuch,
-            { headers },
-        );
+        const response = await fetch(url, {
+            method: PUT,
+            body: JSON.stringify(veraltesBuch),
+            headers,
+        });
 
         // then
-        expect(status).toBe(HttpStatus.PRECONDITION_FAILED);
+        expect(response.status).toBe(HttpStatus.PRECONDITION_FAILED);
 
-        const { message, statusCode } = data;
+        const { message, statusCode } = await response.json();
 
         expect(message).toMatch(/Versionsnummer/u);
         expect(statusCode).toBe(HttpStatus.PRECONDITION_FAILED);
@@ -215,35 +222,38 @@ describe('PUT /rest/:id', () => {
 
     test('Vorhandenes Buch aendern, aber ohne Token', async () => {
         // given
-        const url = `/${idVorhanden}`;
-        delete headers.Authorization;
-        headers['If-Match'] = '"0"';
+        const url = `${restURL}/${idVorhanden}`;
+        const headers = new Headers();
+        headers.append(CONTENT_TYPE, APPLICATION_JSON);
+        headers.append(IF_MATCH, '"0"');
 
         // when
-        const response: AxiosResponse<Record<string, any>> = await client.put(
-            url,
-            geaendertesBuch,
-            { headers },
-        );
+        const { status } = await fetch(url, {
+            method: PUT,
+            body: JSON.stringify(geaendertesBuch),
+            headers,
+        });
 
         // then
-        expect(response.status).toBe(HttpStatus.UNAUTHORIZED);
+        expect(status).toBe(HttpStatus.UNAUTHORIZED);
     });
 
     test('Vorhandenes Buch aendern, aber mit falschem Token', async () => {
         // given
-        const url = `/${idVorhanden}`;
-        const token = 'FALSCH';
-        headers.Authorization = `Bearer ${token}`;
+        const url = `${restURL}/${idVorhanden}`;
+        const headers = new Headers();
+        headers.append(CONTENT_TYPE, APPLICATION_JSON);
+        headers.append(IF_MATCH, '"0"');
+        headers.append(AUTHORIZATION, `${BEARER} FALSCHER_TOKEN`);
 
         // when
-        const response: AxiosResponse<Record<string, any>> = await client.put(
-            url,
-            geaendertesBuch,
-            { headers },
-        );
+        const { status } = await fetch(url, {
+            method: PUT,
+            body: JSON.stringify(geaendertesBuch),
+            headers,
+        });
 
         // then
-        expect(response.status).toBe(HttpStatus.UNAUTHORIZED);
+        expect(status).toBe(HttpStatus.UNAUTHORIZED);
     });
 });

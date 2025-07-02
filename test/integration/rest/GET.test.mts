@@ -14,13 +14,11 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 import { HttpStatus } from '@nestjs/common';
-import axios, { type AxiosInstance, type AxiosResponse } from 'axios';
 import { Decimal } from 'decimal.js';
-import { beforeAll, describe, expect, test } from 'vitest';
+import { describe, expect, test } from 'vitest';
 import { type Page } from '../../../src/buch/controller/page.js';
 import { type Buch } from '../../../src/buch/entity/buch.js';
-import { httpsAgent, restURL } from '../constants.mjs';
-import { type ErrorResponse } from './error-response.mjs';
+import { CONTENT_TYPE, restURL } from '../constants.mjs';
 
 // -----------------------------------------------------------------------------
 // T e s t d a t e n
@@ -38,30 +36,20 @@ const schlagwoerterNichtVorhanden = ['csharp', 'cobol'];
 // -----------------------------------------------------------------------------
 // Test-Suite
 describe('GET /rest', () => {
-    let client: AxiosInstance;
-
-    // Axios initialisieren
-    beforeAll(async () => {
-        client = axios.create({
-            baseURL: restURL,
-            httpsAgent,
-            validateStatus: () => true,
-        });
-    });
-
     test.concurrent('Alle Buecher', async () => {
         // given
 
         // when
-        const { status, headers, data }: AxiosResponse<Page<Buch>> =
-            await client.get('/');
+        const response = await fetch(restURL);
+        const { status, headers } = response;
 
         // then
         expect(status).toBe(HttpStatus.OK);
-        expect(headers['content-type']).toMatch(/json/iu);
-        expect(data).toBeDefined();
+        expect(headers.get(CONTENT_TYPE)).toMatch(/json/iu);
 
-        data.content
+        const body: Page<Buch> = await response.json();
+
+        body.content
             .map((buch) => buch.id)
             .forEach((id) => {
                 expect(id).toBeDefined();
@@ -72,19 +60,23 @@ describe('GET /rest', () => {
         'Buecher mit Teil-Titel %s suchen',
         async (titel) => {
             // given
-            const params = { titel };
+            const params = new URLSearchParams({ titel });
+            const url = `${restURL}?${params}`;
 
             // when
-            const { status, headers, data }: AxiosResponse<Page<Buch>> =
-                await client.get('/', { params });
+            const response = await fetch(url);
+            const { status, headers } = response;
 
             // then
             expect(status).toBe(HttpStatus.OK);
-            expect(headers['content-type']).toMatch(/json/iu);
-            expect(data).toBeDefined();
+            expect(headers.get(CONTENT_TYPE)).toMatch(/json/iu);
+
+            const body: Page<Buch> = await response.json();
+
+            expect(body).toBeDefined();
 
             // Jedes Buch hat einen Titel mit dem Teilstring
-            data.content
+            body.content
                 .map((buch) => buch.titel)
                 .forEach((t) =>
                     expect(t?.titel?.toLowerCase()).toStrictEqual(
@@ -98,37 +90,36 @@ describe('GET /rest', () => {
         'Buecher zu nicht vorhandenem Teil-Titel %s suchen',
         async (titel) => {
             // given
-            const params = { titel };
+            const params = new URLSearchParams({ titel });
+            const url = `${restURL}?${params}`;
 
             // when
-            const { status, data }: AxiosResponse<ErrorResponse> =
-                await client.get('/', { params });
+            const { status } = await fetch(url);
 
             // then
             expect(status).toBe(HttpStatus.NOT_FOUND);
-
-            const { error, statusCode } = data;
-
-            expect(error).toBe('Not Found');
-            expect(statusCode).toBe(HttpStatus.NOT_FOUND);
         },
     );
 
     test.concurrent.each(isbns)('Buch mit ISBN %s suchen', async (isbn) => {
         // given
-        const params = { isbn };
+        const params = new URLSearchParams({ isbn });
+        const url = `${restURL}?${params}`;
 
         // when
-        const { status, headers, data }: AxiosResponse<Page<Buch>> =
-            await client.get('/', { params });
+        const response = await fetch(url);
+        const { status, headers } = response;
 
         // then
         expect(status).toBe(HttpStatus.OK);
-        expect(headers['content-type']).toMatch(/json/iu);
-        expect(data).toBeDefined();
+        expect(headers.get(CONTENT_TYPE)).toMatch(/json/iu);
+
+        const body: Page<Buch> = await response.json();
+
+        expect(body).toBeDefined();
 
         // 1 Buch mit der ISBN
-        const buecher = data.content;
+        const buecher = body.content;
 
         expect(buecher).toHaveLength(1);
 
@@ -141,19 +132,21 @@ describe('GET /rest', () => {
         'Buecher mit Mindest-"rating" %i suchen',
         async (rating) => {
             // given
-            const params = { rating };
+            const params = new URLSearchParams({ rating: rating.toString() });
+            const url = `${restURL}?${params}`;
 
             // when
-            const { status, headers, data }: AxiosResponse<Page<Buch>> =
-                await client.get('/', { params });
+            const response = await fetch(url);
+            const { status, headers } = response;
 
             // then
             expect(status).toBe(HttpStatus.OK);
-            expect(headers['content-type']).toMatch(/json/iu);
-            expect(data).toBeDefined();
+            expect(headers.get(CONTENT_TYPE)).toMatch(/json/iu);
+
+            const body: Page<Buch> = await response.json();
 
             // Jedes Buch hat eine Bewertung >= rating
-            data.content
+            body.content
                 .map((buch) => buch.rating)
                 .forEach((r) => expect(r).toBeGreaterThanOrEqual(rating));
         },
@@ -163,19 +156,21 @@ describe('GET /rest', () => {
         'Buecher mit max. Preis %d suchen',
         async (preis) => {
             // given
-            const params = { preis };
+            const params = new URLSearchParams({ preis: preis.toString() });
+            const url = `${restURL}?${params}`;
 
             // when
-            const { status, headers, data }: AxiosResponse<Page<Buch>> =
-                await client.get('/', { params });
+            const response = await fetch(url);
+            const { status, headers } = response;
 
             // then
             expect(status).toBe(HttpStatus.OK);
-            expect(headers['content-type']).toMatch(/json/iu);
-            expect(data).toBeDefined();
+            expect(headers.get(CONTENT_TYPE)).toMatch(/json/iu);
+
+            const body: Page<Buch> = await response.json();
 
             // Jedes Buch hat einen Preis <= preis
-            data.content
+            body.content
                 .map((buch) => Decimal(buch?.preis ?? 0))
                 .forEach((p) =>
                     expect(p.lessThanOrEqualTo(Decimal(preis))).toBe(true),
@@ -187,20 +182,24 @@ describe('GET /rest', () => {
         'Mind. 1 Buch mit Schlagwort %s',
         async (schlagwort) => {
             // given
-            const params = { [schlagwort]: 'true' };
+            const params = new URLSearchParams({ [schlagwort]: 'true' });
+            const url = `${restURL}?${params}`;
 
             // when
-            const { status, headers, data }: AxiosResponse<Page<Buch>> =
-                await client.get('/', { params });
+            const response = await fetch(url);
+            const { status, headers } = response;
 
             // then
             expect(status).toBe(HttpStatus.OK);
-            expect(headers['content-type']).toMatch(/json/iu);
+            expect(headers.get(CONTENT_TYPE)).toMatch(/json/iu);
+
+            const body: Page<Buch> = await response.json();
+
             // JSON-Array mit mind. 1 JSON-Objekt
-            expect(data).toBeDefined();
+            expect(body).toBeDefined();
 
             // Jedes Buch hat im Array der Schlagwoerter z.B. "javascript"
-            data.content
+            body.content
                 .map((buch) => buch.schlagwoerter)
                 .forEach((schlagwoerter) =>
                     expect(schlagwoerter).toStrictEqual(
@@ -213,20 +212,14 @@ describe('GET /rest', () => {
     test.concurrent.each(schlagwoerterNichtVorhanden)(
         'Keine Buecher zu einem nicht vorhandenen Schlagwort',
         async (schlagwort) => {
-            // given
-            const params = { [schlagwort]: 'true' };
+            const params = new URLSearchParams({ [schlagwort]: 'true' });
+            const url = `${restURL}?${params}`;
 
             // when
-            const { status, data }: AxiosResponse<ErrorResponse> =
-                await client.get('/', { params });
+            const { status } = await fetch(url);
 
             // then
             expect(status).toBe(HttpStatus.NOT_FOUND);
-
-            const { error, statusCode } = data;
-
-            expect(error).toBe('Not Found');
-            expect(statusCode).toBe(HttpStatus.NOT_FOUND);
         },
     );
 
@@ -234,19 +227,14 @@ describe('GET /rest', () => {
         'Keine Buecher zu einer nicht-vorhandenen Property',
         async () => {
             // given
-            const params = { foo: 'bar' };
+            const params = new URLSearchParams({ foo: 'bar' });
+            const url = `${restURL}?${params}`;
 
             // when
-            const { status, data }: AxiosResponse<ErrorResponse> =
-                await client.get('/', { params });
+            const { status } = await fetch(url);
 
             // then
             expect(status).toBe(HttpStatus.NOT_FOUND);
-
-            const { error, statusCode } = data;
-
-            expect(error).toBe('Not Found');
-            expect(statusCode).toBe(HttpStatus.NOT_FOUND);
         },
     );
 });

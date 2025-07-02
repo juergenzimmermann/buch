@@ -15,10 +15,18 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 import { HttpStatus } from '@nestjs/common';
-import axios, { type AxiosInstance, type AxiosResponse } from 'axios';
 import { beforeAll, describe, expect, test } from 'vitest';
-import { baseURL, httpsAgent } from '../constants.mjs';
-import { type GraphQLQuery, type GraphQLResponseBody } from './graphql.mjs';
+import {
+    ACCEPT,
+    APPLICATION_JSON,
+    AUTHORIZATION,
+    BEARER,
+    CONTENT_TYPE,
+    GRAPHQL_RESPONSE_JSON,
+    POST,
+    graphqlURL,
+} from '../constants.mjs';
+import { type GraphQLQuery } from './graphql.mjs';
 import { getToken } from './token.mjs';
 
 // -----------------------------------------------------------------------------
@@ -31,31 +39,19 @@ const idLoeschen = '60';
 // -----------------------------------------------------------------------------
 // Test-Suite
 describe('GraphQL Mutations', () => {
-    let client: AxiosInstance;
     let token: string;
     let tokenUser: string;
 
-    const requestHeaders: Record<string, string> = {
-        'Content-Type': 'application/json',
-        Accept: 'application/graphql-response+json',
-    };
-    const graphqlPath = 'graphql';
-
     // Axios initialisieren
     beforeAll(async () => {
-        client = axios.create({
-            baseURL,
-            httpsAgent,
-        });
-        token = await getToken(client, 'admin', 'p');
-        tokenUser = await getToken(client, 'user', 'p');
+        token = await getToken('admin', 'p');
+        tokenUser = await getToken('user', 'p');
     });
 
     // -------------------------------------------------------------------------
     test('Neues Buch', async () => {
         // given
-        requestHeaders.Authorization = `Bearer ${token}`;
-        const body: GraphQLQuery = {
+        const mutation: GraphQLQuery = {
             query: `
                 mutation {
                     create(
@@ -84,17 +80,31 @@ describe('GraphQL Mutations', () => {
                 }
             `,
         };
+        const headers = new Headers();
+        headers.append(CONTENT_TYPE, APPLICATION_JSON);
+        headers.append(ACCEPT, GRAPHQL_RESPONSE_JSON);
+        headers.append(AUTHORIZATION, `${BEARER} ${token}`);
 
         // when
-        const { status, headers, data }: AxiosResponse<GraphQLResponseBody> =
-            await client.post(graphqlPath, body, { headers: requestHeaders });
+        const response = await fetch(graphqlURL, {
+            method: POST,
+            body: JSON.stringify(mutation),
+            headers,
+        });
 
         // then
-        expect(status).toBe(HttpStatus.OK);
-        expect(headers['content-type']).toMatch(/json/iu);
-        expect(data.data).toBeDefined();
+        const { status } = response;
 
-        const { create } = data.data!;
+        expect(status).toBe(HttpStatus.OK);
+        expect(response.headers.get(CONTENT_TYPE)).toMatch(
+            /application\/graphql-response\+json/iu,
+        );
+
+        const { data } = await response.json();
+
+        expect(data).toBeDefined();
+
+        const { create } = data;
 
         // Der Wert der Mutation ist die generierte ID
         expect(create).toBeDefined();
@@ -107,8 +117,7 @@ describe('GraphQL Mutations', () => {
     // -------------------------------------------------------------------------
     test('Buch mit ungueltigen Werten neu anlegen', async () => {
         // given
-        requestHeaders.Authorization = `Bearer ${token}`;
-        const body: GraphQLQuery = {
+        const mutation: GraphQLQuery = {
             query: `
                 mutation {
                     create(
@@ -140,21 +149,32 @@ describe('GraphQL Mutations', () => {
             expect.stringMatching(/^homepage /u),
             expect.stringMatching(/^titel.titel /u),
         ];
+        const headers = new Headers();
+        headers.append(CONTENT_TYPE, APPLICATION_JSON);
+        headers.append(ACCEPT, GRAPHQL_RESPONSE_JSON);
+        headers.append(AUTHORIZATION, `${BEARER} ${token}`);
 
         // when
-        const { status, headers, data }: AxiosResponse<GraphQLResponseBody> =
-            await client.post(graphqlPath, body, { headers: requestHeaders });
+        const response = await fetch(graphqlURL, {
+            method: POST,
+            body: JSON.stringify(mutation),
+            headers,
+        });
 
         // then
+        const { status } = response;
+
         expect(status).toBe(HttpStatus.OK);
-        expect(headers['content-type']).toMatch(/json/iu);
-        expect(data.data!.create).toBeNull();
+        expect(response.headers.get(CONTENT_TYPE)).toMatch(
+            /application\/graphql-response\+json/iu,
+        );
 
-        const { errors } = data;
+        const { data, errors } = await response.json();
 
+        expect(data.create).toBeNull();
         expect(errors).toHaveLength(1);
 
-        const [error] = errors!;
+        const [error] = errors;
 
         expect(error).toBeDefined();
 
@@ -169,8 +189,7 @@ describe('GraphQL Mutations', () => {
     // -------------------------------------------------------------------------
     test('Buch aktualisieren', async () => {
         // given
-        requestHeaders.Authorization = `Bearer ${token}`;
-        const body: GraphQLQuery = {
+        const mutation: GraphQLQuery = {
             query: `
                 mutation {
                     update(
@@ -193,17 +212,31 @@ describe('GraphQL Mutations', () => {
                 }
             `,
         };
+        const headers = new Headers();
+        headers.append(CONTENT_TYPE, APPLICATION_JSON);
+        headers.append(ACCEPT, GRAPHQL_RESPONSE_JSON);
+        headers.append(AUTHORIZATION, `${BEARER} ${token}`);
 
         // when
-        const { status, headers, data }: AxiosResponse<GraphQLResponseBody> =
-            await client.post(graphqlPath, body, { headers: requestHeaders });
+        const response = await fetch(graphqlURL, {
+            method: POST,
+            body: JSON.stringify(mutation),
+            headers,
+        });
 
         // then
-        expect(status).toBe(HttpStatus.OK);
-        expect(headers['content-type']).toMatch(/json/iu);
-        expect(data.errors).toBeUndefined();
+        const { status } = response;
 
-        const { update } = data.data!;
+        expect(status).toBe(HttpStatus.OK);
+        expect(response.headers.get(CONTENT_TYPE)).toMatch(
+            /application\/graphql-response\+json/iu,
+        );
+
+        const { data, errors } = await response.json();
+
+        expect(errors).toBeUndefined();
+
+        const { update } = data;
 
         // Der Wert der Mutation ist die neue Versionsnummer
         expect(update.version).toBe(1);
@@ -212,9 +245,8 @@ describe('GraphQL Mutations', () => {
     // -------------------------------------------------------------------------
     test('Buch mit ungueltigen Werten aktualisieren', async () => {
         // given
-        requestHeaders.Authorization = `Bearer ${token}`;
         const id = '40';
-        const body: GraphQLQuery = {
+        const mutation: GraphQLQuery = {
             query: `
                 mutation {
                     update(
@@ -245,21 +277,32 @@ describe('GraphQL Mutations', () => {
             expect.stringMatching(/^datum /u),
             expect.stringMatching(/^homepage /u),
         ];
+        const headers = new Headers();
+        headers.append(CONTENT_TYPE, APPLICATION_JSON);
+        headers.append(ACCEPT, GRAPHQL_RESPONSE_JSON);
+        headers.append(AUTHORIZATION, `${BEARER} ${token}`);
 
         // when
-        const { status, headers, data }: AxiosResponse<GraphQLResponseBody> =
-            await client.post(graphqlPath, body, { headers: requestHeaders });
+        const response = await fetch(graphqlURL, {
+            method: POST,
+            body: JSON.stringify(mutation),
+            headers,
+        });
 
         // then
+        const { status } = response;
+
         expect(status).toBe(HttpStatus.OK);
-        expect(headers['content-type']).toMatch(/json/iu);
-        expect(data.data!.update).toBeNull();
+        expect(response.headers.get(CONTENT_TYPE)).toMatch(
+            /application\/graphql-response\+json/iu,
+        );
 
-        const { errors } = data;
+        const { data, errors } = await response.json();
 
+        expect(data.update).toBeNull();
         expect(errors).toHaveLength(1);
 
-        const [error] = errors!;
+        const [error] = errors;
         const { message } = error;
         const messages: string[] = message.split(',');
 
@@ -271,9 +314,8 @@ describe('GraphQL Mutations', () => {
     // -------------------------------------------------------------------------
     test('Nicht-vorhandenes Buch aktualisieren', async () => {
         // given
-        requestHeaders.Authorization = `Bearer ${token}`;
         const id = '999999';
-        const body: GraphQLQuery = {
+        const mutation: GraphQLQuery = {
             query: `
                 mutation {
                     update(
@@ -296,18 +338,29 @@ describe('GraphQL Mutations', () => {
                 }
             `,
         };
+        const headers = new Headers();
+        headers.append(CONTENT_TYPE, APPLICATION_JSON);
+        headers.append(ACCEPT, GRAPHQL_RESPONSE_JSON);
+        headers.append(AUTHORIZATION, `${BEARER} ${token}`);
 
         // when
-        const { status, headers, data }: AxiosResponse<GraphQLResponseBody> =
-            await client.post(graphqlPath, body, { headers: requestHeaders });
+        const response = await fetch(graphqlURL, {
+            method: POST,
+            body: JSON.stringify(mutation),
+            headers,
+        });
 
         // then
+        const { status } = response;
+
         expect(status).toBe(HttpStatus.OK);
-        expect(headers['content-type']).toMatch(/json/iu);
-        expect(data.data!.update).toBeNull();
+        expect(response.headers.get(CONTENT_TYPE)).toMatch(
+            /application\/graphql-response\+json/iu,
+        );
 
-        const { errors } = data;
+        const { data, errors } = await response.json();
 
+        expect(data.update).toBeNull();
         expect(errors).toHaveLength(1);
 
         const [error] = errors!;
@@ -328,8 +381,7 @@ describe('GraphQL Mutations', () => {
     // -------------------------------------------------------------------------
     test('Buch loeschen', async () => {
         // given
-        requestHeaders.Authorization = `Bearer ${token}`;
-        const body: GraphQLQuery = {
+        const mutation: GraphQLQuery = {
             query: `
                 mutation {
                     delete(id: "${idLoeschen}") {
@@ -338,17 +390,31 @@ describe('GraphQL Mutations', () => {
                 }
             `,
         };
+        const headers = new Headers();
+        headers.append(CONTENT_TYPE, APPLICATION_JSON);
+        headers.append(ACCEPT, GRAPHQL_RESPONSE_JSON);
+        headers.append(AUTHORIZATION, `${BEARER} ${token}`);
 
         // when
-        const { status, headers, data }: AxiosResponse<GraphQLResponseBody> =
-            await client.post(graphqlPath, body, { headers: requestHeaders });
+        const response = await fetch(graphqlURL, {
+            method: POST,
+            body: JSON.stringify(mutation),
+            headers,
+        });
 
         // then
-        expect(status).toBe(HttpStatus.OK);
-        expect(headers['content-type']).toMatch(/json/iu);
-        expect(data.errors).toBeUndefined();
+        const { status } = response;
 
-        const success = data.data!.delete.success as boolean;
+        expect(status).toBe(HttpStatus.OK);
+        expect(response.headers.get(CONTENT_TYPE)).toMatch(
+            /application\/graphql-response\+json/iu,
+        );
+
+        const { data, errors } = await response.json();
+
+        expect(errors).toBeUndefined();
+
+        const success: boolean = data.delete.success;
 
         // Der Wert der Mutation ist true (falls geloescht wurde) oder false
         expect(success).toBe(true);
@@ -357,8 +423,7 @@ describe('GraphQL Mutations', () => {
     // -------------------------------------------------------------------------
     test('Buch loeschen als "user"', async () => {
         // given
-        requestHeaders.Authorization = `Bearer ${tokenUser}`;
-        const body: GraphQLQuery = {
+        const mutation: GraphQLQuery = {
             query: `
                 mutation {
                     delete(id: "${idLoeschen}") {
@@ -367,27 +432,31 @@ describe('GraphQL Mutations', () => {
                 }
             `,
         };
+        const headers = new Headers();
+        headers.append(CONTENT_TYPE, APPLICATION_JSON);
+        headers.append(ACCEPT, GRAPHQL_RESPONSE_JSON);
+        headers.append(AUTHORIZATION, `${BEARER} ${tokenUser}`);
 
         // when
-        const {
-            status,
+        const response = await fetch(graphqlURL, {
+            method: POST,
+            body: JSON.stringify(mutation),
             headers,
-            data,
-        }: AxiosResponse<Record<'errors' | 'data', any>> = await client.post(
-            graphqlPath,
-            body,
-            { headers: requestHeaders },
-        );
+        });
 
         // then
-        expect(status).toBe(HttpStatus.OK);
-        expect(headers['content-type']).toMatch(/json/iu);
+        const { status } = response;
 
-        const { errors } = data as { errors: any[] };
+        expect(status).toBe(HttpStatus.OK);
+        expect(response.headers.get(CONTENT_TYPE)).toMatch(
+            /application\/graphql-response\+json/iu,
+        );
+
+        const { data, errors } = await response.json();
 
         expect(errors[0].message).toBe('Forbidden resource');
         expect(errors[0].extensions.code).toBe('BAD_USER_INPUT');
-        expect(data.data.delete).toBeNull();
+        expect(data.delete).toBeNull();
     });
 });
 /* eslint-enable @typescript-eslint/no-non-null-assertion */

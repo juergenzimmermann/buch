@@ -96,6 +96,7 @@ export class BuchWriteService {
         const buchDb = await this.#repo.save(buch); // implizite Transaktion
         await this.#sendmail(buchDb);
 
+        this.#logger.debug('create: buchDb.id=%d', buchDb.id);
         return buchDb.id!;
     }
 
@@ -150,6 +151,11 @@ export class BuchWriteService {
             file: buchFile,
         });
 
+        this.#logger.debug(
+            'addFile: id=%d, filename=%s',
+            buchFile.id,
+            buchFile.filename,
+        );
         return buchFile;
     }
 
@@ -232,8 +238,10 @@ export class BuchWriteService {
     async #validateCreate({ isbn }: Buch): Promise<undefined> {
         this.#logger.debug('#validateCreate: isbn=%s', isbn);
         if (await this.#repo.existsBy({ isbn })) {
+            this.#logger.debug('#validateCreate: isbn existiert: %s', isbn);
             throw new IsbnExistsException(isbn);
         }
+        this.#logger.debug('#validateCreate: ok');
     }
 
     async #sendmail(buch: Buch) {

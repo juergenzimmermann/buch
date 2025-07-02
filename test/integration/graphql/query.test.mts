@@ -16,11 +16,16 @@
 
 import { type GraphQLRequest } from '@apollo/server';
 import { HttpStatus } from '@nestjs/common';
-import axios, { type AxiosInstance, type AxiosResponse } from 'axios';
 import { beforeAll, describe, expect, test } from 'vitest';
 import { type Buch, type BuchArt } from '../../../src/buch/entity/buch.js';
-import { baseURL, httpsAgent } from '../constants.mjs';
-import { type GraphQLResponseBody } from './graphql.mjs';
+import {
+    ACCEPT,
+    APPLICATION_JSON,
+    CONTENT_TYPE,
+    GRAPHQL_RESPONSE_JSON,
+    POST,
+    graphqlURL,
+} from '../constants.mjs';
 
 type BuchDTO = Omit<
     Buch,
@@ -45,29 +50,17 @@ const ratingNichtVorhanden = 99;
 // -----------------------------------------------------------------------------
 // Test-Suite
 describe('GraphQL Queries', () => {
-    let client: AxiosInstance;
+    let headers: Headers;
 
-    const requestHeaders: Record<string, string> = {
-        'Content-Type': 'application/json',
-        Accept: 'application/graphql-response+json',
-    };
-    const graphqlPath = 'graphql';
-
-    // Axios initialisieren
-    beforeAll(async () => {
-        const baseUrlGraphQL = `${baseURL}/`;
-        client = axios.create({
-            baseURL: baseUrlGraphQL,
-            httpsAgent,
-            // auch Statuscode 400 als gueltigen Request akzeptieren, wenn z.B.
-            // ein Enum mit einem falschen String getestest wird
-            validateStatus: () => true,
-        });
+    beforeAll(() => {
+        headers = new Headers();
+        headers.append(CONTENT_TYPE, APPLICATION_JSON);
+        headers.append(ACCEPT, GRAPHQL_RESPONSE_JSON);
     });
 
     test.concurrent.each(ids)('Buch zu ID %i', async (id) => {
         // given
-        const body: GraphQLRequest = {
+        const query: GraphQLRequest = {
             query: `
                 {
                     buch(id: "${id}") {
@@ -90,16 +83,26 @@ describe('GraphQL Queries', () => {
         };
 
         // when
-        const { status, headers, data }: AxiosResponse<GraphQLResponseBody> =
-            await client.post(graphqlPath, body, { headers: requestHeaders });
+        const response = await fetch(graphqlURL, {
+            method: POST,
+            body: JSON.stringify(query),
+            headers,
+        });
 
         // then
-        expect(status).toBe(HttpStatus.OK);
-        expect(headers['content-type']).toMatch(/json/iu);
-        expect(data.errors).toBeUndefined();
-        expect(data.data).toBeDefined();
+        const { status } = response;
 
-        const { buch } = data.data! as { buch: BuchDTO };
+        expect(status).toBe(HttpStatus.OK);
+        expect(response.headers.get(CONTENT_TYPE)).toMatch(
+            /application\/graphql-response\+json/iu,
+        );
+
+        const { data, errors } = await response.json();
+
+        expect(errors).toBeUndefined();
+        expect(data).toBeDefined();
+
+        const { buch }: { buch: BuchDTO } = data;
 
         expect(buch.titel?.titel).toMatch(/^\w/u);
         expect(buch.version).toBeGreaterThan(-1);
@@ -109,7 +112,7 @@ describe('GraphQL Queries', () => {
     test.concurrent('Buch zu nicht-vorhandener ID', async () => {
         // given
         const id = '999999';
-        const body: GraphQLRequest = {
+        const query: GraphQLRequest = {
             query: `
                 {
                     buch(id: "${id}") {
@@ -122,16 +125,23 @@ describe('GraphQL Queries', () => {
         };
 
         // when
-        const { status, headers, data }: AxiosResponse<GraphQLResponseBody> =
-            await client.post(graphqlPath, body, { headers: requestHeaders });
+        const response = await fetch(graphqlURL, {
+            method: POST,
+            body: JSON.stringify(query),
+            headers,
+        });
 
         // then
+        const { status } = response;
+
         expect(status).toBe(HttpStatus.OK);
-        expect(headers['content-type']).toMatch(/json/iu);
-        expect(data.data!.buch).toBeNull();
+        expect(response.headers.get(CONTENT_TYPE)).toMatch(
+            /application\/graphql-response\+json/iu,
+        );
 
-        const { errors } = data;
+        const { data, errors } = await response.json();
 
+        expect(data.buch).toBeNull();
         expect(errors).toHaveLength(1);
 
         const [error] = errors!;
@@ -148,7 +158,7 @@ describe('GraphQL Queries', () => {
         'Buecher zu Teil-Titel %s',
         async (titel) => {
             // given
-            const body: GraphQLRequest = {
+            const query: GraphQLRequest = {
                 query: `
                     {
                         buecher(suchkriterien: {
@@ -163,23 +173,26 @@ describe('GraphQL Queries', () => {
             };
 
             // when
-            const {
-                status,
+            const response = await fetch(graphqlURL, {
+                method: POST,
+                body: JSON.stringify(query),
                 headers,
-                data,
-            }: AxiosResponse<GraphQLResponseBody> = await client.post(
-                graphqlPath,
-                body,
-                { headers: requestHeaders },
-            );
+            });
 
             // then
-            expect(status).toBe(HttpStatus.OK);
-            expect(headers['content-type']).toMatch(/json/iu);
-            expect(data.errors).toBeUndefined();
-            expect(data.data).toBeDefined();
+            const { status } = response;
 
-            const { buecher } = data.data! as { buecher: BuchDTO[] };
+            expect(status).toBe(HttpStatus.OK);
+            expect(response.headers.get(CONTENT_TYPE)).toMatch(
+                /application\/graphql-response\+json/iu,
+            );
+
+            const { data, errors } = await response.json();
+
+            expect(errors).toBeUndefined();
+            expect(data).toBeDefined();
+
+            const { buecher }: { buecher: BuchDTO[] } = data;
 
             expect(buecher).not.toHaveLength(0);
 
@@ -197,7 +210,7 @@ describe('GraphQL Queries', () => {
         'Buch zu nicht vorhandenem Titel %s',
         async (titel) => {
             // given
-            const body: GraphQLRequest = {
+            const query: GraphQLRequest = {
                 query: `
                     {
                         buecher(suchkriterien: {
@@ -213,23 +226,23 @@ describe('GraphQL Queries', () => {
             };
 
             // when
-            const {
-                status,
+            const response = await fetch(graphqlURL, {
+                method: POST,
+                body: JSON.stringify(query),
                 headers,
-                data,
-            }: AxiosResponse<GraphQLResponseBody> = await client.post(
-                graphqlPath,
-                body,
-                { headers: requestHeaders },
-            );
+            });
 
             // then
+            const { status } = response;
+
             expect(status).toBe(HttpStatus.OK);
-            expect(headers['content-type']).toMatch(/json/iu);
-            expect(data.data!.buecher).toBeNull();
+            expect(response.headers.get(CONTENT_TYPE)).toMatch(
+                /application\/graphql-response\+json/iu,
+            );
 
-            const { errors } = data;
+            const { data, errors } = await response.json();
 
+            expect(data.buecher).toBeNull();
             expect(errors).toHaveLength(1);
 
             const [error] = errors!;
@@ -247,7 +260,7 @@ describe('GraphQL Queries', () => {
         'Buch zu ISBN-Nummer %s',
         async (isbnExpected) => {
             // given
-            const body: GraphQLRequest = {
+            const query: GraphQLRequest = {
                 query: `
                     {
                         buecher(suchkriterien: {
@@ -263,23 +276,26 @@ describe('GraphQL Queries', () => {
             };
 
             // when
-            const {
-                status,
+            const response = await fetch(graphqlURL, {
+                method: POST,
+                body: JSON.stringify(query),
                 headers,
-                data,
-            }: AxiosResponse<GraphQLResponseBody> = await client.post(
-                graphqlPath,
-                body,
-                { headers: requestHeaders },
-            );
+            });
 
             // then
-            expect(status).toBe(HttpStatus.OK);
-            expect(headers['content-type']).toMatch(/json/iu);
-            expect(data.errors).toBeUndefined();
-            expect(data.data).toBeDefined();
+            const { status } = response;
 
-            const { buecher } = data.data! as { buecher: BuchDTO[] };
+            expect(status).toBe(HttpStatus.OK);
+            expect(response.headers.get(CONTENT_TYPE)).toMatch(
+                /application\/graphql-response\+json/iu,
+            );
+
+            const { data, errors } = await response.json();
+
+            expect(errors).toBeUndefined();
+            expect(data).toBeDefined();
+
+            const { buecher }: { buecher: BuchDTO[] } = data;
 
             expect(buecher).not.toHaveLength(0);
             expect(buecher).toHaveLength(1);
@@ -297,7 +313,7 @@ describe('GraphQL Queries', () => {
         async (ratingExpected) => {
             // given
             const teilTitel = 'a';
-            const body: GraphQLRequest = {
+            const query: GraphQLRequest = {
                 query: `
                     {
                         buecher(suchkriterien: {
@@ -314,24 +330,26 @@ describe('GraphQL Queries', () => {
             };
 
             // when
-            const {
-                status,
+            const response = await fetch(graphqlURL, {
+                method: POST,
+                body: JSON.stringify(query),
                 headers,
-                data,
-            }: AxiosResponse<GraphQLResponseBody> = await client.post(
-                graphqlPath,
-                body,
-                { headers: requestHeaders },
-            );
+            });
 
             // then
+            const { status } = response;
+
             expect(status).toBe(HttpStatus.OK);
-            expect(headers['content-type']).toMatch(/json/iu);
-            expect(data.errors).toBeUndefined();
+            expect(response.headers.get(CONTENT_TYPE)).toMatch(
+                /application\/graphql-response\+json/iu,
+            );
 
-            expect(data.data).toBeDefined();
+            const { data, errors } = await response.json();
 
-            const { buecher } = data.data! as { buecher: BuchDTO[] };
+            expect(errors).toBeUndefined();
+            expect(data).toBeDefined();
+
+            const { buecher }: { buecher: BuchDTO[] } = data;
 
             expect(buecher).not.toHaveLength(0);
 
@@ -348,7 +366,7 @@ describe('GraphQL Queries', () => {
 
     test.concurrent('Kein Buch zu nicht-vorhandenem "rating"', async () => {
         // given
-        const body: GraphQLRequest = {
+        const query: GraphQLRequest = {
             query: `
                 {
                     buecher(suchkriterien: {
@@ -363,16 +381,23 @@ describe('GraphQL Queries', () => {
         };
 
         // when
-        const { status, headers, data }: AxiosResponse<GraphQLResponseBody> =
-            await client.post(graphqlPath, body, { headers: requestHeaders });
+        const response = await fetch(graphqlURL, {
+            method: POST,
+            body: JSON.stringify(query),
+            headers,
+        });
 
         // then
+        const { status } = response;
+
         expect(status).toBe(HttpStatus.OK);
-        expect(headers['content-type']).toMatch(/json/iu);
-        expect(data.data!.buecher).toBeNull();
+        expect(response.headers.get(CONTENT_TYPE)).toMatch(
+            /application\/graphql-response\+json/iu,
+        );
 
-        const { errors } = data;
+        const { data, errors } = await response.json();
 
+        expect(data.buecher).toBeNull();
         expect(errors).toHaveLength(1);
 
         const [error] = errors!;
@@ -388,7 +413,7 @@ describe('GraphQL Queries', () => {
     test.concurrent('Buecher zur Art "EPUB"', async () => {
         // given
         const buchArt: BuchArt = 'EPUB';
-        const body: GraphQLRequest = {
+        const query: GraphQLRequest = {
             query: `
                 {
                     buecher(suchkriterien: {
@@ -404,16 +429,26 @@ describe('GraphQL Queries', () => {
         };
 
         // when
-        const { status, headers, data }: AxiosResponse<GraphQLResponseBody> =
-            await client.post(graphqlPath, body, { headers: requestHeaders });
+        const response = await fetch(graphqlURL, {
+            method: POST,
+            body: JSON.stringify(query),
+            headers,
+        });
 
         // then
-        expect(status).toBe(HttpStatus.OK);
-        expect(headers['content-type']).toMatch(/json/iu);
-        expect(data.errors).toBeUndefined();
-        expect(data.data).toBeDefined();
+        const { status } = response;
 
-        const { buecher } = data.data! as { buecher: BuchDTO[] };
+        expect(status).toBe(HttpStatus.OK);
+        expect(response.headers.get(CONTENT_TYPE)).toMatch(
+            /application\/graphql-response\+json/iu,
+        );
+
+        const { data, errors } = await response.json();
+
+        expect(errors).toBeUndefined();
+        expect(data).toBeDefined();
+
+        const { buecher }: { buecher: BuchDTO[] } = data;
 
         expect(buecher).not.toHaveLength(0);
 
@@ -428,7 +463,7 @@ describe('GraphQL Queries', () => {
     test.concurrent('Buecher zur einer ungueltigen Art', async () => {
         // given
         const buchArt = 'UNGUELTIG';
-        const body: GraphQLRequest = {
+        const query: GraphQLRequest = {
             query: `
                 {
                     buecher(suchkriterien: {
@@ -443,16 +478,23 @@ describe('GraphQL Queries', () => {
         };
 
         // when
-        const { status, headers, data }: AxiosResponse<GraphQLResponseBody> =
-            await client.post(graphqlPath, body, { headers: requestHeaders });
+        const response = await fetch(graphqlURL, {
+            method: POST,
+            body: JSON.stringify(query),
+            headers,
+        });
 
         // then
+        const { status } = response;
+
         expect(status).toBe(HttpStatus.BAD_REQUEST);
-        expect(headers['content-type']).toMatch(/json/iu);
-        expect(data.data).toBeUndefined();
+        expect(response.headers.get(CONTENT_TYPE)).toMatch(
+            /application\/graphql-response\+json/iu,
+        );
 
-        const { errors } = data;
+        const { data, errors } = await response.json();
 
+        expect(data).toBeUndefined();
         expect(errors).toHaveLength(1);
 
         const [error] = errors!;
@@ -464,7 +506,7 @@ describe('GraphQL Queries', () => {
 
     test.concurrent('Buecher mit lieferbar=true', async () => {
         // given
-        const body: GraphQLRequest = {
+        const query: GraphQLRequest = {
             query: `
                 {
                     buecher(suchkriterien: {
@@ -480,16 +522,26 @@ describe('GraphQL Queries', () => {
         };
 
         // when
-        const { status, headers, data }: AxiosResponse<GraphQLResponseBody> =
-            await client.post(graphqlPath, body, { headers: requestHeaders });
+        const response = await fetch(graphqlURL, {
+            method: POST,
+            body: JSON.stringify(query),
+            headers,
+        });
 
         // then
-        expect(status).toBe(HttpStatus.OK);
-        expect(headers['content-type']).toMatch(/json/iu);
-        expect(data.errors).toBeUndefined();
-        expect(data.data).toBeDefined();
+        const { status } = response;
 
-        const { buecher } = data.data! as { buecher: BuchDTO[] };
+        expect(status).toBe(HttpStatus.OK);
+        expect(response.headers.get(CONTENT_TYPE)).toMatch(
+            /application\/graphql-response\+json/iu,
+        );
+
+        const { data, errors } = await response.json();
+
+        expect(errors).toBeUndefined();
+        expect(data).toBeDefined();
+
+        const { buecher }: { buecher: BuchDTO[] } = data;
 
         expect(buecher).not.toHaveLength(0);
 
