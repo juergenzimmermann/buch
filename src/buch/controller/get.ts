@@ -104,7 +104,12 @@ export class BuchQuery implements Suchkriterien {
 
     @ApiProperty({ required: false })
     declare page?: string;
+
+    @ApiProperty({ required: false })
+    declare only?: 'count';
 }
+
+type CountResult = Record<'count', number>;
 
 /**
  * Die Controller-Klasse für die Verwaltung von Bücher.
@@ -230,12 +235,19 @@ export class BuchGetController {
         @Query() query: BuchQuery,
         @Req() req: Request,
         @Res() res: Response,
-    ): Promise<Response<Buch[] | undefined>> {
+    ): Promise<Response<Buch[] | CountResult | undefined>> {
         this.#logger.debug('get: query=%o', query);
 
         if (req.accepts(['json', 'html']) === false) {
             this.#logger.debug('get: accepted=%o', req.accepted);
             return res.sendStatus(HttpStatus.NOT_ACCEPTABLE);
+        }
+
+        const { only } = query;
+        if (only !== undefined) {
+            const count = await this.#service.count();
+            this.#logger.debug('get: count=%d', count);
+            return res.json({ count: count });
         }
 
         const { page, size } = query;

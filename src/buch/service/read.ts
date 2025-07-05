@@ -51,17 +51,21 @@ export class BuchReadService {
 
     readonly #queryBuilder: QueryBuilder;
 
+    readonly #repo: Repository<Buch>;
+
     readonly #fileRepo: Repository<BuchFile>;
 
     readonly #logger = getLogger(BuchReadService.name);
 
     constructor(
         queryBuilder: QueryBuilder,
+        @InjectRepository(Buch) repo: Repository<Buch>,
         @InjectRepository(BuchFile) fileRepo: Repository<BuchFile>,
     ) {
         const buchDummy = new Buch();
         this.#buchProps = Object.getOwnPropertyNames(buchDummy);
         this.#queryBuilder = queryBuilder;
+        this.#repo = repo;
         this.#fileRepo = fileRepo;
     }
 
@@ -187,6 +191,17 @@ export class BuchReadService {
         }
         const totalElements = await queryBuilder.getCount();
         return this.#createSlice(buecher, totalElements);
+    }
+
+    /**
+     * Anzahl aller Bücher zurückliefern.
+     * @returns Ein JSON-Array mit den gefundenen Büchern.
+     */
+    async count() {
+        this.#logger.debug('count');
+        const count = await this.#repo.count();
+        this.#logger.debug('count: %d', count);
+        return count;
     }
 
     async #findAll(pageable: Pageable) {
