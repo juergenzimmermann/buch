@@ -379,7 +379,7 @@ export function queryBuecher() {
     const body = {
         query: `
             {
-                buecher(suchkriterien: {
+                buecher(suchparameter: {
                     titel: "${titel}"
                 }) {
                     art
@@ -408,7 +408,7 @@ export function queryBuecherNichtVorhanden() {
     const body = {
         query: `
             {
-                buecher(suchkriterien: {
+                buecher(suchparameter: {
                     titel: "NICHT_VORHANDEN"
                 }) {
                     schlagwoerter

@@ -22,15 +22,15 @@ import { ResponseTimeInterceptor } from '../../logger/response-time.js';
 import { Buch } from '../entity/buch.js';
 import { BuchReadService } from '../service/read.js';
 import { createPageable } from '../service/pageable.js';
-import { type Suchkriterien } from '../service/suchkriterien.js';
+import { type Suchparameter } from '../service/suchparameter.js';
 import { HttpExceptionFilter } from './http-exception-filter.js';
 
 export type IdInput = {
     readonly id: number;
 };
 
-export type SuchkriterienInput = {
-    readonly suchkriterien: Suchkriterien;
+export type SuchparameterInput = {
+    readonly suchparameter: Suchparameter;
 };
 
 @Resolver('Buch')
@@ -64,11 +64,11 @@ export class BuchQueryResolver {
 
     @Query('buecher')
     @Public()
-    async find(@Args() input: SuchkriterienInput | undefined) {
+    async find(@Args() input: SuchparameterInput | undefined) {
         this.#logger.debug('find: input=%o', input);
         const pageable = createPageable({});
         const buecherSlice = await this.#service.find(
-            input?.suchkriterien,
+            input?.suchparameter,
             pageable,
         );
         this.#logger.debug('find: buecherSlice=%o', buecherSlice);

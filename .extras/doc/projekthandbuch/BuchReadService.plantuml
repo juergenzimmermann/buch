@@ -43,7 +43,7 @@ package buch {
 
     class BuchReadService << control >> <<@Injectable()>> {
       + async findById(id: number): Promise<Buch | undefined>
-      + async find(suchkriterien?: Record<string, any>): Promise<Buch[]>
+      + async find(suchparameter?: Record<string, any>): Promise<Buch[]>
     }
 
     BuchReadService o--> "1" QueryBuilder: queryBuilder

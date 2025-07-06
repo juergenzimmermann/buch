@@ -28,7 +28,7 @@ import { Buch } from '../entity/buch.js';
 import { DEFAULT_PAGE_NUMBER, DEFAULT_PAGE_SIZE } from './pageable.js';
 import { type Pageable } from './pageable.js';
 import { Titel } from '../entity/titel.js';
-import { type Suchkriterien } from './suchkriterien.js';
+import { type Suchparameter } from './suchparameter.js';
 
 /** Typdefinitionen für die Suche mit der Buch-ID. */
 export type BuildIdParams = {
@@ -92,7 +92,7 @@ export class QueryBuilder {
 
     /**
      * Bücher asynchron suchen.
-     * @param suchkriterien JSON-Objekt mit Suchkriterien. Bei "titel" wird mit
+     * @param suchparameter JSON-Objekt mit Suchparameter. Bei "titel" wird mit
      * einem Teilstring gesucht, bei "rating" mit einem Mindestwert, bei "preis"
      * mit der Obergrenze.
      * @param pageable Maximale Anzahl an Datensätzen und Seitennummer.
@@ -112,7 +112,7 @@ export class QueryBuilder {
             java,
             python,
             ...restProps
-        }: Suchkriterien,
+        }: Suchparameter,
         pageable: Pageable,
     ) {
         this.#logger.debug(
@@ -134,7 +134,7 @@ export class QueryBuilder {
         // z.B. { titel: 'a', rating: 5, javascript: true }
         // "rest properties" fuer anfaengliche WHERE-Klausel: ab ES 2018 https://github.com/tc39/proposal-object-rest-spread
         // type-coverage:ignore-next-line
-        // const { titel, javascript, typescript, ...otherProps } = suchkriterien;
+        // const { titel, javascript, typescript, ...otherProps } = suchparameter;
 
         let useWhere = true;
 

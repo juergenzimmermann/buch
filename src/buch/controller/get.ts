@@ -52,7 +52,7 @@ import { ResponseTimeInterceptor } from '../../logger/response-time.js';
 import { type Buch, type BuchArt } from '../entity/buch.js';
 import { BuchReadService } from '../service/read.js';
 import { createPageable } from '../service/pageable.js';
-import { type Suchkriterien } from '../service/suchkriterien.js';
+import { type Suchparameter } from '../service/suchparameter.js';
 import { createPage } from './page.js';
 
 /**
@@ -65,7 +65,7 @@ import { createPage } from './page.js';
  * Außerdem muss noch `string` statt `Date` verwendet werden, weil es in OpenAPI
  * den Typ Date nicht gibt.
  */
-export class BuchQuery implements Suchkriterien {
+export class BuchQuery implements Suchparameter {
     @ApiProperty({ required: false })
     declare readonly isbn?: string;
 
@@ -217,7 +217,7 @@ export class BuchGetController {
      * des Response ist das JSON-Array mit den gefundenen Büchern, die jeweils
      * um Atom-Links für HATEOAS ergänzt sind.
      *
-     * Falls es kein Buch zu den Suchkriterien gibt, wird der Statuscode `404`
+     * Falls es kein Buch zu den Suchparameter gibt, wird der Statuscode `404`
      * (`Not Found`) gesetzt.
      *
      * Falls es keine Query-Parameter gibt, werden alle Bücher ermittelt.
@@ -229,7 +229,7 @@ export class BuchGetController {
      */
     @Get()
     @Public()
-    @ApiOperation({ summary: 'Suche mit Suchkriterien' })
+    @ApiOperation({ summary: 'Suche mit Suchparameter' })
     @ApiOkResponse({ description: 'Eine evtl. leere Liste mit Büchern' })
     async get(
         @Query() query: BuchQuery,

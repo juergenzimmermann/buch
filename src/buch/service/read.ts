@@ -27,7 +27,7 @@ import { Buch } from './../entity/buch.js';
 import { type Pageable } from './pageable.js';
 import { QueryBuilder } from './query-builder.js';
 import { type Slice } from './slice.js';
-import { type Suchkriterien } from './suchkriterien.js';
+import { type Suchparameter } from './suchparameter.js';
 
 /**
  * Typdefinition für `findById`
@@ -148,45 +148,45 @@ export class BuchReadService {
 
     /**
      * Bücher asynchron suchen.
-     * @param suchkriterien JSON-Objekt mit Suchkriterien.
+     * @param suchparameter JSON-Objekt mit Suchparameter.
      * @param pageable Maximale Anzahl an Datensätzen und Seitennummer.
      * @returns Ein JSON-Array mit den gefundenen Büchern.
      * @throws NotFoundException falls keine Bücher gefunden wurden.
      */
     async find(
-        suchkriterien: Suchkriterien | undefined,
+        suchparameter: Suchparameter | undefined,
         pageable: Pageable,
     ): Promise<Slice<Buch>> {
         this.#logger.debug(
-            'find: suchkriterien=%o, pageable=%o',
-            suchkriterien,
+            'find: suchparameter=%o, pageable=%o',
+            suchparameter,
             pageable,
         );
 
-        // Keine Suchkriterien?
-        if (suchkriterien === undefined) {
+        // Keine Suchparameter?
+        if (suchparameter === undefined) {
             return await this.#findAll(pageable);
         }
-        const keys = Object.keys(suchkriterien);
+        const keys = Object.keys(suchparameter);
         if (keys.length === 0) {
             return await this.#findAll(pageable);
         }
 
-        // Falsche Namen fuer Suchkriterien?
-        if (!this.#checkKeys(keys) || !this.#checkEnums(suchkriterien)) {
-            this.#logger.debug('Ungueltige Suchkriterien');
-            throw new NotFoundException('Ungueltige Suchkriterien');
+        // Falsche Namen fuer Suchparameter?
+        if (!this.#checkKeys(keys) || !this.#checkEnums(suchparameter)) {
+            this.#logger.debug('Ungueltige Suchparameter');
+            throw new NotFoundException('Ungueltige Suchparameter');
         }
 
         // QueryBuilder https://typeorm.io/select-query-builder
         // Das Resultat ist eine leere Liste, falls nichts gefunden
         // Lesen: Keine Transaktion erforderlich
-        const queryBuilder = this.#queryBuilder.build(suchkriterien, pageable);
+        const queryBuilder = this.#queryBuilder.build(suchparameter, pageable);
         const buecher = await queryBuilder.getMany();
         if (buecher.length === 0) {
             this.#logger.debug('find: Keine Buecher gefunden');
             throw new NotFoundException(
-                `Keine Buecher gefunden: ${JSON.stringify(suchkriterien)}, Seite ${pageable.number}}`,
+                `Keine Buecher gefunden: ${JSON.stringify(suchparameter)}, Seite ${pageable.number}}`,
             );
         }
         const totalElements = await queryBuilder.getCount();
@@ -233,7 +233,7 @@ export class BuchReadService {
 
     #checkKeys(keys: string[]) {
         this.#logger.debug('#checkKeys: keys=%s', keys);
-        // Ist jedes Suchkriterium auch eine Property von Buch oder "schlagwoerter"?
+        // Ist jeder Suchparameter auch eine Property von Buch oder "schlagwoerter"?
         let validKeys = true;
         keys.forEach((key) => {
             if (
@@ -244,7 +244,7 @@ export class BuchReadService {
                 key !== 'python'
             ) {
                 this.#logger.debug(
-                    '#checkKeys: ungueltiges Suchkriterium "%s"',
+                    '#checkKeys: ungueltiger Suchparameter "%s"',
                     key,
                 );
                 validKeys = false;
@@ -254,9 +254,9 @@ export class BuchReadService {
         return validKeys;
     }
 
-    #checkEnums(suchkriterien: Suchkriterien) {
-        const { art } = suchkriterien;
-        this.#logger.debug('#checkEnums: Suchkriterium "art=%s"', art);
+    #checkEnums(suchparameter: Suchparameter) {
+        const { art } = suchparameter;
+        this.#logger.debug('#checkEnums: Suchparameter "art=%s"', art);
         // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
         return (
             art === undefined ||

@@ -22,7 +22,7 @@ schema {
 
 "Funktionen, um Bücherdaten zu lesen"
 type Query {
-  buecher(suchkriterien: SuchkriterienInput): [Buch!]
+  buecher(suchparameter: SuchparameterInput): [Buch!]
 
   buch(id: ID!): Buch
 }
@@ -68,8 +68,8 @@ enum Art {
   PAPERBACK
 }
 
-"Suchkriterien für Bücher"
-input SuchkriterienInput {
+"Suchparameter für Bücher"
+input SuchparameterInput {
   titel: String
   isbn: String
   rating: Int

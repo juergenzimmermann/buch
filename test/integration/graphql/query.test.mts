@@ -161,7 +161,7 @@ describe('GraphQL Queries', () => {
             const query: GraphQLRequest = {
                 query: `
                     {
-                        buecher(suchkriterien: {
+                        buecher(suchparameter: {
                             titel: "${titel}"
                         }) {
                             titel {
@@ -213,7 +213,7 @@ describe('GraphQL Queries', () => {
             const query: GraphQLRequest = {
                 query: `
                     {
-                        buecher(suchkriterien: {
+                        buecher(suchparameter: {
                             titel: "${titel}"
                         }) {
                             art
@@ -263,7 +263,7 @@ describe('GraphQL Queries', () => {
             const query: GraphQLRequest = {
                 query: `
                     {
-                        buecher(suchkriterien: {
+                        buecher(suchparameter: {
                             isbn: "${isbnExpected}"
                         }) {
                             isbn
@@ -316,7 +316,7 @@ describe('GraphQL Queries', () => {
             const query: GraphQLRequest = {
                 query: `
                     {
-                        buecher(suchkriterien: {
+                        buecher(suchparameter: {
                             rating: ${ratingExpected},
                             titel: "${teilTitel}"
                         }) {
@@ -369,7 +369,7 @@ describe('GraphQL Queries', () => {
         const query: GraphQLRequest = {
             query: `
                 {
-                    buecher(suchkriterien: {
+                    buecher(suchparameter: {
                         rating: ${ratingNichtVorhanden}
                     }) {
                         titel {
@@ -416,7 +416,7 @@ describe('GraphQL Queries', () => {
         const query: GraphQLRequest = {
             query: `
                 {
-                    buecher(suchkriterien: {
+                    buecher(suchparameter: {
                         art: ${buchArt}
                     }) {
                         art
@@ -466,7 +466,7 @@ describe('GraphQL Queries', () => {
         const query: GraphQLRequest = {
             query: `
                 {
-                    buecher(suchkriterien: {
+                    buecher(suchparameter: {
                         art: ${buchArt}
                     }) {
                         titel {
@@ -509,7 +509,7 @@ describe('GraphQL Queries', () => {
         const query: GraphQLRequest = {
             query: `
                 {
-                    buecher(suchkriterien: {
+                    buecher(suchparameter: {
                         lieferbar: true
                     }) {
                         lieferbar
