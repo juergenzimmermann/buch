@@ -18,7 +18,7 @@
  * @packageDocumentation
  */
 
-import { type Options } from 'nodemailer/lib/smtp-transport';
+import { type Options } from 'nodemailer/lib/smtp-transport/index.js';
 import { config } from './app.js';
 import { logLevel } from './logger.js';
 

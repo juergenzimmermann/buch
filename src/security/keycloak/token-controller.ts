@@ -37,7 +37,7 @@ import {
     ApiTags,
     ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
-import { Response } from 'express';
+import { type Response } from 'express';
 import { Public } from 'nest-keycloak-connect';
 import { paths } from '../../config/paths.js';
 import { getLogger } from '../../logger/logger.js';

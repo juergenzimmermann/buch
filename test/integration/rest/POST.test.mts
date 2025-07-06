@@ -14,7 +14,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 import { HttpStatus } from '@nestjs/common';
-import { Decimal } from 'decimal.js';
+import BigNumber from 'bignumber.js';
 import { beforeAll, describe, expect, test } from 'vitest';
 import { type BuchDTO } from '../../../src/buch/controller/buchDTO.js';
 import { BuchReadService } from '../../../src/buch/service/read.js';
@@ -74,8 +74,8 @@ const neuesBuchIsbnExistiert: BuchDTO = {
     isbn: '978-3-897-22583-1',
     rating: 1,
     art: 'EPUB',
-    preis: new Decimal(99.99),
-    rabatt: new Decimal(0.09),
+    preis: new BigNumber(99.99),
+    rabatt: new BigNumber(0.09),
     lieferbar: true,
     datum: '2022-02-28',
     homepage: 'https://post.isbn/',

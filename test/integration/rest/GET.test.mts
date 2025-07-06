@@ -14,7 +14,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 import { HttpStatus } from '@nestjs/common';
-import { Decimal } from 'decimal.js';
+import BigNumber from 'bignumber.js';
 import { describe, expect, test } from 'vitest';
 import { type Page } from '../../../src/buch/controller/page.js';
 import { type Buch } from '../../../src/buch/entity/buch.js';
@@ -171,9 +171,9 @@ describe('GET /rest', () => {
 
             // Jedes Buch hat einen Preis <= preis
             body.content
-                .map((buch) => Decimal(buch?.preis ?? 0))
+                .map((buch) => BigNumber(buch?.preis ?? 0))
                 .forEach((p) =>
-                    expect(p.lessThanOrEqualTo(Decimal(preis))).toBe(true),
+                    expect(p.isLessThanOrEqualTo(BigNumber(preis))).toBe(true),
                 );
         },
     );

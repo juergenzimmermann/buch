@@ -33,7 +33,7 @@ import {
     ApiOperation,
     ApiTags,
 } from '@nestjs/swagger';
-import { Response } from 'express';
+import { type Response } from 'express';
 import { AuthGuard, Roles } from 'nest-keycloak-connect';
 import { ResponseTimeInterceptor } from '../../logger/response-time.js';
 import { DbPopulateService } from './db-populate.js';

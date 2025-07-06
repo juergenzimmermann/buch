@@ -15,7 +15,7 @@
 
 import { UseFilters, UseInterceptors } from '@nestjs/common';
 import { Args, Parent, Query, ResolveField, Resolver } from '@nestjs/graphql';
-import Decimal from 'decimal.js'; // eslint-disable-line @typescript-eslint/naming-convention
+import BigNumber from 'bignumber.js'; // eslint-disable-line @typescript-eslint/naming-convention
 import { Public } from 'nest-keycloak-connect';
 import { getLogger } from '../../logger/logger.js';
 import { ResponseTimeInterceptor } from '../../logger/response-time.js';
@@ -85,7 +85,7 @@ export class BuchQueryResolver {
             );
         }
         // "Nullish Coalescing" ab ES2020
-        const rabatt = buch.rabatt ?? Decimal(0);
+        const rabatt = buch.rabatt ?? BigNumber(0);
         const shortStr = short === undefined || short ? '%' : 'Prozent';
         return `${rabatt.toString()} ${shortStr}`;
     }

@@ -43,7 +43,7 @@ import {
     ApiResponse,
     ApiTags,
 } from '@nestjs/swagger';
-import { Request, Response } from 'express';
+import { type Request, type Response } from 'express';
 import { Public } from 'nest-keycloak-connect';
 import { Readable } from 'node:stream';
 import { paths } from '../../config/paths.js';

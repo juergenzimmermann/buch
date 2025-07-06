@@ -60,7 +60,7 @@ const setupSwagger = (app: INestApplication) => {
 // async/await ab ES 2017, vgl: C#
 const bootstrap = async () => {
     // Der Keycloak-Server verwendet ein selbstsigniertes Zertifikat
-    process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0'; // eslint-disable-line n/no-process-env
+    process.env['NODE_TLS_REJECT_UNAUTHORIZED'] = '0'; // eslint-disable-line n/no-process-env
 
     // Kein Logging bei Lasttests mit k6 oder locust
     // https://expressjs.com/en/advanced/best-practice-security.html#use-tls

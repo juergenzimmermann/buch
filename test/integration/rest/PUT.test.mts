@@ -14,7 +14,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 import { HttpStatus } from '@nestjs/common';
-import { Decimal } from 'decimal.js';
+import BigNumber from 'bignumber.js';
 import { beforeAll, describe, expect, test } from 'vitest';
 import { type BuchDtoOhneRef } from '../../../src/buch/controller/buchDTO.js';
 import {
@@ -81,8 +81,8 @@ const veraltesBuch: BuchDtoOhneRef = {
     isbn: '978-0-007-09732-6',
     rating: 1,
     art: 'EPUB',
-    preis: new Decimal(44.4),
-    rabatt: new Decimal(0.04),
+    preis: new BigNumber(44.4),
+    rabatt: new BigNumber(0.04),
     lieferbar: true,
     datum: '2022-02-04',
     homepage: 'https://acme.de',

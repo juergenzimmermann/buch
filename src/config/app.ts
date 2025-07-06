@@ -30,6 +30,12 @@ export const RESOURCES_DIR = path.resolve(BASEDIR, 'config', 'resources');
 
 const configFile = path.resolve(RESOURCES_DIR, 'app.yml');
 console.debug(`configFile=${configFile}`);
+
+type AppConfig = Record<
+    'node' | 'db' | 'keycloak' | 'log' | 'health' | 'mail',
+    any
+>;
+
 export const config = parse(
     readFileSync(configFile, 'utf8'), // eslint-disable-line security/detect-non-literal-fs-filename
-) as Record<string, any>;
+) as AppConfig;

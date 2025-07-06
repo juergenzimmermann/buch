@@ -23,8 +23,8 @@ export type Pageable = {
 };
 
 export type PageableProps = {
-    readonly number?: string;
-    readonly size?: string;
+    readonly number?: string | undefined;
+    readonly size?: string | undefined;
 };
 
 export function createPageable({ number, size }: PageableProps): Pageable {

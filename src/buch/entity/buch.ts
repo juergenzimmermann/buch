@@ -38,7 +38,7 @@
  */
 
 import { ApiProperty } from '@nestjs/swagger';
-import Decimal from 'decimal.js'; // eslint-disable-line @typescript-eslint/naming-convention
+import BigNumber from 'bignumber.js'; // eslint-disable-line @typescript-eslint/naming-convention
 import {
     Column,
     CreateDateColumn,
@@ -52,7 +52,7 @@ import {
 import { dbType } from '../../config/db.js';
 import { Abbildung } from './abbildung.js';
 import { BuchFile } from './file.js';
-import { DecimalTransformer } from './decimal-transformer.js';
+import { BigNumberTransformer } from './bignumber-transformer.js';
 import { Titel } from './titel.js';
 
 /**
@@ -95,19 +95,19 @@ export class Buch {
         precision: 8,
         scale: 2,
         // https://typeorm.io/entities#column-options
-        transformer: new DecimalTransformer(),
+        transformer: new BigNumberTransformer(),
     })
     @ApiProperty({ example: 1, type: Number })
     // Decimal aus decimal.js analog zu BigDecimal von Java
-    readonly preis: Decimal | undefined;
+    readonly preis: BigNumber | undefined;
 
     @Column('decimal', {
         precision: 4,
         scale: 3,
-        transformer: new DecimalTransformer(),
+        transformer: new BigNumberTransformer(),
     })
     @ApiProperty({ example: 0.1, type: Number })
-    readonly rabatt: Decimal | undefined;
+    readonly rabatt: BigNumber | undefined;
 
     @Column('decimal') // TypeORM unterstuetzt bei Oracle *NICHT* den Typ boolean
     @ApiProperty({ example: true, type: Boolean })

@@ -237,6 +237,11 @@ export class BuchWriteService {
 
     async #validateCreate({ isbn }: Buch): Promise<undefined> {
         this.#logger.debug('#validateCreate: isbn=%s', isbn);
+        if (isbn === undefined) {
+            this.#logger.debug('#validateCreate: ok');
+            return;
+        }
+
         if (await this.#repo.existsBy({ isbn })) {
             this.#logger.debug('#validateCreate: isbn existiert: %s', isbn);
             throw new IsbnExistsException(isbn);

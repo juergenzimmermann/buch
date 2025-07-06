@@ -40,7 +40,7 @@ import {
     ValidatorConstraint,
     type ValidatorConstraintInterface,
 } from 'class-validator';
-import Decimal from 'decimal.js'; // eslint-disable-line @typescript-eslint/naming-convention
+import BigNumber from 'bignumber.js';
 import { type BuchArt } from '../entity/buch.js';
 import { AbbildungDTO } from './abbildungDTO.js';
 import { TitelDTO } from './titelDTO.js';
@@ -48,56 +48,56 @@ import { TitelDTO } from './titelDTO.js';
 export const MAX_RATING = 5;
 
 // https://github.com/typestack/class-transformer?tab=readme-ov-file#basic-usage
-const number2Decimal = ({ value }: { value: Decimal.Value | undefined }) => {
+const number2Decimal = ({ value }: { value: BigNumber.Value | undefined }) => {
     if (value === undefined) {
         return;
     }
 
     // Decimal aus decimal.js analog zu BigDecimal von Java
     // precision wie bei SQL beim Spaltentyp DECIMAL bzw. NUMERIC
-    Decimal.set({ precision: 6 });
-    return Decimal(value);
+    BigNumber.set({ DECIMAL_PLACES: 6 });
+    return BigNumber(value);
 };
 
-const number2Percent = ({ value }: { value: Decimal.Value | undefined }) => {
+const number2Percent = ({ value }: { value: BigNumber.Value | undefined }) => {
     if (value === undefined) {
         return;
     }
 
     // precision wie bei SQL beim Spaltentyp DECIMAL bzw. NUMERIC
-    Decimal.set({ precision: 4 });
-    return Decimal(value);
+    BigNumber.set({ DECIMAL_PLACES: 4 });
+    return BigNumber(value);
 };
 
 // https://github.com/typestack/class-validator?tab=readme-ov-file#custom-validation-classes
 @ValidatorConstraint({ name: 'decimalMin', async: false })
 class DecimalMin implements ValidatorConstraintInterface {
-    validate(value: Decimal | undefined, args: ValidationArguments) {
+    validate(value: BigNumber | undefined, args: ValidationArguments) {
         if (value === undefined) {
             return true;
         }
-        const [minValue]: Decimal[] = args.constraints; // eslint-disable-line @typescript-eslint/no-unsafe-assignment
-        return value.greaterThanOrEqualTo(minValue!);
+        const [minValue]: BigNumber[] = args.constraints; // eslint-disable-line @typescript-eslint/no-unsafe-assignment
+        return value.isGreaterThan(minValue!);
     }
 
     defaultMessage(args: ValidationArguments) {
-        return `Der Wert muss groesser oder gleich ${(args.constraints[0] as Decimal).toNumber()} sein.`;
+        return `Der Wert muss groesser oder gleich ${(args.constraints[0] as BigNumber).toNumber()} sein.`;
     }
 }
 
 // https://github.com/typestack/class-validator?tab=readme-ov-file#custom-validation-classes
 @ValidatorConstraint({ name: 'decimalMax', async: false })
 class DecimalMax implements ValidatorConstraintInterface {
-    validate(value: Decimal | undefined, args: ValidationArguments) {
+    validate(value: BigNumber | undefined, args: ValidationArguments) {
         if (value === undefined) {
             return true;
         }
-        const [maxValue]: Decimal[] = args.constraints; // eslint-disable-line @typescript-eslint/no-unsafe-assignment
-        return value.lessThanOrEqualTo(maxValue!);
+        const [maxValue]: BigNumber[] = args.constraints; // eslint-disable-line @typescript-eslint/no-unsafe-assignment
+        return value.isLessThan(maxValue!);
     }
 
     defaultMessage(args: ValidationArguments) {
-        return `Der Wert muss kleiner oder gleich ${(args.constraints[0] as Decimal).toNumber()} sein.`;
+        return `Der Wert muss kleiner oder gleich ${(args.constraints[0] as BigNumber).toNumber()} sein.`;
     }
 }
 
@@ -123,23 +123,23 @@ export class BuchDtoOhneRef {
 
     // https://github.com/typestack/class-transformer?tab=readme-ov-file#basic-usage
     @Transform(number2Decimal)
-    @Validate(DecimalMin, [Decimal(0)], {
+    @Validate(DecimalMin, [BigNumber(0)], {
         message: 'preis muss positiv sein.',
     })
     @ApiProperty({ example: 1, type: Number })
     // Decimal aus decimal.js analog zu BigDecimal von Java
-    readonly preis!: Decimal;
+    readonly preis!: BigNumber;
 
     @Transform(number2Percent)
-    @Validate(DecimalMin, [Decimal(0)], {
+    @Validate(DecimalMin, [BigNumber(0)], {
         message: 'rabatt muss positiv sein.',
     })
-    @Validate(DecimalMax, [Decimal(1)], {
+    @Validate(DecimalMax, [BigNumber(1)], {
         message: 'rabatt muss kleiner 1 sein.',
     })
     @IsOptional()
     @ApiProperty({ example: 0.1, type: Number })
-    readonly rabatt: Decimal | undefined;
+    readonly rabatt: BigNumber | undefined;
 
     @IsBoolean()
     @IsOptional()
