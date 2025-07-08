@@ -109,7 +109,7 @@ export class BuchQuery implements Suchparameter {
     declare only?: 'count';
 }
 
-type CountResult = Record<'count', number>;
+export type CountResult = Record<'count', number>;
 
 /**
  * Die Controller-Klasse für die Verwaltung von Bücher.
@@ -275,7 +275,7 @@ export class BuchGetController {
      * Zu einem Buch mit gegebener ID wird die zugehörige Binärdatei, z.B.
      * ein Bild oder ein Video, heruntergeladen.
      *
-     * @param id Pfad-Parameter `id`.
+     * @param idStr Pfad-Parameter `id`.
      * @param res Leeres Response-Objekt von Express.
      * @returns Leeres Promise-Objekt.
      */
@@ -289,7 +289,7 @@ export class BuchGetController {
     @ApiNotFoundResponse({ description: 'Keine Datei zur Buch-ID gefunden' })
     @ApiOkResponse({ description: 'Die Datei wurde gefunden' })
     async getFileById(
-        @Param('id') idStr: number,
+        @Param('id') idStr: string,
         @Res({ passthrough: true }) res: Response,
     ) {
         this.#logger.debug('getFileById: buchId:%s', idStr);
