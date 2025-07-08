@@ -20,7 +20,7 @@ import { getToken } from './token.mjs';
 
 // selbst-signiertes Zertifikat beim Server
 // https://nodejs.org/api/cli.html
-// TODO Warning bzgl. NODE_TLS_REJECT_UNAUTHORIZED unterdruecken
+// Alternative: "Undici" verwenden
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
 
 const dbPopulate = async (token: string) => {
