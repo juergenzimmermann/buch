@@ -111,9 +111,7 @@ aufgerufen hat:
                                             Direct access grants            Haken setzen
         <Next> anklicken
             Root URL                https://localhost:3000
-            Valid redirect URIs     https://localhost:3000
-                                    https://buch:3000                       Docker Container
-                                    https://oauth.pstmn.io/v1/callback      Postman
+            Valid redirect URIs     *
             Web origins             +
         <Save> anklicken
 
