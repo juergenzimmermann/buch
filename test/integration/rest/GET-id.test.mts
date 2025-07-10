@@ -19,9 +19,6 @@
 //  * Mocha     https://mochajs.org
 //  * node:test ab Node 18
 
-// https://github.com/testjavascript/nodejs-integration-tests-best-practices
-// axios: https://github.com/axios/axios
-
 // Alternativen zu fetch aus ES 2015:
 // https://fetch.spec.whatwg.org
 // https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch
