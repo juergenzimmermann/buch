@@ -16,12 +16,6 @@
 /* eslint-disable camelcase, @typescript-eslint/naming-convention */
 
 import { Injectable } from '@nestjs/common';
-import axios, {
-    AxiosError,
-    type AxiosInstance,
-    type AxiosResponse,
-    type RawAxiosRequestHeaders,
-} from 'axios';
 import {
     type KeycloakConnectOptions,
     type KeycloakConnectOptionsFactory,
@@ -30,6 +24,12 @@ import { keycloakConnectOptions, paths } from '../../config/keycloak.js';
 import { getLogger } from '../../logger/logger.js';
 
 const { authServerUrl, clientId, secret } = keycloakConnectOptions;
+const accessTokenUrl = `${authServerUrl}/${paths.accessToken}`;
+const AUTHORIZATION = 'Authorization';
+const BASIC_AUTH = 'Basic';
+const CONTENT_TYPE = 'Content-Type';
+const X_WWW_FORM_URLENCODED = 'application/x-www-form-urlencoded';
+const POST = 'POST';
 
 /** Typdefinition für Eingabedaten zu einem Token. */
 export type TokenData = {
@@ -39,29 +39,21 @@ export type TokenData = {
 
 @Injectable()
 export class KeycloakService implements KeycloakConnectOptionsFactory {
-    readonly #headers: RawAxiosRequestHeaders;
-    readonly #headersAuthorization: RawAxiosRequestHeaders;
-
-    readonly #keycloakClient: AxiosInstance;
-
+    readonly #headers: Headers;
+    readonly #headersAuthorization: Headers;
     readonly #logger = getLogger(KeycloakService.name);
 
     constructor() {
-        this.#headers = {
-            'Content-Type': 'application/x-www-form-urlencoded',
-        };
+        this.#headers = new Headers();
+        this.#headers.append(CONTENT_TYPE, X_WWW_FORM_URLENCODED);
 
         const encoded = btoa(`${clientId}:${secret}`);
-        this.#headersAuthorization = {
-            'Content-Type': 'application/x-www-form-urlencoded',
-            Authorization: `Basic ${encoded}`,
-        };
-
-        this.#keycloakClient = axios.create({
-            baseURL: authServerUrl!,
-            // ggf. httpsAgent fuer HTTPS bei selbst-signiertem Zertifikat
-        });
-        this.#logger.debug('keycloakClient=%o', this.#keycloakClient.defaults);
+        this.#headersAuthorization = new Headers();
+        this.#headersAuthorization.append(CONTENT_TYPE, X_WWW_FORM_URLENCODED);
+        this.#headersAuthorization.append(
+            AUTHORIZATION,
+            `${BASIC_AUTH} ${encoded}`,
+        );
     }
 
     createKeycloakConnectOptions(): KeycloakConnectOptions {
@@ -82,35 +74,31 @@ export class KeycloakService implements KeycloakConnectOptionsFactory {
         this.#logger.debug('token: path=%s', paths.accessToken);
         this.#logger.debug('token: headers=%o', this.#headers);
         this.#logger.debug('token: body=%s', body);
-        let response: AxiosResponse<Record<string, number | string>>;
+        let response: Response;
         try {
-            response = await this.#keycloakClient.post(
-                paths.accessToken,
+            response = await fetch(accessTokenUrl, {
+                method: POST,
                 body,
-                { headers: this.#headers },
-            );
+                headers: this.#headers,
+            });
         } catch (err: unknown) {
-            if (err instanceof AxiosError) {
-                const { code, config } = err;
-                this.#logger.warn('token: code=%s', code);
-                if (config === undefined) {
-                    this.#logger.warn('Sonstiger Axios-Fehler');
-                } else {
-                    const { baseURL, method, url, data } = config;
-                    this.#logger.warn('token: method=%s', method);
-                    this.#logger.warn('token: baseURL=%s', baseURL);
-                    this.#logger.warn('token: url=%s', url);
-                    this.#logger.warn('token: data=%s', data);
-                }
-            } else {
-                this.#logger.warn('Sonstiger Netzwerk-Fehler');
-            }
+            this.#logger.warn('Fehler beim Zugriff auf Keycloak: %o', err);
             return;
         }
 
-        this.#logPayload(response);
-        this.#logger.debug('token: response.data=%o', response.data);
-        return response.data;
+        const { status } = response;
+        if (status !== 200) {
+            this.#logger.warn(
+                'Fehler beim Netzwerkzugriff auf Keycloak. Statuscode: %d',
+                status,
+            );
+            return;
+        }
+
+        const responseBody = await response.json();
+        this.#logPayload(responseBody);
+        this.#logger.debug('token: responseBody=%o', responseBody);
+        return responseBody;
     }
 
     async refresh(refresh_token: string | undefined) {
@@ -121,33 +109,40 @@ export class KeycloakService implements KeycloakConnectOptionsFactory {
 
         // https://stackoverflow.com/questions/51386337/refresh-access-token-via-refresh-token-in-keycloak
         const body = `refresh_token=${refresh_token}&grant_type=refresh_token`;
-        let response: AxiosResponse<Record<string, number | string>>;
+
+        let response: Response;
         try {
-            response = await this.#keycloakClient.post(
-                paths.accessToken,
+            response = await fetch(accessTokenUrl, {
+                method: POST,
                 body,
-                { headers: this.#headersAuthorization },
-                // { headers: this.#headersBasic },
-            );
-        } catch (err) {
-            this.#logger.warn('err=%o', err);
+                headers: this.#headersAuthorization,
+            });
+        } catch (err: unknown) {
+            this.#logger.warn('Fehler beim Zugriff auf Keycloak: %o', err);
+            return;
+        }
+
+        const { status } = response;
+        if (status !== 200) {
             this.#logger.warn(
-                'refresh: Fehler bei POST-Request: path=%s, body=%o',
-                paths.accessToken,
-                body,
+                'Fehler beim Netzwerkzugriff auf Keycloak. Statuscode: %d',
+                status,
             );
             return;
         }
-        this.#logger.debug('refresh: response.data=%o', response.data);
-        return response.data;
+
+        const responseBody = await response.json();
+
+        this.#logger.debug('refresh: responseBody=%o', responseBody);
+        return responseBody;
     }
 
     // Extraktion der Rollen: wird auf Client-Seite benoetigt
     // { ..., "azp": "nest-client", "exp": ..., "resource_access": { "nest-client": { "roles": ["admin"] } ...}
     // azp = authorized party
-    #logPayload(response: AxiosResponse<Record<string, string | number>>) {
-        // https://www.keycloak.org/docs-api/23.0.6/rest-api/index.html#ClientInitialAccessCreatePresentation
-        const { access_token } = response.data;
+    async #logPayload(responseBody: any) {
+        // https://www.keycloak.org/docs-api/latest/rest-api/index.html#ClientInitialAccessCreatePresentation
+        const { access_token } = responseBody;
         // Payload ist der mittlere Teil zwischen 2 Punkten und mit Base64 codiert
         const [, payloadStr] = (access_token as string).split('.');
 

@@ -27,7 +27,7 @@ import { BadUserInputError } from './errors.js';
 
 @Catch(HttpException)
 export class HttpExceptionFilter implements ExceptionFilter {
-    catch(exception: HttpException, _host: ArgumentsHost) {
+    catch(exception: HttpException, _host: ArgumentsHost): never {
         const response = exception.getResponse();
         if (typeof response === 'string') {
             throw new BadUserInputError(response, exception);
