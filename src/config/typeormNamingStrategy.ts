@@ -77,8 +77,8 @@ export class SnakeNamingStrategy extends DefaultNamingStrategy implements Naming
 
     // eslint-disable-next-line unicorn/no-keyword-prefix
     classTableInheritanceParentColumnName(
-        parentTableName: any,
-        parentTableIdPropertyName: any,
+        parentTableName: unknown,
+        parentTableIdPropertyName: unknown,
     ) {
         return snakeCase(`${parentTableName}_${parentTableIdPropertyName}`);
     }

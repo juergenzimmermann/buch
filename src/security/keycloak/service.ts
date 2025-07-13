@@ -137,14 +137,22 @@ export class KeycloakService implements KeycloakConnectOptionsFactory {
         return responseBody;
     }
 
-    // Extraktion der Rollen: wird auf Client-Seite benoetigt
+    // Logging der Rollen: wird auf Client-Seite benoetigt
     // { ..., "azp": "nest-client", "exp": ..., "resource_access": { "nest-client": { "roles": ["admin"] } ...}
     // azp = authorized party
-    async #logPayload(responseBody: any) {
+    async #logPayload(responseBody: unknown) {
+        if (
+            !this.#logger.isLevelEnabled('debug') ||
+            responseBody === null ||
+            typeof responseBody !== 'object' ||
+            !Object.hasOwn(responseBody, 'access_token')
+        ) {
+            return;
+        }
         // https://www.keycloak.org/docs-api/latest/rest-api/index.html#ClientInitialAccessCreatePresentation
-        const { access_token } = responseBody;
+        const { access_token } = responseBody as { access_token: string };
         // Payload ist der mittlere Teil zwischen 2 Punkten und mit Base64 codiert
-        const [, payloadStr] = (access_token as string).split('.');
+        const [, payloadStr] = access_token.split('.');
 
         // Base64 decodieren
         if (payloadStr === undefined) {
