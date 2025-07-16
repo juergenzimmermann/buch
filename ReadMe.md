@@ -458,16 +458,13 @@ für ein Docker-Image ist `<registry-name>/<username>/<image-name>:<image-tag>`.
 Ob das Dockerfile gemäß _Best Practices_ (https://docs.docker.com/develop/develop-images/dockerfile_best-practices)
 erstellt wurde, kann man mit _Hadolint_ überprüfen.
 
-Je nach Basis-Image kann man ein Image folgendermaßen erstellen und mit Hadolint
-validieren:
-
 ```shell
     # Debian Bookworm (12) slim
-    Get-Content Dockerfile | docker run --rm --interactive hadolint/hadolint:2.12.1-beta-debian
+    Get-Content Dockerfile | docker run --rm --interactive hadolint/hadolint:v2.13.1-beta2-debian
     docker build --tag juergenzimmermann/buch:2025.10.1-bookworm .
 
     # Alpine
-    Get-Content Dockerfile.alpine | docker run --rm --interactive hadolint/hadolint:2.12.1-beta-debian
+    Get-Content Dockerfile.alpine | docker run --rm --interactive hadolint/hadolint:v2.13.1-beta2-debian
     docker build --tag juergenzimmermann/buch:2025.10.1-alpine --file Dockerfile.alpine .
 ```
 
