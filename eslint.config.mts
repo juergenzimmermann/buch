@@ -57,7 +57,9 @@ export default tseslint.config(
             ecmaVersion: 2025,
             sourceType: 'module',
             parserOptions: {
+                // https://typescript-eslint.io/blog/parser-options-project-true
                 project: true,
+                tsconfigRootDir: __dirname,
                 ecmaFeatures: {
                     impliedStrict: true,
                 },
@@ -525,7 +527,6 @@ export default tseslint.config(
             ecmaVersion: 2025,
             sourceType: 'module',
             parserOptions: {
-                // project: true,
                 ecmaFeatures: {
                     impliedStrict: true,
                 },
