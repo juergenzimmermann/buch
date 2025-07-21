@@ -7,7 +7,6 @@ import vitest from '@vitest/eslint-plugin';
 import importPlugin from 'eslint-plugin-import';
 import nodePlugin from 'eslint-plugin-n';
 import preferArrow from 'eslint-plugin-prefer-arrow';
-import prettierRecommended from 'eslint-plugin-prettier/recommended';
 import promise from 'eslint-plugin-promise';
 import regexp from 'eslint-plugin-regexp';
 import security from 'eslint-plugin-security';
@@ -17,8 +16,8 @@ import globals from 'globals';
 import tseslint from 'typescript-eslint';
 
 // https://typescript-eslint.io/packages/typescript-eslint#config
+// https://typescript-eslint.io/troubleshooting/typed-linting/performance#eslint-plugin-prettier
 export default tseslint.config(
-    // https://github.com/prettier/eslint-plugin-prettier?tab=readme-ov-file#configuration-new-eslintconfigjs
     {
         files: ['src/*.ts'],
 
@@ -444,26 +443,38 @@ export default tseslint.config(
                 'error',
                 'prefer-inline',
             ],
+            // https://typescript-eslint.io/troubleshooting/typed-linting/performance#eslint-plugin-import
+            'import/default': 'off',
             'import/enforce-node-protocol-usage': ['error', 'always'],
             'import/extensions': 'off',
             'import/first': 'error',
+            // https://typescript-eslint.io/troubleshooting/typed-linting/performance#eslint-plugin-import
+            'import/named': 'off',
+            // https://typescript-eslint.io/troubleshooting/typed-linting/performance#eslint-plugin-import
+            'import/namespace': 'off',
             'import/newline-after-import': 'error',
             'import/no-absolute-path': 'error',
             'import/no-commonjs': 'error',
-            'import/no-cycle': 'error',
+            // https://typescript-eslint.io/troubleshooting/typed-linting/performance#eslint-plugin-import
+            // 'import/no-cycle': 'error',
             'import/no-default-export': 'error',
-            'import/no-deprecated': 'error',
+            // https://typescript-eslint.io/troubleshooting/typed-linting/performance#eslint-plugin-import
+            // 'import/no-deprecated': 'error',
             'import/no-dynamic-require': 'error',
             'import/no-empty-named-blocks': 'error',
             'import/no-extraneous-dependencies': 'error',
             'import/no-internal-modules': 'error',
             'import/no-mutable-exports': 'error',
+            // https://typescript-eslint.io/troubleshooting/typed-linting/performance#eslint-plugin-import
+            'import/no-named-as-default-member': 'off',
             'import/no-named-default': 'error',
             'import/no-namespace': 'error',
             'import/no-self-import': 'error',
             'import/no-unassigned-import': 'error',
+            // https://typescript-eslint.io/troubleshooting/typed-linting/performance#eslint-plugin-import
             'import/no-unresolved': 'off',
-            'import/no-unused-modules': 'error',
+            // https://typescript-eslint.io/troubleshooting/typed-linting/performance#eslint-plugin-import
+            // 'import/no-unused-modules': 'error',
             'import/no-useless-path-segments': 'error',
             'import/order': [
                 'error',
@@ -554,7 +565,4 @@ export default tseslint.config(
             'vitest/prefer-lowercase-title': 'off',
         },
     },
-
-    // prettier ueberschreibt vorherige Konfigurationseinstellungen
-    prettierRecommended,
 );
