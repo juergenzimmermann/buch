@@ -47,8 +47,6 @@ Zugriffsrechte im (Linux-) Docker Container in einer 2. PowerShell gesetzt:
    docker compose down
 ```
 
-### Datenbank, Datenbank-User und Schema anlegen
-
 Nachdem der Docker Container heruntergefahren ist, werden in `compose.yml` die
 zuvor gesetzten Kommentare wieder entfernen, d.h.
 
@@ -64,6 +62,8 @@ zuvor gesetzten Kommentare wieder entfernen, d.h.
 
 Außerdem muss man in derselben Datei `.extras\compose\postgres\compose.yml` die
 Zeile mit `cap_add: [...]` wieder auskommentieren.
+
+### Datenbank, Datenbank-User und Schema anlegen
 
 In der 1. PowerShell startet man wieder den DB-Server als Docker Container, und
 zwar jetzt mit TLS:
