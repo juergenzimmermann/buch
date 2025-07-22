@@ -25,7 +25,7 @@
 // http_req_failed bezieht sich auf Statuscodes zwischen 4xx und 5xx
 // https://github.com/grafana/k6-learn/blob/main/Modules/II-k6-Foundations/03-Understanding-k6-results.md#error-rate
 
-import http, { RefinedResponseBody, type ResponseType } from 'k6/http';
+import http from 'k6/http';
 import { check, sleep } from 'k6';
 import { type Options } from 'k6/options';
 import { BuchDTO } from '../../src/buch/controller/buchDTO.ts';
@@ -80,24 +80,26 @@ const key = open(`${tlsDir}/key.pem`);
 
 // https://grafana.com/docs/k6/latest/using-k6/test-lifecycle
 export function setup() {
-    let headers: { [name: string]: string } = {
+    const tokenHeaders: Record<string, string> = {
         'Content-Type': 'application/x-www-form-urlencoded',
     };
 
-    let body = 'username=admin&password=p';
-    let res = http.post<'text'>(tokenUrl, body, { headers });
+    const body = 'username=admin&password=p';
+    const tokenResponse = http.post<'text'>(tokenUrl, body, {
+        headers: tokenHeaders,
+    });
     let token: string;
-    if (res.status === 200) {
-        token = JSON.parse(res.body).access_token;
+    if (tokenResponse.status === 200) {
+        token = JSON.parse(tokenResponse.body).access_token;
         console.log(`token=${token}`);
     } else {
         throw new Error(
-            `setup fuer adminToken: status=${res.status}, body=${res.body}`,
+            `setup fuer adminToken: status=${tokenResponse.status}, body=${tokenResponse.body}`,
         );
     }
 
-    headers = { Authorization: `Bearer ${token}` };
-    res = http.post(dbPopulateUrl, undefined, { headers });
+    const headers = { Authorization: `Bearer ${token}` };
+    const res = http.post(dbPopulateUrl, undefined, { headers });
     if (res.status === 200) {
         console.log('DB neu geladen');
     } else {
@@ -243,7 +245,7 @@ export function getById() {
 export function getByIdNotModified() {
     // https://stackoverflow.com/questions/4550505/getting-a-random-value-from-a-javascript-array
     const id = ids[Math.floor(Math.random() * ids.length)]; // zwischen 0 und 1
-    let headers: { [name: string]: string } = {
+    const headers: Record<string, string> = {
         'If-None-Match': '"0"',
     };
     const res = http.get(`${restUrl}/${id}`, { headers });
@@ -317,19 +319,21 @@ export function postBuch() {
     buch.isbn = generateISBN();
     buch.schlagwoerter = [schlagwort.toUpperCase()];
 
-    let headers: { [name: string]: string } = {
+    const tokenHeaders: Record<string, string> = {
         'Content-Type': 'application/x-www-form-urlencoded',
     };
-    let body = 'username=admin&password=p';
-    let res = http.post<'text'>(tokenUrl, body, { headers });
-    check(res, { 'POST /auth/token: OK': (r) => r.status === 200 });
-    const token = JSON.parse(res.body).access_token;
+    const body = 'username=admin&password=p';
+    const tokenResponse = http.post<'text'>(tokenUrl, body, {
+        headers: tokenHeaders,
+    });
+    check(tokenResponse, { 'POST /auth/token: OK': (r) => r.status === 200 });
+    const token = JSON.parse(tokenResponse.body).access_token;
 
-    headers = {
+    const headers = {
         Authorization: `Bearer ${token}`,
         'Content-Type': 'application/json',
     };
-    res = http.post(restUrl, JSON.stringify(buch), { headers });
+    const res = http.post(restUrl, JSON.stringify(buch), { headers });
     check(res, {
         'POST "buch": Created': (r) => r.status === 201,
         // 'POST "buch": location': (r) => r.headers.location.startsWith(restUrl),

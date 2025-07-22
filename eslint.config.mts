@@ -565,4 +565,35 @@ export default tseslint.config(
             'vitest/prefer-lowercase-title': 'off',
         },
     },
+
+    // -------------------------------------------------------------------------
+    // L a s t t e s t s
+    // -------------------------------------------------------------------------
+    {
+        files: ['test/lasttest/*.ts'],
+
+        extends: [
+            eslint.configs.recommended,
+            ...tseslint.configs.strict,
+            ...tseslint.configs.stylistic,
+        ],
+
+        languageOptions: {
+            ecmaVersion: 2025,
+            sourceType: 'module',
+            parserOptions: {
+                ecmaFeatures: {
+                    impliedStrict: true,
+                },
+            },
+            globals: {
+                ...globals.node,
+            },
+        },
+
+        rules: {
+            '@typescript-eslint/consistent-type-definitions': ['error', 'type'],
+            '@typescript-eslint/no-explicit-any': 'off',
+        },
+    },
 );
