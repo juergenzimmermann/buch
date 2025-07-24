@@ -14,19 +14,19 @@
 -- along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 -- https://www.atlassian.com/data/databases/understanding-strorage-sizes-for-mysql-text-data-types
--- https://dev.mysql.com/doc/refman/9.2/en/blob.html
+-- https://dev.mysql.com/doc/refman/9.4/en/blob.html
 
--- https://dev.mysql.com/doc/refman/9.2/en/create-table.html
--- https://dev.mysql.com/doc/refman/9.2/en/information-schema-innodb-tablespaces-table.html
--- https://dev.mysql.com/doc/refman/9.2/en/innodb-row-format.html
--- https://dev.mysql.com/doc/refman/9.2/en/data-types.html
--- https://dev.mysql.com/doc/refman/9.2/en/integer-types.html
+-- https://dev.mysql.com/doc/refman/9.4/en/create-table.html
+-- https://dev.mysql.com/doc/refman/9.4/en/information-schema-innodb-tablespaces-table.html
+-- https://dev.mysql.com/doc/refman/9.4/en/innodb-row-format.html
+-- https://dev.mysql.com/doc/refman/9.4/en/data-types.html
+-- https://dev.mysql.com/doc/refman/9.4/en/integer-types.html
 -- BOOLEAN = TINYINT(1) mit TRUE, true, FALSE, false
--- https://dev.mysql.com/doc/refman/9.2/en/boolean-literals.html
--- https://dev.mysql.com/doc/refman/9.2/en/date-and-time-types.html
+-- https://dev.mysql.com/doc/refman/9.4/en/boolean-literals.html
+-- https://dev.mysql.com/doc/refman/9.4/en/date-and-time-types.html
 -- TIMESTAMP nur zwischen '1970-01-01 00:00:01' und '2038-01-19 03:14:07'
--- https://dev.mysql.com/doc/refman/9.2/en/date-and-time-types.html
--- https://dev.mysql.com/doc/refman/9.2/en/create-table-check-constraints.html
+-- https://dev.mysql.com/doc/refman/9.4/en/date-and-time-types.html
+-- https://dev.mysql.com/doc/refman/9.4/en/create-table-check-constraints.html
 -- https://dev.mysql.com/blog-archive/mysql-8-0-16-introducing-check-constraint
 -- UNIQUE: impliziter Index als B+ Baum
 
