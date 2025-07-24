@@ -86,9 +86,10 @@ Schema `buch` mit dem DB-User `buch` als _Owner_ angelegt:
 
 Die beiden SQL-Skripte liegen z.B. im Windows-Verzeichnis `C:\Zimmermann\volumes\postgres\sql`
 und sind durch _Volume Mount_ in `compose.yml` im PostgreSQL-Server als Linux-Verzeichnis
-`/sql` verfügbar. Kopien der beiden SQL-Skripte sind im Projekt-Verzeichnis `.extras\db\postgres`.
+`/sql` verfügbar. Kopien der beiden SQL-Skripte sind im Projekt-Verzeichnis
+`.extras\compose\postgres\sql` damit man den SQL-Editor der IDE nutzen kann.
 Eventuelle Änderungen müssen auf jeden Fall in `C:\Zimmermann\volumes\postgres\sql`
-gemacht werden.
+gemacht werden, z.B. durch Kopieren der Dateien.
 
 ### TLS für den PostgreSQL-Server mit OpenSSL überprüfen
 

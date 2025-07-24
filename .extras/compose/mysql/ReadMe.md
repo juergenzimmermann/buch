@@ -92,6 +92,13 @@ neue DB `buch` mit dem DB-User `buch`anzulegen.
     docker compose down
 ```
 
+Das SQL-Skript liegt z.B. im Windows-Verzeichnis `C:\Zimmermann\volumes\mysql\sql`
+und ist durch _Volume Mount_ in `compose.yml` im MySQL-Server als Linux-Verzeichnis
+`/sql` verfügbar. Kopien der beiden SQL-Skripte sind im Projekt-Verzeichnis
+`.extras\compose\mysql\sql`, damit man den SQL-Editor der IDE nutzen kann.
+Eventuelle Änderungen müssen auf jeden Fall in `C:\Zimmermann\volumes\mysql\sql`
+gemacht werden, z.B. durch Kopieren der Datei.
+
 ### Konfiguration für phpMyAdmin
 
 In der Datei `extras\compose\mysql\compose.yml` muss man innerhalb vom Service
@@ -118,4 +125,4 @@ Volume den Kommentar beim Schlüssel `read_only:` wieder.
 
 ### CLI mysqlsh statt mysql?
 
-`mysqlsh` ist **NICHT** im Docker-Image enthalten (siehe https://dev.mysql.com/doc/refman/9.3/en/mysql.html).
+`mysqlsh` ist **NICHT** im Docker-Image enthalten (siehe https://dev.mysql.com/doc/refman/9.4/en/mysql.html).
