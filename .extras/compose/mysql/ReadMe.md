@@ -123,6 +123,21 @@ setzt die Zugriffsrechte für PHP-Skripte:
 Abschließend entfernt man in `compose.yml` beim Service _phpmyadmin_ und dessen
 Volume den Kommentar beim Schlüssel `read_only:` wieder.
 
+### TLS für den MySQL-Server überprüfen
+
+Jetzt kann man bei Bedarf noch die TLS-Konfiguration für den MySQL-Server
+überprüfen. Dazu muss der MySQL-Server natürlich gestartet sein (s.o.).
+
+```powershell
+   cd extras\compose\mysql
+   docker compose exec db bash
+       mysql -h mysql -u root -p --ssl-mode=REQUIRED
+           SHOW SESSION STATUS LIKE 'Ssl_version';
+           SHOW STATUS LIKE 'Ssl_cipher';
+           quit
+       exit
+```
+
 ### CLI mysqlsh statt mysql?
 
 `mysqlsh` ist **NICHT** im Docker-Image enthalten (siehe https://dev.mysql.com/doc/refman/9.4/en/mysql.html).
