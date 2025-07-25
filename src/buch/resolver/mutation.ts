@@ -21,11 +21,11 @@ import BigNumber from 'bignumber.js'; // eslint-disable-line @typescript-eslint/
 import { AuthGuard, Roles } from 'nest-keycloak-connect';
 import { getLogger } from '../../logger/logger.js';
 import { ResponseTimeInterceptor } from '../../logger/response-time.js';
-import { BuchDTO } from '../controller/buchDTO.js';
+import { BuchDTO } from '../controller/buch-dto.js';
 import { type Abbildung } from '../entity/abbildung.js';
 import { type Buch } from '../entity/buch.js';
 import { type Titel } from '../entity/titel.js';
-import { BuchWriteService } from '../service/write.js';
+import { BuchWriteService } from '../service/write-service.js';
 import { type IdInput } from './query.js';
 import { HttpExceptionFilter } from './http-exception-filter.js';
 

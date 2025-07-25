@@ -16,8 +16,8 @@
 import { HttpStatus } from '@nestjs/common';
 import BigNumber from 'bignumber.js';
 import { beforeAll, describe, expect, test } from 'vitest';
-import { type BuchDTO } from '../../../src/buch/controller/buchDTO.js';
-import { BuchReadService } from '../../../src/buch/service/read.js';
+import { type BuchDTO } from '../../../src/buch/controller/buch-dto.js';
+import { BuchService } from '../../../src/buch/service/service.js';
 import {
     APPLICATION_JSON,
     AUTHORIZATION,
@@ -129,7 +129,7 @@ describe('POST /rest', () => {
         const idStr = location?.slice(indexLastSlash + 1);
 
         expect(idStr).toBeDefined();
-        expect(BuchReadService.ID_PATTERN.test(idStr ?? '')).toBe(true);
+        expect(BuchService.ID_PATTERN.test(idStr ?? '')).toBe(true);
     });
 
     test.concurrent('Neues Buch mit ungueltigen Daten', async () => {

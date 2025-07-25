@@ -20,7 +20,7 @@ import { Public } from 'nest-keycloak-connect';
 import { getLogger } from '../../logger/logger.js';
 import { ResponseTimeInterceptor } from '../../logger/response-time.js';
 import { Buch } from '../entity/buch.js';
-import { BuchReadService } from '../service/read.js';
+import { BuchService } from '../service/service.js';
 import { createPageable } from '../service/pageable.js';
 import { type Suchparameter } from '../service/suchparameter.js';
 import { HttpExceptionFilter } from './http-exception-filter.js';
@@ -37,11 +37,11 @@ export type SuchparameterInput = {
 @UseFilters(HttpExceptionFilter)
 @UseInterceptors(ResponseTimeInterceptor)
 export class BuchQueryResolver {
-    readonly #service: BuchReadService;
+    readonly #service: BuchService;
 
     readonly #logger = getLogger(BuchQueryResolver.name);
 
-    constructor(service: BuchReadService) {
+    constructor(service: BuchService) {
         this.#service = service;
     }
 

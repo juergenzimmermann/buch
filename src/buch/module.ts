@@ -17,13 +17,13 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { MailModule } from '../mail/module.js';
 import { KeycloakModule } from '../security/keycloak/module.js';
-import { BuchGetController } from './controller/get.js';
-import { BuchWriteController } from './controller/write.js';
+import { BuchController } from './controller/controller.js';
+import { BuchWriteController } from './controller/write-controller.js';
 import { entities } from './entity/entities.js';
 import { BuchMutationResolver } from './resolver/mutation.js';
 import { BuchQueryResolver } from './resolver/query.js';
-import { BuchReadService } from './service/read.js';
-import { BuchWriteService } from './service/write.js';
+import { BuchService } from './service/service.js';
+import { BuchWriteService } from './service/write-service.js';
 import { QueryBuilder } from './service/query-builder.js';
 
 /**
@@ -38,16 +38,16 @@ import { QueryBuilder } from './service/query-builder.js';
  */
 @Module({
     imports: [KeycloakModule, MailModule, TypeOrmModule.forFeature(entities)],
-    controllers: [BuchGetController, BuchWriteController],
+    controllers: [BuchController, BuchWriteController],
     // Provider sind z.B. Service-Klassen fuer DI
     providers: [
-        BuchReadService,
+        BuchService,
         BuchWriteService,
         BuchQueryResolver,
         BuchMutationResolver,
         QueryBuilder,
     ],
     // Export der Provider fuer DI in anderen Modulen
-    exports: [BuchReadService, BuchWriteService],
+    exports: [BuchService, BuchWriteService],
 })
 export class BuchModule {}

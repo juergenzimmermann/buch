@@ -23,8 +23,8 @@ import { GraphQLModule } from '@nestjs/graphql';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AdminModule } from './admin/module.js';
 import { BuchModule } from './buch/module.js';
-import { BuchGetController } from './buch/controller/get.js';
-import { BuchWriteController } from './buch/controller/write.js';
+import { BuchController } from './buch/controller/controller.js';
+import { BuchWriteController } from './buch/controller/write-controller.js';
 import { DevModule } from './config/dev/module.js';
 import { graphQlModuleOptions } from './config/graphql.js';
 import { typeOrmModuleOptions } from './config/typeormOptions.js';
@@ -47,11 +47,6 @@ export class AppModule implements NestModule {
     configure(consumer: MiddlewareConsumer) {
         consumer
             .apply(RequestLoggerMiddleware)
-            .forRoutes(
-                BuchGetController,
-                BuchWriteController,
-                'auth',
-                'graphql',
-            );
+            .forRoutes(BuchController, BuchWriteController, 'auth', 'graphql');
     }
 }

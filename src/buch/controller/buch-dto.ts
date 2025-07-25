@@ -42,8 +42,8 @@ import {
 } from 'class-validator';
 import BigNumber from 'bignumber.js';
 import { type BuchArt } from '../entity/buch.js';
-import { AbbildungDTO } from './abbildungDTO.js';
-import { TitelDTO } from './titelDTO.js';
+import { AbbildungDTO } from './abbildung-dto.js';
+import { TitelDTO } from './titel-dto.js';
 
 export const MAX_RATING = 5;
 

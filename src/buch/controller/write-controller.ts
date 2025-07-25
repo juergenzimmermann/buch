@@ -59,8 +59,8 @@ import { ResponseTimeInterceptor } from '../../logger/response-time.js';
 import { type Abbildung } from '../entity/abbildung.js';
 import { type Buch } from '../entity/buch.js';
 import { type Titel } from '../entity/titel.js';
-import { BuchWriteService } from '../service/write.js';
-import { BuchDTO, BuchDtoOhneRef } from './buchDTO.js';
+import { BuchWriteService } from '../service/write-service.js';
+import { BuchDTO, BuchDtoOhneRef } from './buch-dto.js';
 import { createBaseUri } from './create-base-uri.js';
 
 const MSG_FORBIDDEN = 'Kein Token mit ausreichender Berechtigung vorhanden';

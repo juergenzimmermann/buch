@@ -34,7 +34,7 @@ import {
     VersionInvalidException,
     VersionOutdatedException,
 } from './exceptions.js';
-import { BuchReadService } from './read.js';
+import { BuchService } from './service.js';
 
 /** Typdefinitionen zum Aktualisieren eines Buches mit `update`. */
 export type UpdateParams = {
@@ -64,7 +64,7 @@ export class BuchWriteService {
 
     readonly #fileRepo: Repository<BuchFile>;
 
-    readonly #readService: BuchReadService;
+    readonly #readService: BuchService;
 
     readonly #mailService: MailService;
 
@@ -74,7 +74,7 @@ export class BuchWriteService {
     constructor(
         @InjectRepository(Buch) repo: Repository<Buch>,
         @InjectRepository(BuchFile) fileRepo: Repository<BuchFile>,
-        readService: BuchReadService,
+        readService: BuchService,
         mailService: MailService,
     ) {
         this.#repo = repo;

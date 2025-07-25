@@ -50,7 +50,7 @@ import { paths } from '../../config/paths.js';
 import { getLogger } from '../../logger/logger.js';
 import { ResponseTimeInterceptor } from '../../logger/response-time.js';
 import { type Buch, type BuchArt } from '../entity/buch.js';
-import { BuchReadService } from '../service/read.js';
+import { BuchService } from '../service/service.js';
 import { createPageable } from '../service/pageable.js';
 import { type Suchparameter } from '../service/suchparameter.js';
 import { createPage } from './page.js';
@@ -122,17 +122,17 @@ export type CountResult = Record<'count', number>;
 @ApiTags('Buch REST-API')
 // @ApiBearerAuth()
 // Klassen ab ES 2015
-export class BuchGetController {
+export class BuchController {
     // readonly in TypeScript, vgl. C#
     // private ab ES 2019
-    readonly #service: BuchReadService;
+    readonly #service: BuchService;
 
-    readonly #logger = getLogger(BuchGetController.name);
+    readonly #logger = getLogger(BuchController.name);
 
     // Dependency Injection (DI) bzw. Constructor Injection
     // constructor(private readonly service: BuchReadService) {}
     // https://github.com/tc39/proposal-type-annotations#omitted-typescript-specific-features-that-generate-code
-    constructor(service: BuchReadService) {
+    constructor(service: BuchService) {
         this.#service = service;
     }
 

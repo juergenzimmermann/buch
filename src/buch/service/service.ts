@@ -44,7 +44,7 @@ export type FindByIdParams = {
  * mit _TypeORM_ auf eine relationale DB zu.
  */
 @Injectable()
-export class BuchReadService {
+export class BuchService {
     static readonly ID_PATTERN = /^[1-9]\d{0,10}$/u;
 
     readonly #buchProps: string[];
@@ -55,7 +55,7 @@ export class BuchReadService {
 
     readonly #fileRepo: Repository<BuchFile>;
 
-    readonly #logger = getLogger(BuchReadService.name);
+    readonly #logger = getLogger(BuchService.name);
 
     constructor(
         queryBuilder: QueryBuilder,
