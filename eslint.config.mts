@@ -6,6 +6,7 @@ import stylistic from '@stylistic/eslint-plugin';
 import vitest from '@vitest/eslint-plugin';
 import importPlugin from 'eslint-plugin-import';
 import nodePlugin from 'eslint-plugin-n';
+import packageJson from 'eslint-plugin-package-json';
 import preferArrow from 'eslint-plugin-prefer-arrow';
 import promise from 'eslint-plugin-promise';
 import regexp from 'eslint-plugin-regexp';
@@ -595,5 +596,19 @@ export default tseslint.config(
             '@typescript-eslint/consistent-type-definitions': ['error', 'type'],
             '@typescript-eslint/no-explicit-any': 'off',
         },
+    },
+
+    // -------------------------------------------------------------------------
+    // p a c k a g e . j s o n
+    // -------------------------------------------------------------------------
+    {
+        files: ['package.json'],
+        extends: [ packageJson.configs.recommended ],
+        rules: {
+            'package-json/sort-collections': [
+		        'error',
+		        ['dependencies', 'devDependencies']
+	        ]
+        }
     },
 );
