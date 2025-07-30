@@ -603,7 +603,7 @@ export default tseslint.config(
     // -------------------------------------------------------------------------
     {
         files: ['package.json'],
-        extends: [ packageJson.configs.recommended ],
+        extends: [packageJson.configs.recommended],
         rules: {
             'package-json/sort-collections': [
 		        'error',
