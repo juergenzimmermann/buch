@@ -130,7 +130,7 @@ export class BuchController {
     readonly #logger = getLogger(BuchController.name);
 
     // Dependency Injection (DI) bzw. Constructor Injection
-    // constructor(private readonly service: BuchReadService) {}
+    // constructor(private readonly service: BuchService) {}
     // https://github.com/tc39/proposal-type-annotations#omitted-typescript-specific-features-that-generate-code
     constructor(service: BuchService) {
         this.#service = service;
