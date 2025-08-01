@@ -73,11 +73,11 @@ services:
     healthcheck:
       # https://www.keycloak.org/server/health
       # https://gist.github.com/sarath-soman/5d9aec06953bbd0990c648605d4dba07
-      # https://www.reddit.com/r/KeyCloak/comments/14a5a1y/how_to_enable_healthcheck_on_keycloak_on/
+      # https://www.reddit.com/r/KeyCloak/comments/14a5a1y/how_to_enable_healthcheck_on_keycloak_on
       test:
         [
           CMD,
-          "exec 3<>/dev/tcp/127.0.0.1/9000;echo -e 'GET /health/ready HTTP/1.1\r\nhost: http://localhost\r\nConnection: close\r\n\r\n' >&3;if [ $? -eq 0 ]; then echo 'Healthcheck Successful';exit 0;else echo 'Healthcheck Failed';exit 1;fi;",
+          "exec 3<>/dev/tcp/127.0.0.1/9000;echo -e 'GET /health/ready HTTP/1.1\r\nhost: http://localhost\r\nConnection: close\r\n\r\n' >&3;if [ $? -eq 0 ]; then echo 'Healthcheck Successful';exit 0;else echo 'Healthcheck Failed';exit 1;fi;"
         ]
       interval: 30s
       timeout: 5s
