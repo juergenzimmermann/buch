@@ -44,8 +44,9 @@ services:
         source: C:/Zimmermann/volumes/sonarqube/extensions
         target: /opt/sonarqube/lib/extensions
         read_only: true
+    environment:
+      TZ: Europe/Berlin
     networks: [sonar-network]
-    env_file: .env
     hostname: sonarqube
     container_name: sonarqube
     cap_drop: [ALL]

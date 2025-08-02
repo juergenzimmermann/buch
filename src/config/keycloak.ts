@@ -105,6 +105,7 @@ export const paths = {
 /** Agent für Axios für Requests bei selbstsigniertem Zertifikat */
 export const httpsAgent = new Agent({
     requestCert: true,
+    // selbst-signiertes Zertifikat
     rejectUnauthorized: false,
     ca: httpsOptions.cert as Buffer,
 });

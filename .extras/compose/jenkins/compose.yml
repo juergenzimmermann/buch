@@ -34,7 +34,6 @@ services:
         target: 8080
       - published: 50000
         target: 50000
-    networks: [jenkins-network]
     volumes:
       - type: bind
         # /var/jenkins_home/workspace enthaelt das Verzeichnis "buch"
@@ -44,8 +43,11 @@ services:
         source: C:/Zimmermann/volumes/jenkins/certs
         target: /certs/client
         read_only: true
-    env_file: .env
+    environment:
+      TZ: Europe/Berlin
+      JAVA_OPTS: "-Dhudson.plugins.git.GitSCM.ALLOW_LOCAL_CHECKOUT=true"
     user: "jenkins:jenkins"
+    networks: [jenkins-network]
     container_name: jenkins
     hostname: jenkins
     cap_drop: [ALL]
@@ -59,4 +61,5 @@ services:
           memory: 4G
 
 networks:
-  jenkins-network: {}
+  jenkins-network:
+    name: jenkins-network
