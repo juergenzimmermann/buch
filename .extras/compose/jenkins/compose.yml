@@ -45,6 +45,9 @@ services:
         read_only: true
     environment:
       TZ: Europe/Berlin
+      DOCKER_HOST: "tcp://docker:2376"
+      DOCKER_CERT_PATH: /certs/client
+      DOCKER_TLS_VERIFY: 1
       JAVA_OPTS: "-Dhudson.plugins.git.GitSCM.ALLOW_LOCAL_CHECKOUT=true"
     user: "jenkins:jenkins"
     networks: [jenkins-network]
