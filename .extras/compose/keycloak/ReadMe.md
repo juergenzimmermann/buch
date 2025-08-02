@@ -42,7 +42,7 @@ decodiert werden:
 
 ## Installation
 
-_Keycloak_ wird als Docker Container gestartet, wofÃ¼r das Verzeichnis
+_Keycloak_ wird als Docker Container gestartet, wofür das Verzeichnis
 `C:\Zimmermann\volumes\keycloak` vorhanden sein und ggf. angelegt werden muss:
 
 ```powershell
@@ -50,19 +50,19 @@ _Keycloak_ wird als Docker Container gestartet, wofÃ¼r das Verzeichnis
     docker compose up
 ```
 
-Im Verzeichnis `.extras\compose\keycloak` in der Datei `.env` sind Benutzername
-und Passwort für die Administrationskonsole (s.u.) von Keycloak konfiguriert,
-und zwar Benutzername `admin` und Passwort `p`.
+In `compose.yml` sind unterhalb von `environment:` der temporäre Administrator
+mit Benutzername und Passwort konfiguriert, und zwar Benutzername `tmp` und
+Passwort `p`.
 
 Außerdem sind die Umgebungsvariablen für die beiden Dateien für den privatem
-Schlüssel und das Zertifikat gesetzt, so dass Keycloak über `https://localhost:8843`
-aufgerufen werden kann.
+Schlüssel und das Zertifikat gesetzt, so dass Keycloak wahlweise über
+`https://localhost:8843` oder `http://localhost:8880` aufgerufen werden kann.
 
 ## Konfiguration
 
-Nachdem Keycloak als Container gestartet ist, sind folgende Konfigurationsschritte
-_sorgfältig_ durchzuführen, wenn man in einem Webbrowser `https://localhost:8843`
-aufgerufen hat:
+Nachdem Keycloak als Container gestartet ist, sind folgende umfangreiche
+Konfigurationsschritte _sorgfältig_ durchzuführen, nachdem man in einem
+Webbrowser `https://localhost:8843` oder `http://localhost:8880` aufgerufen hat:
 
 ```text
     Username    tmp
@@ -185,7 +185,7 @@ aufgerufen hat:
                 <Save> anklicken
 ```
 
-Mit der URL `http://localhost:8843/realms/nest/.well-known/openid-configuration`
+Mit der URL `https://localhost:8843/realms/nest/.well-known/openid-configuration`
 kann man in einem Webbrowser die Konfiguration als JSON-Datensatz erhalten.
 
 ## Client Secret
