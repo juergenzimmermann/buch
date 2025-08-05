@@ -19,8 +19,8 @@
 # Aufruf:   docker build --tag juergenzimmermann/buch:2025.10.1-bookworm .
 #               ggf. --progress=plain
 #               ggf. --no-cache
-#           Get-Content Dockerfile | docker run --rm --interactive hadolint/hadolint:v2.13.1-beta2-debian
-#               Linux:   cat Dockerfile | docker run --rm --interactive hadolint/hadolint:v2.13.1-beta2-debian
+#           Get-Content Dockerfile | docker run --rm --interactive hadolint/hadolint:v2.13.1-beta3-debian
+#               Linux:   cat Dockerfile | docker run --rm --interactive hadolint/hadolint:v2.13.1-beta3-debian
 #           docker save juergenzimmermann/buch:2025.10.1-bookworm > buch.tar
 #           docker network ls
 
@@ -32,7 +32,7 @@
 # https://snyk.io/blog/10-best-practices-to-containerize-nodejs-web-applications-with-docker
 # https://cheatsheetseries.owasp.org/cheatsheets/NodeJS_Docker_Cheat_Sheet.html
 
-ARG NODE_VERSION=24.4.1
+ARG NODE_VERSION=24.5.0
 
 # ---------------------------------------------------------------------------------------
 # S t a g e   d i s t
