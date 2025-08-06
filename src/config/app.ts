@@ -19,12 +19,20 @@
  */
 
 import { parse } from 'yaml';
-import { existsSync, readFileSync } from 'node:fs';
+import { access, readFile } from 'node:fs/promises';
 import path from 'node:path';
 
 // im Docker-Image gibt es kein Unterverzeichnis "src"
-// https://nodejs.org/api/fs.html
-export const BASEDIR = existsSync('src') ? 'src' : 'dist';
+let srcExists: boolean;
+try {
+    // https://nodejs.org/api/fs.html#fspromisesaccesspath-mode
+    await access('src')
+    srcExists = true;
+} catch {
+    srcExists = false;
+}
+export const BASEDIR = srcExists ? 'src' : 'dist';
+
 // https://nodejs.org/api/path.html
 export const RESOURCES_DIR = path.resolve(BASEDIR, 'config', 'resources');
 
@@ -37,5 +45,5 @@ export type AppConfig = Record<
 >;
 
 export const config = parse(
-    readFileSync(configFile, 'utf8'), // eslint-disable-line security/detect-non-literal-fs-filename
+    await readFile(configFile, 'utf8'), // eslint-disable-line security/detect-non-literal-fs-filename
 ) as AppConfig;

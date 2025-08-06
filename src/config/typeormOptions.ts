@@ -17,7 +17,7 @@
  * Das Modul enthält die Konfiguration für den Zugriff auf die DB.
  * @packageDocumentation
  */
-import { readFileSync } from 'node:fs';
+import { readFile } from 'node:fs/promises';
 import path from 'node:path';
 import { type DataSourceOptions } from 'typeorm';
 import { Buch } from '../buch/entity/buch.js';
@@ -91,7 +91,7 @@ let dataSourceOptions: DataSourceOptions;
 switch (dbType) {
     case 'postgres': {
         // eslint-disable-next-line security/detect-non-literal-fs-filename
-        const cert = readFileSync(
+        const cert = await readFile(
             path.resolve(dbDir, 'certificate.cer'), // eslint-disable-line sonarjs/no-duplicate-string
         );
         dataSourceOptions = {
@@ -114,7 +114,7 @@ switch (dbType) {
     }
     case 'mysql': {
         // eslint-disable-next-line security/detect-non-literal-fs-filename
-        const cert = readFileSync(path.resolve(dbDir, 'certificate.cer'));
+        const cert = await readFile(path.resolve(dbDir, 'certificate.cer'));
         dataSourceOptions = {
             type: 'mysql',
             host,
@@ -171,7 +171,7 @@ if (logLevel === 'debug') {
 export const dbPopulate = db?.populate === true;
 let adminDataSourceOptionsTemp: DataSourceOptions | undefined;
 if (dbType === 'postgres') {
-    const cert = readFileSync(path.resolve(dbDir, 'certificate.cer')); // eslint-disable-line security/detect-non-literal-fs-filename
+    const cert = await readFile(path.resolve(dbDir, 'certificate.cer')); // eslint-disable-line security/detect-non-literal-fs-filename
     adminDataSourceOptionsTemp = {
         type: 'postgres',
         host,
@@ -187,7 +187,7 @@ if (dbType === 'postgres') {
         extra: { ssl: { rejectUnauthorized: false } },
     };
 } else if (dbType === 'mysql') {
-    const cert = readFileSync(path.resolve(dbDir, 'certificate.cer')); // eslint-disable-line security/detect-non-literal-fs-filename
+    const cert = await readFile(path.resolve(dbDir, 'certificate.cer')); // eslint-disable-line security/detect-non-literal-fs-filename
     adminDataSourceOptionsTemp = {
         type: 'mysql',
         host,

@@ -19,7 +19,7 @@
  */
 
 import { type HttpsOptions } from '@nestjs/common/interfaces/external/https-options.interface.js';
-import { readFileSync } from 'node:fs';
+import { readFile } from 'node:fs/promises';
 import path from 'node:path';
 import { RESOURCES_DIR } from './app.js';
 
@@ -32,6 +32,6 @@ console.debug('tlsDir = %s', tlsDir);
 
 // public/private keys und Zertifikat fuer TLS
 export const httpsOptions: HttpsOptions = {
-    key: readFileSync(path.resolve(tlsDir, 'key.pem')), // eslint-disable-line security/detect-non-literal-fs-filename
-    cert: readFileSync(path.resolve(tlsDir, 'certificate.crt')), // eslint-disable-line security/detect-non-literal-fs-filename
+    key: await readFile(path.resolve(tlsDir, 'key.pem')), // eslint-disable-line security/detect-non-literal-fs-filename
+    cert: await readFile(path.resolve(tlsDir, 'certificate.crt')), // eslint-disable-line security/detect-non-literal-fs-filename
 };

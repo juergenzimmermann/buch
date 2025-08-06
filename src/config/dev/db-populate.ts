@@ -22,7 +22,7 @@
 
 import { Injectable, type OnApplicationBootstrap } from '@nestjs/common';
 import { InjectDataSource } from '@nestjs/typeorm';
-import { readFileSync } from 'node:fs';
+import { readFile } from 'node:fs/promises';
 import path from 'node:path';
 import { DataSource } from 'typeorm';
 import { getLogger } from '../../logger/logger.js';
@@ -90,14 +90,13 @@ export class DbPopulateService implements OnApplicationBootstrap {
     async #populatePostgres() {
         const dropScript = path.resolve(this.#dbDir, 'drop.sql');
         this.#logger.debug('dropScript = %s', dropScript); // eslint-disable-line sonarjs/no-duplicate-string
-        // https://nodejs.org/api/fs.html#fs_fs_readfilesync_path_options
-        const dropStatements = readFileSync(dropScript, 'utf8'); // eslint-disable-line security/detect-non-literal-fs-filename,n/no-sync
+        // https://nodejs.org/api/fs.html#fspromisesreadfilepath-options
+        const dropStatements = await readFile(dropScript, 'utf8'); // eslint-disable-line security/detect-non-literal-fs-filename,n/no-sync
         await this.#datasource.query(dropStatements);
 
         const createScript = path.resolve(this.#dbDir, 'create.sql'); // eslint-disable-line sonarjs/no-duplicate-string
         this.#logger.debug('createScript = %s', createScript); // eslint-disable-line sonarjs/no-duplicate-string
-        // https://nodejs.org/api/fs.html#fs_fs_readfilesync_path_options
-        const createStatements = readFileSync(createScript, 'utf8'); // eslint-disable-line security/detect-non-literal-fs-filename,n/no-sync
+        const createStatements = await readFile(createScript, 'utf8'); // eslint-disable-line security/detect-non-literal-fs-filename,n/no-sync
         await this.#datasource.query(createStatements);
 
         // COPY zum Laden von CSV-Dateien erfordert Administrationsrechte
@@ -170,14 +169,14 @@ export class DbPopulateService implements OnApplicationBootstrap {
         await this.#executeStatements(insertScript);
     }
 
-    async #executeStatements(script: string, removeSemi = false) {
+    async #executeStatements(scriptPath: string, removeSemi = false) {
         // https://stackoverflow.com/questions/6156501/read-a-file-one-line-at-a-time-in-node-js#answer-17332534
         // alternativ: https://nodejs.org/api/fs.html#fspromisesopenpath-flags-mode
         const statements: string[] = [];
         let statement = '';
-        readFileSync(script, 'utf8') // eslint-disable-line security/detect-non-literal-fs-filename,n/no-sync
-            // bei Zeilenumbruch einen neuen String erstellen
-            .split(/\r?\n/u)
+        const script = await readFile(scriptPath, 'utf8'); // eslint-disable-line security/detect-non-literal-fs-filename
+        // bei Zeilenumbruch einen neuen String erstellen
+        script.split(/\r?\n/u)
             // Kommentarzeilen entfernen
             .filter((line) => !line.includes('--'))
             // Eine Anweisung aus mehreren Zeilen bis zum Semikolon zusammenfuegen
