@@ -45,7 +45,7 @@
     "clean": "rimraf dist log/server.log",
     "copy-resources": "node scripts/copy-resources.mts",
     "eslint": "eslint src test/integration package.json",
-    "eslint:inspect-config": "eslint --inspect-config",
+    "eslint:inspect-config": "npx @eslint/config-inspector",
     "eslint:debug": "pnpm run eslint -- --debug",
     "leasot": "leasot --exit-nicely src/**/*.ts",
     "madge": "madge --circular src/main.ts",

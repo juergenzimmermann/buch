@@ -52,7 +52,6 @@
     - [Tokens durch Pre-request Scripts und Authorization-Header](#tokens-durch-pre-request-scripts-und-authorization-header)
     - [Tests in Postman](#tests-in-postman)
     - [Erweiterung für VS Code](#erweiterung-für-vs-code)
-    - [REST Client als Extension](#rest-client-als-extension)
   - [Tests aufrufen](#tests-aufrufen)
   - [Docker-Image und Docker Compose](#docker-image-und-docker-compose)
     - [Minimales Basis-Image](#minimales-basis-image)
@@ -62,13 +61,12 @@
       - [docker sbom](#docker-sbom)
     - [Docker Compose](#docker-compose)
   - [Statische Codeanalyse und Formattierer](#statische-codeanalyse-und-formatierer)
-    - [Prettier](#prettier)
     - [ESLint](#eslint)
+    - [Prettier](#prettier)
     - [SonarQube](#sonarqube)
     - [Madge](#madge)
-    - [type-coverage](#type-coverage)
   - [Sicherheitslücken](#sicherheitslücken)
-    - [npm audit](#npm-audit)
+    - [pnpm audit](#pnpm-audit)
     - [OWASP Dependency Check](#owasp-dependency-check)
     - [Docker Scout](#docker-scout)
     - [Snyk](#snyk)
@@ -248,7 +246,7 @@ Sehr empfehlenswert ist https://github.com/goldbergyoni/nodebestpractices
 
 ## Lokaler Appserver mit Nest und dem Watch-Modus
 
-Durch `npm run dev` wird der Appserver im _Watch_-Modus für die
+Durch `pnpm run dev` wird der Appserver im _Watch_-Modus für die
 Entwicklung gestartet, d.h. bei Code-Änderungen wird der Server automatisch
 neu gestartet. Durch die Option `--builder swc` beim Node-Skript `swc`
 in der Datei `package.json` wird _swc_ (= speedy web compiler) anstatt des
@@ -388,10 +386,6 @@ Seit Mai 2023 gibt es Postman auch als Erweiterung für VS Code. Damit kann man
 zwar (noch) nicht Workspaces, Collections, Folders und Requests anlegen, aber
 Requests abschicken, ohne dass man VS Code als Arbeitsumgebung verlassen muss.
 
-### REST Client als Extension
-
-Als Alternative zu _Postman_ kann man auch die Extension _REST Client_ nutzen.
-
 ---
 
 ## Tests aufrufen
@@ -399,7 +393,7 @@ Als Alternative zu _Postman_ kann man auch die Extension _REST Client_ nutzen.
 Folgende Voraussetzungen müssen oder sollten erfüllt sein:
 
 - Der DB-Server muss gestartet sein.
-- Der Appserver muss _nicht gestartet_ sein.
+- Der Appserver muss gestartet sein.
 
 Nun kann man die Tests folgendermaßen in einer Powershell aufrufen. Dabei wird
 beim Skript `test` in `package.json` die Property `log.default` auf `true`
@@ -407,15 +401,18 @@ gesetzt, um nicht zu detailliert zu protokollieren bzw. damit die Log-Ausgabe
 übersichtlich bleibt.
 
 ```shell
-    npm t
+    pnpm t
 ```
 
-Bei der Fehlersuche ist es ratsam, nur eine einzelnen Testdatei aufzurufen,
-z.B.:
+Bei der Fehlersuche ist es ratsam, nur eine einzelnen Testdatei oder sogar
+geziehlt eine Test-Funktion aufzurufen, z.B.:
 
 ```shell
-    npm exec jest --detectOpenHandles --errorOnDeprecated `
-      --forceExit --runTestsByPath '__tests__\buch\buch-GET.controller.test.ts'
+    # Filter für den Namen der Testdatei
+    pnpm vitest GET-id
+
+    # Test-Funktion an einer bestimmten Zeile in der Testdatei
+    pnpm vitest test/integration/rest/GET-id.test.mts:47
 ```
 
 ---
@@ -544,22 +541,13 @@ PowerShell herunterfahren.
 
 ## Statische Codeanalyse und Formatierer
 
-### Prettier
-
-`Prettier` ist ein Formatierer, der durch `.prettierrc.yml` (rc = run command)
-konfiguriert und durch folgendes npm-Skript ausgeführt wird:
-
-```shell
-    npm run prettier
-```
-
 ### ESLint
 
-_ESLint_ wird durch `.eslintrc.yml` (rc = run command) konfiguriert und durch
-folgendes npm-Skript ausgeführt:
+_ESLint_ wird durch `eslint.config.mts` (rc = run command) konfiguriert und durch
+folgendes pnpm-Skript ausgeführt:
 
 ```shell
-    npm run eslint
+    pnpm run eslint
 ```
 
 Mit dem _ESLint Config Inspector_ kann man inspizieren, welche
@@ -569,7 +557,16 @@ Mit dem _ESLint Config Inspector_ kann man inspizieren, welche
 - aktivierten Regeln deprecated sind
 
 ```shell
-    npx @eslint/config-inspector@latest
+    npx @eslint/config-inspector
+```
+
+### Prettier
+
+`Prettier` ist ein Formatierer, der durch `prettier.config.mts` (rc = run command)
+konfiguriert und durch folgendes pnpm-Skript ausgeführt wird:
+
+```shell
+    pnpm run prettier
 ```
 
 ### SonarQube
@@ -599,10 +596,10 @@ Abschließend klickt man auf den Button _Generate_ und trägt den generierten
 Token im Skript `scripts\sonar-scanner.mts` ein.
 
 Nachdem der Server gestartet ist, wird der SonarQube-Scanner in einer zweiten
-PowerShell mit `npm run sonar` gestartet. Das Resultat kann dann in der
+PowerShell mit `pnpm run sonar` gestartet. Das Resultat kann dann in der
 Webseite des zuvor gestarteten Servers über die URL `http://localhost:9000`
 inspiziert werden. Falls es dabei zu einem Fehler kommt, kann man auch direkt
-`C:\Users\<MY__USER>\.sonar\native-sonar-scanner\sonar-scanner-5.0.1.3006-windows\bin\sonar-scanner`
+`C:\Users\<MY__USER>\.sonar\native-sonar-scanner\sonar-scanner-...\bin\sonar-scanner`
 aufrufen.
 
 Abschließend wird der oben gestartete Server heruntergefahren.
@@ -614,37 +611,28 @@ Abschließend wird der oben gestartete Server heruntergefahren.
 
 ### Madge
 
-Mit _Madge_ kann man zyklische Abhängigkeiten auflisten lassen: `npm run madge`.
-Mit `npm run madge:dep` kann man sämtliche Abhängigkeiten in einer SVG-Datei
+Mit _Madge_ kann man zyklische Abhängigkeiten auflisten lassen: `pnpm run madge`.
+Mit `pnpm run madge:dep` kann man sämtliche Abhängigkeiten in einer SVG-Datei
 `dependencies.svg` visualisieren.
-
-### type-coverage
-
-Mit `type-coverage` kann man ermitteln, wo im TypeScript-Code `any` verwendet
-wurde:
-
-```shell
-    npm run type-coverage
-```
 
 ---
 
 ## Sicherheitslücken
 
-### npm audit
+### pnpm audit
 
-Mit dem Unterkommando `audit` von _npm_ kann man `npm_modules` auf Sicherheitslücken
-analysieren. Dabei lässt man sinnvollerweise die `devDependencies` aus `package.json`
-weg:
+Mit dem Unterkommando `audit` von _pnpm_ kann man `npm_modules` auf Sicherheitslücken
+analysieren. Wenn man - sinnvollerweise - nur die `dependencies` aus `package.json`
+berücksichtigen möchte, ergänzt man die Option `-P` ("Production"):
 
 ```shell
-    npm audit --omit dev
+    pnpm audit -P
 ```
 
 ### OWASP Dependency Check
 
 Mit _OWASP Dependency Check_ werden alle in `node_modules` installierten
-npm-Packages mit den _CVE_-Nummern der NIST-Datenbank abgeglichen.
+Packages mit den _CVE_-Nummern der NIST-Datenbank abgeglichen.
 
 Von https://nvd.nist.gov/developers/request-an-api-key fordert man einen "API Key"
 an, um im Laufe des Semesters mit _OWASP Dependency Check_ die benutzte Software
@@ -740,7 +728,7 @@ Die Dokumentation im Format HTML wird in einer Powershell folgendermaßen
 im Verzeichnis `.extras\doc\html` erstellt:
 
 ```shell
-    npm run asciidoc
+    pnpm run asciidoc
 ```
 
 ## Continuous Integration mit Jenkins

@@ -357,8 +357,6 @@ export default tseslint.config(
             // https://github.com/prettier/eslint-config-prettier#no-sequences
             'no-restricted-syntax': ['error', 'SequenceExpression'],
             'no-return-assign': 'error',
-            // siehe @typescript-eslint/return-await
-            'no-return-await': 'off',
             'no-script-url': 'error',
             'no-self-compare': 'error',
             'no-sequences': 'error',
