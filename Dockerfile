@@ -39,6 +39,10 @@ ARG NODE_VERSION=24.5.0
 # ---------------------------------------------------------------------------------------
 FROM node:${NODE_VERSION}-bookworm-slim AS dist
 
+# https://pnpm.io/docker
+ENV PNPM_HOME="/pnpm"
+ENV PATH="$PNPM_HOME:$PATH"
+
 # ggf. Python fuer pg, better-sqlite3
 # https://packages.debian.org/bookworm/python3.11-minimal
 # https://packages.debian.org/trixie/python3.12-minimal
@@ -53,6 +57,9 @@ apt-get update --no-show-upgraded
 # Die neuesten Versionen der bereits installierten Packages installieren
 apt-get upgrade --yes --no-show-upgraded
 
+# https://pnpm.io/docker
+corepack enable
+
 # Debian Bookworm bietet nur Packages fuer Python 3.11; Ubuntu Jammy LTS nur fuer Python 3.10
 # https://packages.debian.org/bookworm/python3.11-minimal
 # https://packages.debian.org/bookworm/python3.11-dev
@@ -62,7 +69,6 @@ apt-get install --no-install-recommends --yes python3.11-minimal=3.11.2-6+deb12u
 ln -s /usr/bin/python3.11 /usr/bin/python3
 ln -s /usr/bin/python3.11 /usr/bin/python
 
-npm i -g --no-audit --no-fund npm
 EOF
 
 USER node
@@ -71,16 +77,16 @@ WORKDIR /home/node
 
 # https://docs.docker.com/engine/reference/builder/#run---mounttypebind
 RUN --mount=type=bind,source=package.json,target=package.json \
-  --mount=type=bind,source=package-lock.json,target=package-lock.json \
+  --mount=type=bind,source=pnpm-lock.yaml,target=pnpm-lock.yaml \
   --mount=type=bind,source=nest-cli.json,target=nest-cli.json \
   --mount=type=bind,source=tsconfig.json,target=tsconfig.json \
   --mount=type=bind,source=tsconfig.build.json,target=tsconfig.build.json \
   --mount=type=bind,source=src,target=src \
-  --mount=type=cache,target=/root/.npm <<EOF
+  --mount=type=cache,target=/root/.pnpm <<EOF
 set -eux
-# ci (= clean install) mit package-lock.json
-npm ci --no-audit --no-fund
-npm run build
+
+pnpm i --prefer-frozen-lockfile
+pnpm run build
 EOF
 
 # ------------------------------------------------------------------------------
@@ -88,18 +94,26 @@ EOF
 # ------------------------------------------------------------------------------
 FROM node:${NODE_VERSION}-bookworm-slim AS dependencies
 
-RUN <<EOF
+# https://pnpm.io/docker
+ENV PNPM_HOME="/pnpm"
+ENV PATH="$PNPM_HOME:$PATH"
+
+RUN --mount=type=bind,source=package.json,target=package.json <<EOF
 set -eux
 # Die "Package Index"-Dateien neu synchronisieren
 apt-get update
 # Die neuesten Versionen der bereits installierten Packages installieren
 apt-get upgrade --yes
+
+# https://pnpm.io/docker
+corepack enable
+
 # https://packages.debian.org/bookworm/python3.11-minimal
 # https://packages.debian.org/bookworm/python3.11-dev
 apt-get install --no-install-recommends --yes python3.11-minimal=3.11.2-6+deb12u6 python3.11-dev=3.11.2-6+deb12u6 build-essential=12.9
 ln -s /usr/bin/python3.11 /usr/bin/python3
 ln -s /usr/bin/python3.11 /usr/bin/python
-npm i -g --no-audit --no-fund npm
+
 EOF
 
 USER node
@@ -107,12 +121,11 @@ USER node
 WORKDIR /home/node
 
 RUN --mount=type=bind,source=package.json,target=package.json \
-  --mount=type=bind,source=package-lock.json,target=package-lock.json \
-  --mount=type=cache,target=/root/.npm <<EOF
+  --mount=type=bind,source=pnpm-lock.yaml,target=pnpm-lock.yaml \
+  --mount=type=cache,target=/root/.pnpm <<EOF
 set -eux
-# ci (= clean install) mit package-lock.json
-# --omit=dev: ohne devDependencies
-npm ci --no-audit --no-fund --omit=dev --omit=peer
+
+pnpm i -P --frozen-lockfile
 EOF
 
 # ------------------------------------------------------------------------------

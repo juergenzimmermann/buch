@@ -75,6 +75,7 @@
     - [Einstellungen für Preview von AsciiDoctor-Dateien](#einstellungen-für-preview-von-asciidoctor-dateien)
     - [Preview von AsciiDoctor-Dateien](#preview-von-asciidoctor-dateien)
     - [Dokumentation im Format HTML](#dokumentation-im-format-html)
+  - [TypeDoc](#typedoc)
   - [Continuous Integration mit Jenkins](#continuous-integration-mit-jenkins)
     - [Aufruf mit Webbrowser](#aufruf-mit-webbrowser)
     - [Bash zur evtl. Fehlersuche im laufenden Jenkins-Container](#bash-zur-evtl-fehlersuche-im-laufenden-jenkins-container)
@@ -385,6 +386,16 @@ findet man bei https://www.chaijs.com/api/bdd.
 Seit Mai 2023 gibt es Postman auch als Erweiterung für VS Code. Damit kann man
 zwar (noch) nicht Workspaces, Collections, Folders und Requests anlegen, aber
 Requests abschicken, ohne dass man VS Code als Arbeitsumgebung verlassen muss.
+
+### Invoke-WebRequest in der PowerShell
+
+Auch von der PowerShell können Requests an die REST-Schnittstelle abgeschickt
+werden:
+
+```shell
+    # GET-Request an die REST-Schnittstelle
+    Invoke-WebRequest https://localhost:3000/rest/1 -SslProtocol Tls13 -SkipCertificateCheck
+```
 
 ---
 
@@ -729,6 +740,15 @@ im Verzeichnis `.extras\doc\html` erstellt:
 
 ```shell
     pnpm run asciidoc
+```
+
+## TypeDoc
+
+Um die API-Dokumentation mit _TypeDoc_ zu erstellen, ruft man in einer Powershell
+folgendes Kommando auf:
+
+```shell
+    pnpm typedoc
 ```
 
 ## Continuous Integration mit Jenkins
