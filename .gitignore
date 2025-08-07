@@ -13,7 +13,6 @@ build
 .extras/doc/api/*
 .extras/doc/ReadMe.html
 scripts/dependency-check-report.html
-node-ts
 temp
 tmp
 dependencies.svg
@@ -41,10 +40,7 @@ sonar-project.properties
 log
 logs
 *.log
-npm-debug.log*
 pnpm-debug.log*
-yarn-debug.log*
-yarn-error.log*
 lerna-debug.log*
 .scannerwork
 
@@ -59,17 +55,9 @@ Thumbs.db
 # Tests
 coverage
 .nyc_output
-.clinic
-__tests__/buch/__snapshots__
 
 # SonarQube
 .sonar
-
-# Snyk
-.snyk
-snyk_report.*
-snyk-*.json
-snyk-*.log
 
 # IDEs and editors
 .idea
@@ -81,7 +69,6 @@ snyk-*.log
 *.launch
 .settings/
 .sonarlint
-*.sublime-workspace
 .extras/compose/buch/.env
 
 # IDE - VSCode
