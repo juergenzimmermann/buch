@@ -34,6 +34,13 @@ type BuchDTO = Omit<
     rabatt: string;
 };
 
+type BuchSuccessType = { data: { buch: BuchDTO }, errors?: undefined };
+type BuecherSuccessType = { data: { buecher: BuchDTO[] }, errors?: undefined };
+
+export type ErrorsType = { message: string, path: string[], extensions: { code: string} }[];
+type BuchErrorsType = { data: { buch: null }, errors: ErrorsType };
+type BuecherErrorsType = { data: { buecher: null }, errors: ErrorsType };
+
 // -----------------------------------------------------------------------------
 // T e s t d a t e n
 // -----------------------------------------------------------------------------
@@ -97,12 +104,12 @@ describe('GraphQL Queries', () => {
             /application\/graphql-response\+json/iu,
         );
 
-        const { data, errors } = await response.json();
+        const { data, errors } = await response.json() as BuchSuccessType;
 
         expect(errors).toBeUndefined();
         expect(data).toBeDefined();
 
-        const { buch }: { buch: BuchDTO } = data;
+        const { buch } = data;
 
         expect(buch.titel?.titel).toMatch(/^\w/u);
         expect(buch.version).toBeGreaterThan(-1);
@@ -139,13 +146,13 @@ describe('GraphQL Queries', () => {
             /application\/graphql-response\+json/iu,
         );
 
-        const { data, errors } = await response.json();
+        const { data, errors } = await response.json() as BuchErrorsType;
 
         expect(data.buch).toBeNull();
         expect(errors).toHaveLength(1);
 
-        const [error] = errors!;
-        const { message, path, extensions } = error;
+        const [error] = errors;
+        const { message, path, extensions } = error!;
 
         expect(message).toBe(`Es gibt kein Buch mit der ID ${id}.`);
         expect(path).toBeDefined();
@@ -187,12 +194,12 @@ describe('GraphQL Queries', () => {
                 /application\/graphql-response\+json/iu,
             );
 
-            const { data, errors } = await response.json();
+            const { data, errors } = await response.json() as BuecherSuccessType;
 
             expect(errors).toBeUndefined();
             expect(data).toBeDefined();
 
-            const { buecher }: { buecher: BuchDTO[] } = data;
+            const { buecher } = data;
 
             expect(buecher).not.toHaveLength(0);
 
@@ -240,13 +247,13 @@ describe('GraphQL Queries', () => {
                 /application\/graphql-response\+json/iu,
             );
 
-            const { data, errors } = await response.json();
+            const { data, errors } = await response.json() as BuecherErrorsType;
 
             expect(data.buecher).toBeNull();
             expect(errors).toHaveLength(1);
 
-            const [error] = errors!;
-            const { message, path, extensions } = error;
+            const [error] = errors;
+            const { message, path, extensions } = error!;
 
             expect(message).toMatch(/^Keine Buecher gefunden:/u);
             expect(path).toBeDefined();
@@ -290,12 +297,12 @@ describe('GraphQL Queries', () => {
                 /application\/graphql-response\+json/iu,
             );
 
-            const { data, errors } = await response.json();
+            const { data, errors } = await response.json() as BuecherSuccessType;
 
             expect(errors).toBeUndefined();
             expect(data).toBeDefined();
 
-            const { buecher }: { buecher: BuchDTO[] } = data;
+            const { buecher } = data;
 
             expect(buecher).not.toHaveLength(0);
             expect(buecher).toHaveLength(1);
@@ -344,12 +351,12 @@ describe('GraphQL Queries', () => {
                 /application\/graphql-response\+json/iu,
             );
 
-            const { data, errors } = await response.json();
+            const { data, errors } = await response.json() as BuecherSuccessType;
 
             expect(errors).toBeUndefined();
             expect(data).toBeDefined();
 
-            const { buecher }: { buecher: BuchDTO[] } = data;
+            const { buecher } = data;
 
             expect(buecher).not.toHaveLength(0);
 
@@ -395,13 +402,13 @@ describe('GraphQL Queries', () => {
             /application\/graphql-response\+json/iu,
         );
 
-        const { data, errors } = await response.json();
+        const { data, errors } = await response.json() as BuecherErrorsType;
 
         expect(data.buecher).toBeNull();
         expect(errors).toHaveLength(1);
 
-        const [error] = errors!;
-        const { message, path, extensions } = error;
+        const [error] = errors;
+        const { message, path, extensions } = error!;
 
         expect(message).toMatch(/^Keine Buecher gefunden:/u);
         expect(path).toBeDefined();
@@ -443,7 +450,7 @@ describe('GraphQL Queries', () => {
             /application\/graphql-response\+json/iu,
         );
 
-        const { data, errors } = await response.json();
+        const { data, errors } = await response.json() as BuecherSuccessType;
 
         expect(errors).toBeUndefined();
         expect(data).toBeDefined();
@@ -492,13 +499,13 @@ describe('GraphQL Queries', () => {
             /application\/graphql-response\+json/iu,
         );
 
-        const { data, errors } = await response.json();
+        const { data, errors } = await response.json() as BuecherErrorsType;
 
         expect(data).toBeUndefined();
         expect(errors).toHaveLength(1);
 
-        const [error] = errors!;
-        const { extensions } = error;
+        const [error] = errors;
+        const { extensions } = error!;
 
         expect(extensions).toBeDefined();
         expect(extensions!.code).toBe('GRAPHQL_VALIDATION_FAILED');
@@ -536,7 +543,7 @@ describe('GraphQL Queries', () => {
             /application\/graphql-response\+json/iu,
         );
 
-        const { data, errors } = await response.json();
+        const { data, errors } = await response.json() as BuecherSuccessType;
 
         expect(errors).toBeUndefined();
         expect(data).toBeDefined();

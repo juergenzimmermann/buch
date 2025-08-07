@@ -27,12 +27,22 @@ import {
     graphqlURL,
 } from '../constants.mjs';
 import { type GraphQLQuery } from './graphql.mjs';
+import { ErrorsType } from './query.test.mjs';
 import { getToken } from './token.mjs';
 
 // -----------------------------------------------------------------------------
 // T e s t d a t e n
 // -----------------------------------------------------------------------------
 const idLoeschen = '60';
+
+type CreateSuccessType = { data: { create: { id: string} }, errors?: undefined };
+type CreateErrorsType = { data: { create: null }, errors: ErrorsType };
+
+type UpdateSuccessType = { data: { update: { version: number} }, errors?: undefined };
+type UpdateErrorsType = { data: { update: null }, errors: ErrorsType };
+
+type DeleteSuccessType = { data: { delete: { success: boolean} }, errors?: undefined };
+type DeleteErrorsType = { data: { delete: null }, errors: ErrorsType };
 
 // -----------------------------------------------------------------------------
 // T e s t s
@@ -100,7 +110,7 @@ describe('GraphQL Mutations', () => {
             /application\/graphql-response\+json/iu,
         );
 
-        const { data } = await response.json();
+        const { data } = await response.json() as CreateSuccessType;
 
         expect(data).toBeDefined();
 
@@ -169,7 +179,7 @@ describe('GraphQL Mutations', () => {
             /application\/graphql-response\+json/iu,
         );
 
-        const { data, errors } = await response.json();
+        const { data, errors } = await response.json() as CreateErrorsType;
 
         expect(data.create).toBeNull();
         expect(errors).toHaveLength(1);
@@ -178,7 +188,7 @@ describe('GraphQL Mutations', () => {
 
         expect(error).toBeDefined();
 
-        const { message } = error;
+        const { message } = error!;
         const messages: string[] = message.split(',');
 
         expect(messages).toBeDefined();
@@ -232,7 +242,7 @@ describe('GraphQL Mutations', () => {
             /application\/graphql-response\+json/iu,
         );
 
-        const { data, errors } = await response.json();
+        const { data, errors } = await response.json() as UpdateSuccessType;
 
         expect(errors).toBeUndefined();
 
@@ -297,13 +307,13 @@ describe('GraphQL Mutations', () => {
             /application\/graphql-response\+json/iu,
         );
 
-        const { data, errors } = await response.json();
+        const { data, errors } = await response.json() as UpdateErrorsType;
 
         expect(data.update).toBeNull();
         expect(errors).toHaveLength(1);
 
-        const [error] = errors;
-        const { message } = error;
+        const [error] = errors!;
+        const { message } = error!;
         const messages: string[] = message.split(',');
 
         expect(messages).toBeDefined();
@@ -358,7 +368,7 @@ describe('GraphQL Mutations', () => {
             /application\/graphql-response\+json/iu,
         );
 
-        const { data, errors } = await response.json();
+        const { data, errors } = await response.json() as UpdateErrorsType;
 
         expect(data.update).toBeNull();
         expect(errors).toHaveLength(1);
@@ -367,7 +377,7 @@ describe('GraphQL Mutations', () => {
 
         expect(error).toBeDefined();
 
-        const { message, path, extensions } = error;
+        const { message, path, extensions } = error!;
 
         expect(message).toBe(
             `Es gibt kein Buch mit der ID ${id.toLowerCase()}.`,
@@ -410,14 +420,11 @@ describe('GraphQL Mutations', () => {
             /application\/graphql-response\+json/iu,
         );
 
-        const { data, errors } = await response.json();
+        const { data, errors } = await response.json() as DeleteSuccessType;
 
         expect(errors).toBeUndefined();
-
-        const success: boolean = data.delete.success;
-
         // Der Wert der Mutation ist true (falls geloescht wurde) oder false
-        expect(success).toBe(true);
+        expect(data.delete.success).toBe(true);
     });
 
     // -------------------------------------------------------------------------
@@ -452,11 +459,18 @@ describe('GraphQL Mutations', () => {
             /application\/graphql-response\+json/iu,
         );
 
-        const { data, errors } = await response.json();
+        const { data, errors } = await response.json() as DeleteErrorsType;
 
-        expect(errors[0].message).toBe('Forbidden resource');
-        expect(errors[0].extensions.code).toBe('BAD_USER_INPUT');
         expect(data.delete).toBeNull();
+
+        const [error] = errors!;
+
+        expect(error).toBeDefined();
+
+        const { message, extensions } = error!;
+
+        expect(message).toBe('Forbidden resource');
+        expect(extensions.code).toBe('BAD_USER_INPUT');
     });
 });
 /* eslint-enable @typescript-eslint/no-non-null-assertion */

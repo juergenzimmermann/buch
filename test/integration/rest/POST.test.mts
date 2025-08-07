@@ -87,6 +87,8 @@ const neuesBuchIsbnExistiert: BuchDTO = {
     abbildungen: [],
 };
 
+type MessageType = { message: string };
+
 // -----------------------------------------------------------------------------
 // T e s t s
 // -----------------------------------------------------------------------------
@@ -161,8 +163,8 @@ describe('POST /rest', () => {
 
         expect(status).toBe(HttpStatus.BAD_REQUEST);
 
-        const body = await response.json();
-        const messages = body.message as string[];
+        const body = await response.json() as MessageType;
+        const messages = body.message;
 
         expect(messages).toBeDefined();
         expect(messages).toHaveLength(expectedMsg.length);
@@ -187,7 +189,7 @@ describe('POST /rest', () => {
 
         expect(status).toBe(HttpStatus.UNPROCESSABLE_ENTITY);
 
-        const body = await response.json();
+        const body = await response.json() as MessageType;
 
         expect(body.message).toStrictEqual(expect.stringContaining('ISBN'));
     });

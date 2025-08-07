@@ -28,7 +28,9 @@
 import http from 'k6/http';
 import { check, sleep } from 'k6';
 import { type Options } from 'k6/options';
-import { BuchDTO } from '../../src/buch/controller/buchDTO.ts';
+// @ts-expect-error k6 verwendet esbuild fuer "Type Stripping": import mit "".js" funktioniert nicht
+import { BuchDTO } from '../../src/buch/controller/buch-dto.ts';
+// @ts-expect-error k6 verwendet esbuild fuer "Type Stripping": import mit "".js" funktioniert nicht
 import { generateISBN } from './isbn_generate.ts';
 
 const baseUrl = 'https://localhost:3000';
@@ -236,7 +238,7 @@ export function getById() {
     check(res, {
         'GET id: OK': (r) => r.status === 200,
         'GET id: application/json': (r) =>
-            r.headers['Content-Type'].startsWith('application/json'),
+            r.headers['Content-Type']?.startsWith('application/json') ?? false,
     });
     sleep(1); // Denkzeit simulieren
 }
@@ -264,7 +266,7 @@ export function getByTitel() {
     check(res, {
         'GET titel: OK': (r) => r.status === 200,
         'GET titel: application/json': (r) =>
-            r.headers['Content-Type'].startsWith('application/json'),
+            r.headers['Content-Type']?.startsWith('application/json') ?? false,
     });
     sleep(1);
 }
@@ -292,7 +294,7 @@ export function getByISBN() {
     check(res, {
         'GET isbn: OK': (r) => r.status === 200,
         'GET isbn: application/json': (r) =>
-            r.headers['Content-Type'].startsWith('application/json'),
+            r.headers['Content-Type']?.startsWith('application/json') ?? false,
     });
     sleep(1);
 }
@@ -306,7 +308,7 @@ export function getBySchlagwort() {
     check(res, {
         'GET schlagwort: OK': (r) => r.status === 200,
         'GET schlagwort: application/json': (r) =>
-            r.headers['Content-Type'].startsWith('application/json'),
+            r.headers['Content-Type']?.startsWith('application/json') ?? false,
     });
     sleep(1);
 }
@@ -317,7 +319,7 @@ export function postBuch() {
         schlagwoerter[Math.floor(Math.random() * schlagwoerter.length)];
     const buch = { ...neuesBuch };
     buch.isbn = generateISBN();
-    buch.schlagwoerter = [schlagwort.toUpperCase()];
+    buch.schlagwoerter = [schlagwort?.toUpperCase() ?? 'N/A'];
 
     const tokenHeaders: Record<string, string> = {
         'Content-Type': 'application/x-www-form-urlencoded',
@@ -372,7 +374,7 @@ export function queryBuch() {
     check(res, {
         'Query "buch": OK': (r) => r.status === 200,
         'Query "buch": application/json': (r) =>
-            r.headers['Content-Type'].startsWith('application/json'),
+            r.headers['Content-Type']?.startsWith('application/json') ?? false,
     });
     sleep(1);
 }
@@ -402,7 +404,7 @@ export function queryBuecher() {
     check(res, {
         'Query "buecher": OK': (r) => r.status === 200,
         'Query "buecher": application/json': (r) =>
-            r.headers['Content-Type'].startsWith('application/json'),
+            r.headers['Content-Type']?.startsWith('application/json') ?? false,
     });
     sleep(1);
 }

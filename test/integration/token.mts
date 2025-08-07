@@ -30,7 +30,7 @@ export const getToken = async (username: string, password: string) => {
         headers,
     });
 
-    const body = await response.json();
+    const body = await response.json() as { access_token: string };
     if (
         response.status !== 200 ||
         body.access_token === undefined ||

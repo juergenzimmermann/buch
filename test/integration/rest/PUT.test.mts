@@ -16,7 +16,7 @@
 import { HttpStatus } from '@nestjs/common';
 import BigNumber from 'bignumber.js';
 import { beforeAll, describe, expect, test } from 'vitest';
-import { type BuchDtoOhneRef } from '../../../src/buch/controller/buchDTO.js';
+import { type BuchDtoOhneRef } from '../../../src/buch/controller/buch-dto.js';
 import {
     APPLICATION_JSON,
     AUTHORIZATION,
@@ -166,8 +166,8 @@ describe('PUT /rest/:id', () => {
         // then
         expect(response.status).toBe(HttpStatus.BAD_REQUEST);
 
-        const body = await response.json();
-        const messages = body.message as string[];
+        const body = await response.json() as { message: string[] };
+        const messages = body.message;
 
         expect(messages).toBeDefined();
         expect(messages).toHaveLength(expectedMsg.length);
@@ -214,7 +214,9 @@ describe('PUT /rest/:id', () => {
         // then
         expect(response.status).toBe(HttpStatus.PRECONDITION_FAILED);
 
-        const { message, statusCode } = await response.json();
+        const { message, statusCode } = await response.json() as {
+            message: string;
+            statusCode: number;};
 
         expect(message).toMatch(/Versionsnummer/u);
         expect(statusCode).toBe(HttpStatus.PRECONDITION_FAILED);

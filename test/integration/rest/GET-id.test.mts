@@ -56,7 +56,7 @@ describe('GET /rest/:id', () => {
         expect(status).toBe(HttpStatus.OK);
         expect(headers.get(CONTENT_TYPE)).toMatch(/json/iu);
 
-        const body = await response.json();
+        const body = await response.json() as { id: number };
 
         expect(body.id).toBe(id);
     });

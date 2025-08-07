@@ -21,7 +21,7 @@ import { getToken } from './token.mjs';
 // selbst-signiertes Zertifikat beim Server
 // https://nodejs.org/api/cli.html
 // Alternative: "Undici" verwenden
-process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
+process.env['NODE_TLS_REJECT_UNAUTHORIZED'] = '0';
 
 const dbPopulate = async (token: string) => {
     const url = `${baseURL}/dev/db_populate`;
@@ -33,7 +33,7 @@ const dbPopulate = async (token: string) => {
         headers,
     });
 
-    const { db_populate } = await response.json();
+    const { db_populate } = await response.json() as { db_populate: string };
     if (db_populate !== 'success') {
         throw new Error('Fehler bei POST /dev/db_populate');
     }

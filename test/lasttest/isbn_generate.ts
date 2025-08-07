@@ -8,7 +8,7 @@ export function generateISBN() {
     let sum = 0;
     const ean13 = `${praefix}${gruppe}${verlag}${titel}`;
     for (let i = 0; i < ean13.length; i++) {
-        const digit = parseInt(ean13[i], 10);
+        const digit = parseInt(ean13[i] ?? '0', 10);
         sum += i % 2 === 0 ? digit : digit * 3;
     }
     const pruefziffer = (10 - (sum % 10)) % 10;
