@@ -53,7 +53,10 @@ apt-get update --no-show-upgraded
 # Die neuesten Versionen der bereits installierten Packages installieren
 apt-get upgrade --yes --no-show-upgraded
 
+npm r -g yarn pnpm
+npm i -g corepack
 corepack enable pnpm
+corepack prepare pnpm@latest-10 --activate
 
 # Debian Bookworm bietet nur Packages fuer Python 3.11; Ubuntu Jammy LTS nur fuer Python 3.10
 # https://packages.debian.org/bookworm/python3.11-minimal
@@ -96,7 +99,10 @@ apt-get update
 # Die neuesten Versionen der bereits installierten Packages installieren
 apt-get upgrade --yes
 
+npm r -g yarn pnpm
+npm i -g corepack
 corepack enable pnpm
+corepack prepare pnpm@latest-10 --activate
 
 # https://packages.debian.org/bookworm/python3.11-minimal
 # https://packages.debian.org/bookworm/python3.11-dev

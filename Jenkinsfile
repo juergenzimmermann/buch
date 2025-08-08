@@ -18,10 +18,17 @@
  */
 
 pipeline {
-    agent any
-    tools {
-        nodejs 'node-24.1.0'
+    // agent any
+    agent {
+        docker {
+            //image 'node:lts-bullseye-slim'
+            image 'node:24.5.0'
+            args '-p 3000:3000'
+        }
     }
+    // tools {
+    //     nodejs 'node-24.5.0'
+    // }
 
     // Umgebungsvariable:
     //environment {
@@ -53,13 +60,15 @@ pipeline {
 
                 // Unterverzeichnisse src und test im WORKSPACE loeschen: vom letzten Build
                 // Kurzform fuer: sh([script: '...'])
-                sh 'rm -rf src'
-                sh 'rm -rf test'
-                sh 'rm -rf node_modules'
-                sh 'rm -rf dist'
-                sh 'rm -rf .extras/doc/api'
-                sh 'rm -rf .extras/doc/folien/folien.html'
-                sh 'rm -rf .extras/doc/projekthandbuch/html'
+                sh '''
+                    rm -rf src
+                    rm -rf test
+                    rm -rf node_modules
+                    rm -rf dist
+                    rm -rf .extras/doc/api
+                    rm -rf .extras/doc/folien/folien.html
+                    rm -rf .extras/doc/projekthandbuch/html
+                '''
 
                 // https://www.jenkins.io/doc/pipeline/steps/git
                 // "named arguments" statt Funktionsaufruf mit Klammern
@@ -95,8 +104,12 @@ pipeline {
                     cat /etc/debian_version
                     lsb_release -a
                     node --version
-                    npm i -g npm
                     npm --version
+                    npm r -g yarn pnpm
+                    npm i -g corepack
+                    corepack enable pnpm
+                    corepack prepare pnpm@latest-10 --activate
+                    pnpm --version
                     python --version
                 '''
 
@@ -110,7 +123,7 @@ pipeline {
                 // /var/jenkins_home/workspace/buch (siehe "pwd" oben)
                 sh '''
                     cat package.json
-                    npm ci --no-fund --no-audit
+                    pnpm i --prefer-frozen-lockfile
                 '''
             }
         }
@@ -119,8 +132,8 @@ pipeline {
             steps {
                 // TODO Warum funktioniert npx nicht?
                 sh '''
-                    npx tsc --version
-                    ./node_modules/.bin/tsc
+                    pnpm tsc --version
+                    pnpm run tsc
                 '''
             }
         }
@@ -134,29 +147,29 @@ pipeline {
                     },
                     'ESLint': {
                         sh '''
-                            npx eslint --version
-                            npm run eslint
+                            pnpm eslint --version
+                            pnpm run eslint
                         '''
                     },
                     'Security Audit': {
-                        sh 'npm audit --omit=dev'
+                        sh 'pnpm audit -P'
                     },
                     'AsciiDoctor': {
                         sh '''
-                            npx asciidoctor --version
-                            npm run asciidoctor
+                            pnpm asciidoctor --version
+                            pnpm run asciidoctor
                         '''
                     },
                     'reveal.js': {
                         sh '''
-                            npx asciidoctor-revealjs --version
-                            npm run revealjs
+                            pnpm asciidoctor-revealjs --version
+                            pnpm run revealjs
                         '''
                     },
                     'TypeDoc': {
                         sh '''
-                            npx typedoc --version
-                            npm run typedoc
+                            pnpm typedoc --version
+                            pnpm run typedoc
                         '''
                     }
                 )
