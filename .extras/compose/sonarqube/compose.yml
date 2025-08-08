@@ -11,21 +11,14 @@
 # GNU General Public License for more details.
 #
 # You should have received a copy of the GNU General Public License
-# along with this program.  If not, see <https://www.gnu.org/licenses/>.
+# along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 # Aufruf:   docker compose up
 #           docker compose down
 
-# PostgreSQL statt H2:
-#   https://docs.sonarsource.com/sonarqube/latest/setup-and-upgrade/install-the-server/installing-sonarqube-from-docker
-
-# TLS durch einen Reverse Proxy
-#   https://bartugozet.medium.com/configuring-ssl-for-sonarqube-5a0212f61a41
-#   https://docs.sonarsource.com/sonarqube/latest/setup-and-upgrade/configure-and-operate-a-server/operating-the-server/#securing-the-server-behind-a-proxy
-
 services:
   sonarqube:
-    image: sonarqube:25.7.0.110598-community
+    image: sonarqube:25.8.0.112029-community
     ports:
       # Port fuer HTTP
       - published: 9000

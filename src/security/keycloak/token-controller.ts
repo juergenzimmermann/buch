@@ -101,7 +101,7 @@ export class TokenController {
         @Body() { username, password }: TokenData,
         @Res() res: Response,
     ) {
-        this.#logger.debug('token: username=%s', username);
+        this.#logger.debug('token: username=%s', username ?? 'undefined');
 
         const result = await this.#keycloakService.token({
             username,
@@ -124,7 +124,7 @@ export class TokenController {
     async refresh(@Body() body: Refresh, @Res() res: Response) {
         // eslint-disable-next-line camelcase, @typescript-eslint/naming-convention
         const { refresh_token } = body;
-        this.#logger.debug('refresh: refresh_token=%s', refresh_token);
+        this.#logger.debug('refresh: refresh_token=%s', refresh_token ?? 'undefined');
 
         const result = await this.#keycloakService.refresh(refresh_token);
         if (result === undefined) {

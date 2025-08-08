@@ -14,7 +14,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 import path from 'node:path';
-import { pino } from 'pino';
+import pino from 'pino';
 import { type PrettyOptions } from 'pino-pretty';
 import { config } from './app.js';
 import { env } from './env.js';

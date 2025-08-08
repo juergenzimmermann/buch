@@ -110,14 +110,14 @@ export class BuchService {
 
         if (this.#logger.isLevelEnabled('debug')) {
             this.#logger.debug(
-                'findById: buch=%s, titel=%o',
+                'findById: buch=%s, titel=%s',
                 buch.toString(),
-                buch.titel,
+                JSON.stringify(buch.titel),
             );
             if (mitAbbildungen) {
                 this.#logger.debug(
-                    'findById: abbildungen=%o',
-                    buch.abbildungen,
+                    'findById: abbildungen=%s',
+                    JSON.stringify(buch.abbildungen),
                 );
             }
         }
@@ -132,7 +132,7 @@ export class BuchService {
     async findFileByBuchId(
         buchId: number,
     ): Promise<Readonly<BuchFile> | undefined> {
-        this.#logger.debug('findFileByBuchId: buchId=%s', buchId);
+        this.#logger.debug('findFileByBuchId: buchId=%d', buchId);
         const buchFile = await this.#fileRepo
             .createQueryBuilder('buch_file')
             .where('buch_id = :id', { id: buchId })
@@ -142,7 +142,7 @@ export class BuchService {
             return;
         }
 
-        this.#logger.debug('findFileByBuchId: filename=%s', buchFile.filename);
+        this.#logger.debug('findFileByBuchId: filename=%s', buchFile.filename ?? 'undefinied');
         return buchFile;
     }
 
@@ -158,8 +158,8 @@ export class BuchService {
         pageable: Pageable,
     ): Promise<Slice<Buch>> {
         this.#logger.debug(
-            'find: suchparameter=%o, pageable=%o',
-            suchparameter,
+            'find: suchparameter=%s, pageable=%o',
+            JSON.stringify(suchparameter),
             pageable,
         );
 
@@ -232,7 +232,7 @@ export class BuchService {
     }
 
     #checkKeys(keys: string[]) {
-        this.#logger.debug('#checkKeys: keys=%s', keys);
+        this.#logger.debug('#checkKeys: keys=%o', keys);
         // Ist jeder Suchparameter auch eine Property von Buch oder "schlagwoerter"?
         let validKeys = true;
         keys.forEach((key) => {
@@ -256,7 +256,7 @@ export class BuchService {
 
     #checkEnums(suchparameter: Suchparameter) {
         const { art } = suchparameter;
-        this.#logger.debug('#checkEnums: Suchparameter "art=%s"', art);
+        this.#logger.debug('#checkEnums: Suchparameter "art=%s"', art ?? 'undefined');
         // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
         return (
             art === undefined ||

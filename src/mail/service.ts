@@ -52,7 +52,7 @@ export class MailService {
             const nodemailer = await import('nodemailer');
             await nodemailer.createTransport(mailConfig.options).sendMail(data);
         } catch (err) {
-            this.#logger.warn('#sendmail: Fehler %o', err);
+            this.#logger.warn('#sendmail: Fehler %o', err as object);
         }
     }
 }

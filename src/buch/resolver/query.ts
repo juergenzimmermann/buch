@@ -54,9 +54,9 @@ export class BuchQueryResolver {
 
         if (this.#logger.isLevelEnabled('debug')) {
             this.#logger.debug(
-                'findById: buch=%s, titel=%o',
+                'findById: buch=%s, titel=%s',
                 buch.toString(),
-                buch.titel,
+                JSON.stringify(buch.titel),
             );
         }
         return buch;
@@ -65,7 +65,7 @@ export class BuchQueryResolver {
     @Query('buecher')
     @Public()
     async find(@Args() input: SuchparameterInput | undefined) {
-        this.#logger.debug('find: input=%o', input);
+        this.#logger.debug('find: input=%s', JSON.stringify(input));
         const pageable = createPageable({});
         const buecherSlice = await this.#service.find(
             input?.suchparameter,
@@ -81,7 +81,7 @@ export class BuchQueryResolver {
             this.#logger.debug(
                 'rabatt: buch=%s, short=%s',
                 buch.toString(),
-                short,
+                short?.toString() ?? 'undefined',
             );
         }
         // "Nullish Coalescing" ab ES2020

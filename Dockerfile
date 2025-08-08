@@ -39,10 +39,6 @@ ARG NODE_VERSION=24.5.0
 # ---------------------------------------------------------------------------------------
 FROM node:${NODE_VERSION}-bookworm-slim AS dist
 
-# https://pnpm.io/docker
-ENV PNPM_HOME="/pnpm"
-ENV PATH="$PNPM_HOME:$PATH"
-
 # ggf. Python fuer pg, better-sqlite3
 # https://packages.debian.org/bookworm/python3.11-minimal
 # https://packages.debian.org/trixie/python3.12-minimal
@@ -57,8 +53,7 @@ apt-get update --no-show-upgraded
 # Die neuesten Versionen der bereits installierten Packages installieren
 apt-get upgrade --yes --no-show-upgraded
 
-# https://pnpm.io/docker
-corepack enable
+corepack enable pnpm
 
 # Debian Bookworm bietet nur Packages fuer Python 3.11; Ubuntu Jammy LTS nur fuer Python 3.10
 # https://packages.debian.org/bookworm/python3.11-minimal
@@ -94,10 +89,6 @@ EOF
 # ------------------------------------------------------------------------------
 FROM node:${NODE_VERSION}-bookworm-slim AS dependencies
 
-# https://pnpm.io/docker
-ENV PNPM_HOME="/pnpm"
-ENV PATH="$PNPM_HOME:$PATH"
-
 RUN --mount=type=bind,source=package.json,target=package.json <<EOF
 set -eux
 # Die "Package Index"-Dateien neu synchronisieren
@@ -105,8 +96,7 @@ apt-get update
 # Die neuesten Versionen der bereits installierten Packages installieren
 apt-get upgrade --yes
 
-# https://pnpm.io/docker
-corepack enable
+corepack enable pnpm
 
 # https://packages.debian.org/bookworm/python3.11-minimal
 # https://packages.debian.org/bookworm/python3.11-dev

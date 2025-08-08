@@ -62,7 +62,7 @@ export class TokenResolver {
             );
         }
 
-        this.#logger.debug('token: result=%o', result);
+        this.#logger.debug('token: result=%o', result as object);
         return result;
     }
 
@@ -78,7 +78,7 @@ export class TokenResolver {
             throw new BadUserInputError('Falscher Token');
         }
 
-        this.#logger.debug('refresh: result=%o', result);
+        this.#logger.debug('refresh: result=%o', result as object);
         return result;
     }
 }

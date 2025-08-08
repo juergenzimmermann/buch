@@ -116,14 +116,14 @@ export class QueryBuilder {
         pageable: Pageable,
     ) {
         this.#logger.debug(
-            'build: titel=%s, rating=%s, preis=%s, javascript=%s, typescript=%s, java=%s, python=%s, restProps=%o, pageable=%o',
-            titel,
-            rating,
-            preis,
-            javascript,
-            typescript,
-            java,
-            python,
+            'build: titel=%s, rating=%s, preis=%d, javascript=%s, typescript=%s, java=%s, python=%s, restProps=%o, pageable=%o',
+            titel ?? 'undefined',
+            rating?.toString() ?? 'undefined',
+            preis ?? -1,
+            javascript ?? 'undefined',
+            typescript ?? 'undefined',
+            java ?? 'undefined',
+            python ?? 'undefined',
             restProps,
             pageable,
         );
@@ -239,7 +239,7 @@ export class QueryBuilder {
         const size = pageable?.size ?? DEFAULT_PAGE_SIZE;
         const number = pageable?.number ?? DEFAULT_PAGE_NUMBER;
         const skip = number * size;
-        this.#logger.debug('take=%s, skip=%s', size, skip);
+        this.#logger.debug('take=%d, skip=%d', size, skip);
         return queryBuilder.take(size).skip(skip);
     }
 }

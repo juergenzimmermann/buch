@@ -61,7 +61,7 @@ export class KeycloakService implements KeycloakConnectOptionsFactory {
     }
 
     async token({ username, password }: TokenData) {
-        this.#logger.debug('token: username=%s', username);
+        this.#logger.debug('token: username=%s', username ?? 'undefined');
         if (username === undefined || password === undefined) {
             return;
         }
@@ -82,7 +82,7 @@ export class KeycloakService implements KeycloakConnectOptionsFactory {
                 headers: this.#headers,
             });
         } catch (err: unknown) {
-            this.#logger.warn('Fehler beim Zugriff auf Keycloak: %o', err);
+            this.#logger.warn('Fehler beim Zugriff auf Keycloak: %o', err as object);
             return;
         }
 
@@ -97,12 +97,12 @@ export class KeycloakService implements KeycloakConnectOptionsFactory {
 
         const responseBody = await response.json();
         this.#logPayload(responseBody);
-        this.#logger.debug('token: responseBody=%o', responseBody);
+        this.#logger.debug('token: responseBody=%o', responseBody as object);
         return responseBody;
     }
 
     async refresh(refresh_token: string | undefined) {
-        this.#logger.debug('refresh: refresh_token=%s', refresh_token);
+        this.#logger.debug('refresh: refresh_token=%s', refresh_token ?? 'undefined');
         if (refresh_token === undefined) {
             return;
         }
@@ -118,7 +118,7 @@ export class KeycloakService implements KeycloakConnectOptionsFactory {
                 headers: this.#headersAuthorization,
             });
         } catch (err: unknown) {
-            this.#logger.warn('Fehler beim Zugriff auf Keycloak: %o', err);
+            this.#logger.warn('Fehler beim Zugriff auf Keycloak: %o', err as object);
             return;
         }
 
@@ -133,7 +133,7 @@ export class KeycloakService implements KeycloakConnectOptionsFactory {
 
         const responseBody = await response.json();
 
-        this.#logger.debug('refresh: responseBody=%o', responseBody);
+        this.#logger.debug('refresh: responseBody=%o', responseBody as object);
         return responseBody;
     }
 

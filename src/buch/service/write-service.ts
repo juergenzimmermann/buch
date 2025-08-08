@@ -96,7 +96,7 @@ export class BuchWriteService {
         const buchDb = await this.#repo.save(buch); // implizite Transaktion
         await this.#sendmail(buchDb);
 
-        this.#logger.debug('create: buchDb.id=%d', buchDb.id);
+        this.#logger.debug('create: buchDb.id=%d', buchDb.id ?? -1);
         return buchDb.id!;
     }
 
@@ -136,7 +136,7 @@ export class BuchWriteService {
 
         const fileType = await fileTypeFromBuffer(data);
         const mimetype = fileType?.mime;
-        this.#logger.debug('mimetype: %s', mimetype);
+        this.#logger.debug('mimetype: %s', mimetype ?? 'undefined');
         // Entity-Objekt aufbauen, um es spaeter in der DB zu speichern (s.u.)
         const buchFile = this.#fileRepo.create({
             filename,
@@ -153,8 +153,8 @@ export class BuchWriteService {
 
         this.#logger.debug(
             'addFile: id=%d, filename=%s',
-            buchFile.id,
-            buchFile.filename,
+            buchFile.id ?? -1,
+            buchFile.filename ?? 'undefined',
         );
         return buchFile;
     }
@@ -172,7 +172,7 @@ export class BuchWriteService {
     async update({ id, buch, version }: UpdateParams) {
         this.#logger.debug(
             'update: id=%d, buch=%o, version=%s',
-            id,
+            id ?? -1,
             buch,
             version,
         );
@@ -236,7 +236,7 @@ export class BuchWriteService {
     }
 
     async #validateCreate({ isbn }: Buch): Promise<undefined> {
-        this.#logger.debug('#validateCreate: isbn=%s', isbn);
+        this.#logger.debug('#validateCreate: isbn=%s', isbn ?? 'undefined');
         if (isbn === undefined) {
             this.#logger.debug('#validateCreate: ok');
             return;
@@ -262,7 +262,7 @@ export class BuchWriteService {
         versionStr: string,
     ): Promise<Buch> {
         this.#logger.debug(
-            '#validateUpdate: buch=%o, id=%s, versionStr=%s',
+            '#validateUpdate: buch=%o, id=%d, versionStr=%s',
             buch,
             id,
             versionStr,

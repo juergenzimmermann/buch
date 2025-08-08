@@ -224,10 +224,10 @@ export class BuchWriteController {
         @Res() res: Response,
     ): Promise<Response> {
         this.#logger.debug(
-            'put: id=%s, buchDTO=%o, version=%s',
+            'put: id=%d, buchDTO=%o, version=%s',
             id,
             buchDTO,
-            version,
+            version ?? 'undefined',
         );
 
         if (version === undefined) {
@@ -261,7 +261,7 @@ export class BuchWriteController {
     })
     @ApiForbiddenResponse({ description: MSG_FORBIDDEN })
     async delete(@Param('id') id: number) {
-        this.#logger.debug('delete: id=%s', id);
+        this.#logger.debug('delete: id=%d', id);
         await this.#service.delete(id);
     }
 

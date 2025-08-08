@@ -107,10 +107,10 @@ export class BuchMutationResolver {
     @Mutation()
     @Roles('admin')
     async delete(@Args() id: IdInput) {
-        const idStr = id.id;
-        this.#logger.debug('delete: id=%s', idStr);
-        const deletePerformed = await this.#service.delete(idStr);
-        this.#logger.debug('deleteBuch: deletePerformed=%s', deletePerformed);
+        const idValue = id.id;
+        this.#logger.debug('delete: idValue=%d', idValue);
+        const deletePerformed = await this.#service.delete(idValue);
+        this.#logger.debug('deleteBuch: deletePerformed=%s', deletePerformed.toString());
         const payload: DeletePayload = { success: deletePerformed };
         return payload;
     }
