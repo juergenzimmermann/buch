@@ -102,17 +102,17 @@ pipeline {
                     cat /etc/os-release
                     cat /etc/debian_version
                     lsb_release -a
-                    env
-                    echo $PATH
                     node --version
                     npm --version
                     npm r -g yarn pnpm
                     npm i -g corepack
+                    npm root -g
                     which corepack
                     ls -al ~/.cache/node
                     corepack --version
                     corepack enable pnpm
                     corepack prepare pnpm@latest-10 --activate
+                    env
                     which pnpm
                     pnpm --version
                     pnpm root -g
