@@ -107,9 +107,15 @@ pipeline {
                     npm --version
                     npm r -g yarn pnpm
                     npm i -g corepack
+                    which corepack
+                    corepack --version
                     corepack enable pnpm
                     corepack prepare pnpm@latest-10 --activate
+                    which pnpm
                     pnpm --version
+                    pnpm root
+                    pnpm root -g
+                    pnpm bin
                     python --version
                 '''
 
