@@ -117,6 +117,7 @@ pipeline {
                     pnpm --version
                     pnpm root -g
                     pnpm store path
+                    pnpm config get cache-dir
                     pnpm root
                     pnpm bin
                     python --version
