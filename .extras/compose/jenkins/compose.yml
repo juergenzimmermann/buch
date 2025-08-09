@@ -36,7 +36,11 @@ services:
         target: 50000
     volumes:
       - type: bind
-        # /var/jenkins_home/workspace enthaelt das Verzeichnis "buch"
+        # /var/jenkins_home hat u.a. folgende Unterverzeichnisse:
+        #   jobs/buch
+        #   workspace/buch
+        #   .local/share/pnpm/store
+        #   .cache/node
         source: C:/Zimmermann/volumes/jenkins/jenkins_home
         target: /var/jenkins_home
       - type: bind
