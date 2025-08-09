@@ -169,7 +169,7 @@ pipeline {
                     'TypeDoc': {
                         sh '''
                             pnpm typedoc --version
-                            pnpm run typedoc
+                            pnpm typedoc
                         '''
                     }
                 )
