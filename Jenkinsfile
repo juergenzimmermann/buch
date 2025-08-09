@@ -112,7 +112,7 @@ pipeline {
                     corepack --version
                     corepack enable pnpm
                     corepack prepare pnpm@latest-10 --activate
-                    env
+                    env | sort
                     which pnpm
                     pnpm --version
                     pnpm root -g
