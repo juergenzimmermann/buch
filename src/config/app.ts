@@ -26,7 +26,7 @@ import path from 'node:path';
 let srcExists: boolean;
 try {
     // https://nodejs.org/api/fs.html#fspromisesaccesspath-mode
-    await access('src')
+    await access('src');
     srcExists = true;
 } catch {
     srcExists = false;

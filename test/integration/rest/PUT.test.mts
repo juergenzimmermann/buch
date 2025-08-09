@@ -166,7 +166,7 @@ describe('PUT /rest/:id', () => {
         // then
         expect(response.status).toBe(HttpStatus.BAD_REQUEST);
 
-        const body = await response.json() as { message: string[] };
+        const body = (await response.json()) as { message: string[] };
         const messages = body.message;
 
         expect(messages).toBeDefined();
@@ -214,9 +214,10 @@ describe('PUT /rest/:id', () => {
         // then
         expect(response.status).toBe(HttpStatus.PRECONDITION_FAILED);
 
-        const { message, statusCode } = await response.json() as {
+        const { message, statusCode } = (await response.json()) as {
             message: string;
-            statusCode: number;};
+            statusCode: number;
+        };
 
         expect(message).toMatch(/Versionsnummer/u);
         expect(statusCode).toBe(HttpStatus.PRECONDITION_FAILED);

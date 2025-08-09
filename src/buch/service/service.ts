@@ -142,7 +142,10 @@ export class BuchService {
             return;
         }
 
-        this.#logger.debug('findFileByBuchId: filename=%s', buchFile.filename ?? 'undefinied');
+        this.#logger.debug(
+            'findFileByBuchId: filename=%s',
+            buchFile.filename ?? 'undefinied',
+        );
         return buchFile;
     }
 
@@ -256,7 +259,10 @@ export class BuchService {
 
     #checkEnums(suchparameter: Suchparameter) {
         const { art } = suchparameter;
-        this.#logger.debug('#checkEnums: Suchparameter "art=%s"', art ?? 'undefined');
+        this.#logger.debug(
+            '#checkEnums: Suchparameter "art=%s"',
+            art ?? 'undefined',
+        );
         // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
         return (
             art === undefined ||

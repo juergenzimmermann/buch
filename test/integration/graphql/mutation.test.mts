@@ -35,14 +35,23 @@ import { getToken } from './token.mjs';
 // -----------------------------------------------------------------------------
 const idLoeschen = '60';
 
-type CreateSuccessType = { data: { create: { id: string} }, errors?: undefined };
-type CreateErrorsType = { data: { create: null }, errors: ErrorsType };
+type CreateSuccessType = {
+    data: { create: { id: string } };
+    errors?: undefined;
+};
+type CreateErrorsType = { data: { create: null }; errors: ErrorsType };
 
-type UpdateSuccessType = { data: { update: { version: number} }, errors?: undefined };
-type UpdateErrorsType = { data: { update: null }, errors: ErrorsType };
+type UpdateSuccessType = {
+    data: { update: { version: number } };
+    errors?: undefined;
+};
+type UpdateErrorsType = { data: { update: null }; errors: ErrorsType };
 
-type DeleteSuccessType = { data: { delete: { success: boolean} }, errors?: undefined };
-type DeleteErrorsType = { data: { delete: null }, errors: ErrorsType };
+type DeleteSuccessType = {
+    data: { delete: { success: boolean } };
+    errors?: undefined;
+};
+type DeleteErrorsType = { data: { delete: null }; errors: ErrorsType };
 
 // -----------------------------------------------------------------------------
 // T e s t s
@@ -110,7 +119,7 @@ describe('GraphQL Mutations', () => {
             /application\/graphql-response\+json/iu,
         );
 
-        const { data } = await response.json() as CreateSuccessType;
+        const { data } = (await response.json()) as CreateSuccessType;
 
         expect(data).toBeDefined();
 
@@ -179,7 +188,7 @@ describe('GraphQL Mutations', () => {
             /application\/graphql-response\+json/iu,
         );
 
-        const { data, errors } = await response.json() as CreateErrorsType;
+        const { data, errors } = (await response.json()) as CreateErrorsType;
 
         expect(data.create).toBeNull();
         expect(errors).toHaveLength(1);
@@ -242,7 +251,7 @@ describe('GraphQL Mutations', () => {
             /application\/graphql-response\+json/iu,
         );
 
-        const { data, errors } = await response.json() as UpdateSuccessType;
+        const { data, errors } = (await response.json()) as UpdateSuccessType;
 
         expect(errors).toBeUndefined();
 
@@ -307,7 +316,7 @@ describe('GraphQL Mutations', () => {
             /application\/graphql-response\+json/iu,
         );
 
-        const { data, errors } = await response.json() as UpdateErrorsType;
+        const { data, errors } = (await response.json()) as UpdateErrorsType;
 
         expect(data.update).toBeNull();
         expect(errors).toHaveLength(1);
@@ -368,7 +377,7 @@ describe('GraphQL Mutations', () => {
             /application\/graphql-response\+json/iu,
         );
 
-        const { data, errors } = await response.json() as UpdateErrorsType;
+        const { data, errors } = (await response.json()) as UpdateErrorsType;
 
         expect(data.update).toBeNull();
         expect(errors).toHaveLength(1);
@@ -420,7 +429,7 @@ describe('GraphQL Mutations', () => {
             /application\/graphql-response\+json/iu,
         );
 
-        const { data, errors } = await response.json() as DeleteSuccessType;
+        const { data, errors } = (await response.json()) as DeleteSuccessType;
 
         expect(errors).toBeUndefined();
         // Der Wert der Mutation ist true (falls geloescht wurde) oder false
@@ -459,7 +468,7 @@ describe('GraphQL Mutations', () => {
             /application\/graphql-response\+json/iu,
         );
 
-        const { data, errors } = await response.json() as DeleteErrorsType;
+        const { data, errors } = (await response.json()) as DeleteErrorsType;
 
         expect(data.delete).toBeNull();
 

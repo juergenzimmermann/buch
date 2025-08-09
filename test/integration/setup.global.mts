@@ -33,7 +33,7 @@ const dbPopulate = async (token: string) => {
         headers,
     });
 
-    const { db_populate } = await response.json() as { db_populate: string };
+    const { db_populate } = (await response.json()) as { db_populate: string };
     if (db_populate !== 'success') {
         throw new Error('Fehler bei POST /dev/db_populate');
     }

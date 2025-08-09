@@ -176,7 +176,8 @@ export class DbPopulateService implements OnApplicationBootstrap {
         let statement = '';
         const script = await readFile(scriptPath, 'utf8'); // eslint-disable-line security/detect-non-literal-fs-filename
         // bei Zeilenumbruch einen neuen String erstellen
-        script.split(/\r?\n/u)
+        script
+            .split(/\r?\n/u)
             // Kommentarzeilen entfernen
             .filter((line) => !line.includes('--'))
             // Eine Anweisung aus mehreren Zeilen bis zum Semikolon zusammenfuegen

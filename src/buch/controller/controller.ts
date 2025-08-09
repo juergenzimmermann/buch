@@ -196,7 +196,10 @@ export class BuchController {
         const buch = await this.#service.findById({ id });
         if (this.#logger.isLevelEnabled('debug')) {
             this.#logger.debug('getById(): buch=%s', buch.toString());
-            this.#logger.debug('getById(): titel=%s', JSON.stringify(buch.titel));
+            this.#logger.debug(
+                'getById(): titel=%s',
+                JSON.stringify(buch.titel),
+            );
         }
 
         // ETags
@@ -254,7 +257,11 @@ export class BuchController {
         const { page, size } = query;
         delete query['page'];
         delete query['size'];
-        this.#logger.debug('get: page=%s, size=%s', page ?? 'undefined', size ?? 'undefined');
+        this.#logger.debug(
+            'get: page=%s, size=%s',
+            page ?? 'undefined',
+            size ?? 'undefined',
+        );
 
         const keys = Object.keys(query) as (keyof BuchQuery)[];
         keys.forEach((key) => {

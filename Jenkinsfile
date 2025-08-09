@@ -18,17 +18,16 @@
  */
 
 pipeline {
-    // agent any
-    agent {
-        docker {
-            //image 'node:lts-bullseye-slim'
-            image 'node:24.5.0'
-            args '-p 3000:3000'
-        }
-    }
-    // tools {
-    //     nodejs 'node-24.5.0'
+    agent any
+    // agent {
+    //     docker {
+    //         image 'node:lts-bullseye-slim'
+    //         args '-p 3000:3000'
+    //     }
     // }
+    tools {
+        nodejs 'node-24.5.0'
+    }
 
     // Umgebungsvariable:
     //environment {

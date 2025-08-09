@@ -47,7 +47,7 @@ describe('GET /rest', () => {
         expect(status).toBe(HttpStatus.OK);
         expect(headers.get(CONTENT_TYPE)).toMatch(/json/iu);
 
-        const body = await response.json() as Page<Buch>;
+        const body = (await response.json()) as Page<Buch>;
 
         body.content
             .map((buch) => buch.id)
@@ -71,7 +71,7 @@ describe('GET /rest', () => {
             expect(status).toBe(HttpStatus.OK);
             expect(headers.get(CONTENT_TYPE)).toMatch(/json/iu);
 
-            const body = await response.json() as Page<Buch>;
+            const body = (await response.json()) as Page<Buch>;
 
             expect(body).toBeDefined();
 
@@ -114,7 +114,7 @@ describe('GET /rest', () => {
         expect(status).toBe(HttpStatus.OK);
         expect(headers.get(CONTENT_TYPE)).toMatch(/json/iu);
 
-        const body = await response.json() as Page<Buch>;
+        const body = (await response.json()) as Page<Buch>;
 
         expect(body).toBeDefined();
 
@@ -144,7 +144,7 @@ describe('GET /rest', () => {
             expect(status).toBe(HttpStatus.OK);
             expect(headers.get(CONTENT_TYPE)).toMatch(/json/iu);
 
-            const body = await response.json() as Page<Buch>;
+            const body = (await response.json()) as Page<Buch>;
 
             // Jedes Buch hat eine Bewertung >= rating
             body.content
@@ -168,7 +168,7 @@ describe('GET /rest', () => {
             expect(status).toBe(HttpStatus.OK);
             expect(headers.get(CONTENT_TYPE)).toMatch(/json/iu);
 
-            const body = await response.json() as Page<Buch>;
+            const body = (await response.json()) as Page<Buch>;
 
             // Jedes Buch hat einen Preis <= preis
             body.content
@@ -194,7 +194,7 @@ describe('GET /rest', () => {
             expect(status).toBe(HttpStatus.OK);
             expect(headers.get(CONTENT_TYPE)).toMatch(/json/iu);
 
-            const body = await response.json() as Page<Buch>;
+            const body = (await response.json()) as Page<Buch>;
 
             // JSON-Array mit mind. 1 JSON-Objekt
             expect(body).toBeDefined();

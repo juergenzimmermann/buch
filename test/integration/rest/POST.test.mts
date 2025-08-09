@@ -163,7 +163,7 @@ describe('POST /rest', () => {
 
         expect(status).toBe(HttpStatus.BAD_REQUEST);
 
-        const body = await response.json() as MessageType;
+        const body = (await response.json()) as MessageType;
         const messages = body.message;
 
         expect(messages).toBeDefined();
@@ -189,7 +189,7 @@ describe('POST /rest', () => {
 
         expect(status).toBe(HttpStatus.UNPROCESSABLE_ENTITY);
 
-        const body = await response.json() as MessageType;
+        const body = (await response.json()) as MessageType;
 
         expect(body.message).toStrictEqual(expect.stringContaining('ISBN'));
     });

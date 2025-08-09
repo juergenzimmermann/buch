@@ -110,7 +110,10 @@ export class BuchMutationResolver {
         const idValue = id.id;
         this.#logger.debug('delete: idValue=%d', idValue);
         const deletePerformed = await this.#service.delete(idValue);
-        this.#logger.debug('deleteBuch: deletePerformed=%s', deletePerformed.toString());
+        this.#logger.debug(
+            'deleteBuch: deletePerformed=%s',
+            deletePerformed.toString(),
+        );
         const payload: DeletePayload = { success: deletePerformed };
         return payload;
     }

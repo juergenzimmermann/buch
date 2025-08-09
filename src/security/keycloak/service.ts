@@ -82,7 +82,10 @@ export class KeycloakService implements KeycloakConnectOptionsFactory {
                 headers: this.#headers,
             });
         } catch (err: unknown) {
-            this.#logger.warn('Fehler beim Zugriff auf Keycloak: %o', err as object);
+            this.#logger.warn(
+                'Fehler beim Zugriff auf Keycloak: %o',
+                err as object,
+            );
             return;
         }
 
@@ -102,7 +105,10 @@ export class KeycloakService implements KeycloakConnectOptionsFactory {
     }
 
     async refresh(refresh_token: string | undefined) {
-        this.#logger.debug('refresh: refresh_token=%s', refresh_token ?? 'undefined');
+        this.#logger.debug(
+            'refresh: refresh_token=%s',
+            refresh_token ?? 'undefined',
+        );
         if (refresh_token === undefined) {
             return;
         }
@@ -118,7 +124,10 @@ export class KeycloakService implements KeycloakConnectOptionsFactory {
                 headers: this.#headersAuthorization,
             });
         } catch (err: unknown) {
-            this.#logger.warn('Fehler beim Zugriff auf Keycloak: %o', err as object);
+            this.#logger.warn(
+                'Fehler beim Zugriff auf Keycloak: %o',
+                err as object,
+            );
             return;
         }
 

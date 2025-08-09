@@ -52,7 +52,9 @@ export const getToken = async (
         headers,
     });
 
-    const body = await response.json() as { data: { token: { access_token: string } } };
+    const body = (await response.json()) as {
+        data: { token: { access_token: string } };
+    };
     const { access_token } = body.data.token;
     if (access_token === undefined || typeof access_token !== 'string') {
         throw new Error('Der Token fuer GraphQL ist kein String');
