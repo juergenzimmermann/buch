@@ -26,7 +26,8 @@ pipeline {
     //     }
     // }
     tools {
-        nodejs 'node-24.5.0'
+        // nodejs 'node-24.5.0'
+        nodejs 'node-24.1.0'
     }
 
     // Umgebungsvariable:
