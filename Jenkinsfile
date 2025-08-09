@@ -97,24 +97,27 @@ pipeline {
                 sh '''
                     id
                     cat /etc/passwd
-                    echo $PATH
                     pwd
                     uname -a
                     cat /etc/os-release
                     cat /etc/debian_version
                     lsb_release -a
+                    env
+                    echo $PATH
                     node --version
                     npm --version
                     npm r -g yarn pnpm
                     npm i -g corepack
                     which corepack
+                    ls -al ~/.cache/node
                     corepack --version
                     corepack enable pnpm
                     corepack prepare pnpm@latest-10 --activate
                     which pnpm
                     pnpm --version
-                    pnpm root
                     pnpm root -g
+                    pnpm store path
+                    pnpm root
                     pnpm bin
                     python --version
                 '''
