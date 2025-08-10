@@ -24,15 +24,13 @@ GPL v3
 ## Entwicklungsumgebung
 
 - Konfig-Dateien, Verzeichnisse
-- package.json einschl. dependencies, devDependencies und scripts
+- pnpm mit package.json einschl. dependencies, devDependencies und scripts
 - node_modules
-- ESLint mit .eslintrc.yml
-- Prettier mit .prettierrc.yml
+- ES2015+, TypeScript einschl. .d.ts sowie tsconfig.json
+- ESLint mit eslint.config.mts
+- Prettier mit prettier.config.mts
 - Git
 - VS Code
-- ES2015+, TypeScript einschl. @types mit .d.ts sowie tsconfig.json
-- ts-node
-- RESTclient für REST und GraphQL
 - SonarQube
 - Dockerfile
 - Docker Compose
@@ -46,43 +44,46 @@ GPL v3
 - Controller-, Resolver- und Service-Klassen
 - Decorators für Klassen und Methoden
 - Dependency Injection
-- Request/Response mit Header/Body, Statuscodes, ETag und HATEOAS
+- Request/Response mit Header/Body, Statuscodes und ETag
 - GraphQL-Schema mit Types, Query und Mutation
 - Validierung mit class-validator
 - TypeORM
-- .env, config/, reguläre Ausdrücke mit /.../ und new RE2(...)
+- .env, config/, reguläre Ausdrücke mit /.../
 - Error
 - Login mit POST und application/x-www-form-urlencoded
-- JWT mit RS256
-- Users als Array
-- Tests mit Jest und Axios zzgl. Coverage durch Istanbul
+- JWT
+- Swagger/OpenAPI
+- Tests mit Vitest und Fetch-API
 
 ## Features von JavaScript und TypeScript
 
-| Feature                                       | ECMAScript | TypeScript
-| --------------------------------------------- | ---------- |-----------
-| import, export, Modul                         | 2015       |
-| import type                                   |            | X
-| Deklaration durch name: Typ                   |            | X
-| const und let (statt var)                     | 2015       |
-| Type Inference                                |            | X
-| === und !==                                   | 1          |
-| Destructuring für JSON-Objekte und -Arrays    | 2015       |
-| Shorthand Properties                          | 2015       |
-| Rest (und Spread) Properties für JSON-Objekte | 2018       |
-| (Rest und Spread Properties für JSON-Arrays)  | 2015       |
-| Optional Chaining ?.                          | 2020       |
-| Nullish Coalescing ??                         | 2020       |
-| Template Strings                              | 2015       |
-| Trailing Comma                                | 2017       |
-| Arrow Function                                | 2015       |
-| Klasse                                        | 2015       |
-| Interface                                     |            | X
-| #                                             | 2020       |
-| private, protected                            |            | X
-| readonly                                      |            | X
-| for await                                     | 2018       |
-| Promise                                       | 2015       |
-| async und await                               | 2017       |
-| Top-Level await                               | 2020       |
-| IIFE                                          | 1          |
+| Feature                                       | ECMAScript | TypeScript |
+| --------------------------------------------- | ---------- |------------|
+| import, export, Modul                         | 2015       |            |
+| import type                                   |            | X          |
+| Deklaration durch name: Typ                   |            | X          |
+| const und let (statt var)                     | 2015       |            |
+| Type Inference                                |            | X          |
+| === und !==                                   | 1          |            |
+| Destructuring für JSON-Objekte und -Arrays    | 2015       |            |
+| Shorthand Properties                          | 2015       |            |
+| Rest (und Spread) Properties für JSON-Objekte | 2018       |            |
+| (Rest und Spread Properties für JSON-Arrays)  | 2015       |            |
+| Optional Chaining ?.                          | 2020       |            |
+| Nullish Coalescing ??                         | 2020       |            |
+| Template Strings                              | 2015       |            |
+| Trailing Comma                                | 2017       |            |
+| Arrow Function                                | 2015       |            |
+| Klasse                                        | 2015       |            |
+| Type                                          |            | X          |
+| Omit                                          |            | X          |
+| Pick                                          |            | X          |
+| Interface                                     |            | X          |
+| #                                             | 2020       |            |
+| private, protected                            |            | X          |
+| readonly                                      |            | X          |
+| for await                                     | 2018       |            |
+| Promise                                       | 2015       |            |
+| async und await                               | 2017       |            |
+| Top-Level await                               | 2020       |            |
+| IIFE                                          | 1          |            |
