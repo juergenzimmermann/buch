@@ -68,16 +68,22 @@ import { InvalidMimeTypeException } from './exceptions.js';
 const MSG_FORBIDDEN = 'Kein Token mit ausreichender Berechtigung vorhanden';
 
 const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10 MB
-const MIME_TYPES = ['image/png', 'image/jpeg', 'video/mp4'];
+const MIME_TYPES = [
+    'image/png',
+    'image/jpeg',
+    'video/mp4',
+    'video/webm',
+    'video/quicktime',
+];
 // https://github.com/expressjs/multer#multeropts
-const MULTER_OPTIONS: MulterOptions ={
+const MULTER_OPTIONS: MulterOptions = {
     limits: { fileSize: MAX_FILE_SIZE },
     fileFilter: (_: any, file: any, cb: any) => {
         if (!MIME_TYPES.includes(file.mimetype)) {
             return cb(new InvalidMimeTypeException(file.mimetype), false);
         }
         cb(null, true);
-    }
+    },
 };
 
 /**
