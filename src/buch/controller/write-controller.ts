@@ -37,6 +37,7 @@ import {
     UseInterceptors,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
+import { type MulterOptions } from '@nestjs/platform-express/multer/interfaces/multer-options.interface.js';
 import {
     ApiBadRequestResponse,
     ApiBearerAuth,
@@ -62,8 +63,23 @@ import { type Titel } from '../entity/titel.js';
 import { BuchWriteService } from '../service/write-service.js';
 import { BuchDTO, BuchDtoOhneRef } from './buch-dto.js';
 import { createBaseUri } from './create-base-uri.js';
+import { InvalidMimeTypeException } from './exceptions.js';
 
 const MSG_FORBIDDEN = 'Kein Token mit ausreichender Berechtigung vorhanden';
+
+const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10 MB
+const MIME_TYPES = ['image/png', 'image/jpeg', 'video/mp4'];
+// https://github.com/expressjs/multer#multeropts
+const MULTER_OPTIONS: MulterOptions ={
+    limits: { fileSize: MAX_FILE_SIZE },
+    fileFilter: (_: any, file: any, cb: any) => {
+        if (!MIME_TYPES.includes(file.mimetype)) {
+            return cb(new InvalidMimeTypeException(file.mimetype), false);
+        }
+        cb(null, true);
+    }
+};
+
 /**
  * Die Controller-Klasse für die Verwaltung von Bücher.
  */
@@ -133,6 +149,7 @@ export class BuchWriteController {
     @Post(':id')
     @Public()
     // @Roles({ roles: ['admin']})
+    @UseInterceptors(FileInterceptor('file', MULTER_OPTIONS))
     @HttpCode(HttpStatus.NO_CONTENT)
     @ApiOperation({ summary: 'Binärdatei mit einem Bild hochladen' })
     @ApiParam({
@@ -142,7 +159,6 @@ export class BuchWriteController {
     @ApiCreatedResponse({ description: 'Erfolgreich hinzugefügt' })
     @ApiBadRequestResponse({ description: 'Fehlerhafte Datei' })
     @ApiForbiddenResponse({ description: MSG_FORBIDDEN })
-    @UseInterceptors(FileInterceptor('file'))
     async addFile(
         @Param(
             'id',
@@ -155,10 +171,11 @@ export class BuchWriteController {
     ): Promise<Response> {
         const { buffer, originalname, size } = file;
         this.#logger.debug(
-            'addFile: id: %d, originalname=%s, size=%d',
+            'addFile: id: %d, originalname=%s, size=%d, options=%o',
             id,
             originalname,
             size,
+            MULTER_OPTIONS,
         );
 
         await this.#service.addFile(id, buffer, originalname, size);
