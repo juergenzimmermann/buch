@@ -23,8 +23,8 @@
 
 services:
   db:
-    # https://github.com/docker-library/postgres/blob/master/16/bookworm/Dockerfile
-    image: postgres:17.5-bookworm
+    # https://github.com/docker-library/postgres/blob/master/16/trixie/Dockerfile
+    image: postgres:17.5-trixie
     ports:
       - published: 5432
         target: 5432
