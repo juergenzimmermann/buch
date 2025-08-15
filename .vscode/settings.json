@@ -34,6 +34,7 @@
     "titleBar.inactiveBackground": "#21573299",
     "titleBar.inactiveForeground": "#e7e7e799"
   },
+  "npm.packageManager": "pnpm",
   "peacock.color": "#215732",
   "postman.telemetry.enabled": false,
   "postman.account.region": "EU",

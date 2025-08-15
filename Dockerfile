@@ -19,8 +19,8 @@
 # Aufruf:   docker build --tag juergenzimmermann/buch:2025.10.1-bookworm .
 #               ggf. --progress=plain
 #               ggf. --no-cache
-#           Get-Content Dockerfile | docker run --rm --interactive hadolint/hadolint:v2.13.1-beta3-debian
-#               Linux:   cat Dockerfile | docker run --rm --interactive hadolint/hadolint:v2.13.1-beta3-debian
+#           Get-Content Dockerfile | docker run --rm --interactive hadolint/hadolint:v2.13.1-beta4-debian
+#               Linux:   cat Dockerfile | docker run --rm --interactive hadolint/hadolint:v2.13.1-beta4-debian
 #           docker save juergenzimmermann/buch:2025.10.1-bookworm > buch.tar
 #           docker network ls
 
