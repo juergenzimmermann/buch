@@ -434,9 +434,9 @@ geziehlt eine Test-Funktion aufzurufen, z.B.:
 
 Für ein minimales Basis-Image gibt es folgende Alternativen:
 
-- _Debian Bookworm slim_
+- _Debian Trixie slim_
   - ca. 250 MB
-  - Bookworm ist der Codename für Debian 12
+  - Trixie ist der Codename für Debian 13
   - mit Node 22
 - _Alpine_
   - ca. 50 MB
@@ -467,12 +467,12 @@ Ob das Dockerfile gemäß _Best Practices_ (https://docs.docker.com/develop/deve
 erstellt wurde, kann man mit _Hadolint_ überprüfen.
 
 ```shell
-    # Debian Bookworm (12) slim
-    Get-Content Dockerfile | docker run --rm --interactive hadolint/hadolint:v2.13.1-beta2-debian
-    docker build --tag juergenzimmermann/buch:2025.10.1-bookworm .
+    # Debian Trixie (13) slim
+    Get-Content Dockerfile | docker run --rm --interactive hadolint/hadolint:v2.13.1-beta4-debian
+    docker build --tag juergenzimmermann/buch:2025.10.1-trixie .
 
     # Alpine
-    Get-Content Dockerfile.alpine | docker run --rm --interactive hadolint/hadolint:v2.13.1-beta2-debian
+    Get-Content Dockerfile.alpine | docker run --rm --interactive hadolint/hadolint:v2.13.1-beta4-debian
     docker build --tag juergenzimmermann/buch:2025.10.1-alpine --file Dockerfile.alpine .
 ```
 
@@ -492,7 +492,7 @@ Mit dem Unterkommando `history` kann man ein Docker-Image und die einzelnen Laye
 inspizieren:
 
 ```shell
-    docker history juergenzimmermann/buch:2025.10.1-bookworm
+    docker history juergenzimmermann/buch:2025.10.1-trixie
     docker history juergenzimmermann/buch:2025.10.1-alpine
 ```
 
@@ -502,7 +502,7 @@ Mit dem Unterkommando `inspect` kann man die Metadaten, z.B. Labels, zu einem
 Image inspizieren:
 
 ```shell
-    docker inspect juergenzimmermann/buch:2025.10.1-bookworm
+    docker inspect juergenzimmermann/buch:2025.10.1-trixie
     docker inspect juergenzimmermann/buch:2025.10.1-alpine
 ```
 
@@ -513,7 +513,7 @@ inspizieren, welche Bestandteilen in einem Docker-Images enthalten sind, z.B.
 npm-Packages oder Debian-Packages.
 
 ```shell
-    docker sbom juergenzimmermann/buch:2025.10.1-bookworm
+    docker sbom juergenzimmermann/buch:2025.10.1-trixie
     docker sbom juergenzimmermann/buch:2025.10.1-alpine
 ```
 
@@ -521,13 +521,13 @@ npm-Packages oder Debian-Packages.
 
 Mit _Docker Compose_ und der Konfigurationsdatei `compose.yml` im Verzeichnis
 `.extras\compose` lässt sich der Container mit dem Basis-Image mit _Debian
-Bookworm (12) Slim_ folgendermaßen starten und später in einer weiteren
+Trixie (13) Slim_ folgendermaßen starten und später in einer weiteren
 PowerShell herunterfahren.
 
 ```shell
     cd .extras\compose\buch
 
-    # PowerShell fuer buch-Server mit Bookworm-Image zzgl. DB-Server und Mailserver
+    # PowerShell fuer buch-Server mit Trixie-Image zzgl. DB-Server und Mailserver
     docker compose up
 
     # Nur zur Fehlersuche: weitere PowerShell für bash
@@ -662,7 +662,7 @@ groben Überblick verschaffen, wieviele Sicherheitslücken in den Bibliotheken i
 Image enthalten sind:
 
 ```shell
-    docker scout quickview juergenzimmermann/buch:2025.10.1-bookworm
+    docker scout quickview juergenzimmermann/buch:2025.10.1-trixie
     docker scout quickview juergenzimmermann/buch:2025.10.1-alpine
 ```
 
@@ -680,8 +680,8 @@ Die Details zu den CVE-Records im Image kann man durch das Unterkommando `cves`
 von _Scout_ auflisten:
 
 ```shell
-    docker scout cves juergenzimmermann/buch:2025.10.1-bookworm
-    docker scout cves --format only-packages juergenzimmermann/buch:2025.10.1-bookworm
+    docker scout cves juergenzimmermann/buch:2025.10.1-trixie
+    docker scout cves --format only-packages juergenzimmermann/buch:2025.10.1-trixie
 ````
 
 Statt der Kommandozeile kann man auch den Menüpunkt "Docker Scout" im

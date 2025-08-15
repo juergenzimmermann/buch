@@ -42,7 +42,7 @@ include:
 # https://docs.docker.com/compose/compose-file/05-services
 services:
   buch:
-    image: juergenzimmermann/buch:2025.10.1-bookworm
+    image: juergenzimmermann/buch:2025.10.1-trixie
     #image: juergenzimmermann/buch:2025.10.1-alpine
     #entrypoint: ["/bin/bash", "-c", "echo 'Container als bash gestartet.' && sleep infinity"]
     # (d)ash = (Debian) Almquist Shell

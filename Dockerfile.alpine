@@ -135,7 +135,7 @@ FROM node:${NODE_VERSION}-alpine3.22 AS final
 # MAINTAINER ist deprecated https://docs.docker.com/engine/reference/builder/#maintainer-deprecated
 LABEL org.opencontainers.image.title="buch" \
   org.opencontainers.image.description="Appserver buch mit Basis-Image Alpine" \
-  org.opencontainers.image.version="2025.10.1-bookworm" \
+  org.opencontainers.image.version="2025.10.1-alpine" \
   org.opencontainers.image.licenses="GPL-3.0-or-later" \
   org.opencontainers.image.authors="Juergen.Zimmermann@h-ka.de"
 
