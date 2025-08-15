@@ -22,7 +22,7 @@
 # https://docs.docker.com/build/bake/reference
 
 target "default" {
-  tags = ["docker.io/juergenzimmermann/buch:2025.10.1-bookworm"]
+  tags = ["docker.io/juergenzimmermann/buch:2025.10.1-trixie"]
   #dockerfile = "Dockerfile"
   #no-cache = true
 }
