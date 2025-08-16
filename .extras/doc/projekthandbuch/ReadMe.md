@@ -30,7 +30,6 @@ Verzeichnis einschließlich dem Unterverzeichnis `bin` enthalten.
 
 Durch das Tastaturkürzel `<Alt>d` erhält man eine Preview-Sicht vom jeweiligen
 UML-Diagramm. Dazu ist eine Internet-Verbindung notwendig.
-Beispiele für PlantUML und AsciiDoctor sind im Unterverzeichnis `.extras\doc`.
 
 ## Einstellungen für Preview von AsciiDoctor-Dateien
 
