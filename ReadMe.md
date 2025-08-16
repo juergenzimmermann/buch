@@ -582,43 +582,7 @@ konfiguriert und durch folgendes pnpm-Skript ausgeführt wird:
 
 ### SonarQube
 
-Für eine statische Codeanalyse durch _SonarQube_ muss zunächst der
-SonarQube-Server mit _Docker Compose_ als Docker-Container gestartet werden:
-
-```shell
-    cd .extras\compose\sonarqube
-    docker compose up
-```
-
-Wenn der Server zum ersten Mal gestartet wird, ruft man in einem Webbrowser die
-URL `http://localhost:9000` auf. In der Startseite muss man sich einloggen und
-verwendet dazu als Loginname `admin` und ebenso als Password `admin`. Danach
-wird man weitergeleitet, um das initiale Passwort zu ändern.
-
-Nun wählt man in der Webseite rechts oben das Profil über _MyAccount_ aus und
-klickt auf den Karteireiter _Security_. Im Abschnitt _Generate Tokens_ macht man
-nun die folgende Eingaben:
-
-- _Name_: z.B. Software Engineering
-- _Type_: _Global Analysis Token_ auswählen
-- _Expires in_: z.B. _90 days_ auswählen
-
-Abschließend klickt man auf den Button _Generate_ und trägt den generierten
-Token im Skript `scripts\sonar-scanner.mts` ein.
-
-Nachdem der Server gestartet ist, wird der SonarQube-Scanner in einer zweiten
-PowerShell mit `pnpm run sonar` gestartet. Das Resultat kann dann in der
-Webseite des zuvor gestarteten Servers über die URL `http://localhost:9000`
-inspiziert werden. Falls es dabei zu einem Fehler kommt, kann man auch direkt
-`C:\Users\<MY__USER>\.sonar\native-sonar-scanner\sonar-scanner-...\bin\sonar-scanner`
-aufrufen.
-
-Abschließend wird der oben gestartete Server heruntergefahren.
-
-```shell
-    cd .extras\compose\sonarqube
-    docker compose down
-```
+Siehe `.extras\compose\sonarqube\ReadMe.md`.
 
 ### Madge
 
@@ -700,47 +664,7 @@ und das Projekt auf Sicherheitslücken überprüfen
 
 ## AsciiDoctor und PlantUML
 
-Mit AsciiDoctor und PlantUML ist die Dokumentation geschrieben.
-
-### Preview von PlantUML-Dateien
-
-Um in VS Code die Erweiterung für PlantUML zu nutzen, wird eine Java-Installation
-benötigt, d.h. die Umgebungsvariable `JAVA_HOME` muss auf das Wurzelverzeichnis
-der Java-Installation verweisen und die Umgebugnsvariable `PATH` muss dieses
-Verzeichnis einschließlich dem Unterverzeichnis `bin` enthalten.
-
-Durch das Tastaturkürzel `<Alt>d` erhält man eine Preview-Sicht vom jeweiligen
-UML-Diagramm. Dazu ist eine Internet-Verbindung notwendig.
-Beispiele für PlantUML und AsciiDoctor sind im Unterverzeichnis `.extras\doc`.
-
-### Einstellungen für Preview von AsciiDoctor-Dateien
-
-Zunächst müssen einmalig die Einstellungen (_Settings_) von VS Code geändert
-werden. Dazu klickt man in der linken unteren Ecke das Icon ("Rädchen") für die
-Einstellungen an und wählt den Menüpunkt _Einstellungen_ bzw. _Settings_ aus.
-Dann gibt man im Suchfeld `asciidoc.use_kroki` ein und setzt den Haken bei
-_Enable kroki integration to generate diagrams_.
-
-Wenn man zum ersten Mal eine `.adoc`-Datei im Editor öffnet, muss man noch
-die Verbindung zum PlantUML-Server zulassen, damit die eingebundenen
-`.puml`-Dateien in `.svg`-Dateien konvertiert werden. Dazu gibt man zunächst
-das `<F1>` ein und schickt im Eingabefeld das Kommando
-_AsciiDoc: Change Preview Security Settings_ durch `<Enter>` ab.
-Danach wählt man den Unterpunkt _Allow insecure content_ aus.
-
-### Preview von AsciiDoctor-Dateien
-
-Durch das Tastaturkürzel `<Strg><Shift>v`. Dazu ist eine Internet-Verbindung
-notwendig.
-
-### Dokumentation im Format HTML
-
-Die Dokumentation im Format HTML wird in einer Powershell folgendermaßen
-im Verzeichnis `.extras\doc\html` erstellt:
-
-```shell
-    pnpm run asciidoc
-```
+Siehe `.extras\doc\projekthandbuch\ReadMe.md`.
 
 ## TypeDoc
 

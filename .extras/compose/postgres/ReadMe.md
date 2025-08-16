@@ -1,5 +1,22 @@
 # Hinweise zur Installation und Konfiguration von PostgreSQL
 
+<!--
+  Copyright (C) 2023 - present Juergen Zimmermann, Hochschule Karlsruhe
+
+  This program is free software: you can redistribute it and/or modify
+  it under the terms of the GNU General Public License as published by
+  the Free Software Foundation, either version 3 of the License, or
+  (at your option) any later version.
+
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+
+  You should have received a copy of the GNU General Public License
+  along with this program. If not, see <http://www.gnu.org/licenses/>.
+-->
+
 [Jürgen Zimmermann](mailto:Juergen.Zimmermann@h-ka.de)
 
 ## Installation ohne TLS
@@ -53,12 +70,12 @@ zuvor gesetzten Kommentare wieder entfernen, d.h.
 - In der Zeile mit dem Schlüssel `command:` und den nachfolgenden Listenelementen
   mit führendem `-`, damit der PostgreSQL-Server mit TLS gestartet wird.
 - Bei den Zeilen mit den Listenelementen unterhalb vom Schlüssel `volumes:`
-  jeweils bei Zeilen mit dem Schlüssel `read_only:`, weil inzwischen die Zugriffsrechte
-  gesetzt bzw. eingeschränkt sind:
+  jeweils bei Zeilen mit dem Schlüssel `read_only:`, weil inzwischen die
+  Zugriffsrechte gesetzt bzw. eingeschränkt sind:
   - bei `key.pem` und
   - bei `certificate.crt`
-- Bei der Zeile mit dem Schlüssel `user:`, damit der PostgreSQL-Server als normaler
-  Linux-User `postgres` gestartet wird.
+- Bei der Zeile mit dem Schlüssel `user:`, damit der PostgreSQL-Server als
+  normaler Linux-User `postgres` gestartet wird.
 
 Außerdem muss man in derselben Datei `.extras\compose\postgres\compose.yml` die
 Zeile mit `cap_add: [...]` wieder auskommentieren.
@@ -85,11 +102,12 @@ Schema `buch` mit dem DB-User `buch` als _Owner_ angelegt:
 ```
 
 Die beiden SQL-Skripte liegen z.B. im Windows-Verzeichnis `C:\Zimmermann\volumes\postgres\sql`
-und sind durch _Volume Mount_ in `compose.yml` im PostgreSQL-Server als Linux-Verzeichnis
-`/sql` verfügbar. Kopien der beiden SQL-Skripte sind im Projekt-Verzeichnis
-`.extras\compose\postgres\sql` damit man den SQL-Editor der IDE nutzen kann.
-Eventuelle Änderungen müssen auf jeden Fall in `C:\Zimmermann\volumes\postgres\sql`
-gemacht werden, z.B. durch Kopieren der Dateien.
+und sind durch _Volume Mount_ in `compose.yml` im PostgreSQL-Server als
+Linux-Verzeichnis `/sql` verfügbar. Kopien der beiden SQL-Skripte sind im
+Projekt-Verzeichnis `.extras\compose\postgres\sql` damit man den SQL-Editor der
+IDE nutzen kann. Eventuelle Änderungen müssen auf jeden Fall in
+`C:\Zimmermann\volumes\postgres\sql` gemacht werden, z.B. durch Kopieren der
+Dateien.
 
 ### TLS für den PostgreSQL-Server mit OpenSSL überprüfen
 

@@ -1,5 +1,22 @@
 # Hinweise zu MySQL
 
+<!--
+  Copyright (C) 2023 - present Juergen Zimmermann, Hochschule Karlsruhe
+
+  This program is free software: you can redistribute it and/or modify
+  it under the terms of the GNU General Public License as published by
+  the Free Software Foundation, either version 3 of the License, or
+  (at your option) any later version.
+
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+
+  You should have received a copy of the GNU General Public License
+  along with this program. If not, see <http://www.gnu.org/licenses/>.
+-->
+
 [Juergen Zimmermann](mailto:Juergen.Zimmermann@h-ka.de)
 
 ## Installation ohne TLS
@@ -23,8 +40,8 @@ Nun startet man in einer PowerShell den MySQL-Server:
     docker compose up db
 ```
 
-In einer 2. Powershell startet man eine `bash` im Linux-Container von MySQL und setzt
-das Passwort vom MySQL-Administrator `root` auf `p`.
+In einer 2. Powershell startet man eine `bash` im Linux-Container von MySQL und
+setzt das Passwort vom MySQL-Administrator `root` auf `p`.
 
 ```powershell
     cd .extras\compose\mysql
@@ -39,15 +56,15 @@ das Passwort vom MySQL-Administrator `root` auf `p`.
 
 ## Konfiguration für TLS
 
-In der Datei `.extras\compose\mysql\compose.yml` müssen jetzt die folgenden Kommentare
-entfernt werden:
+In der Datei `.extras\compose\mysql\compose.yml` müssen jetzt die folgenden
+Kommentare entfernt werden:
 
 - bei den Listenelementen mit `server-key.pem`, `server-cert.pem` und `ca.pem`
   **BIS AUF** die Zeilen mit `read_only:`.
 - beim Schlüssel `user:`, um den den Linux-User `mysql` wieder zu aktivieren.
 
-Jetzt wird der MySQL-Server erneut als Docker-Container gestartet, und zwar mit dem
-Linux-User `mysql`, allerdings noch ohne TLS:
+Jetzt wird der MySQL-Server erneut als Docker-Container gestartet, und zwar mit
+dem Linux-User `mysql`, allerdings noch ohne TLS:
 
 ```powershell
     docker compose up db
@@ -67,7 +84,9 @@ setzt die Zugriffsrechte für TLS:
 ```
 
 Nun entfernt man in `.extras\compose\mysql\compose.yml` die folgenden Kommentare
-- in der Zeile mit `command:` und den nachfolgenden Listenelementen mit führendem `-`
+
+- in der Zeile mit `command:` und den nachfolgenden Listenelementen mit
+  führendem `-`
 - Unterhalb vom Schlüssel `volumes:` bei diesen Listenelementen jeweils bei `read_only:`
   - `server-key.pem`
   - `server-cert.pem`
@@ -109,8 +128,8 @@ man den MySQL-Server und _phpMyAdmin_ jeweils als Docker Container.
     docker compose up
 ```
 
-In der 2. PowerShell startet man eine `bash` im Docker-Container von phpMyAdmin und
-setzt die Zugriffsrechte für PHP-Skripte:
+In der 2. PowerShell startet man eine `bash` im Docker-Container von phpMyAdmin
+und setzt die Zugriffsrechte für PHP-Skripte:
 
 ```powershell
     docker compose exec phpmyadmin bash
