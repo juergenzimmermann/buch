@@ -26,7 +26,9 @@
 // https://github.com/grafana/k6-learn/blob/main/Modules/II-k6-Foundations/03-Understanding-k6-results.md#error-rate
 
 import http from 'k6/http';
-import { check, sleep } from 'k6';
+// @ts-expect-error https://github.com/grafana/k6-jslib-testing
+import { expect } from 'https://jslib.k6.io/k6-testing/0.5.0/index.js';
+import { sleep } from 'k6';
 import { type Options } from 'k6/options';
 // @ts-expect-error k6 verwendet esbuild fuer "Type Stripping": import mit "".js" funktioniert nicht
 import { BuchDTO } from '../../src/buch/controller/buch-dto.ts';
@@ -233,13 +235,14 @@ export function getById() {
     // https://stackoverflow.com/questions/4550505/getting-a-random-value-from-a-javascript-array
     // alternativ: https://jslib.k6.io und https://grafana.com/docs/k6/latest/javascript-api/jslib/utils
     const id = ids[Math.floor(Math.random() * ids.length)]; // zwischen 0 und 1
-    const res = http.get(`${restUrl}/${id}`);
+    const response = http.get(`${restUrl}/${id}`);
 
-    check(res, {
-        'GET id: OK': (r) => r.status === 200,
-        'GET id: application/json': (r) =>
-            r.headers['Content-Type']?.startsWith('application/json') ?? false,
-    });
+    const { status, headers } = response;
+    // expect ab k6 1.2.0
+    // https://github.com/grafana/k6/releases/tag/v1.2.0
+    // https://github.com/grafana/k6/issues/4067
+    expect(status).toBe(200);
+    expect(headers['Content-Type']).toContain('application/json');
     sleep(1); // Denkzeit simulieren
 }
 
@@ -250,24 +253,20 @@ export function getByIdNotModified() {
     const headers: Record<string, string> = {
         'If-None-Match': '"0"',
     };
-    const res = http.get(`${restUrl}/${id}`, { headers });
+    const response = http.get(`${restUrl}/${id}`, { headers });
 
-    check(res, {
-        'GET id: NOT_MODIFIED': (r) => r.status === 304,
-    });
+    expect(response.status).toBe(304);
     sleep(1);
 }
 
 // GET /rest?title=<value>
 export function getByTitel() {
     const titel = titelArray[Math.floor(Math.random() * titelArray.length)];
-    const res = http.get(`${restUrl}?titel=${titel}`);
+    const response = http.get(`${restUrl}?titel=${titel}`);
 
-    check(res, {
-        'GET titel: OK': (r) => r.status === 200,
-        'GET titel: application/json': (r) =>
-            r.headers['Content-Type']?.startsWith('application/json') ?? false,
-    });
+    const { status, headers } = response;
+    expect(status).toBe(200);
+    expect(headers['Content-Type']).toContain('application/json');
     sleep(1);
 }
 
@@ -280,22 +279,20 @@ export function getByTitelNichtVorhanden() {
         titelNichtVorhanden[
             Math.floor(Math.random() * titelNichtVorhanden.length)
         ];
-    const res = http.get(`${restUrl}?titel=${titel}`);
+    const response = http.get(`${restUrl}?titel=${titel}`);
 
-    check(res, { 'GET titel: NOT_FOUND': (r) => r.status === 404 });
+    expect(response.status).toBe(404);
     sleep(1);
 }
 
 // GET /rest?isbn=<value>
 export function getByISBN() {
     const isbn = isbns[Math.floor(Math.random() * isbns.length)];
-    const res = http.get(`${restUrl}?isbn=${isbn}`);
+    const response = http.get(`${restUrl}?isbn=${isbn}`);
 
-    check(res, {
-        'GET isbn: OK': (r) => r.status === 200,
-        'GET isbn: application/json': (r) =>
-            r.headers['Content-Type']?.startsWith('application/json') ?? false,
-    });
+    const { status, headers } = response;
+    expect(status).toBe(200);
+    expect(headers['Content-Type']).toContain('application/json');
     sleep(1);
 }
 
@@ -303,13 +300,11 @@ export function getByISBN() {
 export function getBySchlagwort() {
     const schlagwort =
         schlagwoerter[Math.floor(Math.random() * schlagwoerter.length)];
-    const res = http.get(`${restUrl}?${schlagwort}=true`);
+    const response = http.get(`${restUrl}?${schlagwort}=true`);
 
-    check(res, {
-        'GET schlagwort: OK': (r) => r.status === 200,
-        'GET schlagwort: application/json': (r) =>
-            r.headers['Content-Type']?.startsWith('application/json') ?? false,
-    });
+    const { status, headers } = response;
+    expect(status).toBe(200);
+    expect(headers['Content-Type']).toContain('application/json');
     sleep(1);
 }
 
@@ -328,18 +323,20 @@ export function postBuch() {
     const tokenResponse = http.post<'text'>(tokenUrl, body, {
         headers: tokenHeaders,
     });
-    check(tokenResponse, { 'POST /auth/token: OK': (r) => r.status === 200 });
+    expect(tokenResponse.status).toBe(200);
     const token = JSON.parse(tokenResponse.body).access_token;
 
-    const headers = {
+    const requestHeaders = {
         Authorization: `Bearer ${token}`,
         'Content-Type': 'application/json',
     };
-    const res = http.post(restUrl, JSON.stringify(buch), { headers });
-    check(res, {
-        'POST "buch": Created': (r) => r.status === 201,
-        // 'POST "buch": location': (r) => r.headers.location.startsWith(restUrl),
-    });
+    const response = http.post(
+        restUrl, JSON.stringify(buch), { headers: requestHeaders }
+    );
+
+    const { status, headers } = response;
+    expect(status).toBe(201);
+    expect(headers['Location']).toContain(restUrl);
     sleep(1);
 }
 
@@ -367,15 +364,15 @@ export function queryBuch() {
             }
         `,
     };
-    const headers = { 'Content-Type': 'application/json' };
+    const requestHeaders = { 'Content-Type': 'application/json' };
 
-    const res = http.post(graphqlUrl, JSON.stringify(body), { headers });
+    const response = http.post(
+        graphqlUrl, JSON.stringify(body), { headers: requestHeaders }
+    );
 
-    check(res, {
-        'Query "buch": OK': (r) => r.status === 200,
-        'Query "buch": application/json': (r) =>
-            r.headers['Content-Type']?.startsWith('application/json') ?? false,
-    });
+    const { status, headers } = response;
+    expect(status).toBe(200);
+    expect(headers['Content-Type']).toContain('application/json');
     sleep(1);
 }
 
@@ -397,15 +394,15 @@ export function queryBuecher() {
             }
         `,
     };
-    const headers = { 'Content-Type': 'application/json' };
+    const requestHeaders = { 'Content-Type': 'application/json' };
 
-    const res = http.post(graphqlUrl, JSON.stringify(body), { headers });
+    const response = http.post(
+        graphqlUrl, JSON.stringify(body), { headers: requestHeaders }
+    );
 
-    check(res, {
-        'Query "buecher": OK': (r) => r.status === 200,
-        'Query "buecher": application/json': (r) =>
-            r.headers['Content-Type']?.startsWith('application/json') ?? false,
-    });
+    const { status, headers } = response;
+    expect(status).toBe(200);
+    expect(headers['Content-Type']).toContain('application/json');
     sleep(1);
 }
 
@@ -424,10 +421,8 @@ export function queryBuecherNichtVorhanden() {
     };
     const headers = { 'Content-Type': 'application/json' };
 
-    const res = http.post(graphqlUrl, JSON.stringify(body), { headers });
+    const response = http.post(graphqlUrl, JSON.stringify(body), { headers });
 
-    check(res, {
-        'Query "buecher (nicht vorhanden)": OK': (r) => r.status === 200,
-    });
+    expect(response.status).toBe(200);
     sleep(1);
 }
