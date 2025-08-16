@@ -13,18 +13,6 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-// Aufruf:   k6 run script.ts
-//           durch "esbuild" werden Typen eliminiert, keine Typprüfung
-//           http://localhost:5665
-
-// BEACHTE:
-// k6 ist weder Node noch ein Webbrowser, d.h. keine Unterstützung für
-// z.B. die Node-Module "os" oder "fs" oder das "window"-Objekt
-
-// BEACHTE:
-// http_req_failed bezieht sich auf Statuscodes zwischen 4xx und 5xx
-// https://github.com/grafana/k6-learn/blob/main/Modules/II-k6-Foundations/03-Understanding-k6-results.md#error-rate
-
 import http from 'k6/http';
 // @ts-expect-error https://github.com/grafana/k6-jslib-testing
 import { expect } from 'https://jslib.k6.io/k6-testing/0.5.0/index.js';
