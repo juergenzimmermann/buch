@@ -17,6 +17,8 @@
   along with this program. If not, see <http://www.gnu.org/licenses/>.
 -->
 
+[Juergen Zimmermann](mailto:Juergen.Zimmermann@h-ka.de)
+
 ## Start des Servers
 
 Für eine statische Codeanalyse durch _SonarQube_ muss zunächst der
