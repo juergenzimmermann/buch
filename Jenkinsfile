@@ -19,15 +19,9 @@
 
 pipeline {
     agent any
-    // agent {
-    //     docker {
-    //         image 'node:lts-bullseye-slim'
-    //         args '-p 3000:3000'
-    //     }
-    // }
     tools {
-        // nodejs 'node-24.5.0'
-        nodejs 'node-24.1.0'
+        // Einstellungen > Tools > NodeJS Installationen
+        nodejs 'node-24.6.0'
     }
 
     // Umgebungsvariable:
