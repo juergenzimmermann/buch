@@ -167,10 +167,10 @@
     "vitest": "3.2.4",
     "weak-napi": "2.0.2"
   },
-  "packageManager": "pnpm@10.14.0",
+  "packageManager": "pnpm@10.15.0",
   "engines": {
     "node": ">=24.6.0",
-    "pnpm": ">=10.14.0"
+    "pnpm": ">=10.15.0"
   },
   "devEngines": {
     "runtime": {
