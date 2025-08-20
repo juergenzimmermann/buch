@@ -99,6 +99,15 @@ werden:
 
 ## Bash zur evtl. Fehlersuche im laufenden Jenkins-Container
 
+Das Homedirectory vom User `jenkins` ist `/var/jenkins_home` und der sogenannte
+_Workspace_ für einen _Job_ ist in `/var/jenkins_home/workspace/<jobname>`.
+
 ```shell
     docker compose exec jenkins bash
+        # z.B.
+        cat /etc/os-release
+        cat /etc/debian_version
+        cat /etc/passwd
+        cat /etc/group
+        exit
 ```
