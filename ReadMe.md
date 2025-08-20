@@ -71,14 +71,8 @@
     - [Docker Scout](#docker-scout)
     - [Snyk](#snyk)
   - [AsciiDoctor und PlantUML](#asciidoctor-und-plantuml)
-    - [Preview von PlantUML-Dateien](#preview-von-plantuml-dateien)
-    - [Einstellungen für Preview von AsciiDoctor-Dateien](#einstellungen-für-preview-von-asciidoctor-dateien)
-    - [Preview von AsciiDoctor-Dateien](#preview-von-asciidoctor-dateien)
-    - [Dokumentation im Format HTML](#dokumentation-im-format-html)
   - [TypeDoc](#typedoc)
   - [Continuous Integration mit Jenkins](#continuous-integration-mit-jenkins)
-    - [Aufruf mit Webbrowser](#aufruf-mit-webbrowser)
-    - [Bash zur evtl. Fehlersuche im laufenden Jenkins-Container](#bash-zur-evtl-fehlersuche-im-laufenden-jenkins-container)
   - [Visual Studio Code](#visual-studio-code)
   - [Empfohlene Code-Konventionen](#empfohlene-code-konventionen)
 
@@ -677,28 +671,7 @@ folgendes Kommando auf:
 
 ## Continuous Integration mit Jenkins
 
-Jenkins wird direkt mit _Docker Compose_ genutzt. Dadurch muss Jenkins nicht
-immer laufen und kann bei Bedarf gestartet und wieder heruntergefahren werden.
-
-```shell
-    cd .extras\compose\jenkins
-    docker compose up
-
-    # In einer 2. PowerShell: Herunterfahren
-    docker compose down
-```
-
-### Aufruf mit Webbrowser
-
-Mit der URL https://localhost:7070 kann man von einem Webbrowser auf den
-Jenkins-Container zugreifen. Der Benutzername ist `admin` und das Passwort
-`Inf und WI.`.
-
-### Bash zur evtl. Fehlersuche im laufenden Jenkins-Container
-
-```shell
-    docker compose exec jenkins bash
-```
+Siehe `.extras\compose\jenkins\ReadMe.md`.
 
 ## Visual Studio Code
 
