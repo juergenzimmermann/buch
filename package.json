@@ -44,7 +44,7 @@
     "asciidoctor": "node scripts/asciidoctor.mts",
     "clean": "rimraf dist log/server.log",
     "copy-resources": "node scripts/copy-resources.mts",
-    "eslint": "eslint src test/integration package.json",
+    "eslint": "eslint --concurrency=auto src test/integration package.json",
     "eslint:inspect-config": "npx @eslint/config-inspector",
     "eslint:debug": "pnpm run eslint -- --debug",
     "leasot": "leasot --exit-nicely src/**/*.ts",
