@@ -277,8 +277,8 @@ importers:
         specifier: runtime:24.6.0
         version: runtime:24.6.0
       node-gyp:
-        specifier: 11.4.1
-        version: 11.4.1
+        specifier: 11.4.2
+        version: 11.4.2
       prettier:
         specifier: 3.6.2
         version: 3.6.2
@@ -5241,8 +5241,8 @@ packages:
     resolution: {integrity: sha512-LA4ZjwlnUblHVgq0oBF3Jl/6h/Nvs5fzBLwdEF4nuxnFdsfajde4WfxtJr3CaiH+F6ewcIB/q4jQ4UzPyid+CQ==}
     hasBin: true
 
-  node-gyp@11.4.1:
-    resolution: {integrity: sha512-GiVxQ1e4TdZSSVmFDYUn6uUsrEUP68pa8C/xBzCfL/FcLHa4reWrxxTP7tRGhNdviYrNsL5kRolBL5LNYEutCw==}
+  node-gyp@11.4.2:
+    resolution: {integrity: sha512-3gD+6zsrLQH7DyYOUIutaauuXrcyxeTPyQuZQCQoNPZMHMMS5m4y0xclNpvYzoK3VNzuyxT6eF4mkIL4WSZ1eQ==}
     engines: {node: ^18.17.0 || >=20.5.0}
     hasBin: true
 
@@ -12712,7 +12712,7 @@ snapshots:
 
   node-gyp-build@4.8.4: {}
 
-  node-gyp@11.4.1:
+  node-gyp@11.4.2:
     dependencies:
       env-paths: 2.2.1
       exponential-backoff: 3.1.2
