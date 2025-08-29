@@ -59,7 +59,7 @@ export default tseslint.config(
             parserOptions: {
                 // https://typescript-eslint.io/blog/parser-options-project-true
                 project: true,
-                tsconfigRootDir: __dirname,
+                tsconfigRootDir: import.meta.dirname,
                 ecmaFeatures: {
                     impliedStrict: true,
                 },
@@ -540,6 +540,7 @@ export default tseslint.config(
                 ecmaFeatures: {
                     impliedStrict: true,
                 },
+                tsconfigRootDir: import.meta.dirname,
             },
             globals: {
                 ...globals.node,
