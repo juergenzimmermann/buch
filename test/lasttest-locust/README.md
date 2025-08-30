@@ -64,6 +64,7 @@ Unter Verwendung von _uv_ mit _tools_:
     cd .extras\lasttest-locust
     uvx ruff check locustfile.py
     uvx ruff format locustfile.py
+    uvx ty check src tests
 ```
 
 Oder _pyright_ mit _venv_:
