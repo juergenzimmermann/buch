@@ -1,6 +1,7 @@
 // @ts-check
 import comments from '@eslint-community/eslint-plugin-eslint-comments/configs';
 import eslint from '@eslint/js';
+import { defineConfig } from 'eslint/config';
 import graphql from '@graphql-eslint/eslint-plugin';
 import stylistic from '@stylistic/eslint-plugin';
 import vitest from '@vitest/eslint-plugin';
@@ -16,9 +17,9 @@ import unicorn from 'eslint-plugin-unicorn';
 import globals from 'globals';
 import tseslint from 'typescript-eslint';
 
-// https://typescript-eslint.io/packages/typescript-eslint#config
+// https://eslint.org/docs/latest/use/getting-started#manual-set-up
 // https://typescript-eslint.io/troubleshooting/typed-linting/performance#eslint-plugin-prettier
-export default tseslint.config(
+export default defineConfig(
     {
         files: ['src/*.ts'],
 
@@ -509,6 +510,7 @@ export default tseslint.config(
             },
         },
         plugins: {
+            // @ts-expect-error
             '@graphql-eslint': graphql,
         },
         extends: [graphql.configs['flat/schema-recommended']],
