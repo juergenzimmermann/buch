@@ -1,0 +1,58 @@
+// Copyright (C) 2021 - present Juergen Zimmermann, Hochschule Karlsruhe
+//
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with this program. If not, see <https://www.gnu.org/licenses/>.
+
+/**
+ * Das Modul enthält die Funktion, um die Test-DB neu zu laden.
+ * @packageDocumentation
+ */
+
+import { Injectable, type OnApplicationBootstrap } from '@nestjs/common';
+import figlet from 'figlet';
+import { release, type, userInfo } from 'node:os';
+import process from 'node:process';
+import { nodeConfig } from '../config/node.js';
+import { getLogger } from './logger.js';
+
+/**
+ * Beim Start ein Banner ausgeben durch `onApplicationBootstrap()`.
+ */
+@Injectable()
+export class BannerService implements OnApplicationBootstrap {
+    readonly #logger = getLogger(BannerService.name);
+
+    /**
+     * Banner mit allgemeinen Daten.
+     */
+    onApplicationBootstrap() {
+        const { host, nodeEnv, port } = nodeConfig;
+
+        // IIFE  = Immediately Invoked Function Expression
+        // IIAFE = Immediately Invoked Asynchronous Function Expression
+        (async () => {
+            const text = await figlet.text('buch 2025.10.1');
+            console.log(text);
+        })();
+
+        // https://nodejs.org/api/process.html
+        // "Template String" ab ES 2015
+        this.#logger.info('Node: %s', process.version);
+        this.#logger.info('NODE_ENV: %s', nodeEnv ?? 'undefined');
+        this.#logger.info('Rechnername: %s', host);
+        this.#logger.info('Port: %d', port);
+        this.#logger.info('Betriebssystem: %s (%s)', type(), release());
+        this.#logger.info('Username: %s', userInfo().username);
+        this.#logger.info('Swagger UI: /swagger');
+    }
+}
