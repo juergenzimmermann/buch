@@ -125,6 +125,7 @@ pipeline {
                 sh '''
                     cat package.json
                     pnpm i --prefer-frozen-lockfile
+                    pnpx prisma generate
                 '''
             }
         }
