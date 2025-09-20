@@ -47,18 +47,20 @@ GPL v3
 - Request/Response mit Header/Body, Statuscodes und ETag
 - GraphQL-Schema mit Types, Query und Mutation
 - Validierung mit class-validator
-- TypeORM
+- Prisma
+- PostgreSQL
+- Mailing
 - .env, config/, reguläre Ausdrücke mit /.../
 - Error
 - Login mit POST und application/x-www-form-urlencoded
-- JWT
+- Keycloak
 - Swagger/OpenAPI
 - Tests mit Vitest und Fetch-API
 
 ## Features von JavaScript und TypeScript
 
 | Feature                                       | ECMAScript | TypeScript |
-| --------------------------------------------- | ---------- |------------|
+| --------------------------------------------- | ---------- | ---------- |
 | import, export, Modul                         | 2015       |            |
 | import type                                   |            | X          |
 | Deklaration durch name: Typ                   |            | X          |
