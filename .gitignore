@@ -32,6 +32,8 @@ dependencies.svg
 .extras/*.ogg
 .extras/*.webm
 src/config/resources/tls/key.pem
+src/beispiele.ts
+src/beispiele-write.ts
 test/lasttest-locust/__pycache__
 test/lasttest-locust/.venv
 test/postman
@@ -78,8 +80,3 @@ coverage
 !.vscode/tasks.json
 !.vscode/launch.json
 !.vscode/extensions.json
-
-/src/generated/prisma
-/src/beispiele.ts
-/src/beispiele-write.ts
-/src/config/resources/tls/key.pem
