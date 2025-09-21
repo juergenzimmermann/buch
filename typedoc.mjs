@@ -6,9 +6,11 @@ const config = {
     entryPoints: ['src'],
     entryPointStrategy: 'expand',
     excludePrivate: true,
+    exclude: ['./src/generated/prisma/**/*.ts', 'tests/**/*.ts'],
     favicon: 'favicon.ico',
     validation: {
         invalidLink: true,
+        notExported: false,
     },
     // https://shiki.matsu.io/languages
 };

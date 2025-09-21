@@ -14,7 +14,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 /**
- * Das Modul besteht aus der Klasse {@linkcode QueryBuilder}.
+ * Das Modul besteht aus der Klasse {@linkcode WhereBuilder}.
  * @packageDocumentation
  */
 

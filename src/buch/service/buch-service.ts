@@ -20,7 +20,12 @@
 
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { getLogger } from '../../logger/logger.js';
-import { Buch, BuchFile, Prisma, PrismaClient } from '../../generated/prisma/client.js';
+import {
+    Buch,
+    BuchFile,
+    Prisma,
+    PrismaClient,
+} from '../../generated/prisma/client.js';
 import { type BuchInclude } from '../../generated/prisma/models/Buch.js';
 import { type Pageable } from './pageable.js';
 import { PrismaService } from './prisma-service.js';
@@ -56,7 +61,7 @@ export class BuchService {
     static readonly ID_PATTERN = /^[1-9]\d{0,10}$/u;
 
     readonly #prisma: PrismaClient;
-    readonly #whereBuilder: WhereBuilder
+    readonly #whereBuilder: WhereBuilder;
     readonly #includeTitel: BuchInclude = { titel: true };
     readonly #includeTitelUndAbbildungen: BuchInclude = {
         titel: true,
@@ -221,9 +226,7 @@ export class BuchService {
         });
         if (buecher.length === 0) {
             this.#logger.debug('#findAll: Keine Buecher gefunden');
-            throw new NotFoundException(
-                `Ungueltige Seite "${number}"`,
-            );
+            throw new NotFoundException(`Ungueltige Seite "${number}"`);
         }
         const totalElements = await this.count();
         return this.#createSlice(buecher, totalElements);

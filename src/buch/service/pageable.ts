@@ -48,8 +48,6 @@ export type PageableProps = {
 
 /**
  * Factory-Funktion, um ein Objekt vom Typ `Pageable` zu erstellen.
- * @param number Seitennumer mit Zählung ab 0.
- * @param size Maximale Anzahl Datensätze auf einer Seite.
  * @returns Objekt vom Typ `Pageable`.
  */
 export function createPageable({ number, size }: PageableProps): Pageable {
