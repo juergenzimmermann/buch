@@ -49,7 +49,7 @@ Nun startet man in einer PowerShell den PostgreSQL-Server:
 
 ```powershell
     cd .extras\compose\postgres
-    docker compose up db
+    docker compose up
 ```
 
 ## Konfiguration für Tablespace und TLS
@@ -102,7 +102,7 @@ In der 1. PowerShell startet man wieder den DB-Server als Docker Container, und
 zwar jetzt mit TLS:
 
 ```powershell
-    docker compose up db
+    docker compose up
 ```
 
 In der 2. PowerShell werden die beiden SQL-Skripte ausgeführt, um zunächst eine
@@ -173,13 +173,14 @@ Die Ausgabe vom Kommando `openssl` zeigt u.a. folgendes an:
 
 ## Optional: pgAdmin
 
-Zur Administration von _PostgreSQL_ kann _pgAdmin_ als Alternative zur Erweiterung
-_PostgreSQL_ für VS Code verwendet werden. pgAdmin ist durch Docker Compose über
-ein virtuelles Netzwerk mit dem Docker-Container des DB-Servers verbunden.
-Deshalb muss beim Verbinden mit dem DB-Server der virtuelle Rechnername `postgres`
-statt `localhost` verwendet werden. pgAdmin kann man mit einem Webbrowser und
-der URL `http://localhost:8888` aufrufen. Die Emailadresse `pgadmin@acme.com` und
-das Passwort `p` sind voreingestellt.
+Zur Administration von _PostgreSQL_ kann als Alternative zur Erweiterung
+_PostgreSQL_ für VS Code auch _pgAdmin_ verwendet werden. pgAdmin ist durch
+Docker Compose (siehe `.extras\compose\pgadmin`) über ein virtuelles Netzwerk mit
+dem Docker-Container des DB-Servers verbunden. Deshalb muss beim Verbinden mit
+dem DB-Server der virtuelle Rechnername `postgres` statt `localhost` verwendet
+werden. pgAdmin kann man mit einem Webbrowser und der URL `http://localhost:8888`
+aufrufen. Die Emailadresse `pgadmin@acme.com` und das Passwort `p` sind beim
+Schlüssel `environment` in `.extras\compose\pgadmin\compose.yml` voreingestellt.
 
 Beim 1. Einloggen konfiguriert man einen Server-Eintrag mit z.B. dem Namen
 `localhost` und verwendet folgende Werte:
