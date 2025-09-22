@@ -102,53 +102,6 @@ services:
           cpus: "1.0"
           memory: 512M
 
-  # ------------------------------------------------------------------------------------
-  # p g a d m i n
-  # ------------------------------------------------------------------------------------
-  # http://localhost:8888 mit Emailadresse "pgadmin@acme.com" und Passwort "p"
-  # https://www.pgadmin.org/docs/pgadmin4/latest/container_deployment.html
-  pgadmin:
-    image: dpage/pgadmin4:9.8.0
-    ports:
-      - published: 8888
-        target: 80
-    volumes:
-      - type: bind
-        source: C:/Zimmermann/volumes/postgres/pgadmin
-        # https://www.pgadmin.org/docs/pgadmin4/latest/container_deployment.html
-        # enthaelt u.a. pgadmin4.db als SQLite-DB mit z.B. der Tabelle "user"
-        target: /var/lib/pgadmin
-      - type: bind
-        source: C:/Zimmermann/volumes/postgres/pgadmin4
-        target: /var/lib/pgadmin4
-    environment:
-      # https://www.pgadmin.org/docs/pgadmin4/latest/container_deployment.html
-      PGADMIN_DEFAULT_EMAIL: pgadmin@acme.com
-      PGADMIN_DEFAULT_PASSWORD: p
-      PGADMIN_DISABLE_POSTFIX: true
-      GUNICORN_ACCESS_LOGFILE: /var/lib/pgadmin/pgadmin.log
-    networks: [acme-network]
-    user: "pgadmin:5050"
-    hostname: pgadmin
-    container_name: pgadmin
-    # https://docs.docker.com/compose/compose-file/compose-file-v3/#cap_add-cap_drop
-    cap_drop: [ALL]
-    # https://man7.org/linux/man-pages/man7/capabilities.7.html
-    # setgid
-    # find "/var/lib/..."
-    # find "/var/spool/..."
-    # /venv/bin/python3
-    # /venv/bin/gunicorn
-    cap_add: [CHOWN, SETGID, SETUID, DAC_OVERRIDE, NET_BIND_SERVICE]
-    deploy:
-      resources:
-        limits:
-          cpus: "2.0"
-          memory: 2G
-        reservations:
-          cpus: "1.0"
-          memory: 1G
-
 networks:
   acme-network:
     name: acme-network

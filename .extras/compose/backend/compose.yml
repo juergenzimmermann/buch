@@ -25,3 +25,4 @@ include:
   - path: ../postgres/compose.yml
   - path: ../keycloak/compose.yml
   - path: ../fakesmtp/compose.yml
+  #- path: ../pgadmin/compose.yaml
