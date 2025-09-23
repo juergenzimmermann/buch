@@ -21,7 +21,11 @@
 
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { fileTypeFromBuffer } from 'file-type';
-import { BuchFile, type Prisma, PrismaClient } from '../../generated/prisma/client.js';
+import {
+    BuchFile,
+    type Prisma,
+    PrismaClient,
+} from '../../generated/prisma/client.js';
 import { getLogger } from '../../logger/logger.js';
 import { MailService } from '../../mail/service.js';
 import {
@@ -141,7 +145,9 @@ export class BuchWriteService {
             });
             if (buch === null) {
                 this.#logger.debug('Es gibt kein Buch mit der ID %d', buchId);
-                throw new NotFoundException(`Es gibt kein Buch mit der ID ${buchId}.`);
+                throw new NotFoundException(
+                    `Es gibt kein Buch mit der ID ${buchId}.`,
+                );
             }
 
             // evtl. vorhandene Datei löschen
@@ -156,7 +162,7 @@ export class BuchWriteService {
                 data,
                 mimetype,
                 buchId,
-            }
+            };
             buchFileCreated = await tx.buchFile.create({ data: buchFile });
         });
 
@@ -202,7 +208,10 @@ export class BuchWriteService {
                 where: { id },
             });
         });
-        this.#logger.debug('update: buchUpdated=%s', JSON.stringify(buchUpdated));
+        this.#logger.debug(
+            'update: buchUpdated=%s',
+            JSON.stringify(buchUpdated),
+        );
 
         return buchUpdated?.version ?? -1;
     }
@@ -246,12 +255,11 @@ export class BuchWriteService {
         await this.#mailService.sendmail({ subject, body });
     }
 
-    async #validateUpdate(
-        id: number,
-        versionStr: string,
-    ) {
+    async #validateUpdate(id: number, versionStr: string) {
         this.#logger.debug(
-            '#validateUpdate: id=%d, versionStr=%s', id, versionStr,
+            '#validateUpdate: id=%d, versionStr=%s',
+            id,
+            versionStr,
         );
         if (!BuchWriteService.VERSION_PATTERN.test(versionStr)) {
             throw new VersionInvalidException(versionStr);

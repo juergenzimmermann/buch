@@ -18,30 +18,26 @@
 @startuml Controller-Klasse
 
 interface Promise<T>
+interface Readonly<T>
 
 package @nestjs/graphql {
-  class "@Resolver" as Resolver
-  hide Resolver circle
-
-  class "@UseInterceptors" as UseInterceptors
-  hide UseInterceptors circle
-
-  class "@Query" as Query
-  hide Query circle
-
-  class "@Args" as Args
-  hide Args circle
+  annotation Resolver
+  annotation UseInterceptors
+  annotation Query
+  annotation Args
 
   Resolver .left[hidden].> Promise
 }
 
-package buch {
-  package entity {
-    class Buch <<entity>>
-  }
+package generated.prisma {
+  class Prisma
+  class BuchGetPayload<T>
+  Prisma +-- BuchGetPayload
+}
 
+package buch {
   package service {
-    class BuchReadService << control >>
+    class BuchService << control >>
   }
 
   package graphql #DDDDDD {
@@ -53,23 +49,23 @@ package buch {
     }
 
     class BuchQueryResolver << control >> << @Resolver() >> << @UseInterceptors() >> {
-      + @Query() async buch(@Args() id: IdInput): Promise<BuchDTO>
+      + @Query() async buch(@Args() id: IdInput): Promise<Readonly<BuchGetPayload>>
       + @Query() async buecher(@Args() titel: string | undefined): Promise<BuchDTO[]>
     }
 
-    BuchQueryResolver o-up-> "1" BuchReadService : service
+    BuchQueryResolver o-down-> "1" BuchService : service
     BuchQueryResolver ..> BuchDTO
     BuchQueryResolver ..> IdInput
-    BuchDTO ..> Buch
-    BuchQueryResolver ..> Resolver
+    BuchQueryResolver .up.> Resolver
 
-    BuchQueryResolver ..> Promise
+    BuchQueryResolver .up.> Promise
+    BuchQueryResolver .up.> Readonly
 
-    BuchDTO .[hidden].> Buch
-    Buch .[hidden].> Promise
-    BuchReadService .[hidden].> Promise
-    Buch .[hidden].> Resolver
-    BuchReadService .[hidden].> Resolver
+    BuchQueryResolver .up.> BuchGetPayload
+
+    IdInput .[hidden]down.> BuchService
+    BuchService .[hidden]down.> Prisma
+    BuchService .[hidden]down.> BuchGetPayload
   }
 }
 

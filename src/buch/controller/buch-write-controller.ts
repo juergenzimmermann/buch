@@ -56,7 +56,12 @@ import { AuthGuard, Public, Roles } from 'nest-keycloak-connect';
 import { paths } from '../../config/paths.js';
 import { getLogger } from '../../logger/logger.js';
 import { ResponseTimeInterceptor } from '../../logger/response-time.js';
-import { BuchCreate, type BuchFileCreated, BuchUpdate, BuchWriteService } from '../service/buch-write-service.js';
+import {
+    BuchCreate,
+    type BuchFileCreated,
+    BuchUpdate,
+    BuchWriteService,
+} from '../service/buch-write-service.js';
 import { BuchDTO, BuchDtoOhneRef } from './buch-dto.js';
 import { createBaseUri } from './create-base-uri.js';
 import { InvalidMimeTypeException } from './exceptions.js';
@@ -182,7 +187,8 @@ export class BuchWriteController {
             MULTER_OPTIONS,
         );
 
-        const buchFile: BuchFileCreated | undefined = await this.#service.addFile(id, buffer, originalname, size);
+        const buchFile: BuchFileCreated | undefined =
+            await this.#service.addFile(id, buffer, originalname, size);
         this.#logger.debug(
             'addFile: id=%d, byteLength=%d, filename=%s, mimetype=%s',
             buchFile?.id ?? -1,
@@ -316,7 +322,7 @@ export class BuchWriteController {
                 create: {
                     titel: buchDTO.titel.titel,
                     untertitel: buchDTO.titel.untertitel ?? null,
-                }
+                },
             },
             abbildungen: { create: abbildungen ?? [] },
         };

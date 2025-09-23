@@ -21,7 +21,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { getLogger } from '../../logger/logger.js';
 import {
-    Buch,
     BuchFile,
     Prisma,
     PrismaClient,
@@ -164,7 +163,7 @@ export class BuchService {
     async find(
         suchparameter: Suchparameter | undefined,
         pageable: Pageable,
-    ): Promise<Slice<Buch>> {
+    ): Promise<Readonly<Slice<Readonly<BuchMitTitel>>>> {
         this.#logger.debug(
             'find: suchparameter=%s, pageable=%o',
             JSON.stringify(suchparameter),
@@ -217,9 +216,9 @@ export class BuchService {
         return count;
     }
 
-    async #findAll(pageable: Pageable) {
+    async #findAll(pageable: Pageable): Promise<Readonly<Slice<BuchMitTitel>>> {
         const { number, size } = pageable;
-        const buecher: Buch[] = await this.#prisma.buch.findMany({
+        const buecher: BuchMitTitel[] = await this.#prisma.buch.findMany({
             skip: number * size,
             take: size,
             include: this.#includeTitel,
@@ -232,13 +231,16 @@ export class BuchService {
         return this.#createSlice(buecher, totalElements);
     }
 
-    #createSlice(buecher: Buch[], totalElements: number) {
+    #createSlice(
+        buecher: BuchMitTitel[],
+        totalElements: number,
+    ): Readonly<Slice<BuchMitTitel>> {
         buecher.forEach((buch) => {
             if (buch.schlagwoerter === null) {
                 buch.schlagwoerter = [];
             }
         });
-        const buchSlice: Slice<Buch> = {
+        const buchSlice: Slice<BuchMitTitel> = {
             content: buecher,
             totalElements,
         };

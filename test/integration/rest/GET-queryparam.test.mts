@@ -18,8 +18,8 @@ import BigNumber from 'bignumber.js';
 import { describe, expect, test } from 'vitest';
 import { type Page } from '../../../src/buch/controller/page.js';
 import { CONTENT_TYPE, restURL } from '../constants.mjs';
-import { Buch } from "../../../src/generated/prisma/client.js";
-import { BuchMitTitel } from "../../../src/buch/service/buch-service.js";
+import { Buch } from '../../../src/generated/prisma/client.js';
+import { BuchMitTitel } from '../../../src/buch/service/buch-service.js';
 
 // -----------------------------------------------------------------------------
 // T e s t d a t e n
@@ -154,7 +154,9 @@ describe('GET /rest', () => {
         },
     );
 
-    test.concurrent.each(preisMax)('Buecher mit max. Preis %d suchen', async (preis) => {
+    test.concurrent.each(preisMax)(
+        'Buecher mit max. Preis %d suchen',
+        async (preis) => {
             // given
             const params = new URLSearchParams({ preis: preis.toString() });
             const url = `${restURL}?${params}`;

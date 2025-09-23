@@ -43,7 +43,7 @@ import {
 import BigNumber from 'bignumber.js';
 import { AbbildungDTO } from './abbildung-dto.js';
 import { TitelDTO } from './titel-dto.js';
-import { Buchart } from "../../generated/prisma/enums.js";
+import { Buchart } from '../../generated/prisma/enums.js';
 
 export const MAX_RATING = 5;
 

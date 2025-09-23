@@ -21,7 +21,11 @@ import { AuthGuard, Roles } from 'nest-keycloak-connect';
 import { getLogger } from '../../logger/logger.js';
 import { ResponseTimeInterceptor } from '../../logger/response-time.js';
 import { BuchDTO } from '../controller/buch-dto.js';
-import { BuchWriteService,BuchCreate,BuchUpdate } from '../service/buch-write-service.js';
+import {
+    BuchWriteService,
+    BuchCreate,
+    BuchUpdate,
+} from '../service/buch-write-service.js';
 import { type IdInput } from './query.js';
 import { HttpExceptionFilter } from './http-exception-filter.js';
 
@@ -134,7 +138,7 @@ export class BuchMutationResolver {
                 create: {
                     titel: buchDTO.titel.titel,
                     untertitel: buchDTO.titel.untertitel ?? null,
-                }
+                },
             },
             abbildungen: { create: abbildungen ?? [] },
         };

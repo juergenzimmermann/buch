@@ -128,17 +128,6 @@ malesuada.
 include::BuchWriteService.plantuml[]
 ----
 
-=== Klasse für Entities
-
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur arcu erat,
-accumsan id imperdiet et, porttitor at sem.
-
-.Entity
-[plantuml,Buch,svg]
-----
-include::Buch.plantuml[]
-----
-
 === ER-Diagramm
 
 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.

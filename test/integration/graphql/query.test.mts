@@ -34,7 +34,7 @@ export type BuchDTO = Omit<
         };
     }>,
     'aktualisiert' | 'erzeugt' | 'rabatt'
-    >;
+>;
 
 type BuchSuccessType = { data: { buch: BuchDTO }; errors?: undefined };
 type BuecherSuccessType = { data: { buecher: BuchDTO[] }; errors?: undefined };

@@ -48,12 +48,15 @@ import { Public } from 'nest-keycloak-connect';
 import { paths } from '../../config/paths.js';
 import { getLogger } from '../../logger/logger.js';
 import { ResponseTimeInterceptor } from '../../logger/response-time.js';
-import { BuchService, BuchMitTitelUndAbbildungen } from '../service/buch-service.js';
+import {
+    type BuchMitTitel,
+    BuchService,
+    BuchMitTitelUndAbbildungen,
+} from '../service/buch-service.js';
 import { createPageable } from '../service/pageable.js';
 import { type Suchparameter } from '../service/suchparameter.js';
-import { createPage,Page } from './page.js';
-import { Buchart } from "../../generated/prisma/enums.js";
-import { Buch } from "../../generated/prisma/client.js";
+import { createPage, Page } from './page.js';
+import { Buchart } from '../../generated/prisma/enums.js';
 
 /**
  * Klasse für `BuchGetController`, um Queries in _OpenAPI_ bzw. Swagger zu
@@ -184,7 +187,7 @@ export class BuchController {
         @Req() req: Request,
         @Headers('If-None-Match') version: string | undefined,
         @Res() res: Response,
-    ): Promise<Response<BuchMitTitelUndAbbildungen | undefined>> {
+    ): Promise<Response<BuchMitTitelUndAbbildungen>> {
         // https://getpino.io/#/docs/api?id=message-string
         this.#logger.debug('getById: id=%d, version=%s', id, version ?? '-1');
 
@@ -239,7 +242,7 @@ export class BuchController {
         @Query() query: BuchQuery,
         @Req() req: Request,
         @Res() res: Response,
-    ): Promise<Response<Page<Buch> | CountResult | undefined>> {
+    ): Promise<Response<Page<Readonly<BuchMitTitel>> | CountResult>> {
         this.#logger.debug('get: query=%o', query);
 
         if (req.accepts(['json', 'html']) === false) {
@@ -299,7 +302,7 @@ export class BuchController {
     async getFileById(
         @Param('id') idStr: string,
         @Res({ passthrough: true }) res: Response,
-    ) {
+    ): Promise<StreamableFile> {
         this.#logger.debug('getFileById: buchId:%s', idStr);
 
         const id = Number(idStr);

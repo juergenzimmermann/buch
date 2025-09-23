@@ -20,8 +20,8 @@
 interface Promise<T>
 
 package @nestjs/common {
-  class "@Injectable" as Injectable
-  hide Injectable circle
+  annotation Injectable
+  exception NotFoundException
 }
 
 package generated.prisma {
@@ -42,14 +42,14 @@ package buch {
   package service #DDDDDD {
     class PrismaService
     class BuchService
-    class IsbnExists
-    class VersionInvalid
-    class VersionOutdated
+    exception IsbnExists
+    exception VersionInvalid
+    exception VersionOutdated
 
     class BuchWriteService << control >> <<@Injectable()>> {
       + async create(buch: Prisma.BuchCreateInput): Promise<number>
       + async update(id: number, buch: Prisma.BuchUpdateInput, version: string): Promise<number>
-      + async delete(id: number): Promise<boolean>
+      + async delete(id: number): Promise<void>
     }
 
     BuchWriteService o--> "1" PrismaService
@@ -57,17 +57,21 @@ package buch {
     BuchWriteService o--> "1" MailService: mailService
 
     BuchWriteService .up.> Injectable
+    BuchWriteService .up.> NotFoundException
 
     BuchWriteService .up.> Promise
+
     BuchWriteService .down.> BuchCreateInput
     BuchWriteService .down.> BuchGetPayload
     BuchWriteService .down.> BuchUpdateInput
-    BuchWriteService .right.> IsbnExists
-    BuchWriteService .right.> VersionInvalid
-    BuchWriteService .right.> VersionOutdated
+
+    BuchWriteService .down.> IsbnExists
+    BuchWriteService .down.> VersionInvalid
+    BuchWriteService .down.> VersionOutdated
 
     BuchService .[hidden]down.> MailService
     BuchService .[hidden]down.> Prisma
+    IsbnExists .[hidden]left.> VersionInvalid
   }
 }
 

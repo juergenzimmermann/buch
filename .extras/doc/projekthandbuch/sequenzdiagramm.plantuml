@@ -19,13 +19,13 @@
 
 actor Gast
 
-boundary BuchGetController
-control BuchReadService
+boundary BuchController
+control BuchService
 database buch
 
-Gast -> BuchGetController : GET / getById()
-BuchGetController -> BuchReadService: findById()
-BuchReadService -> buch: [TypeORM]
+Gast -> BuchController : GET / getById()
+BuchController -> BuchService: findById()
+BuchService -> buch: [Prisma]
 
 footer (c) Jürgen Zimmermann
 

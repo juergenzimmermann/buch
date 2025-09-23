@@ -19,11 +19,14 @@ import BigNumber from 'bignumber.js'; // eslint-disable-line @typescript-eslint/
 import { Public } from 'nest-keycloak-connect';
 import { getLogger } from '../../logger/logger.js';
 import { ResponseTimeInterceptor } from '../../logger/response-time.js';
-import { BuchService, BuchMitTitelUndAbbildungen } from '../service/buch-service.js';
+import {
+    BuchService,
+    type BuchMitTitel,
+    type BuchMitTitelUndAbbildungen,
+} from '../service/buch-service.js';
 import { createPageable } from '../service/pageable.js';
 import { HttpExceptionFilter } from './http-exception-filter.js';
-import { Slice } from "../service/slice.js";
-import { type Buch } from "../../generated/prisma/client.js";
+import { Slice } from '../service/slice.js';
 import { Suchparameter } from '../service/suchparameter.js';
 
 export type IdInput = {
@@ -31,7 +34,9 @@ export type IdInput = {
 };
 
 export type SuchparameterInput = {
-    readonly suchparameter: Omit<Suchparameter, 'lieferbar'> & { lieferbar: boolean | undefined };
+    readonly suchparameter: Omit<Suchparameter, 'lieferbar'> & {
+        lieferbar: boolean | undefined;
+    };
 };
 
 @Resolver('Buch')
@@ -48,10 +53,13 @@ export class BuchQueryResolver {
 
     @Query('buch')
     @Public()
-    async findById(@Args() { id }: IdInput): Promise<Readonly<BuchMitTitelUndAbbildungen>> {
+    async findById(
+        @Args() { id }: IdInput,
+    ): Promise<Readonly<BuchMitTitelUndAbbildungen>> {
         this.#logger.debug('findById: id=%s', id);
 
-        const buch: Readonly<BuchMitTitelUndAbbildungen> = await this.#service.findById({ id: Number(id) });
+        const buch: Readonly<BuchMitTitelUndAbbildungen> =
+            await this.#service.findById({ id: Number(id) });
 
         if (this.#logger.isLevelEnabled('debug')) {
             this.#logger.debug(
@@ -65,7 +73,9 @@ export class BuchQueryResolver {
 
     @Query('buecher')
     @Public()
-    async find(@Args() input: SuchparameterInput | undefined): Promise<Buch[]> {
+    async find(
+        @Args() input: SuchparameterInput | undefined,
+    ): Promise<BuchMitTitel[]> {
         this.#logger.debug('find: input=%s', JSON.stringify(input));
         const pageable = createPageable({});
         const suchparameter = input?.suchparameter;
@@ -77,16 +87,14 @@ export class BuchQueryResolver {
                 (suchparameter as any).lieferbar = lieferbar.toString();
             }
         }
-        const buecherSlice: Slice<Buch> = await this.#service.find(
-            suchparameter as any,
-            pageable,
-        );
+        const buecherSlice: Readonly<Slice<Readonly<BuchMitTitel>>> =
+            await this.#service.find(suchparameter as any, pageable);
         this.#logger.debug('find: buecherSlice=%o', buecherSlice);
         return buecherSlice.content;
     }
 
     @ResolveField('rabatt')
-    rabatt(@Parent() buch: Buch, short: boolean | undefined) {
+    rabatt(@Parent() buch: BuchMitTitel, short: boolean | undefined) {
         if (this.#logger.isLevelEnabled('debug')) {
             this.#logger.debug(
                 'rabatt: buch=%s, short=%s',
