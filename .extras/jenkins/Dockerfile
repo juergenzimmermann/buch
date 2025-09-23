@@ -55,7 +55,6 @@ apt-get install --no-install-recommends --yes --show-progress lsb-release=12.0-1
 apt-get install --no-install-recommends --yes --show-progress gcc=4:12.2.0-3 g++=4:12.2.0-3 make=4.3-4.1 python3.11-minimal=3.11.2-6+deb12u6
 ln -s /usr/bin/python3.11 /usr/bin/python
 ln -s /usr/bin/python3.11 /usr/bin/python3
-#apt-get install --no-install-recommends --yes --show-progress ca-certificates=20230311 curl=7.88.1-10+deb12u8 gnupg=2.2.40-1.1
 
 # https://unix.stackexchange.com/questions/217369/clear-apt-get-list
 apt-get autoremove --yes
