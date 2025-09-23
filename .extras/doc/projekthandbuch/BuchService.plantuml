@@ -24,39 +24,32 @@ package @nestjs/common {
   hide Injectable circle
 }
 
-package typeorm {
-  class Repository<T>
-}
-
-package @nestjs/typeorm {
-  class "@InjectRepository" as InjectRepository
-  hide InjectRepository circle
+package generated.prisma {
+  class PrismaClient
+  class Buch
 }
 
 package buch {
-  package entity {
-    class Buch
-  }
-
   package service #DDDDDD {
-    class QueryBuilder
+    class PrismaService
+    class WhereBuilder
 
-    class BuchReadService << control >> <<@Injectable()>> {
+    class BuchService << control >> <<@Injectable()>> {
       + async findById(id: number): Promise<Buch | undefined>
       + async find(suchparameter?: Record<string, any>): Promise<Buch[]>
     }
 
-    BuchReadService o--> "1" QueryBuilder: queryBuilder
-    BuchReadService o--> "1" Repository: @InjectRepository repo
+    BuchService o--> "1" WhereBuilder: whereBuilder
+    BuchService o--> "1" PrismaClient: prisma
 
-    BuchReadService .up.> Injectable
-    BuchReadService .up.> InjectRepository
+    BuchService .up.> Injectable
 
-    BuchReadService .up.> Promise
-    BuchReadService ..> Buch
+    BuchService .up.> Promise
+    BuchService ..> PrismaService
+    BuchService ..> Buch
 
-    QueryBuilder .[hidden].> Repository
-    QueryBuilder .[hidden].> Buch
+    WhereBuilder .[hidden].> PrismaClient
+    WhereBuilder .[hidden].> Buch
   }
 }
 

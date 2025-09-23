@@ -30,14 +30,14 @@ node "Nest" {
 
   [BuchService]
 
-  [Repository<Buch>]
+  [PrismaClient]
 
   [MailService]
 }
 
 
 cloud {
-    [TypeORM]
+    [Prisma]
 }
 
 cloud {
@@ -70,12 +70,12 @@ GraphQLClient ~~> [RequestLoggerMiddleware]
 
 [BuchController] ..> [BuchService]
 [BuchResolver] ..> [BuchService]
-[BuchService] ..> [Repository<Buch>]
+[BuchService] ..> [PrismaClient]
 
-[Repository<Buch>] ~~> [TypeORM]
-[TypeORM] ~~> [Tabelle buch]
-[TypeORM] ~~> [Tabelle titel]
-[TypeORM] ~~> [Tabelle abbildung]
+[PrismaClient] ~~> [Prisma]
+[Prisma] ~~> [Tabelle buch]
+[Prisma] ~~> [Tabelle titel]
+[Prisma] ~~> [Tabelle abbildung]
 
 [BuchController] ..> [nest-keycloak-connect]
 [nest-keycloak-connect] ~~> [Keycloak]

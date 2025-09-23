@@ -66,10 +66,10 @@ ligula. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere
 cubilia Curae; Donec velit neque, auctor sit amet aliquam vel, ullamcorper sit
 amet ligula.
 
-."BuchGetController" für Lesezugriffe an der REST-Schnittstelle
-[plantuml,BuchGetController,svg]
+."BuchController" für Lesezugriffe an der REST-Schnittstelle
+[plantuml,BuchController,svg]
 ----
-include::BuchGetController.plantuml[]
+include::BuchController.plantuml[]
 ----
 
 Curabitur arcu erat, accumsan id imperdiet et, porttitor at sem. Donec
@@ -113,10 +113,10 @@ include::BuchMutationResolver.plantuml[]
 
 Donec rutrum congue leo eget malesuada. Donec rutrum congue leo eget malesuada.
 
-."BuchReadService" von der Geschäftslogik
-[plantuml,BuchReadService,svg]
+."BuchService" von der Geschäftslogik
+[plantuml,BuchService,svg]
 ----
-include::BuchReadService.plantuml[]
+include::BuchService.plantuml[]
 ----
 
 Pellentesque in ipsum id orci porta dapibus. Donec rutrum congue leo eget

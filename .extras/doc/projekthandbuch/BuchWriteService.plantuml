@@ -24,13 +24,14 @@ package @nestjs/common {
   hide Injectable circle
 }
 
-package typeorm {
-  class Repository<T>
-}
-
-package @nestjs/typeorm {
-  class "@InjectRepository" as InjectRepository
-  hide InjectRepository circle
+package generated.prisma {
+  class Prisma
+  class BuchCreateInput
+  class BuchGetPayload<T>
+  class BuchUpdateInput
+  Prisma +-- BuchCreateInput
+  Prisma +-- BuchGetPayload
+  Prisma +-- BuchUpdateInput
 }
 
 package mail {
@@ -38,46 +39,35 @@ package mail {
 }
 
 package buch {
-  package entity {
-    class Buch
-  }
-
   package service #DDDDDD {
-    class BuchInvalid
-    class TitelExists
+    class PrismaService
+    class BuchService
     class IsbnExists
     class VersionInvalid
     class VersionOutdated
 
     class BuchWriteService << control >> <<@Injectable()>> {
-      + async create(buch: Buch): Promise<string|BuchInvalid|TitelExists|IsbnExists>
-      + async update(id: number, buch: Buch, version: string): Promise<number|BuchInvalid|TitelExists|IsbnExists|VersionInvalid|VersionOutdated>
+      + async create(buch: Prisma.BuchCreateInput): Promise<number>
+      + async update(id: number, buch: Prisma.BuchUpdateInput, version: string): Promise<number>
       + async delete(id: number): Promise<boolean>
     }
 
-    BuchWriteService o--> "1" BuchValidationService: validationService
-    BuchWriteService o--> "1" BuchReadService: readService
-    BuchWriteService o--> "1" Repository: @InjectRepository repo
+    BuchWriteService o--> "1" PrismaService
+    BuchWriteService o--> "1" BuchService: readService
     BuchWriteService o--> "1" MailService: mailService
 
     BuchWriteService .up.> Injectable
-    BuchWriteService .up.> InjectRepository
 
     BuchWriteService .up.> Promise
-    BuchWriteService ..> Buch
-    BuchWriteService .up.> BuchInvalid
-    BuchWriteService .up.> TitelExists
-    BuchWriteService .up.> IsbnExists
-    BuchWriteService .up.> VersionInvalid
-    BuchWriteService .up.> VersionOutdated
+    BuchWriteService .down.> BuchCreateInput
+    BuchWriteService .down.> BuchGetPayload
+    BuchWriteService .down.> BuchUpdateInput
+    BuchWriteService .right.> IsbnExists
+    BuchWriteService .right.> VersionInvalid
+    BuchWriteService .right.> VersionOutdated
 
-    BuchInvalid .up[hidden].> Buch
-    Buch .up[hidden].> Promise
-    Buch .up[hidden].> Injectable
-    Buch .up[hidden].> InjectRepository
-    TitelExists .up[hidden].> Buch
-    BuchValidationService .[hidden].> Repository
-    BuchValidationService .[hidden].> MailService
+    BuchService .[hidden]down.> MailService
+    BuchService .[hidden]down.> Prisma
   }
 }
 
