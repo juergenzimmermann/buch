@@ -17,7 +17,7 @@
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 # Aufruf:   docker build --tag juergenzimmermann/jenkins:2025.10.1 .
-#           Get-Content Dockerfile | docker run --rm --interactive hadolint/hadolint:2.12.1-beta-debian
+#           Get-Content Dockerfile | docker run --rm --interactive hadolint/hadolint:2.14.0-debian
 #           docker compose exec jenkins bash
 #               cat /etc/os-release
 #                   ID=debian
