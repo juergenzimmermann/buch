@@ -63,9 +63,9 @@ package buch {
 
     BuchQueryResolver .up.> BuchGetPayload
 
-    IdInput .[hidden]down.> BuchService
-    BuchService .[hidden]down.> Prisma
-    BuchService .[hidden]down.> BuchGetPayload
+    IdInput .down[hidden].> BuchService
+    BuchService .down[hidden].> Prisma
+    BuchService .down[hidden].> BuchGetPayload
   }
 }
 

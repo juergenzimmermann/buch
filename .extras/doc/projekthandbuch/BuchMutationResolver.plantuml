@@ -64,7 +64,7 @@ package buch #DDDDDD {
   BuchMutationResolver .up.> AuthGuard
   BuchMutationResolver .up.> Roles
 
-  Roles .[hidden]right.> Resolver
+  Roles .right[hidden].> Resolver
 }
 
 hide empty members

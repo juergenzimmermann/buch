@@ -86,14 +86,13 @@ package buch {
 
     BuchWriteController .up.> Promise
 
-    AuthGuard .[hidden]left.> Res
-    Roles .[hidden]left.> Res
-    BuchDTO .[hidden]down.> BuchWriteService
-    BuchWriteService .[hidden]down.> Request
-    BuchWriteService .[hidden]down.> Response
-    BuchWriteService .[hidden]down.> Promise
-    AuthGuard .[hidden]left.> Promise
-    BuchWriteService .[hidden]down.> Request
+    AuthGuard .left[hidden].> Res
+    Roles .left[hidden].> Res
+    BuchDTO .down[hidden].> BuchWriteService
+    BuchWriteService .right[hidden].> Request
+    BuchWriteService .down[hidden].> Promise
+    AuthGuard .left[hidden].> Promise
+    BuchWriteService .down[hidden].> Request
   }
 }
 

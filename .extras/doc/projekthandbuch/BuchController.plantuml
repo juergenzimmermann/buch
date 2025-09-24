@@ -61,11 +61,11 @@ package buch {
     BuchController .up.> Promise
     BuchController .up.> BuchGetPayload
 
-    Promise .[hidden]up.> Controller
-    BuchService .[hidden]down.> Prisma
-    BuchService .[hidden]down.> BuchGetPayload
-    BuchService .[hidden]down.> Request
-    Request .[hidden]left.> Prisma
+    Promise .up[hidden].> Controller
+    BuchService .down[hidden].> Prisma
+    BuchService .down[hidden].> BuchGetPayload
+    BuchService .down[hidden].> Request
+    Request .left[hidden].> Prisma
   }
 }
 
