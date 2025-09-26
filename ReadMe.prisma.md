@@ -22,13 +22,13 @@
 > Diese Datei ist in Markdown geschrieben und kann mit `<Strg><Shift>v` in
 > Visual Studio Code leicht gelesen werden.
 >
-> Näheres zu Markdown gibt es z.B. bei [Markdown Guide](https://www.markdownguide.org/)
+> Näheres zu Markdown gibt es z.B. bei [Markdown Guide](https://www.markdownguide.org)
 
 ## Voraussetzungen
 
 ### pnpm
 
-_pnpm_ ist gemäß Installationsanleitung installiert
+_pnpm_ ist gemäß Installationsanleitung installiert.
 
 ### Datenbank mit PostgreSQL
 
@@ -36,8 +36,8 @@ DB mit _PostgreSQL_ ist gemäß `.extras\compose\postgres\ReadMe.md` aufgesetzt.
 
 ### node_modules
 
-Jetzt werden Softwarepakete für _Prisma_ und für die spätere Entwicklung mit z.B.
-_Nest_ installiert.
+Jetzt werden Softwarepakete für _Prisma_ und für die spätere Entwicklung mit
+z.B. _Nest_ installiert.
 
 ```shell
     pnpm i
@@ -131,8 +131,8 @@ als provider für den Generator verwendet wird.
 ## Code-Generierung für den DB-Client
 
 Das (Prisma-) Schema enthält nun die exakten Abbildungsvorschriften für das
-künftige OR-Mapping. Mit diesem Schema kann nun der Prisma-Client generiert werden,
-der später für das OR-Mapping in TypeScript verwendet wird:
+künftige OR-Mapping. Mit diesem Schema kann nun der Prisma-Client generiert
+werden, der später für das OR-Mapping in TypeScript verwendet wird:
 
 ```shell
     pnpx prisma generate
@@ -143,23 +143,25 @@ der später für das OR-Mapping in TypeScript verwendet wird:
 Jetzt kann man mit TypeScript auf die DB zugreifen, z.B.:
 
 ```typescript
-    import { PrismaClient } from "@prisma/client";
+// src/beispiel.ts
+// Aufruf:   node --env-file=.env src\beispiel.ts
+import { PrismaClient } from '@prisma/client';
 
-    const prisma = new PrismaClient();
+const prisma = new PrismaClient();
 
-    try {
-        await prisma.$connect();
-        const buecher = await prisma.buch.findMany();
-        console.log(`buecher=${JSON.stringify(buecher)}`);
-    } finally(async () => {
-        await prisma.$disconnect();
-    });
+try {
+  await prisma.$connect();
+  const buecher = await prisma.buch.findMany();
+  console.log(`buecher=${JSON.stringify(buecher)}`);
+} finally {
+  await prisma.$disconnect();
+}
 ```
 
 ## Aufruf der Beispiele
 
-Die beiden Beispiel-Dateien `src\beispiele.ts` und `src\beispiele-write.ts` können
-mit _Node_ folgendermaßen aufgerufen werden:
+Die beiden Beispiel-Dateien `src\beispiele.ts` und `src\beispiele-write.ts`
+können mit _Node_ folgendermaßen aufgerufen werden:
 
 ```powershell
     node --env-file=.env src\beispiele.ts
