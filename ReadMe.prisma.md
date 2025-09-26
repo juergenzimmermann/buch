@@ -22,13 +22,13 @@
 > Diese Datei ist in Markdown geschrieben und kann mit `<Strg><Shift>v` in
 > Visual Studio Code leicht gelesen werden.
 >
-> Näheres zu Markdown gibt es z.B. bei [Markdown Guide](https://www.markdownguide.org)
+> Näheres zu Markdown gibt es z.B. bei [Markdown Guide](https://www.markdownguide.org/)
 
 ## Voraussetzungen
 
 ### pnpm
 
-_pnpm_ ist gemäß Installationsanleitung installiert.
+_pnpm_ ist gemäß Installationsanleitung installiert
 
 ### Datenbank mit PostgreSQL
 
@@ -43,9 +43,11 @@ z.B. _Nest_ installiert.
     pnpm i
 ```
 
+---
+
 ## Schema für ein neues Projekt
 
-Für dieses Projektbeispiel überspringen, weil `prisma\schema.prisma` schon existiert.
+Für dieses Projektbeispiel **ÜBERSPRINGEN**, weil `prisma\schema.prisma` schon existiert.
 Weiter mit [Code-Generierung für den DB-Client](#code-generierung-für-den-db-client).
 
 ### Initiales Schema erstellen
@@ -128,6 +130,8 @@ als provider für den Generator verwendet wird.
   }
 ```
 
+---
+
 ## Code-Generierung für den DB-Client
 
 Das (Prisma-) Schema enthält nun die exakten Abbildungsvorschriften für das
@@ -137,6 +141,8 @@ werden, der später für das OR-Mapping in TypeScript verwendet wird:
 ```shell
     pnpx prisma generate
 ```
+
+---
 
 ## Einfaches Beispiel in TypeScript
 

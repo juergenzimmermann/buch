@@ -174,6 +174,8 @@ zugegriffen. Der Benutzername und das Passwort sind in der Datei
 `db.populate` in `src\config\resources\buch.yml` wird festgelegt, ob die
 (Test-) DB `buch` neu geladen wird.
 
+---
+
 ## Postman: Desktop-Anwendung und Extension für VS Code
 
 Mit der Desktop-Applikation _Postman_ wie auch mit der Erweiterung _Postman_ für
@@ -309,6 +311,7 @@ werden:
 Folgende Voraussetzungen müssen oder sollten erfüllt sein:
 
 - Der DB-Server muss gestartet sein.
+- Der Mailserver muss gestartet sein.
 - Der Appserver muss gestartet sein.
 
 Nun kann man die Tests folgendermaßen in einer Powershell aufrufen. Dabei wird
@@ -337,7 +340,7 @@ geziehlt eine Test-Funktion aufzurufen, z.B.:
 
 ### Minimales Basis-Image
 
-Für ein minimales Basis-Image gibt es folgende Alternativen:
+Für ein minimales Basis-Image gibt es z.B. folgende Alternativen:
 
 - _Debian Trixie slim_
   - ca. 250 MB
@@ -349,19 +352,6 @@ Für ein minimales Basis-Image gibt es folgende Alternativen:
   - _ash_ als Shell
   - _apk_ ("Alpine Package Keeper") als Package-Manager
   - mit Node 22
-- _Distroless_
-  - auf Basis von Debian
-  - ohne Shell, Package Manager, GUI, grep, sed, awk, ...
-  - von Google
-- _Wolfi_
-  - minimales Community Linux von Chainguard
-  - _undistro_: keine volle Linux-Distribution
-  - nutzt den Linux-Kernel der Laufzeitumgebung, z.B. Container Runtime
-  - _glibc_ als C-Bibliothek und **nicht** _musl_ wie bei _Alpine_
-  - _ash_ als Shell
-  - _apk_ als Package-Format wie bei _Alpine_
-  - https://github.com/wolfi-dev
-  - https://chainguard.dev
 
 ### Image erstellen
 
@@ -551,21 +541,27 @@ von _Scout_ auflisten:
 ```shell
     docker scout cves juergenzimmermann/buch:2025.10.1-trixie
     docker scout cves --format only-packages juergenzimmermann/buch:2025.10.1-trixie
-````
+```
 
 Statt der Kommandozeile kann man auch den Menüpunkt "Docker Scout" im
 _Docker Dashboard_ verwenden.
 
+---
+
 ## OpenAPI
 
-Durch die Decorators `@Api...()` kann man _OpenAPI_ (früher: Swagger) in den
+Durch die Decorators `@Api...()` kann man _OpenAPI_ bzw. _Swagger_ in den
 Controller-Klassen und -Methoden konfigurieren und dann in einem Webbrowser mit
 `https://localhost:3000/swagger` aufrufen. Die _Swagger JSON Datei_ kann man mit
 `https://localhost:3000/swagger-json` abrufen.
 
+---
+
 ## AsciiDoctor und PlantUML
 
 Siehe `.extras\doc\projekthandbuch\ReadMe.md`.
+
+---
 
 ## TypeDoc
 
@@ -576,9 +572,13 @@ folgendes Kommando auf:
     pnpm typedoc
 ```
 
+---
+
 ## Continuous Integration mit Jenkins
 
 Siehe `.extras\compose\jenkins\ReadMe.md`.
+
+---
 
 ## Visual Studio Code
 
@@ -593,6 +593,8 @@ Tipps:
 - `<Alt>d`: Vorschau für PlantUml
 - https://vscodecandothat.com: Kurze Videos zu VS Code
 - https://www.youtube.com/watch?v=beNIDKgdzwQ: Video für Debugging
+
+---
 
 ## Empfohlene Code-Konventionen
 

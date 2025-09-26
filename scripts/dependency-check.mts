@@ -15,7 +15,7 @@
 
 // Aufruf:      cd scripts
 //              node dependency-check.mts
-// ggf. z.B.    npm ls express
+// ggf. z.B.    pnpm why express
 
 // TODO dset https://github.com/lukeed/dset/issues/44#issuecomment-2122866311
 // TODO graphql https://nvd.nist.gov/vuln/detail/CVE-2024-50312
@@ -45,14 +45,16 @@ const script = resolve(baseExecPath, 'dependency-check', 'bin', baseScript);
 console.log(`script=${script}`);
 
 const dataPath = resolve(baseDataPath, 'dependency-check-data');
-const packageLockPath = resolve('..', 'package-lock.json');
+const pnpmPath = 'C:/Zimmermann/node/pnpm.cmd';
 const reportPath = '.';
 
 let options = `--nvdApiKey ${nvdApiKey} --project ${project} `.concat(
-    `--scan ${packageLockPath} --suppression suppression.xml `,
+    `--pnpm ${pnpmPath} --scan .. --suppression dependency-check-suppression.xml `,
     `--out ${reportPath} --data ${dataPath} `,
+    // https://jeremylong.github.io/DependencyCheck/dependency-check-cli/arguments.html
     // dependency-check.bat --advancedHelp
     '--nodeAuditSkipDevDependencies ',
+    '--nodePackageSkipDevDependencies ',
     '--disableArchive ',
     '--disableAssembly ',
     '--disableAutoconf ',
@@ -72,9 +74,9 @@ let options = `--nvdApiKey ${nvdApiKey} --project ${project} `.concat(
     '--disableMSBuild ',
     '--disableNugetconf ',
     '--disableNuspec ',
+    '--disableOssIndex ',
     '--disablePip ',
     '--disablePipfile ',
-    '--disablePnpmAudit ',
     '--disablePoetry ',
     '--disablePyDist ',
     '--disablePyPkg ',
