@@ -166,12 +166,12 @@ try {
 
 ## Aufruf der Beispiele
 
-Die beiden Beispiel-Dateien `src\beispiele.ts` und `src\beispiele-write.ts`
+Die beiden Beispiel-Dateien `src\beispiele.mts` und `src\beispiele-write.mts`
 können mit _Node_ folgendermaßen aufgerufen werden:
 
 ```powershell
-    node --env-file=.env src\beispiele.ts
-    node --env-file=.env src\beispiele-write.ts
+    node --env-file=.env src\beispiele.mts
+    node --env-file=.env src\beispiele-write.mts
 ```
 
 ## Prisma Studio
