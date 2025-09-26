@@ -149,8 +149,8 @@ werden, der später für das OR-Mapping in TypeScript verwendet wird:
 Jetzt kann man mit TypeScript auf die DB zugreifen, z.B.:
 
 ```typescript
-// src/beispiel.ts
-// Aufruf:   node --env-file=.env src\beispiel.ts
+// src/beispiel.mts
+// Aufruf:   node --env-file=.env src\beispiel.mts
 import { PrismaClient } from '@prisma/client';
 
 const prisma = new PrismaClient();
