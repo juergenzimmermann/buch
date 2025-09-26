@@ -36,8 +36,8 @@
 
 services:
   keycloak:
-    image: quay.io/keycloak/keycloak:26.3.4-0
-    #image: keycloak/keycloak:26.3.4-0
+    image: quay.io/keycloak/keycloak:26.3.5-0
+    #image: keycloak/keycloak:26.3.5-0
     ports:
       - published: 8880
         target: 8080
