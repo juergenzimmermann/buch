@@ -23,7 +23,7 @@
 
 - [Installation ohne TLS](#installation-ohne-tls)
 - [Konfiguration für Tablespace und TLS](#konfiguration-für-tablespace-und-tls)
-- [Datenbank, Datenbank-User, Schema und Tabellen anlegen](#datenbank-datenbank-user-schema-und-tabellen-anlegen)
+- [Datenbank, Datenbank-User, Schema, Tabellen und Daten anlegen](#datenbank-datenbank-user-schema-tabellen-und-daten-anlegen)
 - [Optional: TLS für den PostgreSQL-Server mit OpenSSL überprüfen](#optional-tls-für-den-postgresql-server-mit-openssl-überprüfen)
 - [Optional: pgAdmin](#optional-pgadmin)
 
@@ -96,7 +96,7 @@ Jetzt läuft der DB-Server mit folgender Konfiguration:
 - Administrations-User `postgres` bei _PostgreSQL_
 - Passwort `p` für diesen Administrations-User
 
-## Datenbank, Datenbank-User, Schema und Tabellen anlegen
+## Datenbank, Datenbank-User, Schema, Tabellen und Daten anlegen
 
 In der 1. PowerShell startet man wieder den DB-Server als Docker Container, und
 zwar jetzt mit TLS:
@@ -125,16 +125,46 @@ Linux-Verzeichnis `/sql` verfügbar.
 
 _Kopien_ der SQL-Skripte `create-db-buch.sql` und `create-schema-buch.sql` sind
 im Projekt-Verzeichnis `.extras\compose\postgres\sql`, damit man den SQL-Editor
-der IDE nutzen kann. Eventuelle Änderungen müssen auf jeden Fall in
+von VS Code nutzen kann. Eventuelle Änderungen müssen auf jeden Fall in
 `C:\Zimmermann\volumes\postgres\sql` gemacht werden, z.B. durch Kopieren der Dateien.
 Kopien der CSV-Dateien für Testdaten sind im Projekt-Verzeichnis `.extras\compose\postgres\csv`
-und die Originale in `C:\Zimmermann\volumes\postgres\csv`. Diese SQL-Skripte und
-CSV-Dateien können ausschließlich vom DB-Administrator `postgres` benutzt werden,
-und zwar Server-seitig.
+und die Originale in `C:\Zimmermann\volumes\postgres\csv`. Ein SQL-Skripte zum
+Laden von CSV-Dateien kann ausschließlich vom DB-Administrator `postgres` benutzt
+werden, und zwar Server-seitig.
 
 Die _Original_-Skripte `create-table.sql` und `copy-csv.sql` sind im Projekt-Verzeichnis
 `src\config\resources\postgresql`. Dort werden sie später für den _Nest_-basierten
 Appserver benötigt.
+
+## Erweiterung PostgreSQL für VS Code
+
+Mit der Erweiterung _PostgreSQL_ für VS Code kann man die Datenbank `buch` und
+deren Daten verwalten. Man klickt man auf _+ Verbindung hinzufügen_
+und gibt beim Karteireiter _Parameter_ folgende Werte ein:
+
+- SERVER NAME: z.B. `localhost`
+- USER NAME: `postgres` (siehe `compose.yml`)
+- PASSWORD: `p` (siehe `compose.yml`)
+- KENNWORT SPEICHERN: Haken setzen, damit man nicht immer das Passwort eingeben muss
+- DATABASE NAME: `postgres` (das Data Dictionary)
+
+Danacht klickt man auf den Button _Erweitert_, klappt das Menü _SSL_ auf und
+gibt folgende Werte ein:
+
+- SSL MODE: _require_ auswählen
+- SSL CERTIFICATE FILENAME: im Verzeichnis `C:\Zimmermann\volumes\postgres\tls`
+  die Datei `certificate.crt` auswählen
+- SSL KEY FILENAME: im Verzeichnis `C:\Zimmermann\volumes\postgres\tls`
+  die Datei `key.pem` auswählen
+
+Jetzt den modalen Dialog schließen, d.h. rechts oben auf _X_ klicken, und danach
+den Button _Verbindung testen_ anklicken. Wenn dann im Button ein Haken erscheint,
+kann man den anderen Button _Save & Connect_ anklicken, um die Verbindung zu speichern.
+Im Untermenü _Databases_ von der Verbindung sieht man dann z.B. die Datenbank `buch`
+mit dem gleichnamigen Schema `buch` und die Datenbank `postgres`.
+Ebenso kann man man unter _Roles_ den DB-User `buch` und den Superuser `postgres`
+sehen sowie bei _Tablespaces_ den Default-Tablespace `pg_default` und den
+eigenen Tablespace.
 
 ## Optional: TLS für den PostgreSQL-Server mit OpenSSL überprüfen
 

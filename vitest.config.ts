@@ -19,8 +19,8 @@ import { defineConfig } from 'vite';
 // https://vitest.dev/config
 export default defineConfig({
     test: {
-        name: 'Beispiel',
-         // default ist ['**\/*.{test,spec}.?(c|m)[jt]s?(x)']
+        name: 'Integration',
+        // default ist ['**\/*.{test,spec}.?(c|m)[jt]s?(x)']
         include: ['test/integration/**/*.test.mts'],
         globals: true,
         environment: 'node',
@@ -39,4 +39,4 @@ export default defineConfig({
             // provider: 'istanbul',
         },
     },
-})
+});

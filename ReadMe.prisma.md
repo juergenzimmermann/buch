@@ -20,39 +20,151 @@
 [Juergen Zimmermann](mailto:Juergen.Zimmermann@h-ka.de)
 
 > Diese Datei ist in Markdown geschrieben und kann mit `<Strg><Shift>v` in
-> Visual Studio Code leicht gelesen werden.
->
-> Näheres zu Markdown gibt es z.B. bei [Markdown Guide](https://www.markdownguide.org/)
+> Visual Studio Code leicht gelesen werden. Näheres zu Markdown gibt es z.B. bei
+> [Markdown Guide](https://www.markdownguide.org/).
+> Die Anleitung ist für _Windows 11_; für _andere Betriebssysteme_ oder
+> _Windows-Emulationen_ sind Anpassungen notwendig.
 
-## Voraussetzungen
+## Inhalt
 
-### pnpm
+- [Installation und Voraussetzungen](#installation-und-voraussetzungen)
+  - [Basis-Software](#basis-software)
+  - [Umgebungsvariable](#umgebungsvariable)
+  - [Node und npm überprüfen](#node-und-npm-überprüfen)
+  - [pnpm aktivieren](#pnpm-aktivieren)
+  - [node_modules initialisieren](#node_modules-initialisieren)
+  - [Docker-Image für PostgreSQL](#docker-image-für-postgresql)
+  - [Datenbank mit PostgreSQL](#datenbank-mit-postgresql)
+- [Schema für ein neues Projekt](#schema-für-ein-neues-projekt)
+  - [Initiales Schema erstellen](#initiales-schema-erstellen)
+  - [Models aus einer bestehenden DB generieren](#models-aus-einer-bestehenden-db-generieren)
+  - [Schema anpassen](#schema-anpassen)
+- [Code-Generierung für den DB-Client](#code-generierung-für-den-db-client)
+- [Einfaches Beispiel in TypeScript](#einfaches-beispiel-in-typescript)
+- [Aufruf der Beispiele](#aufruf-der-beispiele)
+- [Prisma Studio](#prisma-studio)
 
-_pnpm_ ist gemäß Installationsanleitung installiert
+## Installation und Voraussetzungen
 
-### Datenbank mit PostgreSQL
+### Basis-Software
 
-DB mit _PostgreSQL_ ist gemäß `.extras\compose\postgres\ReadMe.md` aufgesetzt.
+Für _Windows_ gibt es in _ILIAS_ ZIP-Datei `Zimmermann.zip`. Bevor man diese
+ZIP-Datei unter `C:\Zimmermann` entpackt, sollten die Verzeichnisse
+`C:\Zimmermann\Git` und `C:\Zimmermann\node` gelöscht werden, falls sie noch vom
+letztem Semester vorhanden sind. Außerdem sollte _Docker Desktop_ installiert sein
+(https://docs.docker.com/desktop/release-notes) und kann bei Windows folgendermaßen
+überprüft werden:
 
-### node_modules
+```powershell
+    Get-Command docker
+    docker info
+```
 
-Jetzt werden Softwarepakete für _Prisma_ und für die spätere Entwicklung mit
-z.B. _Nest_ installiert.
+Für _Linux_ und _macOS_ muss folgende Software installiert sein (z.B. mit _apt_
+bei Linux oder _brew_ bei macOS):
+
+- Docker Desktop
+- Git
+- Node
+- Python (wird für node-gyp benötigt)
+- GraphViz (wird für PlantUML benötigt)
+
+### Umgebungsvariable
+
+Vorab werden die notwendigen Umgebungsvariable gesetzt, damit nicht bei jeder
+nachfolgenden Installation immer wieder einzelne Umgebungsvariable gesetzt werden
+müssen.
+
+`[Windows-Taste]` betätigen, dann als Suchstring `Systemumgebungsvariablen bearbeiten`
+eingeben und auswählen.
+
+Bei _Systemvariable_ (**nicht** bei _Benutzervariable_) folgende
+Umgebungsvariable mit den jeweiligen Werten eintragen. Die Werte für `PATH`
+_vor_ Pfaden mit _Leerzeichen_ eintragen.
+
+| Name der Umgebungsvariable | Wert der Umgebungsvariable                                                                                                      |
+| -------------------------- | ------------------------------------------------------------------------------------------------------------------------------- |
+| `GIT_HOME`                 | `C:\Zimmermann\git`                                                                                                             |
+| `PYTHON`                   | `C:\Zimmermann\Python\python.exe`                                                                                               |
+| `PATH`                     | `C:\Zimmermann\node`;`%GIT_HOME%\cmd`;`%GIT_HOME%\bin`;`C:\Zimmermann\Python`;`C:\Zimmermann\k6`; `C:\Zimmermann\Graphviz\bin`; |
+
+### Node und npm überprüfen
+
+Bei Windows in einer Powershell die nachfolgenden Kommandos eingeben:
+
+```powershell
+    Get-Command node
+    node --version
+    Get-Command npm
+    npm --version
+```
+
+Bei Linux und macOS in einer Shell die nachfolgenden Kommandos eingeben:
+
+```shell
+    which node
+    node --version
+    which npm
+    npm --version
+```
+
+### pnpm aktivieren
+
+Um `pnpm` (performant node package manager) zu konfigurieren, werden zunächst
+evtl. vorhandene Installationen von `pnpm` und `yarn` entfernt. `corepack` wird
+ab Node 25 nicht mehr in der Distribution für Node enthalten sein.
+
+```shell
+    npm r -g pnpm yarn
+    npm i -g corepack
+
+    corepack enable pnpm
+    corepack prepare pnpm@latest-10 --activate
+```
+
+### node_modules initialisieren
+
+Softwarepakete für _Prisma_ und für die spätere Entwicklung mit z.B. _Nest_
+werden folgendermaßen installiert.
 
 ```shell
     pnpm i
 ```
 
+### Docker-Image für PostgreSQL
+
+Das aktuelle Image für _PostgreSQL_ wird von _Docker Hub_ heruntergeladen:
+
+```shell
+    docker pull postgres:18.0-trixie
+```
+
+### Datenbank mit PostgreSQL
+
+Die DB mit _PostgreSQL_ wird gemäß `.extras\compose\postgres\ReadMe.md` aufgesetzt.
+
+Bei Linux und macOS sind in `.extras\compose\postgres\compose.yaml` Anpassungen
+für die Volumes notwendig. Für das Mounting sind folgende Verzeichnisse notwendig:
+
+- csv
+- data
+- run
+- sql
+- tablespace
+- tls
+
+Für csv, sql und tls gibt es in ILIAS die ZIP-Datei `postgres.linux-macos.zip.zip`.
+
 ---
 
-## Schema für ein neues Projekt
+## Schema für ein NEUES Projekt
 
 Für dieses Projektbeispiel **ÜBERSPRINGEN**, weil `prisma\schema.prisma` schon existiert.
-Weiter mit [Code-Generierung für den DB-Client](#code-generierung-für-den-db-client).
+Es geht weiter im Abschnitt [Code-Generierung für den DB-Client](#code-generierung-für-den-db-client).
 
 ### Initiales Schema erstellen
 
-Zunächst muss man ein neues (Prisma-)Schema erstellen, d.h. im Verzeichnis `prisma`
+Zunächst muss man ein neues Prisma-Schema erstellen, d.h. im Verzeichnis `prisma`
 wird die Datei `schema.prisma` angelegt:
 
 ```shell
@@ -61,7 +173,7 @@ wird die Datei `schema.prisma` angelegt:
 
 ### Models aus einer bestehenden DB generieren
 
-Als nächstes müssen (Prisma-) Models aus der bestehenden DB generiert werden,
+Als nächstes müssen Prisma-Models aus der bestehenden DB generiert werden,
 um später das OR-Mapping zu ermöglichen. Dazu muss der DB-Server mit einer
 existierenden DB gestartet sein:
 
@@ -134,7 +246,7 @@ als provider für den Generator verwendet wird.
 
 ## Code-Generierung für den DB-Client
 
-Das (Prisma-) Schema enthält nun die exakten Abbildungsvorschriften für das
+Das Prisma-Schema enthält nun die exakten Abbildungsvorschriften für das
 künftige OR-Mapping. Mit diesem Schema kann nun der Prisma-Client generiert
 werden, der später für das OR-Mapping in TypeScript verwendet wird:
 
@@ -169,9 +281,9 @@ try {
 Die beiden Beispiel-Dateien `src\beispiele.mts` und `src\beispiele-write.mts`
 können mit _Node_ folgendermaßen aufgerufen werden:
 
-```powershell
-    node --env-file=.env src\beispiele.mts
-    node --env-file=.env src\beispiele-write.mts
+```shell
+    node --env-file=.env src/beispiele.mts
+    node --env-file=.env src/beispiele-write.mts
 ```
 
 ## Prisma Studio

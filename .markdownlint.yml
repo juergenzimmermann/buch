@@ -16,8 +16,7 @@
 default: true
 
 # line-length
-MD013:
-  code_block_line_length: 150
+MD013: false
 
 # no-blanks-blockquote
 MD028: false
