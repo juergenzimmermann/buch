@@ -25,7 +25,6 @@
 - [Konfiguration für Tablespace und TLS](#konfiguration-für-tablespace-und-tls)
 - [Datenbank, Datenbank-User, Schema, Tabellen und Daten anlegen](#datenbank-datenbank-user-schema-tabellen-und-daten-anlegen)
 - [Optional: TLS für den PostgreSQL-Server mit OpenSSL überprüfen](#optional-tls-für-den-postgresql-server-mit-openssl-überprüfen)
-- [Optional: pgAdmin](#optional-pgadmin)
 
 ## Installation ohne TLS
 
@@ -200,27 +199,3 @@ Die Ausgabe vom Kommando `openssl` zeigt u.a. folgendes an:
 - L(ocation)
 - ST(ate)
 - C(ountry)
-
-## Optional: pgAdmin
-
-Zur Administration von _PostgreSQL_ kann als Alternative zur Erweiterung
-_PostgreSQL_ für VS Code auch _pgAdmin_ verwendet werden. pgAdmin ist durch
-Docker Compose (siehe `.extras\compose\pgadmin`) über ein virtuelles Netzwerk mit
-dem Docker-Container des DB-Servers verbunden. Deshalb muss beim Verbinden mit
-dem DB-Server der virtuelle Rechnername `postgres` statt `localhost` verwendet
-werden. pgAdmin kann man mit einem Webbrowser und der URL `http://localhost:8888`
-aufrufen. Die Emailadresse `pgadmin@acme.com` und das Passwort `p` sind beim
-Schlüssel `environment` in `.extras\compose\pgadmin\compose.yml` voreingestellt.
-
-Beim 1. Einloggen konfiguriert man einen Server-Eintrag mit z.B. dem Namen
-`localhost` und verwendet folgende Werte:
-
-- Host: `postgres` (virtueller Rechnername des DB-Servers im Docker-Netzwerk.
-  **BEACHTE**: `localhost` ist im virtuellen Netzwerk der Name des
-  pgadmin-Containers selbst !!!)
-- Port: `5432` (Defaultwert)
-- Username: `postgres` (Superuser beim DB-Server)
-- Password: `p`
-
-Es empfiehlt sich, das Passwort abzuspeichern, damit man es künftig nicht jedes
-Mal beim Einloggen eingeben muss.

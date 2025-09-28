@@ -288,8 +288,8 @@ können mit _Node_ folgendermaßen aufgerufen werden:
 
 ## Prisma Studio
 
-Statt eines DB-Browsers, wie z.B. _pgAdmin_ oder die Erweiterung _PostgreSQL_
-für VS Code, kann auch _Prisma Studio_ als DB-Werkzeug verwendet werden:
+Statt z.B. der Erweiterung _PostgreSQL_ für VS Code, kann auch _Prisma Studio_
+als DB-Werkzeug verwendet werden:
 
 ```shell
     pnpx prisma studio
