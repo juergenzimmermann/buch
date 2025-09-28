@@ -28,12 +28,12 @@ import {
 } from '../../generated/prisma/client.js';
 import { getLogger } from '../../logger/logger.js';
 import { MailService } from '../../mail/service.js';
+import { BuchService } from './buch-service.js';
 import {
     IsbnExistsException,
     VersionInvalidException,
     VersionOutdatedException,
 } from './exceptions.js';
-import { BuchService } from './buch-service.js';
 import { PrismaService } from './prisma-service.js';
 
 export type BuchCreate = Prisma.BuchCreateInput;
@@ -110,7 +110,7 @@ export class BuchWriteService {
         });
 
         this.#logger.debug('create: buchDb.id=%s', buchDb?.id ?? 'N/A');
-        return buchDb?.id!;
+        return buchDb?.id ?? NaN;
     }
 
     /**
@@ -168,8 +168,8 @@ export class BuchWriteService {
 
         this.#logger.debug(
             'addFile: id=%d, byteLength=%d, filename=%s, mimetype=%s',
-            buchFileCreated?.id ?? -1,
-            buchFileCreated?.data.byteLength ?? -1,
+            buchFileCreated?.id ?? NaN,
+            buchFileCreated?.data.byteLength ?? NaN,
             buchFileCreated?.filename ?? 'undefined',
             buchFileCreated?.mimetype ?? 'null',
         );
@@ -189,7 +189,7 @@ export class BuchWriteService {
     async update({ id, buch, version }: UpdateParams) {
         this.#logger.debug(
             'update: id=%d, buch=%o, version=%s',
-            id ?? -1,
+            id ?? NaN,
             buch,
             version,
         );
@@ -213,7 +213,7 @@ export class BuchWriteService {
             JSON.stringify(buchUpdated),
         );
 
-        return buchUpdated?.version ?? -1;
+        return buchUpdated?.version ?? NaN;
     }
 
     /**

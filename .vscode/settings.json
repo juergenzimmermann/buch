@@ -39,6 +39,5 @@
   "postman.telemetry.enabled": false,
   "postman.account.region": "EU",
   "asciidoc.antora.showEnableAntoraPrompt": false,
-  "typescript.experimental.useTsgo": true,
   "postman.settings.dotenv-detection-notification-visibility": false
 }
