@@ -21,7 +21,7 @@ import {
     KeycloakConnectModule,
     RoleGuard,
 } from 'nest-keycloak-connect';
-import { KeycloakService } from './service.js';
+import { KeycloakService } from './keycloak-service.js';
 import { TokenController } from './token-controller.js';
 import { TokenResolver } from './token-resolver.js';
 

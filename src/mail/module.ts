@@ -14,7 +14,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 import { Module } from '@nestjs/common';
-import { MailService } from './service.js';
+import { MailService } from './mail-service.js';
 
 /**
  * Das Modul besteht aus Services für Mail.

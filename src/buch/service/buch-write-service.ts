@@ -27,7 +27,7 @@ import {
     PrismaClient,
 } from '../../generated/prisma/client.js';
 import { getLogger } from '../../logger/logger.js';
-import { MailService } from '../../mail/service.js';
+import { MailService } from '../../mail/mail-service.js';
 import { BuchService } from './buch-service.js';
 import {
     IsbnExistsException,

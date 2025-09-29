@@ -19,7 +19,7 @@ import { Public } from 'nest-keycloak-connect';
 import { BadUserInputError } from '../../buch/resolver/errors.js';
 import { getLogger } from '../../logger/logger.js';
 import { ResponseTimeInterceptor } from '../../logger/response-time.js';
-import { KeycloakService } from './service.js';
+import { KeycloakService } from './keycloak-service.js';
 
 // @nestjs/graphql fasst die Input-Daten zu einem Typ zusammen
 /** Typdefinition für Token-Daten bei GraphQL */

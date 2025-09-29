@@ -23,9 +23,9 @@ import { PrismaService } from '../../src/buch/service/prisma-service.js';
 import { WhereBuilder } from '../../src/buch/service/where-builder.js';
 import { Prisma, PrismaClient } from '../../src/generated/prisma/client.js';
 import { Buchart } from '../../src/generated/prisma/enums.js';
-import { MailService } from '../../src/mail/service.js';
+import { MailService } from '../../src/mail/mail-service.js';
 
-describe('BuchWriteService.create', () => {
+describe('BuchWriteService create', () => {
     let service: BuchWriteService;
     let prismaServiceMock: PrismaService;
     let readService: BuchService;
@@ -60,6 +60,7 @@ describe('BuchWriteService.create', () => {
 
         readService = new BuchService(prismaServiceMock, whereBuilder);
 
+        // TODO Mocking der Funktion sendMail()
         mailService = new MailService();
 
         service = new BuchWriteService(
