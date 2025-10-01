@@ -28,6 +28,7 @@
 ## Inhalt
 
 - [Installation und Voraussetzungen](#installation-und-voraussetzungen)
+  - [Powershell bei Windows](#powershell-bei-windows)
   - [Basis-Software](#basis-software)
   - [Umgebungsvariable](#umgebungsvariable)
   - [Node und npm überprüfen](#node-und-npm-überprüfen)
@@ -45,6 +46,26 @@
 - [Prisma Studio](#prisma-studio)
 
 ## Installation und Voraussetzungen
+
+### Powershell bei Windows
+
+Überprüfung, ob sich Powershell-Skripte starten lassen:
+
+```powershell
+    Get-ExecutionPolicy -list
+```
+
+`CurrentUser` muss _zumindest_ das Recht `RemoteSigned` haben. Ggf. muss dieses
+Ausführungsrecht gesetzt werden:
+
+```powershell
+    Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
+```
+
+Ggf. genügt `RemoteSigned` nicht und man muss `Bypass` verwenden, sodass
+keine Ausführung blockiert wird und dabei keine Warnings ausgegeben werden.
+Das hängt von der eigenen Windows-Installation ab. Details siehe
+https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.security/set-executionpolicy?view=powershell-7.2
 
 ### Basis-Software
 
@@ -294,3 +315,20 @@ als DB-Werkzeug verwendet werden:
 ```shell
     pnpx prisma studio
 ```
+
+## Ausblick für Nest
+
+Nachdem das Prisma-Schema in der Datei `prisma/schema.prisma` erstellt wurde,
+sind für das _Nest_-basierte Projekt folgende Anpassungen notwendig:
+
+- In `tsconfig.json` die Option `allowImportingTsExtensions` auskommentieren,
+  weil beim direkten Arbeiten mit _Node_ das Feature _Type Stripping_ genutzt
+  wurde, d.h. Node wurde aufgerufen und die Typen von _TypeScript_ wurden
+  zur Laufzeit einfach weggelassen. _Nest_ verwendet dagegen _übersetzten_
+  Code, d.h. _JavaScript_.
+- Der Prisma-Client muss deshalb auch neu generiert werden, d.h.
+  - das Verzeichnis `src\generated` wird gelöscht und
+  - `pnpx prisma generate` wird in der PowerShell aufgerufen.
+- Die bisherigen Beispieldateien `beispiele.mts` und `beispiele-write.mts`
+  für den "alten" Prisma-Client können deshalb nicht mehr funktionieren, weshalb
+  man sie am einfachsten aus dem Projekt löscht.

@@ -86,7 +86,7 @@ sind für das _Nest_-basierte Projekt folgende Anpassungen notwendig:
 - Der Prisma-Client muss deshalb auch neu generiert werden, d.h.
   - das Verzeichnis `src\generated` wird gelöscht und
   - `pnpx prisma generate` wird in der PowerShell aufgerufen.
-- Die bisherigen Beispieldateien `beispiele.ts` und `beispiele-write.ts`
+- Die bisherigen Beispieldateien `beispiele.mts` und `beispiele-write.mts`
   für den "alten" Prisma-Client können deshalb nicht mehr funktionieren, weshalb
   man sie am einfachsten aus dem Projekt löscht.
 
