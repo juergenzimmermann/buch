@@ -21,7 +21,10 @@
     "outDir": "./dist",
     "declaration": true,
     "removeComments": true,
+    // !!!Kommentar fuer Nest entfernen
     "emitDecoratorMetadata": true,
+    // !!!auskommentieren fuer Nest
+    //"noEmit": true,
     "experimentalDecorators": true,
     "allowSyntheticDefaultImports": true,
     "sourceMap": true,
@@ -44,7 +47,7 @@
     "preserveWatchOutput": true,
     // "strict": true, // strictest: alle "strict"-Optionen aktivieren
 
-    // auskommentieren fuer Nest
+    // !!!auskommentieren fuer Nest
     //"allowImportingTsExtensions": true,
     "erasableSyntaxOnly": true // NICHT: enum, parameter properties in constructor(), namespace, import aliases
 

@@ -78,11 +78,13 @@
 Nachdem das Prisma-Schema in der Datei `prisma/schema.prisma` erstellt wurde,
 sind für das _Nest_-basierte Projekt folgende Anpassungen notwendig:
 
-- In `tsconfig.json` die Option `allowImportingTsExtensions` auskommentieren,
-  weil beim direkten Arbeiten mit _Node_ das Feature _Type Stripping_ genutzt
-  wurde, d.h. Node wurde aufgerufen und die Typen von _TypeScript_ wurden
-  zur Laufzeit einfach weggelassen. _Nest_ verwendet dagegen _übersetzten_
-  Code, d.h. _JavaScript_.
+- In `tsconfig.json`, weil beim direkten Arbeiten mit _Node_ das Feature _Type
+  Stripping_ genutzt wurde, d.h. Node wurde aufgerufen und die Typen von
+  _TypeScript_ wurden zur Laufzeit einfach weggelassen. _Nest_ verwendet dagegen
+  _übersetzten_ Code, d.h. _JavaScript_.
+  - bei der Option `emitDecoratorMetadata` den Kommentar entfernen
+  - die Option `noEmit` auskommentieren
+  - die Option `allowImportingTsExtensions` auskommentieren
 - Der Prisma-Client muss deshalb auch neu generiert werden, d.h.
   - das Verzeichnis `src\generated` wird gelöscht und
   - `pnpx prisma generate` wird in der PowerShell aufgerufen.
