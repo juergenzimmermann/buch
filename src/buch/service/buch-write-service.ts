@@ -225,11 +225,20 @@ export class BuchWriteService {
     async delete(id: number) {
         this.#logger.debug('delete: id=%d', id);
 
+        const buch = await this.#prisma.buch.findUnique({
+            where: { id },
+        });
+        if (buch === null) {
+            this.#logger.debug('delete: not found');
+            return false;
+        }
+
         await this.#prisma.$transaction(async (tx) => {
             await tx.buch.delete({ where: { id } });
         });
 
         this.#logger.debug('delete');
+        return true;
     }
 
     async #validateCreate({

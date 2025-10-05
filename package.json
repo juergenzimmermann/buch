@@ -58,6 +58,7 @@
   },
   "dependencies": {
     "@apollo/server": "5.0.0",
+    "@as-integrations/express5": "1.1.2",
     "@js-temporal/polyfill": "0.5.1",
     "@nestjs/apollo": "13.2.1",
     "@nestjs/axios": "4.0.1",
