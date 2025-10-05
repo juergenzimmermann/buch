@@ -164,8 +164,8 @@ Das aktuelle Image für _PostgreSQL_ wird von _Docker Hub_ heruntergeladen:
 
 Die DB mit _PostgreSQL_ wird gemäß `.extras\compose\postgres\ReadMe.md` aufgesetzt.
 
-Bei Linux und macOS sind in `.extras\compose\postgres\compose.yaml` Anpassungen
-für die Volumes notwendig. Für das Mounting sind folgende Verzeichnisse notwendig:
+Bei macOS und Linux sind in `.extras\compose\postgres\compose.yaml` Anpassungen
+für die Volumes notwendig, um für das Mounting folgende Verzeichnisse zu haben:
 
 - csv
 - data
@@ -174,7 +174,9 @@ für die Volumes notwendig. Für das Mounting sind folgende Verzeichnisse notwen
 - tablespace
 - tls
 
-Für csv, sql und tls gibt es in ILIAS die ZIP-Datei `postgres.linux-macos.zip.zip`.
+Für csv, sql und tls gibt es in ILIAS die ZIP-Datei `postgres.macos-linux.zip.zip`.
+Die anderen Verzeichnisse (data, run und tablespace) müssen lediglich als zunächst
+leere Verzeichnisse existieren.
 
 ---
 
