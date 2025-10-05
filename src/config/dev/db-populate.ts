@@ -21,13 +21,13 @@
 /* eslint-disable @stylistic/quotes */
 
 import { Injectable, type OnApplicationBootstrap } from '@nestjs/common';
-import process from 'node:process';
 import { PrismaPg } from '@prisma/adapter-pg';
-import { PrismaClient } from '../../generated/prisma/client.js';
 import { readFile } from 'node:fs/promises';
 import path from 'node:path';
-import { dbPopulate, dbDir } from '../db.js';
+import process from 'node:process';
+import { PrismaClient } from '../../generated/prisma/client.js';
 import { getLogger } from '../../logger/logger.js';
+import { dbDir, dbPopulate } from '../db.js';
 
 /**
  * Die Test-DB wird im Development-Modus neu geladen, nachdem die Module
@@ -104,18 +104,6 @@ export class DbPopulateService implements OnApplicationBootstrap {
             await tx.$executeRawUnsafe(copyStatements);
         });
         await this.#prismaAdmin.$disconnect();
-
-        // const copyStmt = `COPY ${this.#schema}.%TABELLE% FROM '/csv/%TABELLE%.csv' (FORMAT csv, DELIMITER ';', HEADER true);`;
-        // await this.#prismaAdmin.$connect();
-        // await this.#prismaAdmin.$transaction(async (tx) => {
-        //     for (const tabelle of this.#tabellen) {
-        //         const stmt = copyStmt.replace(/%TABELLE%/gu, tabelle);
-        //         this.#logger.debug('%s', stmt);
-        //         // eslint-disable-next-line unicorn/prefer-string-replace-all
-        //         await tx.$executeRawUnsafe(stmt);
-        //     }
-        // });
-        // await this.#prismaAdmin.$disconnect();
     }
 }
 /* eslint-enable @stylistic/quotes */

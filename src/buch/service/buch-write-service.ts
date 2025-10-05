@@ -110,7 +110,7 @@ export class BuchWriteService {
         });
 
         this.#logger.debug('create: buchDb.id=%s', buchDb?.id ?? 'N/A');
-        return buchDb?.id ?? NaN;
+        return buchDb?.id ?? Number.NaN;
     }
 
     /**
@@ -168,8 +168,8 @@ export class BuchWriteService {
 
         this.#logger.debug(
             'addFile: id=%d, byteLength=%d, filename=%s, mimetype=%s',
-            buchFileCreated?.id ?? NaN,
-            buchFileCreated?.data.byteLength ?? NaN,
+            buchFileCreated?.id ?? Number.NaN,
+            buchFileCreated?.data.byteLength ?? Number.NaN,
             buchFileCreated?.filename ?? 'undefined',
             buchFileCreated?.mimetype ?? 'null',
         );
@@ -189,7 +189,7 @@ export class BuchWriteService {
     async update({ id, buch, version }: UpdateParams) {
         this.#logger.debug(
             'update: id=%d, buch=%o, version=%s',
-            id ?? NaN,
+            id ?? Number.NaN,
             buch,
             version,
         );
@@ -213,7 +213,7 @@ export class BuchWriteService {
             JSON.stringify(buchUpdated),
         );
 
-        return buchUpdated?.version ?? NaN;
+        return buchUpdated?.version ?? Number.NaN;
     }
 
     /**

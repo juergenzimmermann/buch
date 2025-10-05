@@ -25,9 +25,9 @@ import {
     type BuchMitTitelUndAbbildungen,
 } from '../service/buch-service.js';
 import { createPageable } from '../service/pageable.js';
-import { HttpExceptionFilter } from './http-exception-filter.js';
 import { Slice } from '../service/slice.js';
 import { Suchparameter } from '../service/suchparameter.js';
+import { HttpExceptionFilter } from './http-exception-filter.js';
 
 export type IdInput = {
     readonly id: string;
@@ -61,13 +61,7 @@ export class BuchQueryResolver {
         const buch: Readonly<BuchMitTitelUndAbbildungen> =
             await this.#service.findById({ id: Number(id) });
 
-        if (this.#logger.isLevelEnabled('debug')) {
-            this.#logger.debug(
-                'findById: buch=%s, titel=%s',
-                buch.toString(),
-                JSON.stringify(buch.titel),
-            );
-        }
+        this.#logger.debug('findById: buch=%o', buch);
         return buch;
     }
 
@@ -88,20 +82,18 @@ export class BuchQueryResolver {
             }
         }
         const buecherSlice: Readonly<Slice<Readonly<BuchMitTitel>>> =
-            await this.#service.find(suchparameter as any, pageable);
+            await this.#service.find(suchparameter as any, pageable); // NOSONAR
         this.#logger.debug('find: buecherSlice=%o', buecherSlice);
         return buecherSlice.content;
     }
 
     @ResolveField('rabatt')
     rabatt(@Parent() buch: BuchMitTitel, short: boolean | undefined) {
-        if (this.#logger.isLevelEnabled('debug')) {
-            this.#logger.debug(
-                'rabatt: buch=%s, short=%s',
-                buch.toString(),
-                short?.toString() ?? 'undefined',
-            );
-        }
+        this.#logger.debug(
+            'rabatt: buch=%o, short=%s',
+            buch,
+            short?.toString() ?? 'undefined',
+        );
         // "Nullish Coalescing" ab ES2020
         const rabatt = buch.rabatt ?? BigNumber(0);
         const shortStr = short === undefined || short ? '%' : 'Prozent';

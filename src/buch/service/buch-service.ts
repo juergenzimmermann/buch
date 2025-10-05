@@ -19,13 +19,13 @@
  */
 
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { getLogger } from '../../logger/logger.js';
 import {
     BuchFile,
     Prisma,
     PrismaClient,
 } from '../../generated/prisma/client.js';
 import { type BuchInclude } from '../../generated/prisma/models/Buch.js';
+import { getLogger } from '../../logger/logger.js';
 import { type Pageable } from './pageable.js';
 import { PrismaService } from './prisma-service.js';
 import { type Slice } from './slice.js';
@@ -113,9 +113,8 @@ export class BuchService {
             this.#logger.debug('Es gibt kein Buch mit der ID %d', id);
             throw new NotFoundException(`Es gibt kein Buch mit der ID ${id}.`);
         }
-        if (buch.schlagwoerter === null) {
-            buch.schlagwoerter = [];
-        }
+        // nullish coalescing operator
+        buch.schlagwoerter ??= [];
 
         this.#logger.debug('findById: buch=%o', buch);
         return buch;
@@ -236,9 +235,7 @@ export class BuchService {
         totalElements: number,
     ): Readonly<Slice<BuchMitTitel>> {
         buecher.forEach((buch) => {
-            if (buch.schlagwoerter === null) {
-                buch.schlagwoerter = [];
-            }
+            buch.schlagwoerter ??= [];
         });
         const buchSlice: Slice<BuchMitTitel> = {
             content: buecher,

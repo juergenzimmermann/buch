@@ -19,8 +19,8 @@
  */
 
 import { Injectable } from '@nestjs/common';
+import { Buchart, Prisma } from '../../generated/prisma/client.js';
 import { type BuchWhereInput } from '../../generated/prisma/models/Buch.js';
-import { Prisma, Buchart } from '../../generated/prisma/client.js';
 import { getLogger } from '../../logger/logger.js';
 import { type Suchparameter } from './suchparameter.js';
 
@@ -86,18 +86,20 @@ export class WhereBuilder {
                 case 'isbn':
                     where.isbn = { equals: value as string };
                     break;
-                case 'rating':
-                    const ratingNumber = parseInt(value as string);
-                    if (!isNaN(ratingNumber)) {
+                case 'rating': {
+                    const ratingNumber = Number.parseInt(value as string);
+                    if (!Number.isNaN(ratingNumber)) {
                         where.rating = { gte: ratingNumber };
                     }
                     break;
-                case 'preis':
-                    const preisNumber = parseInt(value as string);
-                    if (!isNaN(preisNumber)) {
+                }
+                case 'preis': {
+                    const preisNumber = Number.parseInt(value as string);
+                    if (!Number.isNaN(preisNumber)) {
                         where.preis = { lte: preisNumber };
                     }
                     break;
+                }
                 case 'art':
                     // enum
                     where.art = { equals: value as Buchart };

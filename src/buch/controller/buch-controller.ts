@@ -46,17 +46,17 @@ import {
 import { type Request, type Response } from 'express';
 import { Public } from 'nest-keycloak-connect';
 import { paths } from '../../config/paths.js';
+import { Buchart } from '../../generated/prisma/enums.js';
 import { getLogger } from '../../logger/logger.js';
 import { ResponseTimeInterceptor } from '../../logger/response-time.js';
 import {
     type BuchMitTitel,
-    BuchService,
     BuchMitTitelUndAbbildungen,
+    BuchService,
 } from '../service/buch-service.js';
 import { createPageable } from '../service/pageable.js';
 import { type Suchparameter } from '../service/suchparameter.js';
 import { createPage, Page } from './page.js';
-import { Buchart } from '../../generated/prisma/enums.js';
 
 /**
  * Klasse für `BuchGetController`, um Queries in _OpenAPI_ bzw. Swagger zu
@@ -197,13 +197,7 @@ export class BuchController {
         }
 
         const buch = await this.#service.findById({ id });
-        if (this.#logger.isLevelEnabled('debug')) {
-            this.#logger.debug('getById(): buch=%s', buch.toString());
-            this.#logger.debug(
-                'getById(): titel=%s',
-                JSON.stringify(buch.titel),
-            );
-        }
+        this.#logger.debug('getById(): buch=%o', buch);
 
         // ETags
         const versionDb = buch.version;
@@ -275,7 +269,7 @@ export class BuchController {
         this.#logger.debug('get: query=%o', query);
 
         const pageable = createPageable({ number: page, size });
-        const buecherSlice = await this.#service.find(query, pageable);
+        const buecherSlice = await this.#service.find(query, pageable); // NOSONAR
         const buchPage = createPage(buecherSlice, pageable);
         this.#logger.debug('get: buchPage=%o', buchPage);
 
