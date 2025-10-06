@@ -21,10 +21,19 @@
 
 ## Inhalt
 
+- [Docker Container vs. Installation auf dem Host-Rechner](#docker-container-vs-installation-auf-dem-host-rechner)
 - [Installation ohne TLS](#installation-ohne-tls)
 - [Konfiguration für Tablespace und TLS](#konfiguration-für-tablespace-und-tls)
 - [Datenbank, Datenbank-User, Schema, Tabellen und Daten anlegen](#datenbank-datenbank-user-schema-tabellen-und-daten-anlegen)
 - [Optional: TLS für den PostgreSQL-Server mit OpenSSL überprüfen](#optional-tls-für-den-postgresql-server-mit-openssl-überprüfen)
+
+## Docker Container vs. Installation auf dem Host-Rechner
+
+Wenn _PostgreSQL_ bereits auf dem Host-Rechner installiert ist, dann läuft auch
+ein Datenbank-Server i.a. auf dem Default-Port `5432`. In diesem Fall kann man
+diesen - vermutlich ohne TLS - weiter benutzen oder aber man beendet den
+ensprechenden Hintergrund-Prozess bzw. Dienst oder man deinstalliert
+PostgreSQL komplett.
 
 ## Installation ohne TLS
 
