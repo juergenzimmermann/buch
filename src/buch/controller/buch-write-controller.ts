@@ -73,7 +73,6 @@ const MIME_TYPES = new Set([
     'image/png',
     'image/jpeg',
     'video/mp4',
-    'video/mpeg',
     'video/webm',
     'video/quicktime',
 ]);
