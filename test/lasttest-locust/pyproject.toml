@@ -27,7 +27,7 @@ name = "lasttest"
 version = "2025.10.1"
 description = "Lasttest für buch"
 readme = "README.md"
-requires-python = ">=3.13"
+requires-python = ">=3.14"
 license = "GPLv3"
 license-files = ["LICENSE"]
 keywords = ["Lasttest", "Python"]
@@ -46,7 +46,7 @@ classifiers = [
   "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
   "Operating System :: OS Independent",
   "Programming Language :: Python",
-  "Programming Language :: Python :: 3.13",
+  "Programming Language :: Python :: 3.14",
   "Topic :: Software Development :: Testing",
   "Topic :: Software Development :: Testing :: Traffic Generation",
 ]
@@ -62,10 +62,10 @@ changelog = "https://github.com/juergenzimmermann/locust/blob/master/CHANGELOG.m
 # https://docs.astral.sh/uv/concepts/projects/dependencies/#dependency-groups
 [dependency-groups]
 # https://docs.astral.sh/uv/concepts/projects/dependencies/#development-dependencies
-dev = ["locust>=2.41.1"]
+dev = ["locust>=2.41.5"]
 lint = [
   # https://docs.astral.sh/ruff
-  "ruff>=0.13.2",
+  "ruff>=0.14.0",
   # https://github.com/astral-sh/ty
   "ty>=0.0.1a19",
 ]

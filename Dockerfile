@@ -57,7 +57,7 @@ npm i -g corepack
 corepack enable pnpm
 corepack prepare pnpm@latest-10 --activate
 
-# Debian Trixie bietet nur Packages fuer Python 3.11; Ubuntu Jammy LTS nur fuer Python 3.10
+# Debian Trixie bietet nur Packages fuer Python 3.13
 # https://packages.debian.org/trixie/python3.13-minimal
 # https://packages.debian.org/trixie/python3.13-dev
 # https://packages.debian.org/trixie/build-essential

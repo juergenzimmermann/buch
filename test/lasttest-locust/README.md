@@ -27,7 +27,7 @@ Inhalt
 
 ## Voraussetzungen
 
-- Python 3.13
+- Python 3.14
 - uv als Package Manager
 
 ## Aufruf
@@ -51,7 +51,7 @@ Danach startet man den Lasttest mit _Locust_:
     cd .extras\lasttest-locust
     uv run locust -f locustfile.py
     http://localhost:8089
-        Number of users: 100
+        Number of users: 50
         Ramp Up (users started/second): 5
         Host: https://localhost:3000
 ```
@@ -64,13 +64,5 @@ Unter Verwendung von _uv_ mit _tools_:
     cd .extras\lasttest-locust
     uvx ruff check locustfile.py
     uvx ruff format locustfile.py
-    uvx ty check src tests
-```
-
-Oder _pyright_ mit _venv_:
-
-```powershell
-    cd .extras\lasttest-locust
-    .\.venv\Scripts\Activate.ps1
-    pyright locustfile.py
+    uvx ty check locustfile.py
 ```
