@@ -25,7 +25,7 @@
 
 # https://manpages.debian.org/bullseye/apt/apt-get.8.en.html
 
-ARG JENKINS_VERSION=2.530-jdk21
+ARG JENKINS_VERSION=2.531-jdk21
 
 FROM jenkins/jenkins:${JENKINS_VERSION}
 
@@ -39,22 +39,22 @@ apt-get upgrade --yes
 
 # LSB = Linux Standard Base
 # lsb-release: benutzte Linux-Distribution identifizieren und Einhaltung der Linux Standard Base zu pruefen
-# https://packages.debian.org/bookworm/lsb-release
-apt-get install --no-install-recommends --yes --show-progress lsb-release=12.0-1
+# https://packages.debian.org/trixie/lsb-release
+apt-get install --no-install-recommends --yes --show-progress lsb-release=12.1-1
 
 # https://packages.debian.org/stable/python/python3
-# https://packages.debian.org/bookworm/python3
-# https://packages.debian.org/bookworm/python3-minimal
+# https://packages.debian.org/trixie/python3
+# https://packages.debian.org/trixie/python3-minimal
 # https://packages.debian.org/trixie/python3.12
 # https://computingforgeeks.com/how-to-install-python-on-debian-linux
 # https://cloudcone.com/docs/article/how-to-install-python-3-10-on-debian-11
 # https://linuxhint.com/install-python-debian-10
 # https://computingforgeeks.com/how-to-install-python-on-debian-linux
-# apt show python3.11-minimal
+# apt show python3.13-minimal
 # apt list
-apt-get install --no-install-recommends --yes --show-progress gcc=4:12.2.0-3 g++=4:12.2.0-3 make=4.3-4.1 python3.11-minimal=3.11.2-6+deb12u6
-ln -s /usr/bin/python3.11 /usr/bin/python
-ln -s /usr/bin/python3.11 /usr/bin/python3
+apt-get install --no-install-recommends --yes --show-progress gcc=4:14.2.0-1 g++=4:14.2.0-1 make=4.4.1-2 python3.13-minimal=3.13.5-2
+ln -s /usr/bin/python3.13 /usr/bin/python
+ln -s /usr/bin/python3.13 /usr/bin/python3
 
 # https://unix.stackexchange.com/questions/217369/clear-apt-get-list
 apt-get autoremove --yes
