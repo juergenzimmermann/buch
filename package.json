@@ -160,15 +160,15 @@
     "vitest": "3.2.4",
     "weak-napi": "2.0.2"
   },
-  "packageManager": "pnpm@10.18.1",
+  "packageManager": "pnpm@10.18.2",
   "engines": {
-    "node": ">=24.9.0",
-    "pnpm": ">=10.18.1"
+    "node": ">=24.10.0",
+    "pnpm": ">=10.18.2"
   },
   "devEngines": {
     "runtime": {
       "name": "node",
-      "version": "25.0.0-rc.0",
+      "version": "25.0.0-rc.1",
       "onFail": "download"
     }
   }
