@@ -12,8 +12,18 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
+
+# https://pnpm.io/settings
+
+# https://pnpm.io/settings#saveprefix
+savePrefix: ""
+
+# https://pnpm.io/cli/add#--save-exact--e
 saveExact: true
 
 # https://pnpm.io/settings#minimumreleaseage
 # 1 Tag = 24 * 60 Minuten
 minimumReleaseAge: 1440
+
+# https://pnpm.io/settings#packagemanagerstrictversion
+packageManagerStrictVersion: true
