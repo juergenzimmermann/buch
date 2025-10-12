@@ -23,6 +23,7 @@
 
 import asciidoctor from '@asciidoctor/core';
 // https://github.com/eshepelyuk/asciidoctor-plantuml.js ist deprecated
+// @ts-expect-error keine .d.ts-Datei
 import kroki from 'asciidoctor-kroki';
 import { join } from 'node:path';
 import url from 'node:url';

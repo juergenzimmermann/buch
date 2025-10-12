@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-import { cpSync, existsSync, mkdirSync } from 'node:fs';
+import { cp, mkdir, stat } from 'node:fs/promises';
 import { join } from 'node:path';
 
 // BEACHTE: "assets" innerhalb von nest-cli.json werden bei "--watch" NICHT beruecksichtigt
@@ -22,12 +22,14 @@ import { join } from 'node:path';
 
 const src = 'src';
 const dist = 'dist';
-if (!existsSync(dist)) {
-    mkdirSync(dist);
+try {
+    await stat(dist);
+} catch {
+    await mkdir(dist);
 }
 
 // DB-Skripte, PEM-Dateien fuer TLS und GraphQL-Schema kopieren
 const resourcesSrc = join(src, 'config', 'resources');
 const resourcesDist = join(dist, src, 'config', 'resources');
-mkdirSync(resourcesDist, { recursive: true });
-cpSync(resourcesSrc, resourcesDist, { recursive: true });
+await mkdir(resourcesDist, { recursive: true });
+await cp(resourcesSrc, resourcesDist, { recursive: true });
