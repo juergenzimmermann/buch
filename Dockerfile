@@ -78,6 +78,7 @@ RUN --mount=type=bind,source=package.json,target=package.json \
   --mount=type=bind,source=tsconfig.json,target=tsconfig.json \
   --mount=type=bind,source=tsconfig.build.json,target=tsconfig.build.json \
   --mount=type=bind,source=src,target=src \
+  --mount=type=bind,source=scripts/clean.mts,target=scripts/clean.mts \
   --mount=type=cache,target=/root/.pnpm <<EOF
 set -eux
 

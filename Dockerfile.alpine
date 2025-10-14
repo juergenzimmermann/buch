@@ -67,7 +67,7 @@ corepack prepare pnpm@latest-10 --activate
 # https://pkgs.alpinelinux.org/package/v3.22/main/x86_64/g++
 # https://pkgs.alpinelinux.org/package/v3.22/main/x86_64/build-base
 # apk info python3
-apk add --update --no-cache python3=3.12.11-r0 py3-pip=25.1.1-r0 make=4.4.1-r3 gcc=14.2.0-r6 g++=14.2.0-r6 build-base=0.5-r3
+apk add --update --no-cache python3=3.12.12-r0 py3-pip=25.1.1-r0 make=4.4.1-r3 gcc=14.2.0-r6 g++=14.2.0-r6 build-base=0.5-r3
 ln -sf python3 /usr/bin/python
 
 EOF
@@ -83,6 +83,7 @@ RUN --mount=type=bind,source=package.json,target=package.json \
   --mount=type=bind,source=tsconfig.json,target=tsconfig.json \
   --mount=type=bind,source=tsconfig.build.json,target=tsconfig.build.json \
   --mount=type=bind,source=src,target=src \
+  --mount=type=bind,source=scripts/clean.mts,target=scripts/clean.mts \
   --mount=type=cache,target=/root/.pnpm <<EOF
 set -eux
 
@@ -108,7 +109,7 @@ npm i -g corepack
 corepack enable pnpm
 corepack prepare pnpm@latest-10 --activate
 
-apk add --update --no-cache python3=3.12.11-r0 py3-pip=25.1.1-r0 make=4.4.1-r3 gcc=14.2.0-r6 g++=14.2.0-r6 build-base=0.5-r3
+apk add --update --no-cache python3=3.12.12-r0 py3-pip=25.1.1-r0 make=4.4.1-r3 gcc=14.2.0-r6 g++=14.2.0-r6 build-base=0.5-r3
 ln -sf python3 /usr/bin/python
 EOF
 
