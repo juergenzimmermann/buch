@@ -274,8 +274,8 @@ importers:
         specifier: 8.0.0
         version: 8.0.0(typescript@5.9.3)
       node:
-        specifier: runtime:25.0.0-rc.1
-        version: runtime:25.0.0-rc.1
+        specifier: runtime:25.0.0-rc.2
+        version: runtime:25.0.0-rc.2
       node-gyp:
         specifier: 11.4.2
         version: 11.4.2
@@ -4654,85 +4654,95 @@ packages:
     resolution: {integrity: sha512-3VW/8JpPqPvnJvseXowjZcirPisssnBuDikk6JIZ8jQzF7KJQX52iPFX4RYYxLycYH7IbMRSPUOga/esVjy5Yg==}
     engines: {node: '>=18'}
 
-  node@runtime:25.0.0-rc.1:
+  node@runtime:25.0.0-rc.2:
     resolution:
       type: variations
       variants:
         - resolution:
             archive: tarball
             bin: bin/node
-            integrity: sha256-1w44fH/ao0pFB1ueBy/qLxH272RhCZNfnTdoQmLL+RI=
+            integrity: sha256-jn3+BhWf6jookb4+3InGtY/7LC4Jvad5sH+SzYBfrcw=
             type: binary
-            url: https://nodejs.org/download/rc/v25.0.0-rc.1/node-v25.0.0-rc.1-aix-ppc64.tar.gz
+            url: https://nodejs.org/download/rc/v25.0.0-rc.2/node-v25.0.0-rc.2-aix-ppc64.tar.gz
           targets:
             - cpu: ppc64
               os: aix
         - resolution:
             archive: tarball
             bin: bin/node
-            integrity: sha256-KyY1U1HxxUboNKiYMyZkC6I5Lkp5oRVpiop9Qx+3aVA=
+            integrity: sha256-iXcXia3bJDjhmFYHwoy8p6sgfPzDlRgJ4qMCUb9iuIk=
             type: binary
-            url: https://nodejs.org/download/rc/v25.0.0-rc.1/node-v25.0.0-rc.1-darwin-arm64.tar.gz
+            url: https://nodejs.org/download/rc/v25.0.0-rc.2/node-v25.0.0-rc.2-darwin-arm64.tar.gz
           targets:
             - cpu: arm64
               os: darwin
         - resolution:
             archive: tarball
             bin: bin/node
-            integrity: sha256-56vTAryMnakd79b0SAO/d6NNk8tUC91732ZnuSBZEQU=
+            integrity: sha256-daLxL3HQh9yT6XFxfhGkl1vASPA3K2Q4m1hn5xY1WXE=
             type: binary
-            url: https://nodejs.org/download/rc/v25.0.0-rc.1/node-v25.0.0-rc.1-darwin-x64.tar.gz
+            url: https://nodejs.org/download/rc/v25.0.0-rc.2/node-v25.0.0-rc.2-darwin-x64.tar.gz
           targets:
             - cpu: x64
               os: darwin
         - resolution:
             archive: tarball
             bin: bin/node
-            integrity: sha256-zDi9t4EiZNVI2oKFYjexgksN31uMUpex/HqCIqDmAyw=
+            integrity: sha256-9Sqhh2GU/+jD7ZFLaxOaoMgtzsRmPgOXjbOU2AAcnIc=
             type: binary
-            url: https://nodejs.org/download/rc/v25.0.0-rc.1/node-v25.0.0-rc.1-linux-ppc64le.tar.gz
+            url: https://nodejs.org/download/rc/v25.0.0-rc.2/node-v25.0.0-rc.2-linux-arm64.tar.gz
+          targets:
+            - cpu: arm64
+              os: linux
+        - resolution:
+            archive: tarball
+            bin: bin/node
+            integrity: sha256-2cyzZD/ZKcXFs35okEIcYKRL1Lak7Qk5w1tlwy/L3rQ=
+            type: binary
+            url: https://nodejs.org/download/rc/v25.0.0-rc.2/node-v25.0.0-rc.2-linux-ppc64le.tar.gz
           targets:
             - cpu: ppc64le
               os: linux
         - resolution:
             archive: tarball
             bin: bin/node
-            integrity: sha256-bzDu0QYZvUyJBoHlOa5tTAduLd4GlxfjaESaMkCuUMg=
+            integrity: sha256-iWlHfzpRD4eJXjOWrGJ2+TnJpexL+jLO1dRDPLVwWAM=
             type: binary
-            url: https://nodejs.org/download/rc/v25.0.0-rc.1/node-v25.0.0-rc.1-linux-s390x.tar.gz
+            url: https://nodejs.org/download/rc/v25.0.0-rc.2/node-v25.0.0-rc.2-linux-s390x.tar.gz
           targets:
             - cpu: s390x
               os: linux
         - resolution:
             archive: tarball
             bin: bin/node
-            integrity: sha256-y55MI/J4ciD2SUMDLA7g+86VQwkVijX6uCq8D14ilVU=
+            integrity: sha256-gU1lw4qJ5yFEM6Kj9H6NCuAgoR+zA3J2DyMolZpNVFo=
             type: binary
-            url: https://nodejs.org/download/rc/v25.0.0-rc.1/node-v25.0.0-rc.1-linux-x64.tar.gz
+            url: https://nodejs.org/download/rc/v25.0.0-rc.2/node-v25.0.0-rc.2-linux-x64.tar.gz
           targets:
             - cpu: x64
               os: linux
         - resolution:
             archive: zip
             bin: node.exe
-            integrity: sha256-Sfjx1x+mcSYfs0r62P2/M4rs0j4Qs2DnrC42Qm14IIU=
-            prefix: node-v25.0.0-rc.1-win-arm64
+            integrity: sha256-h+o+/h/o+D67dnUh96H4iQXDogbp5hs8wXaTBE+b5i0=
+            prefix: node-v25.0.0-rc.2-win-arm64
             type: binary
-            url: https://nodejs.org/download/rc/v25.0.0-rc.1/node-v25.0.0-rc.1-win-arm64.zip
+            url: https://nodejs.org/download/rc/v25.0.0-rc.2/node-v25.0.0-rc.2-win-arm64.zip
           targets:
             - cpu: arm64
               os: win32
         - resolution:
             archive: zip
             bin: node.exe
-            integrity: sha256-Ur2xjkXltIBuYXj+z7r0Nr5pVj4JIpJ85djxGYijc34=
-            prefix: node-v25.0.0-rc.1-win-x64
+            integrity: sha256-oOTyPVT3kOpVn6nSTWIg1wJvckG5QQjlgKUbvF1XcHE=
+            prefix: node-v25.0.0-rc.2-win-x64
             type: binary
-            url: https://nodejs.org/download/rc/v25.0.0-rc.1/node-v25.0.0-rc.1-win-x64.zip
+            url: https://nodejs.org/download/rc/v25.0.0-rc.2/node-v25.0.0-rc.2-win-x64.zip
           targets:
             - cpu: x64
               os: win32
-    version: 0.0.0
+    version: 25.0.0-rc.2
+    hasBin: true
 
   nodemailer@7.0.9:
     resolution: {integrity: sha512-9/Qm0qXIByEP8lEV2qOqcAW7bRpL8CR9jcTwk3NBnHJNmP9fIJ86g2fgmIXqHY+nj55ZEMwWqYAT2QTDpRUYiQ==}
@@ -11226,7 +11236,7 @@ snapshots:
     dependencies:
       '@babel/parser': 7.28.4
 
-  node@runtime:25.0.0-rc.1: {}
+  node@runtime:25.0.0-rc.2: {}
 
   nodemailer@7.0.9: {}
 
