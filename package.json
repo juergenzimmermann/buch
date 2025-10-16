@@ -147,7 +147,7 @@
     "jiti": "2.6.1",
     "leasot": "14.4.0",
     "madge": "8.0.0",
-    "node-gyp": "11.4.2",
+    "node-gyp": "11.5.0",
     "prettier": "3.6.2",
     "prisma": "6.17.1",
     "shelljs": "0.10.0",
