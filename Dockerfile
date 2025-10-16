@@ -52,7 +52,9 @@ apt-get update --no-show-upgraded
 # Die neuesten Versionen der bereits installierten Packages installieren
 apt-get upgrade --yes --no-show-upgraded
 
-npm r -g yarn pnpm
+npm r -g yarn pnpm corepack
+rm /usr/local/bin/yarn
+rm /usr/local/bin/yarnpkg
 npm i -g corepack
 corepack enable pnpm
 corepack prepare pnpm@latest-10 --activate
@@ -98,7 +100,9 @@ apt-get update
 # Die neuesten Versionen der bereits installierten Packages installieren
 apt-get upgrade --yes
 
-npm r -g yarn pnpm
+npm r -g yarn pnpm corepack
+rm /usr/local/bin/yarn
+rm /usr/local/bin/yarnpkg
 npm i -g corepack
 corepack enable pnpm
 corepack prepare pnpm@latest-10 --activate

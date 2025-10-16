@@ -52,7 +52,9 @@ apk update
 # Die neuesten Versionen der bereits installierten Packages installieren
 apk upgrade
 
-npm r -g yarn pnpm
+npm r -g yarn pnpm corepack
+rm /usr/local/bin/yarn
+rm /usr/local/bin/yarnpkg
 npm i -g corepack
 corepack enable pnpm
 corepack prepare pnpm@latest-10 --activate
@@ -104,7 +106,9 @@ apk update
 # Die neuesten Versionen der bereits installierten Packages installieren
 apk upgrade
 
-npm r -g yarn pnpm
+npm r -g yarn pnpm corepack
+rm /usr/local/bin/yarn
+rm /usr/local/bin/yarnpkg
 npm i -g corepack
 corepack enable pnpm
 corepack prepare pnpm@latest-10 --activate
