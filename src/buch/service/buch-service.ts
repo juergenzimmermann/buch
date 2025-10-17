@@ -95,7 +95,7 @@ export class BuchService {
     // https://2ality.com/2015/01/es6-destructuring.html#simulating-named-parameters-in-javascript
     async findById({
         id,
-        mitAbbildungen = false,
+        mitAbbildungen,
     }: FindByIdParams): Promise<Readonly<BuchMitTitelUndAbbildungen>> {
         this.#logger.debug('findById: id=%d', id);
 
