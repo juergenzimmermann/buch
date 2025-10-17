@@ -61,7 +61,7 @@ export class KeycloakService implements KeycloakConnectOptionsFactory {
     }
 
     async token({ username, password }: TokenData) {
-        this.#logger.debug('token: username=%s', username ?? 'undefined');
+        this.#logger.debug('token: username=%s', username);
         if (username === undefined || password === undefined) {
             return;
         }
@@ -105,10 +105,7 @@ export class KeycloakService implements KeycloakConnectOptionsFactory {
     }
 
     async refresh(refresh_token: string | undefined) {
-        this.#logger.debug(
-            'refresh: refresh_token=%s',
-            refresh_token ?? 'undefined',
-        );
+        this.#logger.debug('refresh: refresh_token=%s', refresh_token);
         if (refresh_token === undefined) {
             return;
         }

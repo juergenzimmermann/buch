@@ -18,6 +18,7 @@
  * @packageDocumentation
  */
 
+import { HttpsOptions } from '@nestjs/common/interfaces/external/https-options.interface.js';
 import { hostname } from 'node:os';
 import { RESOURCES_DIR, config } from './app.js';
 import { env } from './env.js';
@@ -49,7 +50,14 @@ const port = (node?.port as number | undefined) ?? 3000; // eslint-disable-line 
 // https://www.typescriptlang.org/docs/handbook/release-notes/typescript-3-4.html#const-assertions
 // TODO records als "deeply immutable data structure" (Stage 2)
 // https://github.com/tc39/proposal-record-tuple
-export const nodeConfig = {
+type NodeConfig = {
+    host: string;
+    port: number;
+    resourcesDir: string;
+    httpsOptions: HttpsOptions;
+    nodeEnv: 'development' | 'PRODUCTION' | 'production' | 'test' | undefined;
+};
+export const nodeConfig: NodeConfig = {
     host: computername,
     // Shorthand Property ab ES 2015
     port,

@@ -56,10 +56,10 @@ export class WhereBuilder {
     }: Suchparameter) {
         this.#logger.debug(
             'build: javascript=%s, typescript=%s, java=%s, python=%s, restProps=%o',
-            javascript ?? 'undefined',
-            typescript ?? 'undefined',
-            java ?? 'undefined',
-            python ?? 'undefined',
+            javascript,
+            typescript,
+            java,
+            python,
             restProps,
         );
 

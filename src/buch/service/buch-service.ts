@@ -141,7 +141,7 @@ export class BuchService {
             buchFile.id,
             buchFile.data.byteLength,
             buchFile.filename,
-            buchFile.mimetype ?? 'undefined',
+            buchFile.mimetype,
             buchFile.buchId,
         );
 
@@ -270,10 +270,7 @@ export class BuchService {
 
     #checkEnums(suchparameter: Suchparameter) {
         const { art } = suchparameter;
-        this.#logger.debug(
-            '#checkEnums: Suchparameter "art=%s"',
-            art ?? 'undefined',
-        );
+        this.#logger.debug('#checkEnums: Suchparameter "art=%s"', art);
         // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
         return (
             art === undefined ||

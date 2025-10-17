@@ -109,7 +109,7 @@ export class BuchWriteService {
             titel: buchDb?.titel?.titel ?? 'N/A',
         });
 
-        this.#logger.debug('create: buchDb.id=%s', buchDb?.id ?? 'N/A');
+        this.#logger.debug('create: buchDb.id=%s', buchDb?.id);
         return buchDb?.id ?? Number.NaN;
     }
 
@@ -155,7 +155,7 @@ export class BuchWriteService {
 
             const fileType = await fileTypeFromBuffer(data);
             const mimetype = fileType?.mime ?? null;
-            this.#logger.debug('addFile: mimetype=%s', mimetype ?? 'undefined');
+            this.#logger.debug('addFile: mimetype=%s', mimetype);
 
             const buchFile: BuchFileCreate = {
                 filename,
@@ -167,11 +167,11 @@ export class BuchWriteService {
         });
 
         this.#logger.debug(
-            'addFile: id=%d, byteLength=%d, filename=%s, mimetype=%s',
-            buchFileCreated?.id ?? Number.NaN,
-            buchFileCreated?.data.byteLength ?? Number.NaN,
-            buchFileCreated?.filename ?? 'undefined',
-            buchFileCreated?.mimetype ?? 'null',
+            'addFile: id=%s, byteLength=%s, filename=%s, mimetype=%s',
+            buchFileCreated?.id,
+            buchFileCreated?.data.byteLength,
+            buchFileCreated?.filename,
+            buchFileCreated?.mimetype,
         );
         return buchFileCreated;
     }
@@ -188,8 +188,8 @@ export class BuchWriteService {
     // https://2ality.com/2015/01/es6-destructuring.html#simulating-named-parameters-in-javascript
     async update({ id, buch, version }: UpdateParams) {
         this.#logger.debug(
-            'update: id=%d, buch=%o, version=%s',
-            id ?? Number.NaN,
+            'update: id=%s, buch=%o, version=%s',
+            id,
             buch,
             version,
         );
@@ -244,7 +244,7 @@ export class BuchWriteService {
     async #validateCreate({
         isbn,
     }: Prisma.BuchCreateInput): Promise<undefined> {
-        this.#logger.debug('#validateCreate: isbn=%s', isbn ?? 'undefined');
+        this.#logger.debug('#validateCreate: isbn=%s', isbn);
         if (isbn === undefined) {
             this.#logger.debug('#validateCreate: ok');
             return;

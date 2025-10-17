@@ -189,7 +189,7 @@ export class BuchController {
         @Res() res: Response,
     ): Promise<Response<BuchMitTitelUndAbbildungen>> {
         // https://getpino.io/#/docs/api?id=message-string
-        this.#logger.debug('getById: id=%d, version=%s', id, version ?? '-1');
+        this.#logger.debug('getById: id=%d, version=%s', id, version);
 
         if (req.accepts(['json', 'html']) === false) {
             this.#logger.debug('getById: accepted=%o', req.accepted);
@@ -254,11 +254,7 @@ export class BuchController {
         const { page, size } = query;
         delete query['page'];
         delete query['size'];
-        this.#logger.debug(
-            'get: page=%s, size=%s',
-            page ?? 'undefined',
-            size ?? 'undefined',
-        );
+        this.#logger.debug('get: page=%s, size=%s', page, size);
 
         const keys = Object.keys(query) as (keyof BuchQuery)[];
         keys.forEach((key) => {

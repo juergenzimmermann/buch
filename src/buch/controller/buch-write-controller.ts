@@ -190,11 +190,11 @@ export class BuchWriteController {
         const buchFile: BuchFileCreated | undefined =
             await this.#service.addFile(id, buffer, originalname, size);
         this.#logger.debug(
-            'addFile: id=%d, byteLength=%d, filename=%s, mimetype=%s',
-            buchFile?.id ?? -1,
-            buchFile?.data.byteLength ?? -1,
-            buchFile?.filename ?? 'undefined',
-            buchFile?.mimetype ?? 'null',
+            'addFile: id=%s, byteLength=%s, filename=%s, mimetype=%s',
+            buchFile?.id,
+            buchFile?.data.byteLength,
+            buchFile?.filename,
+            buchFile?.mimetype,
         );
 
         const location = `${createBaseUri(req)}/file/${id}`;
@@ -261,7 +261,7 @@ export class BuchWriteController {
             'put: id=%d, buchDTO=%o, version=%s',
             id,
             buchDTO,
-            version ?? 'undefined',
+            version,
         );
 
         if (version === undefined) {
