@@ -17,6 +17,7 @@
 #
 #           uvx ruff check locustfile.py
 #           uvx ruff format locustfile.py [--diff]
+#           uvx ty check locustfile.py
 #
 #           uv run locust -f locustfile.py
 
@@ -62,12 +63,12 @@ changelog = "https://github.com/juergenzimmermann/locust/blob/master/CHANGELOG.m
 # https://docs.astral.sh/uv/concepts/projects/dependencies/#dependency-groups
 [dependency-groups]
 # https://docs.astral.sh/uv/concepts/projects/dependencies/#development-dependencies
-dev = ["locust>=2.41.5"]
+dev = ["locust>=2.41.6"]
 lint = [
   # https://docs.astral.sh/ruff
-  "ruff>=0.14.0",
+  "ruff>=0.14.1",
   # https://github.com/astral-sh/ty
-  "ty>=0.0.1a19",
+  "ty>=0.0.1a21",
 ]
 
 [tool.ruff]
