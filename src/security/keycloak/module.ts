@@ -48,7 +48,7 @@ class ConfigModule {}
             useClass: AuthGuard,
         },
         {
-            // fuer @Roles({ roles: ['admin'] }) einschl. @Public() und @AllowAnyRole()
+            // fuer @Roles('admin') einschl. @Public() und @AllowAnyRole()
             provide: APP_GUARD,
             useClass: RoleGuard,
         },
