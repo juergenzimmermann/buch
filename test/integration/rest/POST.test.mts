@@ -134,7 +134,7 @@ describe('POST /rest', () => {
         expect(BuchService.ID_PATTERN.test(idStr ?? '')).toBe(true);
     });
 
-    test.concurrent('Neues Buch mit ungueltigen Daten', async () => {
+    test('Neues Buch mit ungueltigen Daten', async () => {
         // given
         const headers = new Headers();
         headers.append(CONTENT_TYPE, APPLICATION_JSON);
@@ -171,7 +171,7 @@ describe('POST /rest', () => {
         expect(messages).toStrictEqual(expect.arrayContaining(expectedMsg));
     });
 
-    test.concurrent('Neues Buch, aber die ISBN existiert bereits', async () => {
+    test('Neues Buch, aber die ISBN existiert bereits', async () => {
         // given
         const headers = new Headers();
         headers.append(CONTENT_TYPE, APPLICATION_JSON);

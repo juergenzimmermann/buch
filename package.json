@@ -37,7 +37,7 @@
     "start": "node --env-file=.env dist/src/main.js",
     "pre:dev": "pnpm run copy-resources",
     "dev": "nest start --env-file=.env --watch",
-    "test": "set LOG_LEVEL=info&& vitest --ui",
+    "test": "vitest --ui",
     "test:unit": "vitest -c ./vitest.config.unit.ts --ui",
     "test:k6": "k6 run test\\lasttest\\script.ts",
     "asciidoctor": "node scripts/asciidoctor.mts",
