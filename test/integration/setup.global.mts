@@ -18,11 +18,6 @@
 import { AUTHORIZATION, BEARER, POST, baseURL } from './constants.mjs';
 import { getToken } from './token.mjs';
 
-// selbst-signiertes Zertifikat beim Server
-// https://nodejs.org/api/cli.html
-// Alternative: "Undici" verwenden
-process.env['NODE_TLS_REJECT_UNAUTHORIZED'] = '0';
-
 const dbPopulate = async (token: string) => {
     const url = `${baseURL}/dev/db_populate`;
     const headers = new Headers();

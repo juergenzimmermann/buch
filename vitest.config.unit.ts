@@ -30,7 +30,6 @@ export default defineConfig({
         // https://vitest.dev/config/#coverage
         coverage: {
             include: ['src/buch/service/*'],
-            extension: ['.mts', '.ts'],
             // default ist ['text', 'html', 'clover', 'json']
             reporter: ['text', 'html'],
             // default ist 'v8'

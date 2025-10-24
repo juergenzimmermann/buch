@@ -32,7 +32,6 @@ export default defineConfig({
         coverage: {
             include: ['src/**'],
             exclude: ['src/config/resources/**'],
-            extension: ['.mts', '.ts'],
             // default ist ['text', 'html', 'clover', 'json']
             reporter: ['text', 'html'],
             // default ist 'v8'
