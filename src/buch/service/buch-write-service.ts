@@ -159,7 +159,7 @@ export class BuchWriteService {
 
             const buchFile: BuchFileCreate = {
                 filename,
-                data,
+                data: data as Uint8Array<ArrayBuffer>,
                 mimetype,
                 buchId,
             };
