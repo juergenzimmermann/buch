@@ -124,7 +124,7 @@ export class BuchWriteService {
     // eslint-disable-next-line max-params
     async addFile(
         buchId: number,
-        data: Uint8Array<ArrayBufferLike>,
+        data: Buffer,
         filename: string,
         size: number,
     ): Promise<Readonly<BuchFile> | undefined> {
