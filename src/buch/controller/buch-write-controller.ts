@@ -155,7 +155,7 @@ export class BuchWriteController {
     // eslint-disable-next-line max-params
     @Post(':id')
     @Public()
-    // @Roles({ roles: ['admin']})
+    // @Roles('admin')
     @UseInterceptors(FileInterceptor('file', MULTER_OPTIONS))
     @HttpCode(HttpStatus.NO_CONTENT)
     @ApiOperation({ summary: 'Binärdatei mit einem Bild hochladen' })
