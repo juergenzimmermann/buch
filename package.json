@@ -43,7 +43,7 @@
     "asciidoctor": "node scripts/asciidoctor.mts",
     "clean": "node scripts/clean.mts",
     "copy-resources": "node scripts/copy-resources.mts",
-    "eslint": "eslint --concurrency=auto src test/integration package.json",
+    "eslint": "eslint --concurrency auto --flag v10_config_lookup_from_file src test/integration package.json",
     "eslint:inspect-config": "npx @eslint/config-inspector",
     "eslint:debug": "pnpm run eslint -- --debug",
     "leasot": "leasot --exit-nicely src/**/*.ts",
