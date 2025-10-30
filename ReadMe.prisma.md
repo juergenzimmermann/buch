@@ -191,8 +191,19 @@ Zunächst muss man ein neues Prisma-Schema erstellen, d.h. im Verzeichnis `prism
 wird die Datei `schema.prisma` angelegt:
 
 ```shell
-    pnpx prisma init
+    # Windows:
+    $env:DATABASE_URL='postgresql://buch:p@localhost/buch?schema=buch&connection_limit=10&sslnegotiation=direct?sslcert=../src/config/resources/postgresql/certificate.cer'
+
+    # macOS:
+    DATABASE_URL='postgresql://buch:p@localhost/buch?schema=buch&connection_limit=10&sslnegotiation=direct?sslcert=../src/config/resources/postgresql/certificate.cer'
+
+    pnpm prisma init
 ```
+
+Dabei werden folgende Dateien generiert:
+
+- `prisma.config.ts`
+- `prisma\schema.prisma`
 
 ### Models aus einer bestehenden DB generieren
 
@@ -222,7 +233,7 @@ Nun wird die Generierung durchgeführt, so dass die Datei `prisma\schema.prisma`
 um die Models für das spätere OR-Mapping ergänzt wird:
 
 ```shell
-    pnpx prisma db pull
+    pnpm prisma db pull
 ```
 
 Warnungen, dass _Check-Constraints_ nicht unterstützt werden, können ignoriert werden,
@@ -274,7 +285,7 @@ künftige OR-Mapping. Mit diesem Schema kann nun der Prisma-Client generiert
 werden, der später für das OR-Mapping in TypeScript verwendet wird:
 
 ```shell
-    pnpx prisma generate
+    pnpm prisma generate
 ```
 
 ---
