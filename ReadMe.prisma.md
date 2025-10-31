@@ -202,7 +202,7 @@ wird die Datei `schema.prisma` angelegt:
 
 Dabei werden folgende Dateien generiert:
 
-- `prisma.config.ts`
+- `prisma.config.ts` siehe https://github.com/prisma/prisma/releases/tag/6.18.0
 - `prisma\schema.prisma`
 
 ### Models aus einer bestehenden DB generieren

@@ -21,9 +21,20 @@ Der zu testende Applikationsserver einschließlich der Backend-Systeme muss
 gestartet, z.B. als Docker Container:
 
 ```shell
+    # Windows
     cd .extras\compose\buch
+
+    # macOS:
+    cd .extras/compose/buch
+
     docker compose up
 ```
+
+## expect aus k6-jslib-testing
+
+Um in den einzelnen Test-Funktionen die Funktion `expect` für Assertions zu nutzen,
+wird sie von `https://github.com/grafana/k6-jslib-testing` in der Script-Datei
+`script.ts` importiert.
 
 ## TypeScript durch esbuild
 
@@ -41,11 +52,16 @@ zu beachten, dass die Scenarios, bei denen bewusst der Statuscode 404 bzw.
 NOT_FOUND erwartet wird, zu `http_req_failed` zugeordnet werden.
 
 ```shell
+    # Windows
+    cd test\lasttest
+
+    # macOS:
     cd test/lasttest
+
     k6 run script.ts
 ```
 
 ## Visualisierung des Lasttests
 
-Wenn der Lasttest läuft, kann in einem Webbrowser mit der URL `http://localhost:5665`
+Während der Lasttest läuft, kann in einem Webbrowser mit der URL `http://localhost:5665`
 der Ablauf verfolgt werden.
