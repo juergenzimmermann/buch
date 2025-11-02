@@ -1,0 +1,105 @@
+' Copyright (C) 2025 - present Juergen Zimmermann, Hochschule Karlsruhe
+'
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+'
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+'
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <https://www.gnu.org/licenses/>.
+
+' Preview durch <Alt>d
+
+@startuml Domain Storytelling
+
+' https://github.com/tmorin/plantuml-libs
+' https://github.com/tmorin/plantuml-libs/blob/master/distribution/fontawesome-6/Regular/README.md
+' https://github.com/tmorin/plantuml-libs/blob/master/distribution/fontawesome-6/Solid/README.md
+' https://fontawesome.com/icons
+' alternativ: https://github.com/johthor/DomainStory-PlantUML
+
+!$Story_Layout = "top-to-bottom"
+
+!include https://raw.githubusercontent.com/tmorin/plantuml-libs/master/distribution/domainstorytelling/single.puml
+
+Title("Ein Buch verlegen")
+
+include("domainstorytelling/Actor/User")
+' include("domainstorytelling/Actor/Users")
+
+include("fontawesome-6/Solid/Laptop")
+include("fontawesome-6/Regular/CommentDots")
+include("fontawesome-6/Solid/At")
+include("fontawesome-6/Solid/ArrowUpFromBracket")
+include("fontawesome-6/Solid/Globe")
+include("fontawesome-6/Solid/Box")
+include("fontawesome-6/Solid/Shop")
+include("fontawesome-6/Solid/BookOpen")
+
+' include("fontawesome-6/Solid/CartShopping")
+' include("fontawesome-6/Solid/List")
+' include("fontawesome-6/Solid/ShieldHalved")
+' include("fontawesome-6/Solid/At")
+' include("fontawesome-6/Solid/TriangleExclamation")
+' include("fontawesome-6/Solid/Check")
+' include("fontawesome-6/Solid/EuroSign")
+' include("fontawesome-6/Solid/CreditCard")
+
+User("autor", "Autor/in")
+CommentDots("an_verlag")
+Laptop("verlag", "Verlag")
+CommentDots("an_lektor")
+User("lektor", "Lektor/in")
+CommentDots("betreut")
+At("steuer_id")
+At("manuskript")
+
+At("an_isbn")
+Laptop("isbn_agentur", "ISBN-Agentur")
+Box("an_druckerei")
+Shop("druckerei", "Druckerei")
+ArrowUpFromBracket("hochladen")
+Globe("webseite", "Webseite")
+At("marketing")
+Globe("online_shops", "Online Shops")
+Shop("buchhandlungen", "Buchhandlungen")
+BookOpen("bibliotheken", "Bibliotheken")
+
+autor -right-> an_verlag : Activity("1", "kontaktiert")
+an_verlag -right-> verlag
+
+verlag --> an_lektor : Activity("2", "zuordnen")
+an_lektor --> lektor
+lektor -[hidden]right-> druckerei
+
+lektor -up-> betreut : Activity("3", "betreuen\n Vertrag abschließen")
+betreut -up-> autor
+
+autor --> steuer_id : Activity("4", "Steuer-ID übermitteln")
+an_verlag -[hidden]-> steuer_id
+steuer_id -right-> verlag
+
+autor --> manuskript : Activity("5", "Manuskript senden")
+steuer_id -[hidden]-> manuskript
+manuskript -right-> verlag
+
+verlag -right-> an_isbn : Activity("6", "ISBN anfordern")
+an_isbn -right-> isbn_agentur
+
+verlag --> an_druckerei : Activity("7", "Manuskript übergeben")
+an_druckerei --> druckerei
+
+verlag --> hochladen : Activity("8", "Info hochladen")
+hochladen --> webseite
+
+verlag --> marketing : Activity("8", "Neues Buch")
+marketing --> online_shops
+marketing --> buchhandlungen
+marketing --> bibliotheken
+
+@enduml

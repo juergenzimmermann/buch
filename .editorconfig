@@ -1,4 +1,6 @@
 # http://editorconfig.org
+
+# oberste EditorConfig-Datei
 root = true
 
 [*]
