@@ -78,9 +78,6 @@ services:
     user: "postgres:postgres"
     hostname: postgres
     container_name: postgres
-    security_opt:
-      - label:user:postgres
-      - no-new-privileges:true
     # https://docs.docker.com/reference/compose-file/services/#cap_drop
     # https://man7.org/linux/man-pages/man7/capabilities.7.html
     cap_drop: [ALL]
