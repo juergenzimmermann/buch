@@ -5,6 +5,7 @@ import eslint from '@eslint/js';
 import graphql from '@graphql-eslint/eslint-plugin';
 import stylistic from '@stylistic/eslint-plugin';
 import vitest from '@vitest/eslint-plugin';
+// alternativ: https://github.com/un-ts/eslint-plugin-import-x
 import importPlugin from 'eslint-plugin-import';
 import nodePlugin from 'eslint-plugin-n';
 import packageJson from 'eslint-plugin-package-json';
