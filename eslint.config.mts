@@ -609,7 +609,10 @@ export default defineConfig(
     // -------------------------------------------------------------------------
     {
         files: ['package.json'],
-        extends: [packageJson.configs.recommended],
+        extends: [
+            packageJson.configs.recommended,
+            packageJson.configs.stylistic,
+        ],
         rules: {
             'package-json/sort-collections': [
                 'error',
