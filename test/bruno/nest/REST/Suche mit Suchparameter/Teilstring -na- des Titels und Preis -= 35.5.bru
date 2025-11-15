@@ -1,0 +1,47 @@
+meta {
+  name: Teilstring "na" des Titels und Preis <= 35.5
+  type: http
+  seq: 16
+}
+
+get {
+  url: {{rest_url}}?titel=na&preis=45.5
+  body: none
+  auth: inherit
+}
+
+params:query {
+  titel: na
+  preis: 45.5
+}
+
+headers {
+  Accept: application/json
+}
+
+assert {
+  res.status: eq 200
+  res.headers['content-type']: matches ^application\/json(; charset=utf-8)?$
+  res.body.content: isArray
+  res.body.content: isNotEmpty
+}
+
+tests {
+  test('Body: Titel enthaelt "na", Preis <= 45.5 und ID vorhanden', () => {
+    res.getBody()
+      .content
+      .forEach(buch => {
+        const { titel, preis, id } = buch;
+        expect(titel.titel).to.be.a('string').that.includes('na');
+        expect(preis).to.be.a('string');
+        const preisNumber = Number(preis);
+        expect(preisNumber).to.be.lte(45.5);
+        expect(id).to.be.above(0);
+      });
+  });
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

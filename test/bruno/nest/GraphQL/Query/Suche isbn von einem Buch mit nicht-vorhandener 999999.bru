@@ -1,0 +1,47 @@
+meta {
+  name: Suche isbn von einem Buch mit nicht-vorhandener 999999
+  type: graphql
+  seq: 2
+}
+
+post {
+  url: {{graphql_url}}
+  body: graphql
+  auth: inherit
+}
+
+headers {
+  Accept: application/graphql-response+json
+}
+
+body:graphql {
+  query ($id: ID! = "1") {
+    buch(id: $id) {
+      isbn
+    }
+  }
+}
+
+body:graphql:vars {
+  {
+    "id": "999999"
+  }
+}
+
+assert {
+  res.status: eq 200
+  res.headers['content-type']: matches ^application\/graphql-response\+json(; charset=utf-8)?$
+  res.body.errors: isArray
+  res.body.errors: length 1
+  res.body.errors[0].message: contains 999999
+  res.body.errors[0].path: isArray
+  res.body.errors[0].path: length 1
+  res.body.errors[0].path[0]: eq buch
+  res.body.errors[0].extensions.code: eq BAD_USER_INPUT
+  res.body.data.buch: isNull
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

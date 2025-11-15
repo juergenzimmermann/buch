@@ -1,0 +1,29 @@
+meta {
+  name: Token mit falschem Passwort
+  type: http
+  seq: 4
+}
+
+post {
+  url: {{token_url}}
+  body: formUrlEncoded
+  auth: inherit
+}
+
+headers {
+  ~: 
+}
+
+body:form-urlencoded {
+  username: admin
+  password: FALSCH
+}
+
+assert {
+  res.status: eq 401
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

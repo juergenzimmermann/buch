@@ -64,7 +64,7 @@ export class DevController {
         await this.#service.populate();
         const success = {
             // eslint-disable-next-line @typescript-eslint/naming-convention, camelcase
-            db_populate: 'success',
+            db_populate: 'ok',
         };
         return res.status(HttpStatus.OK).json(success);
     }

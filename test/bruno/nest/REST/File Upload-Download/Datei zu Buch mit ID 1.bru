@@ -1,0 +1,24 @@
+meta {
+  name: Datei zu Buch mit ID 1
+  type: http
+  seq: 3
+}
+
+get {
+  url: {{rest_url}}/file/:id
+  body: none
+  auth: inherit
+}
+
+params:path {
+  id: 1
+}
+
+assert {
+  res.status: eq 200
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

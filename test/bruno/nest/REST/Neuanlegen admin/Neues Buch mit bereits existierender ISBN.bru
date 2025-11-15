@@ -1,0 +1,49 @@
+meta {
+  name: Neues Buch mit bereits existierender ISBN
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{rest_url}}
+  body: json
+  auth: bearer
+}
+
+headers {
+  ~: 
+}
+
+auth:bearer {
+  token: {{TOKEN}}
+}
+
+body:json {
+  {
+    "isbn": "978-3-897-22583-1",
+    "rating": 1,
+    "art": "HARDCOVER",
+    "preis": 99.9,
+    "rabatt": 0.1,
+    "lieferbar": true,
+    "datum": "2025-01-31T00:00:00Z",
+    "homepage": "https://post.isbn",
+    "schlagwoerter": ["JAVASCRIPT", "TYPESCRIPT"],
+    "titel": {
+      "titel": "Titelpostisbn",
+      "untertitel": "Untertitelpostisbn"
+    }
+  }
+}
+
+assert {
+  res.status: eq 422
+  res.headers['content-type']: matches ^application\/json(; charset=utf-8)?
+  res.body.statusCode: eq 422
+  res.body.message: contains ISBN
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

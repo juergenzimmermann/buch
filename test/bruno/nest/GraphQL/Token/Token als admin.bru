@@ -1,0 +1,38 @@
+meta {
+  name: Token als admin
+  type: graphql
+  seq: 1
+}
+
+post {
+  url: {{graphql_url}}
+  body: graphql
+  auth: inherit
+}
+
+headers {
+  Accept: application/graphql-response+json
+}
+
+body:graphql {
+  mutation {
+      token(username: "admin", password: "p") {
+          access_token
+          expires_in
+          refresh_token
+          refresh_expires_in
+      }
+  }
+}
+
+assert {
+  res.status: eq 200
+  res.headers['content-type']: matches ^application\/graphql-response\+json(; charset=utf-8)?$
+  res.body.data.token.access_token: matches .+\..+\..+
+  res.body.data.token.expires_in: eq 1800
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

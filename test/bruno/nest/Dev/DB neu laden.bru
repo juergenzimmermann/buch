@@ -1,0 +1,48 @@
+meta {
+  name: DB neu laden
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{base_url}}/dev/db_populate
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{TOKEN}}
+}
+
+assert {
+  res.status: eq 200
+  res.headers['content-type']: matches ^application\/json(; charset=utf-8)?
+  res.body.db_populate: eq ok
+}
+
+script:pre-request {
+  const axios = require('axios');
+  
+  // "Developer Mode" statt "Safe" erforderlich
+  const https = require('https');
+  const httpsAgent = new https.Agent({
+   rejectUnauthorized: false,
+  });
+  
+  const tokenUrl = bru.getCollectionVar('token_url');
+  // https://axios-http.com/docs/post_example
+  let response = await axios.post(
+    tokenUrl,
+    { 'username': 'admin', 'password': 'p' },
+    // https://axios-http.com/docs/req_config
+    { httpsAgent },
+  );
+  const token = response.data.access_token;
+  console.log(`token=${token}`)
+  bru.setVar('TOKEN', token);
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

@@ -1,0 +1,31 @@
+meta {
+  name: Vorhandene ID 1 mit If-None-Match
+  type: http
+  seq: 2
+}
+
+get {
+  url: {{rest_url}}/:id
+  body: none
+  auth: inherit
+}
+
+params:path {
+  id: 1
+}
+
+headers {
+  Accept: application/json
+  If-None-Match: "0"
+}
+
+assert {
+  res.status: eq 304
+  res.body: isString
+  res.body: isEmpty
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

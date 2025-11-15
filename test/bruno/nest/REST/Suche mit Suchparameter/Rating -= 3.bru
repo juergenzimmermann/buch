@@ -1,0 +1,43 @@
+meta {
+  name: Rating >= 3
+  type: http
+  seq: 17
+}
+
+get {
+  url: {{rest_url}}?rating=3
+  body: none
+  auth: inherit
+}
+
+params:query {
+  rating: 3
+}
+
+headers {
+  Accept: application/json
+}
+
+assert {
+  res.status: eq 200
+  res.headers['content-type']: matches ^application\/json(; charset=utf-8)?$
+  res.body.content: isArray
+  res.body.content: isNotEmpty
+}
+
+script:post-response {
+  test('Body: rating und ID', () => {
+    res.getBody()
+      .content
+      .forEach(buch => {
+        const { rating, id } = buch;
+        expect(rating).to.be.gte(3);
+        expect(id).to.be.above(0);
+      });
+  });
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

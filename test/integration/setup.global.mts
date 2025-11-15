@@ -29,7 +29,7 @@ const dbPopulate = async (token: string) => {
     });
 
     const { db_populate } = (await response.json()) as { db_populate: string };
-    if (db_populate !== 'success') {
+    if (db_populate !== 'ok') {
         throw new Error('Fehler bei POST /dev/db_populate');
     }
     console.log('DB wurde neu geladen');

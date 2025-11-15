@@ -24,7 +24,7 @@
 services:
   db:
     # https://github.com/docker-library/postgres/blob/master/18/trixie/Dockerfile
-    image: postgres:18.0-trixie
+    image: postgres:18.1-trixie
     ports:
       - published: 5432
         target: 5432

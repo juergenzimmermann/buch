@@ -1,0 +1,37 @@
+meta {
+  name: Alle
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{rest_url}}
+  body: none
+  auth: inherit
+}
+
+headers {
+  Accept: application/json
+}
+
+assert {
+  res.status: eq 200
+  res.headers['content-type']: matches ^application\/json(; charset=utf-8)?$
+  res.body.content: isArray
+  res.body.content: isNotEmpty
+  res.body.page.number: eq 0
+}
+
+tests {
+  test('Body: mind. 1 Buch und ID', () => {
+    res.getBody()
+      .content
+      .map(buch => buch.id)
+        .forEach(id => expect(id).to.be.above(0));
+  });
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

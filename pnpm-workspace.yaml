@@ -15,15 +15,23 @@
 
 # https://pnpm.io/settings
 
-# https://pnpm.io/settings#saveprefix
-savePrefix: ""
-
-# https://pnpm.io/cli/add#--save-exact--e
-saveExact: true
+# Keine Ausfuehrung von (pre-/post-) install-Skripten
+# https://pnpm.io/settings#ignoredbuiltdependencies
+ignoredBuiltDependencies: ["@prisma/client", "@prisma/engines"]
 
 # https://pnpm.io/settings#minimumreleaseage
 # 1 Tag = 24 * 60 Minuten
 minimumReleaseAge: 1440
 
+# Ausfuehrung von (pre-, post-) install-Skripte
+# https://pnpm.io/settings#onlybuiltdependencies
+onlyBuiltDependencies: [prisma]
+
 # https://pnpm.io/settings#packagemanagerstrictversion
 packageManagerStrictVersion: true
+
+# https://pnpm.io/cli/add#--save-exact--e
+saveExact: true
+
+# https://pnpm.io/settings#saveprefix
+savePrefix: ""

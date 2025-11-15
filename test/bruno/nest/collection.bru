@@ -1,0 +1,24 @@
+meta {
+  name: nest
+}
+
+auth {
+  mode: none
+}
+
+vars:pre-request {
+  base_url: https://localhost:3000
+  keycloak_url: http://localhost:8880
+  realm: nest
+  realm_url: {{keycloak_url}}/realms/{{realm}}
+  client_id: nest-client
+  client_secret: 2274NaOwcPoQL5hZyOIDfFEoTarD4mND
+  health_url: health
+  prometheus_url: {{base_url}}/metrics
+  rest_url: {{base_url}}/rest
+  auth_url: {{base_url}}/auth
+  token_url: {{auth_url}}/token
+  oidc_token_url: {{realm_url}}/protocol/openid-connect/token
+  oidc_auth_url: {{realm_url}}/protocol/openid-connect/token
+  graphql_url: {{base_url}}/graphql
+}

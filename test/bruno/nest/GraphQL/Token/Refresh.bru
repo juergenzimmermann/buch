@@ -1,0 +1,27 @@
+meta {
+  name: Refresh
+  type: graphql
+  seq: 3
+}
+
+post {
+  url: {{graphql_url}}
+  body: graphql
+  auth: inherit
+}
+
+body:graphql {
+  mutation {
+      refresh(refresh_token: "eyJhbGciOiJIUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICI3NDg1ODZmNi1iYjg5LTQ0MGEtYmFiNi01NGFlYWZmOGQ1ZjgifQ.eyJleHAiOjE3MDYzNzQ5OTMsImlhdCI6MTcwNjM3MTM5MywianRpIjoiN2IyMGRlOWItNTI0Ny00NDczLThlNjAtYzIwNjk5NjZhOWE5IiwiaXNzIjoiaHR0cDovL2xvY2FsaG9zdDo4MDgwL3JlYWxtcy9hY21lIiwiYXVkIjoiaHR0cDovL2xvY2FsaG9zdDo4MDgwL3JlYWxtcy9hY21lIiwic3ViIjoiZjkxNTZhYmYtNmRhNS00OGJmLWJjMWMtODEzM2FhZTI3NDE0IiwidHlwIjoiUmVmcmVzaCIsImF6cCI6ImJ1Y2gtY2xpZW50Iiwic2Vzc2lvbl9zdGF0ZSI6Ijc0OWE5ZGI3LWFhMjgtNDA1YS1hYzU5LWI1ZGE3OGM5MDFiNCIsInNjb3BlIjoib3BlbmlkIHByb2ZpbGUgZW1haWwiLCJzaWQiOiI3NDlhOWRiNy1hYTI4LTQwNWEtYWM1OS1iNWRhNzhjOTAxYjQifQ.X9FiLztLxqy9u4bEt6OAdUT8TsmEiWqs9oeQskT2ONo") {
+          access_token
+          expires_in
+          refresh_token
+          refresh_expires_in
+          roles
+      }
+  }
+}
+
+settings {
+  encodeUrl: true
+}

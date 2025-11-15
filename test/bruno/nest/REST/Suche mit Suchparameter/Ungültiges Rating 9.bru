@@ -1,0 +1,32 @@
+meta {
+  name: Ungültiges Rating 9
+  type: http
+  seq: 18
+}
+
+get {
+  url: {{rest_url}}?rating=9
+  body: none
+  auth: inherit
+}
+
+params:query {
+  rating: 9
+}
+
+headers {
+  Accept: application/json
+}
+
+assert {
+  res.status: eq 404
+  res.headers['content-type']: matches ^application\/json(; charset=utf-8)?$
+  res.body.statusCode: eq 404
+  res.body.error: eq Not Found
+  res.body.message: contains rating
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

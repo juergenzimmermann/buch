@@ -24,13 +24,9 @@ pipeline {
         nodejs 'node-25.1.0'
     }
 
-    // Umgebungsvariable:
+    // globale Umgebungsvariable:
     //environment {
-        // Cloud:
-        //DB_HOST = 'unknown.amazonaws.com'
-        //DB_USER = 'nobody'
-        //DB_PASS = 'ChangeMe'
-        //DB_POPULATE = true
+    //    DATABASE_URL = 'postgresql://buch:p@localhost/buch?schema=buch&connection_limit=10&sslnegotiation=direct?sslcert=../src/config/resources/postgresql/certificate.cer'
     //}
 
     options {
@@ -71,6 +67,11 @@ pipeline {
         }
 
         stage('Install') {
+            // Stage-spezifische Umgebungsvariable
+            environment {
+                DATABASE_URL = 'postgresql://buch:p@localhost/buch?schema=buch&connection_limit=10&sslnegotiation=direct?sslcert=../src/config/resources/postgresql/certificate.cer'
+            }
+
             steps {
                 // https://stackoverflow.com/questions/51416409/jenkins-env-node-no-such-file-or-directory
                 // https://github.com/nodesource/distributions/blob/master/README.md#installation-instructions
@@ -122,10 +123,11 @@ pipeline {
 
                 // /var/jenkins_home ist das Homedirectory vom User "jenkins"
                 // /var/jenkins_home/workspace/buch (siehe "pwd" oben)
+                echo "DATABASE_URL = ${env.DATABASE_URL}"
                 sh '''
                     cat package.json
                     pnpm i --prefer-frozen-lockfile
-                    pnpx prisma generate
+                    pnpm prisma generate
                 '''
             }
         }

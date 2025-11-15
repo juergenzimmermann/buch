@@ -1,0 +1,44 @@
+meta {
+  name: Schlagwoerter JAVASCRIPT und JAVA
+  type: http
+  seq: 12
+}
+
+get {
+  url: {{rest_url}}?javascript=true&java=true
+  body: none
+  auth: inherit
+}
+
+params:query {
+  javascript: true
+  java: true
+}
+
+headers {
+  Accept: application/json
+}
+
+assert {
+  res.status: eq 200
+  res.headers['content-type']: matches ^application\/json(; charset=utf-8)?$
+  res.body.content: isArray
+  res.body.content: isNotEmpty
+}
+
+tests {
+  test('Body: Schlagwoerter JAVASCRIPT und JAVA sowie ID', () => {
+    res.getBody()
+      .content
+      .forEach(buch => {
+        const { schlagwoerter, id } = buch;
+        expect(schlagwoerter).to.be.an('array').that.includes.members(['JAVASCRIPT', 'JAVA']);
+        expect(id).to.be.above(0);
+      });
+  });
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

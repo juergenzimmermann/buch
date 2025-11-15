@@ -1,0 +1,67 @@
+meta {
+  name: Neues Buch
+  type: graphql
+  seq: 1
+}
+
+post {
+  url: {{graphql_url}}
+  body: graphql
+  auth: bearer
+}
+
+headers {
+  Accept: application/graphql-response+json
+}
+
+auth:bearer {
+  token: {{TOKEN}}
+}
+
+body:graphql {
+  mutation {
+    create(
+      input: {
+        isbn: "978-1-491-95035-7",
+        rating: 1,
+        art: HARDCOVER,
+        preis: 99.99,
+        rabatt: 0.123,
+        lieferbar: true,
+        datum: "2025-01-31T00:00:00Z",
+        homepage: "https://create.mutation",
+        schlagwoerter: ["JAVASCRIPT", "TYPESCRIPT"],
+        titel: {
+          titel: "Titelcreatemutation",
+          untertitel: "untertitelcreatemutation"
+        },
+        abbildungen: [{
+          beschriftung: "Abb. 1",
+          contentType: "img/png"
+        }]
+      }
+    ) {
+        id
+    }
+  }
+}
+
+assert {
+  res.status: eq 200
+  res.headers['content-type']: matches ^application\/graphql-response\+json(; charset=utf-8)?$
+  res.body.data.create: isJson
+  res.body.data.create.id: isString
+}
+
+tests {
+  test('Body mit id', () => {
+    const { data } = res.getBody();
+    const id = parseInt(data.create.id, 10);
+    expect(id).to.be.gte(0);
+  });
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

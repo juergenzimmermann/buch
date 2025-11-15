@@ -1,0 +1,50 @@
+meta {
+  name: Buchart EPUB
+  type: http
+  seq: 14
+}
+
+get {
+  url: {{rest_url}}?art=EPUB
+  body: none
+  auth: inherit
+}
+
+params:query {
+  art: EPUB
+}
+
+headers {
+  Cache-Control: no-cache
+  Postman-Token: <calculated when request is sent>
+  Host: <calculated when request is sent>
+  User-Agent: PostmanRuntime/7.31.1
+  Accept-Encoding: gzip, deflate, br
+  Connection: keep-alive
+  Accept: application/json
+  ~Accept: */*
+}
+
+assert {
+  res.status: eq 200
+  res.headers['content-type']: matches ^application\/json(; charset=utf-8)?$
+  res.body.content: isArray
+  res.body.content: isNotEmpty
+}
+
+tests {
+  test('Body: Schlagwort TYPESCRIPT und ID', () => {
+    res.getBody()
+      .content
+      .forEach(buch => {
+          const { art, id } = buch;
+          expect(art).to.be.equal('EPUB');
+          expect(id).to.be.above(0);
+      });
+  });
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

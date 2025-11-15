@@ -1,0 +1,28 @@
+meta {
+  name: Nicht-vorhandenes Buch 999999 löschen
+  type: http
+  seq: 2
+}
+
+delete {
+  url: {{rest_url}}/:id
+  body: json
+  auth: bearer
+}
+
+params:path {
+  id: 999999
+}
+
+auth:bearer {
+  token: {{TOKEN}}
+}
+
+assert {
+  res.status: eq 204
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

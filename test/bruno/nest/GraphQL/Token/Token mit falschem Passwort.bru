@@ -1,0 +1,38 @@
+meta {
+  name: Token mit falschem Passwort
+  type: graphql
+  seq: 2
+}
+
+post {
+  url: {{graphql_url}}
+  body: graphql
+  auth: inherit
+}
+
+headers {
+  Accept: application/graphql-response+json
+}
+
+body:graphql {
+  mutation {
+      token(username: "admin", password: "FALSCH") {
+          access_token
+      }
+  }
+}
+
+assert {
+  res.status: eq 200
+  res.headers['content-type']: matches ^application\/graphql-response\+json(; charset=utf-8)?$
+  res.body.data.token: isNull
+  res.body.errors: isArray
+  res.body.errors: length 1
+  res.body.errors[0].extensions.code: eq BAD_USER_INPUT
+  res.body.errors[0].message: contains Passwort
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

@@ -1,0 +1,41 @@
+meta {
+  name: Mutation user
+  seq: 4
+}
+
+auth {
+  mode: inherit
+}
+
+script:pre-request {
+  const axios = require('axios');
+  // const util = require('util'); // fuer inspect() bei rekursiven JSON-Objekten
+  
+  // "Developer Mode" statt "Safe" erforderlich
+  const https = require('https');
+  const httpsAgent = new https.Agent({
+   rejectUnauthorized: false,
+  });
+  
+  const graphqlUrl = bru.getCollectionVar('graphql_url');
+  // https://axios-http.com/docs/post_example
+  const response = await axios.post(
+    graphqlUrl,
+    {
+      query: `
+        mutation {
+          token(username: "user", password: "p") {
+            access_token
+          }
+        }
+      `
+    },
+    // https://axios-http.com/docs/req_config
+    { 'Content-Type': 'application/json', httpsAgent },
+  );
+  
+  // console.log(`response=${util.inspect(response)}`);
+  const token = response.data.data.token.access_token;
+  console.log(`token=${token}`)
+  bru.setVar('TOKEN', token);
+}

@@ -265,12 +265,15 @@ export class BuchWriteController {
         );
 
         if (version === undefined) {
-            const msg = 'Header "If-Match" fehlt';
-            this.#logger.debug('put: msg=%s', msg);
+            const problem = {
+                statusCode: HttpStatus.PRECONDITION_REQUIRED,
+                message: 'Header "If-Match" fehlt',
+            };
+            this.#logger.debug('put: problem=%o', problem);
             return res
                 .status(HttpStatus.PRECONDITION_REQUIRED)
                 .set('Content-Type', 'application/json')
-                .send(msg);
+                .send(problem);
         }
 
         const buch = this.#buchDtoToBuchUpdate(buchDTO);

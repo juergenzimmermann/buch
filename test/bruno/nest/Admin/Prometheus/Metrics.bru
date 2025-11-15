@@ -1,0 +1,29 @@
+meta {
+  name: Metrics
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{prometheus_url}}
+  body: none
+  auth: inherit
+}
+
+headers {
+  ~: 
+}
+
+script:post-response {
+  test('Statuscode 200', () => {
+      expect(res.getStatus()).to.equal(200);
+  });
+  test('Body ueberpruefen', () => {
+      const body = JSON.stringify(res.getBody());
+      expect(body).not.to.be.empty;
+  });
+}
+
+settings {
+  encodeUrl: true
+}

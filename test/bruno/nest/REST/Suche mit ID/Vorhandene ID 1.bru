@@ -1,0 +1,30 @@
+meta {
+  name: Vorhandene ID 1
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{rest_url}}/:id
+  body: none
+  auth: inherit
+}
+
+params:path {
+  id: 1
+}
+
+headers {
+  Accept: application/json
+}
+
+assert {
+  res.status: eq 200
+  res.headers['content-type']: matches ^application\/json(; charset=utf-8)?$
+  res.body.id: eq 1
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

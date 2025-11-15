@@ -1,0 +1,34 @@
+meta {
+  name: Liveness
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{health_url}}/liveness
+  body: none
+  auth: inherit
+}
+
+script:post-response {
+  test('Statuscode 200', () => {
+      expect(res.getStatus()).to.equal(200);
+  });
+  test('Content-Type application/json', () => {
+      const contentType = res.getHeader('Content-Type');
+      expect(contentType).to.match(/^application\/json(; charset=utf-8)?/u);
+  });
+  test('Status im Body ueberpruefen', () => {
+      const body = res.getBody();
+      const { status, info, error } = body
+      expect(status).to.be.equal('ok');
+      expect(info.appserver.status).to.be.equal('up');
+      expect(error).to.be.an('object').that.is.empty;
+  });
+  
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

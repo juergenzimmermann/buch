@@ -1,0 +1,33 @@
+meta {
+  name: Teilstring "n" auf Seite 9999
+  type: http
+  seq: 5
+}
+
+get {
+  url: {{rest_url}}?titel=n&page=9999
+  body: none
+  auth: inherit
+}
+
+params:query {
+  titel: n
+  page: 9999
+}
+
+headers {
+  Accept: application/json
+}
+
+assert {
+  res.status: eq 404
+  res.headers['content-type']: matches ^application\/json(; charset=utf-8)?$
+  res.body.statusCode: eq 404
+  res.body.error: eq Not Found
+  res.body.message: contains Seite
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

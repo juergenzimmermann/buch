@@ -1,0 +1,28 @@
+meta {
+  name: Token ohne Benutzerkennung
+  type: http
+  seq: 5
+}
+
+post {
+  url: {{token_url}}
+  body: formUrlEncoded
+  auth: inherit
+}
+
+headers {
+  ~: 
+}
+
+body:form-urlencoded {
+  ~: 
+}
+
+assert {
+  res.status: eq 401
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

@@ -1,0 +1,38 @@
+meta {
+  name: Neuanlegen admin
+  seq: 4
+}
+
+auth {
+  mode: bearer
+}
+
+auth:bearer {
+  token: {{TOKEN}}
+}
+
+script:pre-request {
+  const axios = require('axios');
+  
+  // "Developer Mode" statt "Safe" erforderlich
+  const https = require('https');
+  const httpsAgent = new https.Agent({
+   rejectUnauthorized: false,
+  });
+  
+  const tokenUrl = bru.getCollectionVar('token_url');
+  // https://axios-http.com/docs/post_example
+  let response = await axios.post(
+    tokenUrl,
+    { 'username': 'admin', 'password': 'p' },
+    // https://axios-http.com/docs/req_config
+    { httpsAgent },
+  );
+  const token = response.data.access_token;
+  console.log(`token=${token}`)
+  bru.setVar('TOKEN', token);
+}
+
+docs {
+  Über die REST-Schnittstelle neue Bücher anlegen
+}

@@ -1,0 +1,26 @@
+meta {
+  name: Falsche ID xy
+  type: http
+  seq: 5
+}
+
+get {
+  url: {{rest_url}}/:id
+  body: none
+  auth: inherit
+}
+
+params:path {
+  id: xy
+}
+
+assert {
+  res.status: eq 404
+  res.body: isJson
+  res.body.statusCode: eq 404
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

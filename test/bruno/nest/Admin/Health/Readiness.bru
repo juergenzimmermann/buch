@@ -1,0 +1,36 @@
+meta {
+  name: Readiness
+  type: http
+  seq: 2
+}
+
+get {
+  url: {{health_url}}/readiness
+  body: none
+  auth: inherit
+}
+
+headers {
+  ~: 
+}
+
+script:post-response {
+  test('Statuscode 200', () => {
+      expect(res.getStatus()).to.equal(200);
+  });
+  test('Content-Type application/json', () => {
+      const contentType = res.getHeader('Content-Type');
+      expect(contentType).to.match(/^application\/json(; charset=utf-8)?/u);
+  });
+  test('Status im Body ueberpruefen', () => {
+      const body = res.getBody();
+      const { status, info, error } = body
+      expect(status).to.be.equal('ok');
+  //     // pm.expect(info.db.status).to.be.equal('up');
+      expect(error).to.be.an('object').that.is.empty;
+  });
+}
+
+settings {
+  encodeUrl: true
+}

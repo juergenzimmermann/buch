@@ -1,0 +1,34 @@
+meta {
+  name: Token admin
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{token_url}}
+  body: formUrlEncoded
+  auth: inherit
+}
+
+headers {
+  ~: 
+}
+
+body:form-urlencoded {
+  username: admin
+  password: p
+}
+
+assert {
+  res.status: eq 200
+  res.headers['content-type']: matches ^application\/json(; charset=utf-8)?
+  res.body.access_token: matches .+\..+\..+
+  res.body.expires_in: eq 1800
+  res.body.refresh_token: matches .+\..+\..+
+  res.body.refresh_expires_in: eq 3600
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

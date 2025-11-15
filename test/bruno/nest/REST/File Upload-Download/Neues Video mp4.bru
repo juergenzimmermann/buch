@@ -1,0 +1,61 @@
+meta {
+  name: Neues Video mp4
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{rest_url}}/:id
+  body: multipartForm
+  auth: bearer
+}
+
+params:path {
+  id: 1
+}
+
+headers {
+  ~: 
+}
+
+auth:bearer {
+  token: {{TOKEN}}
+}
+
+body:multipart-form {
+  file: @file(video.mp4)
+}
+
+assert {
+  res.status: eq 204
+  res.headers.location: matches \/rest\/file\/[1-9]\d*
+  res.body: isString
+  res.body: isEmpty
+}
+
+script:pre-request {
+  const axios = require('axios');
+  
+  // "Developer Mode" statt "Safe" erforderlich
+  const https = require('https');
+  const httpsAgent = new https.Agent({
+   rejectUnauthorized: false,
+  });
+  
+  const tokenUrl = bru.getCollectionVar('token_url');
+  // https://axios-http.com/docs/post_example
+  const response = await axios.post(
+    tokenUrl,
+    { 'username': 'admin', 'password': 'p' },
+    // https://axios-http.com/docs/req_config
+    { httpsAgent },
+  );
+  const token = response.data.access_token;
+  console.log(`token=${token}`)
+  bru.setVar('TOKEN', token);
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

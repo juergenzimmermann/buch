@@ -1,0 +1,32 @@
+meta {
+  name: Nicht-vorhandene ID 999999
+  type: http
+  seq: 4
+}
+
+get {
+  url: {{rest_url}}/:id
+  body: none
+  auth: inherit
+}
+
+params:path {
+  id: 999999
+}
+
+headers {
+  Accept: application/json
+}
+
+assert {
+  res.status: eq 404
+  res.headers['content-type']: matches ^application\/json(; charset=utf-8)?$
+  res.body.statusCode: eq 404
+  res.body.error: eq Not Found
+  res.body.message: contains 999999
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

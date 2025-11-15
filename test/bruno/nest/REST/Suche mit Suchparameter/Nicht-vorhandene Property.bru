@@ -1,0 +1,31 @@
+meta {
+  name: Nicht-vorhandene Property
+  type: http
+  seq: 22
+}
+
+get {
+  url: {{rest_url}}?php=true
+  body: none
+  auth: inherit
+}
+
+params:query {
+  php: true
+}
+
+headers {
+  Accept: application/json
+}
+
+assert {
+  res.status: eq 404
+  res.headers['content-type']: matches ^application\/json(; charset=utf-8)?$
+  res.body.statusCode: eq 404
+  res.body.error: eq Not Found
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

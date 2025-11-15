@@ -1,4 +1,4 @@
-# syntax=docker.io/docker/dockerfile-upstream:1.19.0
+# syntax=docker.io/docker/dockerfile-upstream:1.20.0
 # check=error=true
 
 # Copyright (C) 2023 - present, Juergen Zimmermann, Hochschule Karlsruhe
@@ -32,7 +32,7 @@
 # https://snyk.io/blog/10-best-practices-to-containerize-nodejs-web-applications-with-docker
 # https://cheatsheetseries.owasp.org/cheatsheets/NodeJS_Docker_Cheat_Sheet.html
 
-ARG NODE_VERSION=25.1.0
+ARG NODE_VERSION=25.2.0
 
 # ---------------------------------------------------------------------------------------
 # S t a g e   d i s t

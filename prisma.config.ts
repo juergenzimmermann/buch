@@ -1,12 +1,10 @@
-import { defineConfig, env } from "prisma/config";
+// https://www.prisma.io/docs/orm/reference/prisma-config-reference
+import { defineConfig, env } from 'prisma/config';
 
 export default defineConfig({
-  schema: "prisma/schema.prisma",
-  migrations: {
-    path: "prisma/migrations",
-  },
-  engine: "classic",
-  datasource: {
-    url: env("DATABASE_URL"),
-  },
+    schema: 'prisma/schema.prisma',
+    engine: 'classic',
+    datasource: {
+        url: env('DATABASE_URL'),
+    },
 });

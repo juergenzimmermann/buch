@@ -1,0 +1,36 @@
+meta {
+  name: New Access Token "admin" BASIC Authentication
+  type: http
+  seq: 3
+}
+
+post {
+  url: {{oidc_token_url}}
+  body: formUrlEncoded
+  auth: basic
+}
+
+auth:basic {
+  username: {{client_id}}
+  password: {{client_secret}}
+}
+
+body:form-urlencoded {
+  grant_type: password
+  username: admin
+  password: p
+}
+
+assert {
+  res.status: eq 200
+  res.headers['content-type']: eq application/json
+  res.body.access_token: matches .+\..+\..+
+  res.body.expires_in: eq 1800
+  res.body.refresh_token: matches .+\..+\..+
+  res.body.refresh_expires_in: eq 3600
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}
