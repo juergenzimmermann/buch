@@ -1,4 +1,4 @@
-# Copyright (C) 2023 - present Juergen Zimmermann
+# Copyright (C) 2025 - present Juergen Zimmermann
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -16,8 +16,8 @@
 # ==============================================================================
 # N o d e
 # ==============================================================================
-#node:
-#  port: 3000
+#[node]
+#port = 3000
 
 # ==============================================================================
 # D a t e n b a n k
@@ -25,42 +25,42 @@
 
 # "pg-native" erfordert die Installation von PostgreSQL: Docker-Image genügt nicht
 
-db:
-  populate: true
+[db]
+populate = true
 
 # ==============================================================================
 # K e y c l o a k
 # ==============================================================================
 # Client-ID muss durch die Umgebungsvariable CLIENT_ID gesetzt werden
-keycloak:
-  #schema: http
-  #host: keycloak
-  #port: 8080
-  #realm: nest
-  # siehe Keycloak Menuepunkt "Clients" > Tab "Clients list" > Spalte "Client ID"
-  #clientId: nest-client
-  #tokenValidation: online
+#[keycloak]
+#schema = "http"
+#host = "keycloak"
+#port = 8080
+#realm = "nest"
+# siehe Keycloak Menuepunkt "Clients" > Tab "Clients list" > Spalte "Client ID"
+#clientId = "nest-client"
+#tokenValidation = "online"
 
 # ==============================================================================
 # L o g g i n g
 # ==============================================================================
-log:
-  #dir: /tmp
-  # Auskommentieren fuer Lasttests
-  level: debug
-  pretty: true
+[log]
+#dir = "/tmp"
+# Auskommentieren fuer Lasttests
+level = "debug"
+pretty = true
 
 # ==============================================================================
 # H e a l t h
 # ==============================================================================
-health:
-  prettyPrint: true
+[health]
+prettyPrint = true
 
 # ==============================================================================
 # M a i l s e r v e r
 # ==============================================================================
-mail:
-  #activated: false
-  host: fakesmtp
-  port: 8025
-  log: false
+[mail]
+#activated = false
+host = "fakesmtp"
+port = 8025
+log = false

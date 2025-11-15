@@ -190,9 +190,13 @@ describe('PUT /rest/:id', () => {
         // then
         expect(response.status).toBe(HttpStatus.PRECONDITION_REQUIRED);
 
-        const body = await response.text();
+        const { message, statusCode } = (await response.json()) as {
+            message: string;
+            statusCode: number;
+        };
 
-        expect(body).toBe(`Header "${IF_MATCH}" fehlt`);
+        expect(message).toContain(IF_MATCH);
+        expect(statusCode).toBe(HttpStatus.PRECONDITION_REQUIRED);
     });
 
     test('Vorhandenes Buch aendern, aber mit alter Versionsnummer', async () => {

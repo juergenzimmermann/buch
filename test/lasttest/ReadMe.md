@@ -46,7 +46,7 @@ Typprüfung statt. Details siehe https://esbuild.github.io/content-types/#typesc
 ## Aufruf von k6
 
 Um die Ergebnisse eines Lasttests durch zeitintensive Logausgaben in der
-Konsole nicht zu verfälschen, sollten in der Datei `.extras\compose\buch\app.yml`
+Konsole nicht zu verfälschen, sollten in der Datei `.extras\compose\buch\app.toml`
 die Optionen `log.level` und  `log.pretty` auskommentiert werden. Außerdem ist
 zu beachten, dass die Scenarios, bei denen bewusst der Statuscode 404 bzw.
 NOT_FOUND erwartet wird, zu `http_req_failed` zugeordnet werden.

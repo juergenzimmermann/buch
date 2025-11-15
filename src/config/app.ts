@@ -18,9 +18,9 @@
  * @packageDocumentation
  */
 
-import { parse } from 'yaml';
 import { access, readFile } from 'node:fs/promises';
 import path from 'node:path';
+import { parse } from 'smol-toml';
 
 // im Docker-Image gibt es kein Unterverzeichnis "src"
 let srcExists: boolean;
@@ -36,7 +36,7 @@ export const BASEDIR = srcExists ? 'src' : 'dist';
 // https://nodejs.org/api/path.html
 export const RESOURCES_DIR = path.resolve(BASEDIR, 'config', 'resources');
 
-const configFile = path.resolve(RESOURCES_DIR, 'app.yml');
+const configFile = path.resolve(RESOURCES_DIR, 'app.toml');
 console.debug(`configFile=${configFile}`);
 
 export type AppConfig = Record<
@@ -47,3 +47,5 @@ export type AppConfig = Record<
 export const config = parse(
     await readFile(configFile, 'utf8'), // eslint-disable-line security/detect-non-literal-fs-filename
 ) as AppConfig;
+
+// export const config = parse(configFile) as AppConfig; // eslint-disable-line security/detect-non-literal-fs-filename
