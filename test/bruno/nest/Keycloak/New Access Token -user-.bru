@@ -21,25 +21,16 @@ body:form-urlencoded {
   password: p
 }
 
-script:post-response {
-  test('Statuscode 200', () => {
-      expect(res.getStatus()).to.equal(200);
-  });
-  test('Content-Type application/json', () => {
-      const contentType = res.getHeader('Content-Type');
-      expect(contentType).to.match(/^application\/json(; charset=utf-8)?/u);
-  });
-  test('Body mit token, expiresIn, roles', () => {
-      const body = res.getBody();
-      console.log(`${JSON.stringify(body)}`);
-      const { access_token, expires_in, refresh_token, refresh_expires_in } = body;
-      expect(access_token).to.be.a('string').that.matches(/.+\..+\..+/u);
-      expect(expires_in).to.be.equal(1800);
-      expect(refresh_token).to.be.a('string').that.matches(/.+\..+\..+/u);
-      expect(refresh_expires_in).to.be.equal(3600);
-  });
+assert {
+  res.status: eq 200
+  res.headers['content-type']: eq application/json
+  res.body.access_token: matches .+\..+\..+
+  res.body.expires_in: eq 1800
+  res.body.refresh_token: matches .+\..+\..+
+  res.body.refresh_expires_in: eq 3600
 }
 
 settings {
   encodeUrl: true
+  timeout: 0
 }

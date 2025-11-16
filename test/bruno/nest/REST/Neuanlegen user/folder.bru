@@ -20,7 +20,7 @@ script:pre-request {
   // https://axios-http.com/docs/post_example
   let response = await axios.post(
     tokenUrl,
-    { 'username': 'user', 'password': 'p' },
+    { username: 'user', password: 'p' },
     // https://axios-http.com/docs/req_config
     { httpsAgent },
   );

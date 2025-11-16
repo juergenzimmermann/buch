@@ -21,12 +21,11 @@ body:form-urlencoded {
   password: p
 }
 
-script:post-response {
-  test('Statuscode 401', () => {
-      expect(res.getStatus()).to.equal(401);
-  });
+assert {
+  res.status: eq 401
 }
 
 settings {
   encodeUrl: true
+  timeout: 0
 }

@@ -43,10 +43,12 @@ script:pre-request {
   });
   
   const tokenUrl = bru.getCollectionVar('token_url');
+  const username = bru.getCollectionVar('username');
+  const password = bru.getCollectionVar('password');
   // https://axios-http.com/docs/post_example
   const response = await axios.post(
     tokenUrl,
-    { 'username': 'admin', 'password': 'p' },
+    { username, password },
     // https://axios-http.com/docs/req_config
     { httpsAgent },
   );
