@@ -5,7 +5,7 @@ meta {
 }
 
 get {
-  url: {{prometheus_url}}
+  url: {{prometheusUrl}}
   body: none
   auth: inherit
 }
@@ -26,4 +26,5 @@ script:post-response {
 
 settings {
   encodeUrl: true
+  timeout: 0
 }

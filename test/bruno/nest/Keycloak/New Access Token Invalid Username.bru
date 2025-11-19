@@ -5,14 +5,14 @@ meta {
 }
 
 post {
-  url: {{keycloak_url}}/realms/nest/protocol/openid-connect/token
+  url: {{oidcTokenUrl}}
   body: formUrlEncoded
   auth: basic
 }
 
 auth:basic {
-  username: {{client_id}}
-  password: {{client_secret}}
+  username: {{clientId}}
+  password: {{clientSecret}}
 }
 
 body:form-urlencoded {

@@ -170,6 +170,7 @@ export default defineConfig(
             '@typescript-eslint/no-unnecessary-qualifier': 'error',
             '@typescript-eslint/no-unnecessary-type-conversion': 'error',
             '@typescript-eslint/no-unsafe-member-access': 'off',
+            '@typescript-eslint/no-unused-private-class-members': 'error',
             '@typescript-eslint/no-unused-vars': [
                 'off',
                 {

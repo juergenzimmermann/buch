@@ -16,7 +16,7 @@ script:pre-request {
    rejectUnauthorized: false,
   });
   
-  const tokenUrl = bru.getCollectionVar('token_url');
+  const tokenUrl = bru.getCollectionVar('tokenUrl');
   // https://axios-http.com/docs/post_example
   let response = await axios.post(
     tokenUrl,

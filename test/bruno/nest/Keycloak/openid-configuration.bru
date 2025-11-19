@@ -5,11 +5,12 @@ meta {
 }
 
 get {
-  url: http://localhost:8880/realms/nest/.well-known/openid-configuration
+  url: {{realmUrl}}/.well-known/openid-configuration
   body: none
   auth: inherit
 }
 
 settings {
   encodeUrl: true
+  timeout: 0
 }

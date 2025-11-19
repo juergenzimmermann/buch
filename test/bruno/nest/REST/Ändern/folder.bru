@@ -20,9 +20,9 @@ script:pre-request {
    rejectUnauthorized: false,
   });
   
-  const tokenUrl = bru.getCollectionVar('token_url');
-  const username = bru.getCollectionVar('username');
-  const password = bru.getCollectionVar('password');
+  const tokenUrl = bru.getCollectionVar('tokenUrl');
+  const username = bru.getEnvVar('username');
+  const password = bru.getEnvVar('password');
   // https://axios-http.com/docs/post_example
   let response = await axios.post(
     tokenUrl,

@@ -5,7 +5,7 @@ meta {
 }
 
 post {
-  url: {{token_url}}
+  url: {{tokenUrl}}
   body: formUrlEncoded
   auth: inherit
 }
@@ -15,7 +15,7 @@ headers {
 }
 
 body:form-urlencoded {
-  username: admin
+  username: {{username}}
   password: FALSCH
 }
 

@@ -5,17 +5,17 @@ meta {
 }
 
 post {
-  url: {{oidc_token_url}}
+  url: {{oidcTokenUrl}}
   body: formUrlEncoded
   auth: none
 }
 
 body:form-urlencoded {
   grant_type: password
-  username: admin
-  password: p
-  client_id: {{client_id}}
-  client_secret: {{client_secret}}
+  username: {{username}}
+  password: {{password}}
+  client_id: {{clientId}}
+  client_secret: {{clientSecret}}
 }
 
 assert {
