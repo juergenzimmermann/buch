@@ -182,6 +182,14 @@ Die Ausgabe vom Kommando `openssl` zeigt u.a. folgendes an:
 
 ## Erweiterung PostgreSQL für VS Code
 
+Für VS Code gibt übrigens auch folgende Erweiterungen:
+
+- _SQL Server (mssql)_ von _Microsoft_ mit KI-Unterstützung durch Copilot
+- _Oracle SQL Developer Extension for VS Code_ von _Oracle_ **ohne** KI-Unterstützung durch Copilot
+- Für MySQL gibt es folgende Erweiterungen:
+  - _MySQL_ von Jun Han: wird seit 2023 nicht mehr gepflegt bzw. weiterentwickelt
+  - _MySQL_ von "Database Client" (?): **ohne** KI-Unterstützung durch Copilot
+
 ### Konfiguration
 
 Mit der Erweiterung _PostgreSQL_ für VS Code kann man die Datenbank `buch` und
@@ -227,4 +235,7 @@ Danach im Chat-Fenster Fragen stellen und ggf. nachhaken, z.B.:
 - Jetzt fehlt aber der Buchtitel.
 - Wie kann ich diese Daten als CSV exportieren?
 
-**BEACHTE**: _Bücher_ mit deutschem Umlaut als Plural der DB-Tabelle `buch`.
+**BEACHTE**:
+
+- _Bücher_ mit deutschem Umlaut als Plural der DB-Tabelle `buch`.
+- Es wird auch erkannt, dass `ILIKE` anstelle von `=` benutzt werden soll.
