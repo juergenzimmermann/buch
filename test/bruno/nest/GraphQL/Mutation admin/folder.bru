@@ -21,14 +21,16 @@ script:pre-request {
    rejectUnauthorized: false,
   });
   
-  const graphqlUrl = bru.getCollectionVar('graphql_url');
+  const graphqlUrl = bru.getFolderVar('graphqlUrl');
+  const username = bru.getEnvVar('username');
+  const password = bru.getEnvVar('password');
   // https://axios-http.com/docs/post_example
   const response = await axios.post(
     graphqlUrl,
     {
       query: `
         mutation {
-          token(username: "admin", password: "p") {
+          token(username: "${username}", password: "${password}") {
             access_token
           }
         }
