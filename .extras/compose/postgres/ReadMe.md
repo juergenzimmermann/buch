@@ -26,6 +26,7 @@
 - [Konfiguration für Tablespace und TLS](#konfiguration-für-tablespace-und-tls)
 - [Datenbank, Datenbank-User, Schema, Tabellen und Daten anlegen](#datenbank-datenbank-user-schema-tabellen-und-daten-anlegen)
 - [Optional: TLS für den PostgreSQL-Server mit OpenSSL überprüfen](#optional-tls-für-den-postgresql-server-mit-openssl-überprüfen)
+- [Erweiterung PostgreSQL für VS Code](#erweiterung-postgresql-für-vs-code)
 
 ## Docker Container vs. Installation auf dem Host-Rechner
 
@@ -144,36 +145,6 @@ Die _Original_-Skripte `create-table.sql` und `copy-csv.sql` sind im Projekt-Ver
 `src\config\resources\postgresql`. Dort werden sie später für den _Nest_-basierten
 Appserver benötigt.
 
-## Erweiterung PostgreSQL für VS Code
-
-Mit der Erweiterung _PostgreSQL_ für VS Code kann man die Datenbank `buch` und
-deren Daten verwalten. Man klickt man auf _+ Verbindung hinzufügen_
-und gibt beim Karteireiter _Parameter_ folgende Werte ein:
-
-- SERVER NAME: z.B. `localhost`
-- USER NAME: `postgres` (siehe `compose.yml`)
-- PASSWORD: `p` (siehe `compose.yml`)
-- KENNWORT SPEICHERN: Haken setzen, damit man nicht immer das Passwort eingeben muss
-- DATABASE NAME: `postgres` (das Data Dictionary)
-
-Danacht klickt man auf den Button _Erweitert_, klappt das Menü _SSL_ auf und
-gibt folgende Werte ein:
-
-- SSL MODE: _require_ auswählen
-- SSL CERTIFICATE FILENAME: im Verzeichnis `C:\Zimmermann\volumes\postgres\tls`
-  die Datei `certificate.crt` auswählen
-- SSL KEY FILENAME: im Verzeichnis `C:\Zimmermann\volumes\postgres\tls`
-  die Datei `key.pem` auswählen
-
-Jetzt den modalen Dialog schließen, d.h. rechts oben auf _X_ klicken, und danach
-den Button _Verbindung testen_ anklicken. Wenn dann im Button ein Haken erscheint,
-kann man den anderen Button _Save & Connect_ anklicken, um die Verbindung zu speichern.
-Im Untermenü _Databases_ von der Verbindung sieht man dann z.B. die Datenbank `buch`
-mit dem gleichnamigen Schema `buch` und die Datenbank `postgres`.
-Ebenso kann man man unter _Roles_ den DB-User `buch` und den Superuser `postgres`
-sehen sowie bei _Tablespaces_ den Default-Tablespace `pg_default` und den
-eigenen Tablespace.
-
 ## Optional: TLS für den PostgreSQL-Server mit OpenSSL überprüfen
 
 Jetzt kann man bei Bedarf noch die TLS-Konfiguration für den PostgreSQL-Server
@@ -208,3 +179,52 @@ Die Ausgabe vom Kommando `openssl` zeigt u.a. folgendes an:
 - L(ocation)
 - ST(ate)
 - C(ountry)
+
+## Erweiterung PostgreSQL für VS Code
+
+### Konfiguration
+
+Mit der Erweiterung _PostgreSQL_ für VS Code kann man die Datenbank `buch` und
+deren Daten verwalten. Man klickt man auf _+ Verbindung hinzufügen_
+und gibt beim Karteireiter _Parameter_ folgende Werte ein:
+
+- SERVER NAME: z.B. `localhost`
+- USER NAME: `postgres` (siehe `compose.yml`)
+- PASSWORD: `p` (siehe `compose.yml`)
+- KENNWORT SPEICHERN: Haken setzen, damit man nicht immer das Passwort eingeben muss
+- DATABASE NAME: `postgres` (das Data Dictionary)
+
+Danacht klickt man auf den Button _Erweitert_, klappt das Menü _SSL_ auf und
+gibt folgende Werte ein:
+
+- SSL MODE: _require_ auswählen
+- SSL CERTIFICATE FILENAME: im Verzeichnis `C:\Zimmermann\volumes\postgres\tls`
+  die Datei `certificate.crt` auswählen
+- SSL KEY FILENAME: im Verzeichnis `C:\Zimmermann\volumes\postgres\tls`
+  die Datei `key.pem` auswählen
+
+Jetzt den modalen Dialog schließen, d.h. rechts oben auf _X_ klicken, und danach
+den Button _Verbindung testen_ anklicken. Wenn dann im Button ein Haken erscheint,
+kann man den anderen Button _Save & Connect_ anklicken, um die Verbindung zu speichern.
+Im Untermenü _Databases_ von der Verbindung sieht man dann z.B. die Datenbank `buch`
+mit dem gleichnamigen Schema `buch` und die Datenbank `postgres`.
+Ebenso kann man man unter _Roles_ den DB-User `buch` und den Superuser `postgres`
+sehen sowie bei _Tablespaces_ den Default-Tablespace `pg_default` und den
+eigenen Tablespace.
+
+### DB-Schema visualisieren
+
+Im Kontextmenü für eine DB den Menüpunkt _Schema visualisieren_ anklicken.
+
+### Chat mit Copilot
+
+Voraussetzung ist, dass die DB geöffnet ist und z.B. eine einfache Query ausgeführt wurde.
+Im Kontextmenü für eine DB den Menüpunkt _Mit dieser Datenbank chatten_ anklicken.
+Danach im Chat-Fenster Fragen stellen und ggf. nachhaken, z.B.:
+
+- Wie kann ich Bücher mit einem "a" im Titel selektieren?
+- Ich möchte die Daten der Bücher und nicht den Untertitel.
+- Jetzt fehlt aber der Buchtitel.
+- Wie kann ich diese Daten als CSV exportieren?
+
+**BEACHTE**: _Bücher_ mit deutschem Umlaut als Plural der DB-Tabelle `buch`.
