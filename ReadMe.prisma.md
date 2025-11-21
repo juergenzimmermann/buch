@@ -45,6 +45,8 @@
 - [Aufruf der Beispiele](#aufruf-der-beispiele)
 - [Prisma Studio](#prisma-studio)
 
+**BEACHTE: Prisma 7.0.0 kann nicht mit pnpm verwendet werden** https://github.com/prisma/prisma/issues/28581.
+
 ## Installation und Voraussetzungen
 
 ### Powershell bei Windows
@@ -187,8 +189,8 @@ Es geht weiter im Abschnitt [Code-Generierung für den DB-Client](#code-generier
 
 ### Initiales Schema erstellen
 
-Zunächst muss man ein neues Prisma-Schema erstellen, d.h. im Verzeichnis `prisma`
-wird die Datei `schema.prisma` angelegt:
+Um ein neues Prisma-Schema zu erstellen, muss die Umgebungsvariable `DATABASE_URL`
+gesetzt sein:
 
 ```shell
     # Windows:
@@ -196,7 +198,23 @@ wird die Datei `schema.prisma` angelegt:
 
     # macOS:
     DATABASE_URL='postgresql://buch:p@localhost/buch?schema=buch&connection_limit=10&sslnegotiation=direct?sslcert=../src/config/resources/postgresql/certificate.cer'
+```
 
+Dadurch ist folgendes konfiguriert:
+
+- Benutzername: `buch`
+- Passwort: `p`
+- DB-Host: `localhost`
+- DB-Name: `buch`
+- Schema: `buch`
+- Größe des Verbindungs-Pools: max. `10` Verbindungen
+- SSL: durch die Zertifikatsdatei `certificate.cer` im Verzeichnis `src\config\resources\postgresql`
+
+Nun kann man ein neues Prisma-Schema erstellen, d.h. im Verzeichnis `prisma`
+wird die Datei `schema.prisma` angelegt. Das Verzeichnis `prisma` darf dabei
+noch nicht existieren.
+
+```shell
     pnpm prisma init
 ```
 
@@ -204,6 +222,10 @@ Dabei werden folgende Dateien generiert:
 
 - `prisma.config.ts` siehe https://github.com/prisma/prisma/releases/tag/6.18.0
 - `prisma\schema.prisma`
+
+In der Datei `.env` wurde `DATABASE_URL` als Umgebungsvariable eingetragen.
+Diesen Wert überschreibt man mit dem Wert, den man zuvor in der Shell gesetzt
+hatte (s.o.).
 
 ### Models aus einer bestehenden DB generieren
 
@@ -215,19 +237,6 @@ existierenden DB gestartet sein:
     cd .extras\compose\postgres
     docker compose up
 ```
-
-Damit sich der Prisma-Client für die Generierung mit der DB verbinden kann,
-muss die Umgebungsvariable `DATABASE_URL` in der Datei `.env` gesetzt sein, z.B.
-`"postgresql://buch:p@localhost/buch?schema=buch&connection_limit=10&sslnegotiation=direct?sslcert=../src/config/resources/postgresql/certificate.cer"`.
-Dadurch ist folgendes konfiguriert:
-
-- Benutzername: `buch`
-- Passwort: `p`
-- DB-Host: `localhost`
-- DB-Name: `buch`
-- Schema: `buch`
-- Größe des Verbindungs-Pools: max. `10` Verbindungen
-- SSL: durch die Zertifikatsdatei `certificate.cer` im Verzeichnis `src\config\resources\postgresql`
 
 Nun wird die Generierung durchgeführt, so dass die Datei `prisma\schema.prisma`
 um die Models für das spätere OR-Mapping ergänzt wird:
@@ -271,7 +280,6 @@ als provider für den Generator verwendet wird.
   }
   datasource db {
     provider = "postgresql"
-    url      = env("DATABASE_URL")
     schemas  = ["buch"]
   }
 ```

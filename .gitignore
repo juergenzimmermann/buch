@@ -83,3 +83,9 @@ coverage
 !.vscode/tasks.json
 !.vscode/launch.json
 !.vscode/extensions.json
+
+/src/generated/prisma
+
+/src/generated/prisma
+
+/src/generated/prisma
