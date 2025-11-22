@@ -1,0 +1,97 @@
+# Hinweise zu Bruno
+
+<!--
+  Copyright © 2025 - present Juergen Zimmermann, Hochschule Karlsruhe
+
+  This program is free software: you can redistribute it and/or modify
+  it under the terms of the GNU General Public License as published by
+  the Free Software Foundation, either version 3 of the License, or
+  (at your option) any later version.
+
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+
+  You should have received a copy of the GNU General Public License
+  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+-->
+
+[Juergen Zimmermann](mailto:Juergen.Zimmermann@h-ka.de)
+
+## Server mit selbst-signiertem Zertifikat
+
+Um auf einen Server mit selbst-signiertem Zertifikat zugreifen zu können,
+muss man die _Preferences_ in der linken unteren Ecke anklicken und
+im anschließenden Dialog bei _SSL/TLS Certificate Verification_ den
+Haken entfernen.
+
+## Sensible Daten
+
+Sensible Daten, wie z.B. Passwörter oder evtl. auch Benutzernamen, sollte man nicht
+als gewöhnliche Variable bei einer Collection, einem Folder oder einem Request
+ablegen, da sie sonst evtl. im Klartext in einem Versionsierungssystem wie Git
+abgelegt werden würden. Dazu klickt man rechts oben auf das Dropdown-Menü _No environments_
+und anschließend auf den Button _+ Create_. Nun gibt man einen Namen, z.B. `nest` ein
+und klickt auf `Create`. Im nachfolgenden Dialog gibt man dann die Variablennamen
+und deren Werte ein. In der Spalte _Secret_ kann man dann einen Haken setzen, so dass
+künftig die Werte nicht im Klartext, sondern als Sterne angezeigt werden.
+Abschließend darf man nicht vergessen, die Einträge mit dem Button _Save_ abzuspeichern.
+
+## Autorisierung mit OAuth 2
+
+Für _OAuth 2_ gibt es u.a. die beiden Möglichkeiten _Password Credentials_ und
+_Authorization Code_. Bei _Password Credentials_ werden Benutzername und Passwort
+in einem Formular von Bruno eingetragen und sind fortan bei jedem Request, der abgeschickt
+wird vorhanden und auch dieselben Werte. Bei _Authorization Code_ wird ein Dialog mit dem
+_Authorization Server_ aufgebaut und man gibt die Werte interaktiv ein.
+
+### Password Credentials
+
+Voraussetzung für _Password Credentials_ ist, dass in _Keycloak_ beim entsprechenden
+Client bei _Authentication flow_ für _Direct access grants_ der Haken gesetzt ist.
+Für OAuth 2 klickt man bei einer Collection, einem Folder oder einem Request zunächst
+den Tab _Auth_ an. Im Dropdown-Menü wählt man dann _Password Credentials_ aus und gibt
+z.B. folgende Werte ein:
+
+| Option               | Wert                                 |
+|:---------------------|:-------------------------------------|
+| _Access Token URL_   | `{{oidcTokenUrl}}`                   |
+| _Username_           | `{{username}}`                       |
+| _Password_           | `{{password}}`                       |
+| _Client ID_          | `{{clientId}}`                       |
+| _Client Secret_      | `{{clientSecret}}`                   |
+| _Add Credentials to_ | _Request Body_ aus dem Dropdown-Menü |
+| _Header Prefix_      | `Bearer`                             |
+
+`oidcTokenUrl` könnte eine Variable mit dem Wert `http://localhost:8880/realms/spring/protocol/openid-connect/token`
+sein. `clientId` und `clientSecret` könnten aus dem _Environment_ (s.o.) sein
+und die Werte für _Client ID_ und _Client Secret_ aus _Keycloak_ enthalten.
+Nun klickt man auf den Button _Get Access Token_, so dass der von _Keycloak_
+angeforderte Token für nachfolgende Requests verwendet wird.
+
+### Authorization Code
+
+Für OAuth 2 klickt man bei einer Collection, einem Folder oder einem Request zunächst
+den Tab _Auth_ an. Im Dropdown-Menü wählt man dann _Authorization Code_ aus und gibt
+z.B. folgende Werte ein:
+
+| Option               | Wert                                 |
+|:---------------------|:-------------------------------------|
+| _Callback URL_       | `{{baseUrl}}`                        |
+| _Authorization URL_  | `{{oidcAuthUrl}}`                    |
+| _Access Token URL_   | `{{oidcTokenUrl}}`                   |
+| _Client ID_          | `{{clientId}}`                       |
+| _Client Secret_      | `{{clientSecret}}`                   |
+| _Add Credentials to_ | _Request Body_ aus dem Dropdown-Menü |
+| _Header Prefix_      | `Bearer`                             |
+
+`baseUrl` könnte eine Collection-Variable mit dem Wert `https://localhost:8443` sein,
+`oidcAuthUrl` eine Variable mit `http://localhost:8880/realms/spring/protocol/openid-connect/auth`
+für _Keycloak_ und `oidcTokenUrl` eine Variable mit `http://localhost:8880/realms/spring/protocol/openid-connect/token`.
+`clientId` und `clientSecret` könnten aus dem _Environment_ (s.o.) sein
+und die Werte für _Client ID_ und _Client Secret_ aus _Keycloak_ enthalten.
+Nun klickt man auf den Button _Get Access Token_, so dass eine Verbindung
+mit _Keycloak_ aufgebaut wird und man im Dialogfenster den Benutzernamen
+und das Passwort eingeben kann, wofür man einen Token anfordert. Dieser
+Token wird dann für nachfolgende Requests verwendet.
