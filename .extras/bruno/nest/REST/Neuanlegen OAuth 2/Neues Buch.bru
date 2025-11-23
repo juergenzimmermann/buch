@@ -1,0 +1,49 @@
+meta {
+  name: Neues Buch
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{restUrl}}
+  body: json
+  auth: inherit
+}
+
+headers {
+  ~: 
+}
+
+body:json {
+  {
+    "isbn": "978-0-007-00644-1",
+    "rating": 1,
+    "art": "HARDCOVER",
+    "preis": 99.99,
+    "rabatt": 0.123,
+    "lieferbar": true,
+    "datum": "2025-02-28T00:00:00Z",
+    "homepage": "https://post.rest",
+    "schlagwoerter": ["JAVASCRIPT", "TYPESCRIPT"],
+    "titel": {
+      "titel": "Titelpost",
+      "untertitel": "untertitelpost"
+    },
+    "abbildungen": [{
+      "beschriftung": "Abb. 1",
+      "contentType": "img/png"
+    }]
+  }
+}
+
+assert {
+  res.status: eq 201
+  res.headers.location: matches /rest\/[1-9]\d*$
+  res.body: isString
+  res.body: isEmpty
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

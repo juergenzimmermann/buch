@@ -1,0 +1,19 @@
+meta {
+  name: nest
+}
+
+auth {
+  mode: none
+}
+
+vars:pre-request {
+  baseUrl: https://localhost:3000
+  keycloakUrl: https://localhost:8843
+  realm: nest
+  realmUrl: {{keycloakUrl}}/realms/{{realm}}
+  oidcAuthUrl: {{realmUrl}}/protocol/openid-connect/auth
+  oidcTokenUrl: {{realmUrl}}/protocol/openid-connect/token
+  authUrl: {{baseUrl}}/auth
+  tokenUrl: {{authUrl}}/token
+  ~keycloakUrl: http://localhost:8880
+}
