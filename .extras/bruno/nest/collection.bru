@@ -11,8 +11,9 @@ vars:pre-request {
   keycloakUrl: https://localhost:8843
   realm: nest
   realmUrl: {{keycloakUrl}}/realms/{{realm}}
-  oidcAuthUrl: {{realmUrl}}/protocol/openid-connect/auth
-  oidcTokenUrl: {{realmUrl}}/protocol/openid-connect/token
+  oidcUrl: {{realmUrl}}/protocol/openid-connect
+  oidcAuthUrl: {{oidcUrl}}/auth
+  oidcTokenUrl: {{oidcUrl}}/token
   authUrl: {{baseUrl}}/auth
   tokenUrl: {{authUrl}}/token
   ~keycloakUrl: http://localhost:8880
