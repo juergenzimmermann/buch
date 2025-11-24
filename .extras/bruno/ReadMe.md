@@ -19,6 +19,15 @@
 
 [Juergen Zimmermann](mailto:Juergen.Zimmermann@h-ka.de)
 
+## Inhalt
+
+- [Server mit selbst-signiertem Zertifikat](#server-mit-selbst-signiertem-zertifikat)
+- [Sensible Daten](#sensible-daten)
+- [Autorisierung mit OAuth 2](#autorisierung-mit-oauth-2)
+  - [Password Credentials](#password-credentials)
+  - [Authorization Code](#authorization-code)
+- [Developer Mode](#developer-mode)
+
 ## Server mit selbst-signiertem Zertifikat
 
 Um auf einen Server mit selbst-signiertem Zertifikat zugreifen zu können,
@@ -95,3 +104,14 @@ Nun klickt man auf den Button _Get Access Token_, so dass eine Verbindung
 mit _Keycloak_ aufgebaut wird und man im Dialogfenster den Benutzernamen
 und das Passwort eingeben kann, wofür man einen Token anfordert. Dieser
 Token wird dann für nachfolgende Requests verwendet.
+
+## Developer Mode
+
+Mit _JavaScript_ kann man Requests zu einem Server schicken, um z.B. einen Token
+anzufordern. Wenn bei einem solchen Server selbst-signierte Zertifikate verwendet
+werden, kann man allerdings **nicht** die Funktion `fetch` aus ECMAScript 2015
+verwenden, sondern muss _axios_ verwenden. Um _axios_ zu verwenden, muss man
+jedoch vom _Safe Mode_ in den _Developer Mode_ wechseln. Voraussetzung dafür ist,
+dass auf dem eigenen Entwicklungsrechner _Node_ installiert ist. Zum Wechseln in
+den _Developer Mode_ klickt man rechts oben auf _Safe Mode_ und anschließend auf
+den Radiobutton _Developer Mode_.
