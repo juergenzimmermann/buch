@@ -31,7 +31,7 @@ script:pre-request {
     { httpsAgent },
   );
   const token = response.data.access_token;
-  console.log(`token=${token}`)
+  console.log(`token=${token}`);
   bru.setVar('TOKEN', token);
 }
 
