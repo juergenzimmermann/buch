@@ -66,7 +66,7 @@ services:
         source: C:/Zimmermann/volumes/postgres/sql
         target: /sql
         read_only: true
-    # https://docs.docker.com/compose/environment-variables/set-environment-variables
+    # https://docs.docker.com/compose/how-tos/environment-variables/set-environment-variables
     environment:
       TZ: Europe/Berlin
       PGTZ: Europe/Berlin
@@ -81,6 +81,7 @@ services:
     # https://docs.docker.com/reference/compose-file/services/#cap_drop
     # https://man7.org/linux/man-pages/man7/capabilities.7.html
     cap_drop: [ALL]
+    # https://docs.docker.com/reference/compose-file/services/#cap_add
     #cap_add: [CHOWN, SETGID, SETUID, DAC_OVERRIDE, NET_BIND_SERVICE, CAP_FOWNER]
     healthcheck:
       test: [CMD, pg_isready, --dbname=postgres, --username=postgres]
