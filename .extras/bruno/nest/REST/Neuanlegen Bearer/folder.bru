@@ -12,10 +12,9 @@ auth:bearer {
 }
 
 script:pre-request {
-  const axios = require('axios');
-  
   // "Developer Mode" statt "Safe" erforderlich
-  const https = require('https');
+  const https = require('node:https');
+  
   const httpsAgent = new https.Agent({
    rejectUnauthorized: false,
   });
@@ -23,13 +22,14 @@ script:pre-request {
   const tokenUrl = bru.getCollectionVar('tokenUrl');
   const username = bru.getEnvVar('username');
   const password = bru.getEnvVar('password');
-  // https://axios-http.com/docs/post_example
-  let response = await axios.post(
-    tokenUrl,
-    { username, password },
-    // https://axios-http.com/docs/req_config
-    { httpsAgent },
-  );
+  
+  const response = await bru.sendRequest({
+    method: 'POST',
+    url: tokenUrl,
+    data: { username, password },
+    httpsAgent,
+  });
+  
   const token = response.data.access_token;
   console.log(`token=${token}`);
   bru.setVar('TOKEN', token);

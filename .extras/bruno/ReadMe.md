@@ -110,8 +110,8 @@ Token wird dann für nachfolgende Requests verwendet.
 Mit _JavaScript_ kann man Requests zu einem Server schicken, um z.B. einen Token
 anzufordern. Wenn bei einem solchen Server selbst-signierte Zertifikate verwendet
 werden, kann man allerdings **nicht** die Funktion `fetch` aus ECMAScript 2015
-verwenden, sondern muss _axios_ verwenden. Um _axios_ zu verwenden, muss man
-jedoch vom _Safe Mode_ in den _Developer Mode_ wechseln. Voraussetzung dafür ist,
-dass auf dem eigenen Entwicklungsrechner _Node_ installiert ist. Zum Wechseln in
-den _Developer Mode_ klickt man rechts oben auf _Safe Mode_ und anschließend auf
-den Radiobutton _Developer Mode_.
+verwenden, sondern man muss `bru.sendRequest` verwenden und vom _Safe Mode_ in
+den _Developer Mode_ wechseln. Voraussetzung dafür ist, dass auf dem eigenen
+Entwicklungsrechner _Node_ installiert ist. Zum Wechseln in den _Developer Mode_
+klickt man rechts oben auf _Safe Mode_ und anschließend auf den Radiobutton
+_Developer Mode_.

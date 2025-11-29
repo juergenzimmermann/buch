@@ -5,7 +5,7 @@ meta {
 }
 
 post {
-  url: {{graphql_url}}
+  url: {{graphqlUrl}}
   body: graphql
   auth: inherit
 }
@@ -24,4 +24,5 @@ body:graphql {
 
 settings {
   encodeUrl: true
+  timeout: 0
 }

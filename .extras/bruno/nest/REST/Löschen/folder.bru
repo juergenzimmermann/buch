@@ -4,31 +4,24 @@ meta {
 }
 
 auth {
-  mode: inherit
+  mode: oauth2
 }
 
-script:pre-request {
-  const axios = require('axios');
-  
-  // "Developer Mode" statt "Safe" erforderlich
-  const https = require('https');
-  const httpsAgent = new https.Agent({
-   rejectUnauthorized: false,
-  });
-  
-  const tokenUrl = bru.getCollectionVar('tokenUrl');
-  const username = bru.getEnvVar('username');
-  const password = bru.getEnvVar('password');
-  // https://axios-http.com/docs/post_example
-  let response = await axios.post(
-    tokenUrl,
-    { username, password },
-    // https://axios-http.com/docs/req_config
-    { httpsAgent },
-  );
-  const token = response.data.access_token;
-  console.log(`token=${token}`)
-  bru.setVar('TOKEN', token);
+auth:oauth2 {
+  grant_type: password
+  access_token_url: {{oidcTokenUrl}}
+  refresh_token_url: 
+  username: {{username}}
+  password: {{password}}
+  client_id: {{clientId}}
+  client_secret: {{clientSecret}}
+  scope: 
+  credentials_placement: body
+  credentials_id: credentials
+  token_placement: header
+  token_header_prefix: Bearer
+  auto_fetch_token: true
+  auto_refresh_token: false
 }
 
 docs {

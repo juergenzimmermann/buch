@@ -4,38 +4,22 @@ meta {
 }
 
 auth {
-  mode: inherit
+  mode: oauth2
 }
 
-script:pre-request {
-  const axios = require('axios');
-  // const util = require('util'); // fuer inspect() bei rekursiven JSON-Objekten
-  
-  // "Developer Mode" statt "Safe" erforderlich
-  const https = require('https');
-  const httpsAgent = new https.Agent({
-   rejectUnauthorized: false,
-  });
-  
-  const graphqlUrl = bru.getFolderVar('graphqlUrl');
-  // https://axios-http.com/docs/post_example
-  const response = await axios.post(
-    graphqlUrl,
-    {
-      query: `
-        mutation {
-          token(username: "user", password: "p") {
-            access_token
-          }
-        }
-      `
-    },
-    // https://axios-http.com/docs/req_config
-    { 'Content-Type': 'application/json', httpsAgent },
-  );
-  
-  // console.log(`response=${util.inspect(response)}`);
-  const token = response.data.data.token.access_token;
-  console.log(`token=${token}`)
-  bru.setVar('TOKEN', token);
+auth:oauth2 {
+  grant_type: password
+  access_token_url: {{oidcTokenUrl}}
+  refresh_token_url: 
+  username: user
+  password: p
+  client_id: {{clientId}}
+  client_secret: {{clientSecret}}
+  scope: 
+  credentials_placement: body
+  credentials_id: credentials
+  token_placement: header
+  token_header_prefix: Bearer
+  auto_fetch_token: true
+  auto_refresh_token: false
 }
