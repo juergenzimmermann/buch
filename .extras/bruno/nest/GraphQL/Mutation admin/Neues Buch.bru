@@ -7,15 +7,11 @@ meta {
 post {
   url: {{graphqlUrl}}
   body: graphql
-  auth: bearer
+  auth: inherit
 }
 
 headers {
   Accept: application/graphql-response+json
-}
-
-auth:bearer {
-  token: {{TOKEN}}
 }
 
 body:graphql {
