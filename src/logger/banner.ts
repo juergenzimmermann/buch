@@ -45,6 +45,8 @@ export class BannerService implements OnApplicationBootstrap {
             console.log(text);
         })();
 
+        const isContainer = host.match(/[0-9a-f]{12}/u);
+
         // https://nodejs.org/api/process.html
         // "Template String" ab ES 2015
         this.#logger.info('Node: %s', process.version);
@@ -54,5 +56,11 @@ export class BannerService implements OnApplicationBootstrap {
         this.#logger.info('Betriebssystem: %s (%s)', type(), release());
         this.#logger.info('Username: %s', userInfo().username);
         this.#logger.info('Swagger UI: /swagger');
+        this.#logger.info('Docker Container %s:', isContainer);
+        if (isContainer) {
+            this.#logger.debug(
+                '!!! Server als Container: Bruno nicht nutzbar !!!',
+            );
+        }
     }
 }
