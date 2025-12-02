@@ -47,5 +47,3 @@ export type AppConfig = Record<
 export const config = parse(
     await readFile(configFile, 'utf8'), // eslint-disable-line security/detect-non-literal-fs-filename
 ) as AppConfig;
-
-// export const config = parse(configFile) as AppConfig; // eslint-disable-line security/detect-non-literal-fs-filename

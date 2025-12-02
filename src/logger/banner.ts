@@ -45,7 +45,7 @@ export class BannerService implements OnApplicationBootstrap {
             console.log(text);
         })();
 
-        const isContainer = host.match(/[0-9a-f]{12}/u);
+        const isContainer = /[0-9a-f]{12}/u.exec(host);
 
         // https://nodejs.org/api/process.html
         // "Template String" ab ES 2015
