@@ -30,7 +30,8 @@ const logFileDefault = path.resolve(logDirDefault, logFileNameDefault);
 
 const { log } = config;
 
-if (log?.dir !== undefined || typeof log.dir !== 'string') {
+if (log?.dir !== undefined && typeof log.dir !== 'string') {
+    console.debug(`log.dir=${log.dir}`);
     throw new TypeError('Das konfigurierte Log-Verzeichnis ist kein String');
 }
 

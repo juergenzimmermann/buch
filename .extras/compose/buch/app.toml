@@ -61,6 +61,6 @@ prettyPrint = true
 # ==============================================================================
 [mail]
 #activated = false
-host = "fakesmtp"
-port = 8025
+host = "mailpit"
+port = 1025
 log = false

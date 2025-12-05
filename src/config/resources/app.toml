@@ -61,5 +61,5 @@ prettyPrint = true
 [mail]
 #activated = false
 host = "localhost"
-port = 8025
+port = 1025
 log = false

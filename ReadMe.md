@@ -37,9 +37,8 @@
   - [ES Modules (= ESM)](#es-modules--esm)
   - [Node Best Practices](#node-best-practices)
   - [Lokaler Appserver mit Nest und dem Watch-Modus](#lokaler-appserver-mit-nest-und-dem-watch-modus)
-  - [Postman: Desktop-Anwendung und Extension für VS Code](#postman-desktop-anwendung-und-extension-für-vs-code)
+  - [Bruno als API-Client](#bruno-als-api-client)
     - [Registrieren und Installieren](#registrieren-und-installieren)
-    - [Workspace anlegen](#workspace-anlegen)
     - [Environments](#environments)
     - [Collections und Folders](#collections-und-folders)
     - [Requests](#requests)
@@ -170,18 +169,21 @@ Durch `pnpm run dev` wird der Appserver im _Watch_-Modus für die
 Entwicklung gestartet, d.h. bei Code-Änderungen wird der Server automatisch
 neu gestartet.
 
-Beim Starten des Appservers wird außerdem mit _TypeORM_ auf die Datenbank
+Beim Starten des Appservers wird außerdem mit _Prisma_ auf die Datenbank
 zugegriffen. Der Benutzername und das Passwort sind in der Datei
 `src\config\db.ts` auf `admin` und `p` voreingestellt. Durch die Property
-`db.populate` in `src\config\resources\buch.yml` wird festgelegt, ob die
+`db.populate` in `src\config\resources\app.toml` wird festgelegt, ob die
 (Test-) DB `buch` neu geladen wird.
+
+Durch `pnpm run start:ts` wird der Appserver gestartet und der TypeScript-Code
+wird in das Verzeichnis `dist` übersetzt. Der Watch-Modus ist dabei deaktiviert.
 
 ---
 
-## Postman: Desktop-Anwendung und Extension für VS Code
+## Bruno als API-Client
 
-Mit der Desktop-Applikation _Postman_ wie auch mit der Erweiterung _Postman_ für
-VS Code kann man u.a. REST-, GraphQL und gRPC-Schnittstellen interaktiv testen.
+Mit der Desktop-Applikation _Bruno_ kann man u.a. REST-, GraphQL und
+gRPC-Schnittstellen interaktiv testen.
 
 ### Registrieren und Installieren
 
@@ -189,17 +191,6 @@ Zunächst muss man sich bei https://www.postman.com registrieren und kann danach
 die Desktop-Application _Postman_ von https://www.postman.com/downloads
 herunterladen und installieren. Die Installation erfolgt dabei im Verzeichnis
 `${LOCALAPPDATA}\Postman\app-VERSION`, z.B. `C:\Users\MeineKennung\AppData\Local\Postman\app-VERSION`.
-
-### Workspace anlegen
-
-Über die Desktop-Applikation legt man sich folgendermaßen einen _Workspace_ an:
-
-- Den Menüpunkt _Workspaces_ anklicken
-- Im Drop-Down Menü den Button _Create Workspace_ anklicken
-- Danach den Button _Next_ anklicken
-- Im Eingabefeld _Name_ `buch` und im Eingabefeld _Summary_ z.B.
-  `REST- und GraphQL-Requests für den Appserver.`
-- Abschließend den Button _Create_ anklicken.
 
 ### Environments
 
