@@ -14,6 +14,8 @@
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 # Aufruf:   uv sync --all-groups
+#           uv tree --outdated --all-groups --depth=1 --prerelease=allow
+#           uv pip list --outdated
 #
 #           uvx ruff check locustfile.py
 #           uvx ruff format locustfile.py [--diff]
@@ -66,9 +68,9 @@ changelog = "https://github.com/juergenzimmermann/locust/blob/master/CHANGELOG.m
 dev = ["locust>=2.42.5"]
 lint = [
   # https://docs.astral.sh/ruff
-  "ruff>=0.14.6",
+  "ruff>=0.14.8",
   # https://github.com/astral-sh/ty
-  "ty>=0.0.1a27",
+  "ty>=0.0.1a32",
 ]
 
 [tool.ruff]
