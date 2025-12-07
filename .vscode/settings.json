@@ -36,8 +36,5 @@
   },
   "npm.packageManager": "pnpm",
   "peacock.color": "#215732",
-  "postman.telemetry.enabled": false,
-  "postman.account.region": "EU",
-  "asciidoc.antora.showEnableAntoraPrompt": false,
-  "postman.settings.dotenv-detection-notification-visibility": false
+  "asciidoc.antora.showEnableAntoraPrompt": false
 }

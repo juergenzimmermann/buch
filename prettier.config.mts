@@ -40,6 +40,12 @@ const config: Config = {
                 singleQuote: false,
             },
         },
+        {
+            files: ['*.jsonc'],
+            options: {
+                trailingComma: 'none',
+            },
+        },
     ],
 };
 
