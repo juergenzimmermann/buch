@@ -55,9 +55,9 @@ pipeline {
                     rm -rf test
                     rm -rf node_modules
                     rm -rf dist
-                    rm -rf .extras/doc/api
-                    rm -rf .extras/doc/folien/folien.html
-                    rm -rf .extras/doc/projekthandbuch/html
+                    rm -rf extras/doc/api
+                    rm -rf extras/doc/folien/folien.html
+                    rm -rf extras/doc/projekthandbuch/html
                 '''
 
                 // https://www.jenkins.io/doc/pipeline/steps/git
@@ -182,21 +182,21 @@ pipeline {
             post {
                 always {
                     publishHTML (target : [
-                        reportDir: '.extras/doc/projekthandbuch/html',
+                        reportDir: 'extras/doc/projekthandbuch/html',
                         reportFiles: 'projekthandbuch.html',
                         reportName: 'Projekthandbuch',
                         reportTitles: 'Projekthandbuch'
                     ])
 
                     publishHTML target : [
-                        reportDir: '.extras/doc/folien',
+                        reportDir: 'extras/doc/folien',
                         reportFiles: 'folien.html',
                         reportName: 'Folien (reveal.js)',
                         reportTitles: 'reveal.js'
                     ]
 
                     publishHTML target : [
-                        reportDir: '.extras/doc/api',
+                        reportDir: 'extras/doc/api',
                         reportFiles: 'index.html',
                         reportName: 'TypeDoc',
                         reportTitles: 'TypeDoc'

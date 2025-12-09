@@ -54,7 +54,7 @@ Dazu ist eine Internet-Verbindung notwendig.
 ## Dokumentation im Format HTML
 
 Die Dokumentation im Format HTML wird in einer Powershell im Verzeichnis
-`.extras\doc\html` folgendermaßen erstellt:
+`extras\doc\html` folgendermaßen erstellt:
 
 ```shell
     pnpm run asciidoc

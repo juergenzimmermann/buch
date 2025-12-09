@@ -38,7 +38,7 @@ PostgreSQL komplett.
 
 ## Installation ohne TLS
 
-In der Datei `.extras\compose\postgres\compose.yml` muss man folgende Zeilen
+In der Datei `extras\compose\postgres\compose.yml` muss man folgende Zeilen
 auskommentieren:
 
 - Den Schlüssel `command:` und die nachfolgenden Listenelemente mit führendem `-`,
@@ -51,25 +51,25 @@ auskommentieren:
 - Die Zeile mit dem Schlüssel `user:`, damit der PostgreSQL-Server implizit mit
   dem Linux-User `root` gestartet wird.
 
-Außerdem muss man in derselben Datei `.extras\compose\postgres\compose.yml` in
+Außerdem muss man in derselben Datei `extras\compose\postgres\compose.yml` in
 der Zeile mit `#cap_add: [...]` den Kommentar entfernen.
 
 Nun startet man in einer PowerShell den PostgreSQL-Server:
 
 ```powershell
-    cd .extras\compose\postgres
+    cd extras\compose\postgres
     docker compose up
 ```
 
 ## Konfiguration für Tablespace und TLS
 
-Für das _Volume Mounting_ in `.extras\compose\postgres\compose.yml` muss man in
+Für das _Volume Mounting_ in `extras\compose\postgres\compose.yml` muss man in
 Windows das Verzeichnis `C:/Zimmermann/volumes/postgres/tablespace/buch` anlegen
 oder geeignet anpassen. Danach werden _Owner_, _Group_ und eingeschränkte
 Zugriffsrechte im (Linux-) Docker Container in einer 2. PowerShell gesetzt:
 
 ```powershell
-   cd .extras\compose\postgres
+   cd extras\compose\postgres
    docker compose exec db bash
       chown postgres:postgres /var/lib/postgresql/tablespace
       chown postgres:postgres /var/lib/postgresql/tablespace/buch
@@ -94,7 +94,7 @@ zuvor gesetzten Kommentare wieder entfernen, d.h.
 - Bei der Zeile mit dem Schlüssel `user:`, damit der PostgreSQL-Server als
   normaler Linux-User `postgres` gestartet wird.
 
-Außerdem muss man in derselben Datei `.extras\compose\postgres\compose.yml` die
+Außerdem muss man in derselben Datei `extras\compose\postgres\compose.yml` die
 Zeile mit `cap_add: [...]` wieder auskommentieren.
 
 Jetzt läuft der DB-Server mit folgender Konfiguration:
@@ -133,10 +133,10 @@ und sind durch _Volume Mount_ in `compose.yml` im PostgreSQL-Server als
 Linux-Verzeichnis `/sql` verfügbar.
 
 _Kopien_ der SQL-Skripte `create-db-buch.sql` und `create-schema-buch.sql` sind
-im Projekt-Verzeichnis `.extras\compose\postgres\sql`, damit man den SQL-Editor
+im Projekt-Verzeichnis `extras\compose\postgres\sql`, damit man den SQL-Editor
 von VS Code nutzen kann. Eventuelle Änderungen müssen auf jeden Fall in
 `C:\Zimmermann\volumes\postgres\sql` gemacht werden, z.B. durch Kopieren der Dateien.
-Kopien der CSV-Dateien für Testdaten sind im Projekt-Verzeichnis `.extras\compose\postgres\csv`
+Kopien der CSV-Dateien für Testdaten sind im Projekt-Verzeichnis `extras\compose\postgres\csv`
 und die Originale in `C:\Zimmermann\volumes\postgres\csv`. Ein SQL-Skripte zum
 Laden von CSV-Dateien kann ausschließlich vom DB-Administrator `postgres` benutzt
 werden, und zwar Server-seitig.
@@ -153,7 +153,7 @@ In einer PowerShell startet man einen Docker Container mit dem Image
 `nicolaka/netshoot`, der dasselbe virtuelle Netzwerk nutzt wie der PostgreSQL-Server:
 
 ```powershell
-   cd .extras\compose\debug
+   cd extras\compose\debug
    docker compose up
 ```
 
@@ -162,7 +162,7 @@ um darin mit `openssl` eine TLS-Verbindung über das virtuelle Netzwerk mit dem
 PostgreSQL-Server aufzubauen.
 
 ```powershell
-   cd .extras\compose\debug
+   cd extras\compose\debug
    docker compose exec netshoot bash
        openssl s_client -tls1_3 -trace postgres:5432
        exit

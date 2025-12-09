@@ -9,19 +9,19 @@ node_modules
 # Generierte Dateien
 src/generated
 build
-.extras/doc/projekthandbuch/html/*
-.extras/doc/folien/*.html
-.extras/doc/api/*
-.extras/doc/ReadMe.html
+extras/doc/projekthandbuch/html/*
+extras/doc/folien/*.html
+extras/doc/api/*
+extras/doc/ReadMe.html
 scripts/dependency-check-report.html
 temp
 tmp
 dependencies.svg
 
 # Sensible Daten (Passwort, Token, private Schluessel)
-.extras/compose/buch/.env
-.extras/compose/mysql/db_root_password.txt
-.extras/compose/postgres/db_password.txt
+extras/compose/buch/.env
+extras/compose/mysql/db_root_password.txt
+extras/compose/postgres/db_password.txt
 src/config/resources/tls/key.pem
 src/beispiele.ts
 src/beispiele-write.ts
@@ -51,8 +51,8 @@ test/bruno/nest/*.ogg
 test/bruno/nest/*.webm
 
 # Prometheus und Grafana
-.extras/compose/prometheus-grafana/prometheus-data/*
-.extras/compose/prometheus-grafana/grafana.db
+extras/compose/prometheus-grafana/prometheus-data/*
+extras/compose/prometheus-grafana/grafana.db
 
 # OS
 .DS_Store
@@ -75,7 +75,7 @@ coverage
 *.launch
 .settings/
 .sonarlint
-.extras/compose/buch/.env
+extras/compose/buch/.env
 
 # IDE - VSCode
 .vscode/*
@@ -83,9 +83,3 @@ coverage
 !.vscode/tasks.json
 !.vscode/launch.json
 !.vscode/extensions.json
-
-/src/generated/prisma
-
-/src/generated/prisma
-
-/src/generated/prisma

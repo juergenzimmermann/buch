@@ -32,7 +32,7 @@ Inhalt
 
 ## Aufruf
 
-In der Datei `app.yml` im Verzeichnis `.extras\compose\buch` werden bei der
+In der Datei `app.yml` im Verzeichnis `extras\compose\buch` werden bei der
 Property `log` die untergeordneten Properties `level` und `pretty` auskommentiert,
 damit höchstens der Log-Level INFO verwendet wird, um vor allem die Log-Ausgaben
 in der Konsole zu reduzieren.
@@ -41,14 +41,14 @@ Jetzt kann man die Docker-Container mit den Backend-Server und dem Buch-Server
 starten:
 
 ```powershell
-    cd .extras\compose\buch
+    cd extras\compose\buch
     docker compose up
 ```
 
 Danach startet man den Lasttest mit _Locust_:
 
 ```powershell
-    cd .extras\lasttest-locust
+    cd extras\lasttest-locust
     uv run locust -f locustfile.py
     http://localhost:8089
         Number of users: 50
@@ -61,7 +61,7 @@ Danach startet man den Lasttest mit _Locust_:
 Unter Verwendung von _uv_ mit _tools_:
 
 ```powershell
-    cd .extras\lasttest-locust
+    cd extras\lasttest-locust
     uvx ruff check locustfile.py
     uvx ruff format locustfile.py
     uvx ty check locustfile.py

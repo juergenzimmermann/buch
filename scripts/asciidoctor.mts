@@ -36,12 +36,12 @@ kroki.register(adoc.Extensions);
 const options = {
     safe: 'safe',
     attributes: { linkcss: true },
-    base_dir: '.extras/doc/projekthandbuch',
+    base_dir: 'extras/doc/projekthandbuch',
     to_dir: 'html',
     mkdirs: true,
 };
 adoc.convertFile(
-    join('.extras', 'doc', 'projekthandbuch', 'projekthandbuch.adoc'),
+    join('extras', 'doc', 'projekthandbuch', 'projekthandbuch.adoc'),
     options,
 );
 
@@ -50,7 +50,7 @@ console.log(
     `HTML-Datei ${join(
         __dirname,
         '..',
-        '.extras',
+        'extras',
         'doc',
         'projekthandbuch',
         'html',

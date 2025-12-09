@@ -164,9 +164,9 @@ Das aktuelle Image für _PostgreSQL_ wird von _Docker Hub_ heruntergeladen:
 
 ### Datenbank mit PostgreSQL
 
-Die DB mit _PostgreSQL_ wird gemäß `.extras\compose\postgres\ReadMe.md` aufgesetzt.
+Die DB mit _PostgreSQL_ wird gemäß `extras\compose\postgres\ReadMe.md` aufgesetzt.
 
-Bei macOS und Linux sind in `.extras\compose\postgres\compose.yaml` Anpassungen
+Bei macOS und Linux sind in `extras\compose\postgres\compose.yaml` Anpassungen
 für die Volumes notwendig, um für das Mounting folgende Verzeichnisse zu haben:
 
 - csv
@@ -234,7 +234,7 @@ um später das OR-Mapping zu ermöglichen. Dazu muss der DB-Server mit einer
 existierenden DB gestartet sein:
 
 ```powerhell
-    cd .extras\compose\postgres
+    cd extras\compose\postgres
     docker compose up
 ```
 

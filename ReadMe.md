@@ -196,7 +196,7 @@ herunterladen und installieren. Die Installation erfolgt dabei im Verzeichnis
 
 Zunächst legt man ein _Environment_ mit Variablen an. Dazu wählt man am
 linken Rand den Menüpunkt _Environments_, klickt auf den Button `Import`
-und wählt aus dem Verzeichnis `.extras\postman` die Datei `buch.postman_environment.json`
+und wählt aus dem Verzeichnis `extras\postman` die Datei `buch.postman_environment.json`
 aus. Jetzt hat man die Umgebung `buch` mit der Variablen `base_url` und dem
 Wert `https://localhost:3000` angelegt.
 
@@ -207,7 +207,7 @@ bei _Client Secret_ steht.
 ### Collections und Folders
 
 Als nächstes wählt man den Menüpunkt _Collections_ aus und importiert der Reihe
-nach _Collections_ aus dem Verzeichnis `.extras\postman`, indem man den Button
+nach _Collections_ aus dem Verzeichnis `extras\postman`, indem man den Button
 `Import` anklickt. Collections sind zusammengehörige Gruppierungen von Requests
 und können zur besseren Strukturierung in _Folder_ unterteilt werden.
 Beispielsweise gibt es die Collection _REST_ mit untergeordneten Folder, wie
@@ -408,18 +408,18 @@ npm-Packages oder Debian-Packages.
 ### Docker Compose
 
 Mit _Docker Compose_ und der Konfigurationsdatei `compose.yml` im Verzeichnis
-`.extras\compose` lässt sich der Container mit dem Basis-Image mit _Debian
+`extras\compose` lässt sich der Container mit dem Basis-Image mit _Debian
 Trixie (13) Slim_ folgendermaßen starten und später in einer weiteren
 PowerShell herunterfahren.
 
 ```shell
-    cd .extras\compose\buch
+    cd extras\compose\buch
 
     # PowerShell fuer buch-Server mit Trixie-Image zzgl. DB-Server und Mailserver
     docker compose up
 
     # Nur zur Fehlersuche: weitere PowerShell für bash
-    cd .extras\compose\buch
+    cd extras\compose\buch
     docker compose exec buch bash
         id
         env
@@ -432,7 +432,7 @@ PowerShell herunterfahren.
         exit
 
     # 2. Powershell: buch-Server einschl. DB-Server und Mailserver herunterfahren
-    cd .extras\compose\buch
+    cd extras\compose\buch
     docker compose down
 ```
 
@@ -470,7 +470,7 @@ konfiguriert und durch folgendes pnpm-Skript ausgeführt wird:
 
 ### SonarQube
 
-Siehe `.extras\compose\sonarqube\ReadMe.md`.
+Siehe `extras\compose\sonarqube\ReadMe.md`.
 
 ### Madge
 
@@ -552,7 +552,7 @@ Controller-Klassen und -Methoden konfigurieren und dann in einem Webbrowser mit
 
 ## AsciiDoctor und PlantUML
 
-Siehe `.extras\doc\projekthandbuch\ReadMe.md`.
+Siehe `extras\doc\projekthandbuch\ReadMe.md`.
 
 ---
 

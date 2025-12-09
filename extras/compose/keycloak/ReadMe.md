@@ -46,7 +46,7 @@ _Keycloak_ wird als Docker Container gestartet, wofür das Verzeichnis
 `C:\Zimmermann\volumes\keycloak` vorhanden sein und ggf. angelegt werden muss:
 
 ```powershell
-    cd .extras\compose\keycloak
+    cd extras\compose\keycloak
     docker compose up
 ```
 
@@ -192,7 +192,7 @@ kann man in einem Webbrowser die Konfiguration als JSON-Datensatz erhalten.
 
 Im Wurzelverzeichnis des Projekts in der Datei `.env` muss man die
 Umgebungsvariable `CLIENT_SECRET` auf folgenden Wert aus _Keycloak_ setzen
-und ebenso in `.extras\compose\buch\.env`:
+und ebenso in `extras\compose\buch\.env`:
 
 - Menüpunkt `Clients`
 - `nest-client` aus der Liste beim voreingestellten Tab `Clients list` auswählen
@@ -208,7 +208,7 @@ Umgebungsvariable `client_secret` eintragen.
 Im Development-Modus verwaltet Keycloak seine Daten in einer H2-Datenbank. Um
 die _H2 Console_ als DB-Browser zu starten, lädt man zunächst die JAR-Datei
 von `https://repo.maven.apache.org/maven2/com/h2database/h2/2.3.230/h2-2.3.230.jar`.
-herunter und speichert sie z.B. im Verzeichnis `.extras\compose\keycloak`.
+herunter und speichert sie z.B. im Verzeichnis `extras\compose\keycloak`.
 
 Mit dem Kommando `java -jar h2-2.3.230.jar` startet man nun die H2 Console, wobei
 ein Webbrowser gestartet wird. Dort gibt man folgende Werte ein:

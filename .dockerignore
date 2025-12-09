@@ -1,9 +1,9 @@
-.extras
 .git
 .scannerwork
 .vscode
 coverage
 dist
+extras
 log
 node_modules
 test

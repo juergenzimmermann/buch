@@ -28,7 +28,7 @@ mittels Python übersetzt werden können. Ein solches Image kann mit Docker
 folgendermaßen erstellt werden:
 
 ```powershell
-    cd <projekt>\.extras\jenkins
+    cd <projekt>\extras\jenkins
     docker buildx bake
 ```
 
@@ -38,7 +38,7 @@ Der Jenkins-Server wird mit _Docker Compose_ gestartet. Dadurch muss Jenkins nic
 immer laufen und kann bei Bedarf gestartet und wieder heruntergefahren werden.
 
 ```powershell
-    cd .extras\compose\jenkins
+    cd extras\compose\jenkins
     docker compose up
 
     # In einer 2. PowerShell: Herunterfahren

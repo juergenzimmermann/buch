@@ -2,7 +2,7 @@
 /* global module */
 /** @type {import('typedoc').TypeDocOptions} */
 const config = {
-    out: '.extras/doc/api',
+    out: 'extras/doc/api',
     entryPoints: ['src'],
     entryPointStrategy: 'expand',
     excludePrivate: true,

@@ -25,7 +25,7 @@ Für eine statische Codeanalyse durch _SonarQube_ muss zunächst der
 SonarQube-Server mit _Docker Compose_ als Docker-Container gestartet werden:
 
 ```shell
-    cd .extras\compose\sonarqube
+    cd extras\compose\sonarqube
     docker compose up
 ```
 
@@ -66,6 +66,6 @@ aufrufen.
 Abschließend wird der oben gestartete Server heruntergefahren.
 
 ```shell
-    cd .extras\compose\sonarqube
+    cd extras\compose\sonarqube
     docker compose down
 ```
