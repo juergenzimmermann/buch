@@ -101,6 +101,11 @@ export class BuchService {
 
         // Das Resultat ist null, falls kein Datensatz gefunden
         // Lesen: Keine Transaktion erforderlich
+        // "include":
+        // - referenzierte Daten werden mitgeladen
+        // - keine Konfiguration fuer Eager- oder Lazy-Fetching
+        // - keine Proxy-Objekte durch evtl. Lazy-Fetching
+        // - keine DTO-Klassen mit weggelassenen nicht geladenen Properties
         const include = mitAbbildungen
             ? this.#includeTitelUndAbbildungen
             : this.#includeTitel;
