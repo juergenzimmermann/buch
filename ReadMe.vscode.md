@@ -35,24 +35,28 @@ Bei _PostgreSQL_ empfiehlt sich die Erweiterung von _Microsoft_.
 - Apollo GraphQL
 - AsciiDoc
 - Better Comments
-- Docker
+- Container Tools
+- Docker DX
 - DotENV
 - EditorConfig for VS Code
 - Error Lens
 - ESLint
+- Even Better TOML
 - German Language Pack for Visual Studio Code
 - GitLens
 - Git Graph
 - Git History
 - GraphQL: Language Feature Support
+- GraphQL: Syntax Highlighting
+- HashiCorp HCL
 - JavaScript and TypeScript Nightly
 - MarkdownLint
 - Material Icon Theme
 - PlantUML
 - PostgreSQL
-- Postman
 - Prettier - Code formatter
 - Pretty TypeScript Errors
+- Prisma
 - Rainbow CSV
 - Todo Tree
 - TypeScript Importer
@@ -64,7 +68,6 @@ Dazu ein KI-Werkzeug für _Code Completion_, _Chat_, evtl. _Agent Mode_. Beispie
 
 - GitHub Copilot (siehe https://code.visualstudio.com/docs/copilot/setup und
   https://code.visualstudio.com/docs/copilot/getting-started)
-- IntelliCode (siehe https://marketplace.visualstudio.com/items?itemName=VisualStudioExptTeam.vscodeintellicode)
 - ChatGPT - EasyCode
 - Tabnine AI Autocomplete
 
