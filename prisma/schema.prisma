@@ -1,7 +1,7 @@
 /// https://www.prisma.io/docs/orm/reference/prisma-schema-reference
 /// https://www.prisma.io/docs/orm/reference/prisma-schema-reference#generator
 generator client {
-  /// Default ab Prisma 6.18 (Vorbereitung fuer Prisma 7)
+  /// Default ab Prisma 6.18
   /// https://www.prisma.io/docs/orm/prisma-schema/overview/generators#output-splitting-and-importing-types
   /// https://www.prisma.io/blog/why-prisma-orm-generates-code-into-node-modules-and-why-it-ll-change
   /// https://www.prisma.io/blog/rust-free-prisma-orm-is-ready-for-production
@@ -21,8 +21,6 @@ generator client {
 /// https://www.prisma.io/docs/orm/reference/prisma-schema-reference#datasource
 datasource db {
   provider = "postgresql"
-  // TODO bei Prisma 7 entfernen
-  url      = env("DATABASE_URL")
   schemas  = ["buch"]
 }
 
