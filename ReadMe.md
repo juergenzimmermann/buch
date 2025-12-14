@@ -29,69 +29,40 @@
 
 ## Inhalt
 
-- [Hinweise zum Programmierbeispiel](#hinweise-zum-programmierbeispiel)
-  - [Inhalt](#inhalt)
-  - [Vorbereitung von Prisma für Nest](#vorbereitung-von-prisma-für-nest)
-  - [Download- und ggf. Upload Geschwindigkeit](#download--und-ggf-upload-geschwindigkeit)
-  - [Vorbereitung der Installation](#vorbereitung-der-installation)
-  - [ES Modules (= ESM)](#es-modules--esm)
-  - [Node Best Practices](#node-best-practices)
-  - [Lokaler Appserver mit Nest und dem Watch-Modus](#lokaler-appserver-mit-nest-und-dem-watch-modus)
-  - [Tests aufrufen](#tests-aufrufen)
-  - [Docker-Image und Docker Compose](#docker-image-und-docker-compose)
-    - [Minimales Basis-Image](#minimales-basis-image)
-    - [Image erstellen](#image-erstellen)
-    - [Image inspizieren](#image-inspizieren)
-      - [docker inspect](#docker-inspect)
-      - [docker sbom](#docker-sbom)
-    - [Docker Compose](#docker-compose)
-  - [Statische Codeanalyse und Formattierer](#statische-codeanalyse-und-formatierer)
-    - [ESLint](#eslint)
-    - [Prettier](#prettier)
-    - [SonarQube](#sonarqube)
-    - [Madge](#madge)
-  - [Sicherheitslücken](#sicherheitslücken)
-    - [pnpm audit](#pnpm-audit)
-    - [OWASP Dependency Check](#owasp-dependency-check)
-    - [Docker Scout](#docker-scout)
-  - [OpenAPI](#openapi)
-  - [AsciiDoctor und PlantUML](#asciidoctor-und-plantuml)
-  - [TypeDoc](#typedoc)
-  - [Continuous Integration mit Jenkins](#continuous-integration-mit-jenkins)
-  - [Visual Studio Code](#visual-studio-code)
-  - [Empfohlene Code-Konventionen](#empfohlene-code-konventionen)
-
----
-
-## Vorbereitung von Prisma für Nest
-
-Nachdem das Prisma-Schema in der Datei `prisma/schema.prisma` erstellt wurde,
-sind für das _Nest_-basierte Projekt folgende Anpassungen notwendig:
-
-- In `tsconfig.json`, weil beim direkten Arbeiten mit _Node_ das Feature _Type
-  Stripping_ genutzt wurde, d.h. Node wurde aufgerufen und die Typen von
-  _TypeScript_ wurden zur Laufzeit einfach weggelassen. _Nest_ verwendet dagegen
-  _übersetzten_ Code, d.h. _JavaScript_.
-  - bei der Option `emitDecoratorMetadata` den Kommentar entfernen
-  - die Option `noEmit` auskommentieren
-  - die Option `allowImportingTsExtensions` auskommentieren
-- Der Prisma-Client muss deshalb auch neu generiert werden, d.h.
-  - das Verzeichnis `src\generated` wird gelöscht und
-  - `pnpx prisma generate` wird in der PowerShell aufgerufen.
-- Die bisherigen Beispieldateien `beispiele.mts` und `beispiele-write.mts`
-  für den "alten" Prisma-Client können deshalb nicht mehr funktionieren, weshalb
-  man sie am einfachsten aus dem Projekt löscht.
-
----
-
-## Download- und ggf. Upload Geschwindigkeit
-
-In einem Webbrowser kann man z.B. mit der URL `https://speed.cloudflare.com` die
-Download- und die Upload-Geschwindigkeit testen.
-
-Alternativ kann man durch das Kommando `fast` in einer Powershell die aktuelle
-Download-Geschwindigkeit ermitteln. Mit der zusätzlichen Option `--upload` kann
-zusätzlich die aktuelle Upload-Geschwindigkeit ermittelt werden.
+- [Inhalt](#inhalt)
+- [Vorbereitung der Installation](#vorbereitung-der-installation)
+- [Migration von Bun zu pnpm](#migration-von-bun-zu-pnpm)
+  - [pnpm installieren und aktivieren](#pnpm-installieren-und-aktivieren)
+  - [Konfigurationsdateien für Bun löschen](#konfigurationsdateien-für-bun-löschen)
+  - [package.json und node_modules](#packagejson-und-node_modules)
+  - [Migration von Prisma für pnpm und Nest](#migration-von-prisma-für-pnpm-und-nest)
+- [Download- und ggf. Upload Geschwindigkeit](#download--und-ggf-upload-geschwindigkeit)
+- [ES Modules (= ESM)](#es-modules--esm)
+- [Node Best Practices](#node-best-practices)
+- [Lokaler Appserver mit Nest und dem Watch-Modus](#lokaler-appserver-mit-nest-und-dem-watch-modus)
+- [Tests aufrufen](#tests-aufrufen)
+- [Docker-Image und Docker Compose](#docker-image-und-docker-compose)
+  - [Minimales Basis-Image](#minimales-basis-image)
+  - [Image erstellen](#image-erstellen)
+  - [Image inspizieren](#image-inspizieren)
+    - [docker inspect](#docker-inspect)
+    - [docker sbom](#docker-sbom)
+  - [Docker Compose](#docker-compose)
+- [Statische Codeanalyse und Formattierer](#statische-codeanalyse-und-formatierer)
+  - [ESLint](#eslint)
+  - [Prettier](#prettier)
+  - [SonarQube](#sonarqube)
+  - [Madge](#madge)
+- [Sicherheitslücken](#sicherheitslücken)
+  - [pnpm audit](#pnpm-audit)
+  - [OWASP Dependency Check](#owasp-dependency-check)
+  - [Docker Scout](#docker-scout)
+- [OpenAPI](#openapi)
+- [AsciiDoctor und PlantUML](#asciidoctor-und-plantuml)
+- [TypeDoc](#typedoc)
+- [Continuous Integration mit Jenkins](#continuous-integration-mit-jenkins)
+- [Visual Studio Code](#visual-studio-code)
+- [Empfohlene Code-Konventionen](#empfohlene-code-konventionen)
 
 ---
 
@@ -104,6 +75,114 @@ zusätzlich die aktuelle Upload-Geschwindigkeit ermittelt werden.
 
 - Bei [GitHub](https://github.com) oder [GitLab](https://gitlab.com)
   registrieren, falls man dort noch nicht registriert ist.
+
+---
+
+## Migration von Bun zu pnpm
+
+### pnpm installieren und aktivieren
+
+_pnpm_ (performant node package manager) ist ein Paketmanager für _Node_, der
+effizienter ist als das herkömmliche _npm_ und in diesem Beispiel statt _Bun_
+genutzt wird.
+
+Die Kommandos für die Installation und Aktivierung von _pnpm_ sind hier kompakt
+aufgeführt. Anschließend wird der Ablauf im Detail erklärt.
+
+```shell
+    node --version
+    npm --version
+
+    npm i -g corepack
+
+    corepack enable pnpm
+    corepack prepare pnpm@latest-10 --activate
+```
+
+Zunächst wird sichergestellt, dass _Node_ und _npm_ installiert sind und
+aktuelle Versionen verwendet werden.
+
+Um _pnpm_ zu installieren und zu aktivieren, muss _corepack_ global installiert
+werden. _corepack_ wird mit `npm i -g corepack` aus der Distribution
+von _Node_ in demselben Verzeichnis installiert wie die ausführbaren Dateien
+`node` und `npm`, z.B. in `C:\Zimmermann\node`, was bereits in der Umgebungsvariable
+`PATH` enthalten ist. Dabei wird in `node_modules\corepack\dist`
+das "Dispatcher"-Skript `pnpm.js` installiert, das beim späteren Aufruf von `pnpm`,
+die gewünschte Version von `pnpm` aufruft.
+
+Nachdem _corepack_ installiert ist, werden durch `corepack enable pnpm` sogenannte
+"Shims" erstellt. Das sind "kleine Ausführungswrapper" im Installationsverzeichnis
+von corepack, z.B. `C:\Zimmermann\node (s.o.)`. Bei Windows ist das "Shim" dann das
+PowerShell-Skript `pnpm.ps1`. Bei macOS und Linux ist das "Shim" das
+_Bourne Shell_-Script `pnpm` und wird mittels `/bin/sh` aufgerufen, so dass das
+Script auch korrekt unter der _dash_ bei Debian/Ubuntu, _ash_ bei Alpine,
+_zsh_ bei macOS und _ksh_ (Korn Shell) bei z.B. AIX und HP-UX läuft. Das "Shim"
+`pnpm.ps1` bzw. `pnpm` ruft dann das "Dispatcher"-Skript `pnpm.js` in
+`node_modules\corepack\dist` auf, das zuvor mit _corepack_ installiert wurde.
+
+Abschließend wird mit `corepack prepare pnpm@... --activate` die spezifizierte
+Version von _pnpm_ heruntergeladen und im Cache von _corepack_ gespeichert. Das
+Cache-Verzeichnis von _corepack_ befindet sich bei Windows in `$env:LOCALAPPDATA\node\corepack`
+und _pnpm_ wird in `$env:LOCALAPPDATA\node\corepack\v1\pnpm` gespeichert. Diese
+Version von _pnpm_ wird dann zur globalen Default-Version für das "Dispatcher"-Skript
+`pnpm.js`.
+
+### Konfigurationsdateien für Bun löschen
+
+Die beiden Dateien `bun.lock` und `bunfig.toml` werden nur für _Bun_, aber nicht
+für _pnpm_ benötigt und können deshalb gelöscht werden.
+
+### `package.json` und node_modules
+
+In der Datei `package.json` ist jetzt `pnpm` statt `bun` als Package-Manager
+eingetragen und außerdem hat das Verzeichnis `node_modules` bei `pnpm` eine
+andere Struktur. Außerdem werden für Nest, für die REST-Schnittstelle und viele
+weitere Funktionalitäten weitere Packages benötigt, die in `package.json`
+deklariert sind.
+
+```shell
+    # Verzeichnis node_modules loeschen, falls es existiert
+    # Windows:
+    rm -Recurse -Force node_modules
+    # macOS:
+    rm -rf node_modules
+
+    pnpm i
+```
+
+### Migration von Prisma für pnpm und Nest
+
+Nachdem das Prisma-Schema in der Datei `prisma/schema.prisma` erstellt wurde,
+sind für das _Nest_-basierte Projekt die nachfolgenden Anpassungen notwendig.
+
+Bei _Bun_ wurde das Feature _Type Stripping_ genutzt, d.h. `bun` wurde aufgerufen
+und die Typen von _TypeScript_ wurden zur Laufzeit einfach weggelassen. _Nest_
+verwendet dagegen _übersetzten_ Code, d.h. _JavaScript_. Deshalb müssen in
+`tsconfig.json` folgende Anpassungen erfolgen:
+
+- bei der Option `emitDecoratorMetadata` den Kommentar entfernen
+- die Option `noEmit` auskommentieren
+- die Option `allowImportingTsExtensions` auskommentieren
+
+Der Prisma-Client muss deshalb auch neu generiert werden, d.h.
+
+- das Verzeichnis `src\generated` wird gelöscht und
+- `pnpx prisma generate` wird in der PowerShell aufgerufen.
+
+Die bisherigen Beispieldateien `beispiele.mts` und `beispiele-write.mts`
+waren für den "alten" Prisma-Client, so dass die `import`-Klauseln nicht mehr
+funktionieren, weshalb man sie am einfachsten aus dem Projekt löscht.
+
+---
+
+## Download- und ggf. Upload Geschwindigkeit
+
+In einem Webbrowser kann man z.B. mit der URL `https://speed.cloudflare.com` die
+Download- und die Upload-Geschwindigkeit testen.
+
+Alternativ kann man durch das Kommando `fast` in einer Powershell die aktuelle
+Download-Geschwindigkeit ermitteln. Mit der zusätzlichen Option `--upload` kann
+zusätzlich die aktuelle Upload-Geschwindigkeit ermittelt werden.
 
 ---
 

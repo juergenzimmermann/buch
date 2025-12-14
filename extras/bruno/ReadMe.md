@@ -50,7 +50,7 @@ Abschließend darf man nicht vergessen, die Einträge mit dem Button _Save_ abzu
 _Secrets_ werden folgendermaßen abgespeichert:
 
 | Betriebssystem | Verzeichnis                           |
-|:---------------|:--------------------------------------|
+| ---------------| --------------------------------------|
 | Windows        | `$env:APPDATA\Bruno`                  |
 | macOS          | `~/Library/Application Support/Bruno` |
 | Linux          | `~/.config/Bruno`                     |
@@ -78,7 +78,7 @@ den Tab _Auth_ an. Im Dropdown-Menü wählt man dann _Password Credentials_ aus 
 z.B. folgende Werte ein:
 
 | Option               | Wert                                 |
-|:---------------------|:-------------------------------------|
+| -------------------- | ------------------------------------ |
 | _Access Token URL_   | `{{oidcTokenUrl}}`                   |
 | _Username_           | `{{username}}`                       |
 | _Password_           | `{{password}}`                       |
@@ -100,7 +100,7 @@ den Tab _Auth_ an. Im Dropdown-Menü wählt man dann _Authorization Code_ aus un
 z.B. folgende Werte ein:
 
 | Option               | Wert                                 |
-|:---------------------|:-------------------------------------|
+| -------------------- | ------------------------------------ |
 | _Callback URL_       | `{{baseUrl}}`                        |
 | _Authorization URL_  | `{{oidcAuthUrl}}`                    |
 | _Access Token URL_   | `{{oidcTokenUrl}}`                   |

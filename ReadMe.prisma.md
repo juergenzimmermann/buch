@@ -27,27 +27,40 @@
 
 ## Inhalt
 
-- [Installation und Voraussetzungen](#installation-und-voraussetzungen)
+- [Vorbereitung der Installation](#vorbereitung-der-installation)
+- [Voraussetzungen](#voraussetzungen)
   - [Powershell bei Windows](#powershell-bei-windows)
   - [Basis-Software](#basis-software)
-  - [Umgebungsvariable](#umgebungsvariable)
-  - [Node und npm überprüfen](#node-und-npm-überprüfen)
-  - [pnpm aktivieren](#pnpm-aktivieren)
-  - [node_modules initialisieren](#node_modules-initialisieren)
   - [Docker-Image für PostgreSQL](#docker-image-für-postgresql)
   - [Datenbank mit PostgreSQL](#datenbank-mit-postgresql)
-- [Schema für ein neues Projekt](#schema-für-ein-neues-projekt)
-  - [Initiales Schema erstellen](#initiales-schema-erstellen)
+  - [Umgebungsvariable](#umgebungsvariable)
+- [Installation](#installation)
+  - [Bun installieren](#bun-installieren)
+  - [Bun, Node und npm überprüfen](#bun-node-und-npm-überprüfen)
+  - [Software-Pakete in node_modules mit Bun installieren](#software-pakete-in-node_modules-mit-bun-installieren)
+- [Prisma-Schema für ein neues Projekt](#prisma-schema-für-ein-neues-projekt)
+  - [Initiales Prisma-Schema erstellen](#initiales-prisma-schema-erstellen)
   - [Models aus einer bestehenden DB generieren](#models-aus-einer-bestehenden-db-generieren)
   - [Schema anpassen](#schema-anpassen)
 - [Code-Generierung für den DB-Client](#code-generierung-für-den-db-client)
 - [Einfaches Beispiel in TypeScript](#einfaches-beispiel-in-typescript)
 - [Aufruf der Beispiele](#aufruf-der-beispiele)
+- [Neuere Versionen und evtl. Sicherheitslücken](#neuere-versionen-und-evtl-sicherheitslücken)
 - [Prisma Studio](#prisma-studio)
 
-**BEACHTE: Prisma 7.0.0 kann nicht mit pnpm verwendet werden** https://github.com/prisma/prisma/issues/28581.
+## Vorbereitung der Installation
 
-## Installation und Voraussetzungen
+- Das Beispiel _nicht_ in einem Pfad mit _Leerzeichen_ installieren.
+  Viele Javascript-Bibliotheken werden unter Linux entwickelt und dort benutzt
+  man **keine** Leerzeichen in Pfaden. Ebenso würde ich das Beispiel nicht auf
+  dem _Desktop_ auspacken bzw. installieren.
+
+- Bei [GitHub](https://github.com) oder [GitLab](https://gitlab.com)
+  registrieren, falls man dort noch nicht registriert ist.
+
+---
+
+## Voraussetzungen
 
 ### Powershell bei Windows
 
@@ -71,7 +84,7 @@ https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.security
 
 ### Basis-Software
 
-Für _Windows_ gibt es in _ILIAS_ ZIP-Datei `Zimmermann.zip`. Bevor man diese
+Für _Windows_ gibt es in _ILIAS_ die ZIP-Datei `Zimmermann.zip`. Bevor man diese
 ZIP-Datei unter `C:\Zimmermann` entpackt, sollten die Verzeichnisse
 `C:\Zimmermann\Git` und `C:\Zimmermann\node` gelöscht werden, falls sie noch vom
 letztem Semester vorhanden sind. Außerdem sollte _Docker Desktop_ installiert sein
@@ -86,80 +99,21 @@ letztem Semester vorhanden sind. Außerdem sollte _Docker Desktop_ installiert s
 Für _Linux_ und _macOS_ muss folgende Software installiert sein (z.B. mit _apt_
 bei Linux oder _brew_ bei macOS):
 
+- Bun
 - Docker Desktop
 - Git
 - Node
 - Python (wird für node-gyp benötigt)
 - GraphViz (wird für PlantUML benötigt)
-
-### Umgebungsvariable
-
-Vorab werden die notwendigen Umgebungsvariable gesetzt, damit nicht bei jeder
-nachfolgenden Installation immer wieder einzelne Umgebungsvariable gesetzt werden
-müssen.
-
-`[Windows-Taste]` betätigen, dann als Suchstring `Systemumgebungsvariablen bearbeiten`
-eingeben und auswählen.
-
-Bei _Systemvariable_ (**nicht** bei _Benutzervariable_) folgende
-Umgebungsvariable mit den jeweiligen Werten eintragen. Die Werte für `PATH`
-_vor_ Pfaden mit _Leerzeichen_ eintragen.
-
-| Name der Umgebungsvariable | Wert der Umgebungsvariable                                                                                                      |
-| -------------------------- | ------------------------------------------------------------------------------------------------------------------------------- |
-| `GIT_HOME`                 | `C:\Zimmermann\git`                                                                                                             |
-| `PYTHON`                   | `C:\Zimmermann\Python\python.exe`                                                                                               |
-| `PATH`                     | `C:\Zimmermann\node`;`%GIT_HOME%\cmd`;`%GIT_HOME%\bin`;`C:\Zimmermann\Python`;`C:\Zimmermann\k6`; `C:\Zimmermann\Graphviz\bin`; |
-
-### Node und npm überprüfen
-
-Bei Windows in einer Powershell die nachfolgenden Kommandos eingeben:
-
-```powershell
-    Get-Command node
-    node --version
-    Get-Command npm
-    npm --version
-```
-
-Bei Linux und macOS in einer Shell die nachfolgenden Kommandos eingeben:
-
-```shell
-    which node
-    node --version
-    which npm
-    npm --version
-```
-
-### pnpm aktivieren
-
-Um `pnpm` (performant node package manager) zu konfigurieren, werden zunächst
-evtl. vorhandene Installationen von `pnpm` und `yarn` entfernt. `corepack` wird
-ab Node 25 nicht mehr in der Distribution für Node enthalten sein.
-
-```shell
-    npm r -g pnpm yarn
-    npm i -g corepack
-
-    corepack enable pnpm
-    corepack prepare pnpm@latest-10 --activate
-```
-
-### node_modules initialisieren
-
-Softwarepakete für _Prisma_ und für die spätere Entwicklung mit z.B. _Nest_
-werden folgendermaßen installiert.
-
-```shell
-    pnpm i
-```
+- VS Code (siehe ReadMe.vscode.md)
 
 ### Docker-Image für PostgreSQL
 
-Das aktuelle Image für _PostgreSQL_ wird von _Docker Hub_ heruntergeladen:
+Das aktuelle Image für _PostgreSQL_ wird von _Docker Hub_ heruntergeladen. Die
+aktuelle Versionsnummer kann man `extras\compose\postgres\compose.yml` entnehmen.
 
 ```shell
-    docker pull postgres:18.0-trixie
+    docker pull postgres:<VERSION>-trixie
 ```
 
 ### Datenbank mit PostgreSQL
@@ -180,24 +134,93 @@ Für csv, sql und tls gibt es in ILIAS die ZIP-Datei `postgres.macos-linux.zip.z
 Die anderen Verzeichnisse (data, run und tablespace) müssen lediglich als zunächst
 leere Verzeichnisse existieren.
 
+### Umgebungsvariable
+
+Vorab werden die notwendigen Umgebungsvariable gesetzt, damit nicht bei jeder
+nachfolgenden Installation immer wieder einzelne Umgebungsvariable gesetzt werden
+müssen.
+
+`[Windows-Taste]` betätigen, dann als Suchstring `Systemumgebungsvariablen bearbeiten`
+eingeben und auswählen.
+
+Bei _Systemvariable_ (**nicht** bei _Benutzervariable_) folgende
+Umgebungsvariable mit den jeweiligen Werten eintragen. Die Werte für `PATH`
+_vor_ Pfaden mit _Leerzeichen_ eintragen.
+
+| Name der Umgebungsvariable | Wert der Umgebungsvariable                                                                                                     |
+| -------------------------- | ------------------------------------------------------------------------------------------------------------------------------ |
+| `GIT_HOME`                 | `C:\Zimmermann\git`                                                                                                            |
+| `PYTHON`                   | `C:\Zimmermann\Python\python.exe`                                                                                              |
+| `PATH`                     | `C:\Zimmermann\node`;`%GIT_HOME%\cmd`;`%GIT_HOME%\bin`;`C:\Zimmermann\Python`;`C:\Zimmermann\k6`;`C:\Zimmermann\Graphviz\bin`; |
+
+## Installation
+
+### Bun installieren
+
+_Bun_ wird folgendermaßen installiert:
+
+```shell
+    # Windows:
+    powershell -c "irm bun.sh/install.ps1|iex"
+
+    # macOS und Linux:
+    curl -fsSL https://bun.sh/install | bash
+```
+
+Bei Windows erfolgt die Installation im Pfad `${env:USERPROFILE}\.bun\bin`,
+welcher auch in der Umgebungsvariablen `PATH` ergänzt wird. Bei macOS und Linux
+ist es analog `$HOME/.bun/bin`.
+
+### Bun, Node und npm überprüfen
+
+Bei Windows in einer Powershell die nachfolgenden Kommandos eingeben:
+
+```powershell
+    Get-Command bun
+    bun --version
+    Get-Command node
+    node --version
+    Get-Command npm
+    npm --version
+```
+
+Bei Linux und macOS in einer Shell die nachfolgenden Kommandos eingeben:
+
+```shell
+    which bun
+    bun --version
+    which node
+    node --version
+    which npm
+    npm --version
+```
+
+### Software-Pakete in node_modules mit Bun installieren
+
+Die Softwarepakete für _Prisma_ werden mit _Bun_ folgendermaßen installiert:
+
+```shell
+    bun i
+```
+
 ---
 
-## Schema für ein NEUES Projekt
+## Prisma-Schema für ein NEUES Projekt
 
 Für dieses Projektbeispiel **ÜBERSPRINGEN**, weil `prisma\schema.prisma` schon existiert.
 Es geht weiter im Abschnitt [Code-Generierung für den DB-Client](#code-generierung-für-den-db-client).
 
-### Initiales Schema erstellen
+### Initiales Prisma-Schema erstellen
 
 Um ein neues Prisma-Schema zu erstellen, muss die Umgebungsvariable `DATABASE_URL`
 gesetzt sein:
 
 ```shell
     # Windows:
-    $env:DATABASE_URL='postgresql://buch:p@localhost/buch?schema=buch&connection_limit=10&sslnegotiation=direct?sslcert=../src/config/resources/postgresql/certificate.cer'
+    $env:DATABASE_URL='postgresql://buch:p@localhost/buch?schema=buch&connection_limit=10&sslnegotiation=direct?sslcert=src/config/resources/postgresql/certificate.cer'
 
     # macOS:
-    DATABASE_URL='postgresql://buch:p@localhost/buch?schema=buch&connection_limit=10&sslnegotiation=direct?sslcert=../src/config/resources/postgresql/certificate.cer'
+    DATABASE_URL='postgresql://buch:p@localhost/buch?schema=buch&connection_limit=10&sslnegotiation=direct?sslcert=src/config/resources/postgresql/certificate.cer'
 ```
 
 Dadurch ist folgendes konfiguriert:
@@ -215,17 +238,30 @@ wird die Datei `schema.prisma` angelegt. Das Verzeichnis `prisma` darf dabei
 noch nicht existieren.
 
 ```shell
-    pnpm prisma init
+    bun prisma init
 ```
 
 Dabei werden folgende Dateien generiert:
 
 - `prisma.config.ts` siehe https://github.com/prisma/prisma/releases/tag/6.18.0
 - `prisma\schema.prisma`
+- `.env`
 
-In der Datei `.env` wurde `DATABASE_URL` als Umgebungsvariable eingetragen.
-Diesen Wert überschreibt man mit dem Wert, den man zuvor in der Shell gesetzt
-hatte (s.o.).
+Falls `.env` bereits existiert, wird ggf. `DATABASE_URL` als Umgebungsvariable
+eingetragen. Der Wert von `DATABASE_URL` muss auf jeden Fall mit dem Wert
+übereinstimmen, den man zuvor in der Shell gesetzt hatte (s.o.).
+
+In `prisma\schema.prisma` ergänzt man den Abschnitt `generator client` um
+folgende Einträge, damit später die neuesten Features von Prisma genutzt werden
+können:
+
+```prisma
+    generator client {
+        ...
+        previewFeatures = ["nativeDistinct", "relationJoins"]
+        engineType      = "client"
+    }
+```
 
 ### Models aus einer bestehenden DB generieren
 
@@ -242,12 +278,12 @@ Nun wird die Generierung durchgeführt, so dass die Datei `prisma\schema.prisma`
 um die Models für das spätere OR-Mapping ergänzt wird:
 
 ```shell
-    pnpm prisma db pull
+    bun prisma db pull
 ```
 
-Warnungen, dass _Check-Constraints_ nicht unterstützt werden, können ignoriert werden,
-weil an der API-Schnittstelle (z.B. REST) des künftigen Appservers, Validierungsfehler
-überprüft werden.
+Warnungen, dass _Check-Constraints_ nicht unterstützt werden, können ignoriert
+werden, weil an der API-Schnittstelle (z.B. REST) des künftigen Appservers,
+Validierungsfehler überprüft werden.
 
 ### Schema anpassen
 
@@ -266,18 +302,11 @@ Nachdem die Models generiert wurden, empfiehlt es sich das Schema anzupassen, z.
   JavaScript-Objekte auf Datensätze in Tabellen im gewünschten Schema abgebildet
   werden.
 
-Um die neuesten Features von Prisma zu nutzen, sollten im Schema auch folgende
-Einträge angepasst werden, wobei der Schema-Name `buch` durch den eigenen
-Schema-Namen zu ersetzen ist. Zu beachten ist insbesondere, dass `prisma-client`
-als provider für den Generator verwendet wird.
+Außerdem sollte in `prisma\schema.prisma` der eigene Schema-Name (hier: `buch`)
+eingetragen werden:
 
 ```prisma
-  generator client {
-    provider        = "prisma-client"
-    output          = "../src/generated/prisma"
-    previewFeatures = ["nativeDistinct", "relationJoins"]
-    engineType      = "client"
-  }
+  ...
   datasource db {
     provider = "postgresql"
     schemas  = ["buch"]
@@ -324,34 +353,26 @@ Die beiden Beispiel-Dateien `src\beispiele.mts` und `src\beispiele-write.mts`
 können mit _Node_ folgendermaßen aufgerufen werden:
 
 ```shell
-    node --env-file=.env src/beispiele.mts
-    node --env-file=.env src/beispiele-write.mts
+    bun --env-file=.env src/beispiele.mts
+    bun --env-file=.env src/beispiele-write.mts
+```
+
+## Neuere Versionen und evtl. Sicherheitslücken
+
+Mit _Bun_ können neuere Versionen der Software-Pakete aus `package.json` ermittelt
+und auch auf Sicherheitslücken überprüft werden:
+
+```shell
+    bun outdated
+    bun audit
 ```
 
 ## Prisma Studio
 
-Statt z.B. der Erweiterung _PostgreSQL_ für VS Code, kann auch _Prisma Studio_
-als DB-Werkzeug verwendet werden:
+Statt z.B. der Erweiterung _PostgreSQL_ für VS Code, sollte auch _Prisma Studio_
+als DB-Werkzeug verwendet werden können, was allerdings mit _Bun_ nicht funktioniert.
+Der Aufruf mit _Bun_ würde lauten:
 
 ```shell
-    pnpx prisma studio
+    bunx prisma studio
 ```
-
-## Ausblick für Nest
-
-Nachdem das Prisma-Schema in der Datei `prisma/schema.prisma` erstellt wurde,
-sind für das _Nest_-basierte Projekt folgende Anpassungen notwendig:
-
-- In `tsconfig.json`, weil beim direkten Arbeiten mit _Node_ das Feature _Type
-  Stripping_ genutzt wurde, d.h. Node wurde aufgerufen und die Typen von
-  _TypeScript_ wurden zur Laufzeit einfach weggelassen. _Nest_ verwendet dagegen
-  _übersetzten_ Code, d.h. _JavaScript_.
-  - bei der Option `emitDecoratorMetadata` den Kommentar entfernen
-  - die Option `noEmit` auskommentieren
-  - die Option `allowImportingTsExtensions` auskommentieren
-- Der Prisma-Client muss deshalb auch neu generiert werden, d.h.
-  - das Verzeichnis `src\generated` wird gelöscht und
-  - `pnpx prisma generate` wird in der PowerShell aufgerufen.
-- Die bisherigen Beispieldateien `beispiele.mts` und `beispiele-write.mts`
-  für den "alten" Prisma-Client können deshalb nicht mehr funktionieren, weshalb
-  man sie am einfachsten aus dem Projekt löscht.
