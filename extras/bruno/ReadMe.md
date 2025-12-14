@@ -47,6 +47,20 @@ und deren Werte ein. In der Spalte _Secret_ kann man dann einen Haken setzen, so
 künftig die Werte nicht im Klartext, sondern als Sterne angezeigt werden.
 Abschließend darf man nicht vergessen, die Einträge mit dem Button _Save_ abzuspeichern.
 
+_Secrets_ werden folgendermaßen abgespeichert:
+
+| Betriebssystem | Verzeichnis                           |
+|:---------------|:--------------------------------------|
+| Windows        | `$env:APPDATA\Bruno`                  |
+| macOS          | `~/Library/Application Support/Bruno` |
+| Linux          | `~/.config/Bruno`                     |
+
+Für das vorliegende Beispiel müssen deshalb für das Environment `kunde` folgende Werte
+gesetzt werden:
+
+- `clientSecret`: siehe Kubernetes
+- `password`: Administrationspasswort für Kubernetes, z.B. `p`
+
 ## Autorisierung mit OAuth 2
 
 Für _OAuth 2_ gibt es u.a. die beiden Möglichkeiten _Password Credentials_ und
