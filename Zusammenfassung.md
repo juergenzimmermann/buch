@@ -50,7 +50,7 @@ GPL v3
 - Prisma
 - PostgreSQL
 - Mailing
-- .env, config/, reguläre Ausdrücke mit /.../
+- .env, config/resources, reguläre Ausdrücke mit /.../
 - Error
 - Login mit POST und application/x-www-form-urlencoded
 - Keycloak

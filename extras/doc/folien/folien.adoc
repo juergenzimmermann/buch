@@ -28,9 +28,9 @@ Jürgen Zimmermann <Juergen.Zimmermann@h-ka.de>
 * Werkzeuge
 * Nest und REST
 * Nest und GraphQL
-* TypeORM
+* Prisma
 * Security
-* Vitest und Axios
+* Vitest und fetch
 * OpenAPI durch Swagger
 
 == Werkzeuge
@@ -42,7 +42,7 @@ Jürgen Zimmermann <Juergen.Zimmermann@h-ka.de>
 
 === Infrastruktur
 
-* npm
+* pnpm
 * node_modules
 * ts-node
 
@@ -52,7 +52,7 @@ Jürgen Zimmermann <Juergen.Zimmermann@h-ka.de>
 * TypeScript und ES 2015+
 * ESLint und SonarQube
 * Prettier
-* Postman
+* Bruno
 
 === CI und Deployment
 
@@ -69,7 +69,6 @@ Jürgen Zimmermann <Juergen.Zimmermann@h-ka.de>
 
 * Controller mit `@Controller()` usw.
 * Services durch `@Injectable()`
-* Entity-Klasse mit `@Entity()` und Decorators für die Properties, wie z.B. `@Column()`, für TypeORM
 * Guards für Security
 * Middleware, z.B. `RequestLoggerMiddleware`
 * Interceptor, z.B. für Antwortzeit und Statuscode
@@ -96,14 +95,14 @@ Jürgen Zimmermann <Juergen.Zimmermann@h-ka.de>
 * Resolver mit `@Resolver()`, `@Query()`, `@Mutation()`, `@Args()`
 * Postman
 
-== TypeORM
+== Prisma
 
 * OR-Mapping
-* ähnlich wie Hibernate
-* Entity-Klassen
-* Decorators: @Entity(), @Column(), @PrimaryGeneratedColumn(), @OneToOne(), ..., @VersionColumn(), @CreateDateColumn(), @UpdateDateColumn()
-* Repository
-* QueryBuilder
+* Schema
+* Generierter Client einschl. Entity-Klassen
+* findUnique(), findMany(), include
+* Pagination, WhereBuilder
+* $transaction mit Arrow-Function, create(), update(), delete()
 
 == Security
 
@@ -115,10 +114,10 @@ Jürgen Zimmermann <Juergen.Zimmermann@h-ka.de>
   - @Roles()
   - @Public()
 
-== Vitest und Axios
+== Vitest und fetch
 
 * Vitest als Test-Framework
-* Axios für HTTP-Requests bei Integrationstests
+* fetch() für HTTP-Requests bei Integrationstests
 
 == OpenAPI durch Swagger
 
