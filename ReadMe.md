@@ -164,7 +164,9 @@ verwendet dagegen _übersetzten_ Code, d.h. _JavaScript_. Deshalb müssen in
 - die Option `noEmit` auskommentieren
 - die Option `allowImportingTsExtensions` auskommentieren
 
-Der Prisma-Client muss deshalb auch neu generiert werden, d.h.
+Das Prisma-Schema in der Datei `prisma/schema.prisma` ist unverändert gültig,
+aber der Prisma-Client muss aufgrund der Änderungen in `tsconfig.json` und
+`package.json` neu generiert werden, d.h.
 
 - das Verzeichnis `src\generated` wird gelöscht und
 - `pnpx prisma generate` wird in der PowerShell aufgerufen.
