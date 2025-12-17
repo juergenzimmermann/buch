@@ -52,12 +52,8 @@ apt-get update --no-show-upgraded
 # Die neuesten Versionen der bereits installierten Packages installieren
 apt-get upgrade --yes --no-show-upgraded
 
-npm r -g yarn pnpm corepack
-rm /usr/local/bin/yarn
-rm /usr/local/bin/yarnpkg
-npm i -g corepack
-corepack enable pnpm
-corepack prepare pnpm@latest-10 --activate
+npm r -g pnpm
+npm i -g pnpm
 
 # Debian Trixie bietet nur Packages fuer Python 3.13
 # https://packages.debian.org/trixie/python3.13-minimal
@@ -99,12 +95,8 @@ apt-get update
 # Die neuesten Versionen der bereits installierten Packages installieren
 apt-get upgrade --yes
 
-npm r -g yarn pnpm corepack
-rm /usr/local/bin/yarn
-rm /usr/local/bin/yarnpkg
-npm i -g corepack
-corepack enable pnpm
-corepack prepare pnpm@latest-10 --activate
+npm r -g pnpm
+npm i -g pnpm
 
 # https://packages.debian.org/trixie/python3.13-minimal
 # https://packages.debian.org/trixie/python3.13-dev

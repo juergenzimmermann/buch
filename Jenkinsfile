@@ -96,14 +96,10 @@ pipeline {
                     lsb_release -a
                     node --version
                     npm --version
-                    npm r -g yarn pnpm
-                    npm i -g corepack
+                    npm r -g pnpm
+                    npm i -g pnpm
                     npm root -g
-                    which corepack
                     ls -al ~/.cache/node
-                    corepack --version
-                    corepack enable pnpm
-                    corepack prepare pnpm@latest-10 --activate
                     env | sort
                     which pnpm
                     pnpm --version

@@ -53,12 +53,8 @@ apk update
 # Die neuesten Versionen der bereits installierten Packages installieren
 apk upgrade
 
-npm r -g yarn pnpm corepack
-rm /usr/local/bin/yarn
-rm /usr/local/bin/yarnpkg
-npm i -g corepack
-corepack enable pnpm
-corepack prepare pnpm@latest-10 --activate
+npm r -g pnpm
+npm i -g pnpm
 
 # ggf. Python fuer pg
 # https://dl-cdn.alpinelinux.org/alpine/v3.23/main/x86_64
@@ -106,12 +102,8 @@ apk update
 # Die neuesten Versionen der bereits installierten Packages installieren
 apk upgrade
 
-npm r -g yarn pnpm corepack
-rm /usr/local/bin/yarn
-rm /usr/local/bin/yarnpkg
-npm i -g corepack
-corepack enable pnpm
-corepack prepare pnpm@latest-10 --activate
+npm r -g pnpm
+npm i -g pnpm
 
 apk add --update --no-cache python3=3.12.12-r0 make=4.4.1-r3 gcc=15.2.0-r2 g++=15.2.0-r2 build-base=0.5-r3
 ln -sf python3 /usr/bin/python
