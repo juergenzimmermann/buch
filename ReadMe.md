@@ -32,7 +32,7 @@
 - [Inhalt](#inhalt)
 - [Vorbereitung der Installation](#vorbereitung-der-installation)
 - [Migration von Bun zu pnpm](#migration-von-bun-zu-pnpm)
-  - [pnpm installieren und aktivieren](#pnpm-installieren-und-aktivieren)
+  - [pnpm installieren](#pnpm-installieren)
   - [Konfigurationsdateien für Bun löschen](#konfigurationsdateien-für-bun-löschen)
   - [package.json und node_modules](#packagejson-und-node_modules)
   - [Migration von Prisma für pnpm und Nest](#migration-von-prisma-für-pnpm-und-nest)
@@ -80,52 +80,19 @@
 
 ## Migration von Bun zu pnpm
 
-### pnpm installieren und aktivieren
+### pnpm installieren
 
 _pnpm_ (performant node package manager) ist ein Paketmanager für _Node_, der
 effizienter ist als das herkömmliche _npm_ und in diesem Beispiel statt _Bun_
-genutzt wird.
-
-Die Kommandos für die Installation und Aktivierung von _pnpm_ sind hier kompakt
-aufgeführt. Anschließend wird der Ablauf im Detail erklärt.
+genutzt wird. Die Installation von _pnpm_ erfolgt mit _npm_, nachdem sichergestellt
+ist, dass _Node_ und _npm_ installiert sind und aktuelle Versionen verwendet werden:
 
 ```shell
     node --version
     npm --version
 
-    npm i -g corepack
-
-    corepack enable pnpm
-    corepack prepare pnpm@latest-10 --activate
+    npm i -g pnpm
 ```
-
-Zunächst wird sichergestellt, dass _Node_ und _npm_ installiert sind und
-aktuelle Versionen verwendet werden.
-
-Um _pnpm_ zu installieren und zu aktivieren, muss _corepack_ global installiert
-werden. _corepack_ wird mit `npm i -g corepack` aus der Distribution
-von _Node_ in demselben Verzeichnis installiert wie die ausführbaren Dateien
-`node` und `npm`, z.B. in `C:\Zimmermann\node`, was bereits in der Umgebungsvariable
-`PATH` enthalten ist. Dabei wird in `node_modules\corepack\dist`
-das "Dispatcher"-Skript `pnpm.js` installiert, das beim späteren Aufruf von `pnpm`,
-die gewünschte Version von `pnpm` aufruft.
-
-Nachdem _corepack_ installiert ist, werden durch `corepack enable pnpm` sogenannte
-"Shims" erstellt. Das sind "kleine Ausführungswrapper" im Installationsverzeichnis
-von corepack, z.B. `C:\Zimmermann\node (s.o.)`. Bei Windows ist das "Shim" dann das
-PowerShell-Skript `pnpm.ps1`. Bei macOS und Linux ist das "Shim" das
-_Bourne Shell_-Script `pnpm` und wird mittels `/bin/sh` aufgerufen, so dass das
-Script auch korrekt unter der _dash_ bei Debian/Ubuntu, _ash_ bei Alpine,
-_zsh_ bei macOS und _ksh_ (Korn Shell) bei z.B. AIX und HP-UX läuft. Das "Shim"
-`pnpm.ps1` bzw. `pnpm` ruft dann das "Dispatcher"-Skript `pnpm.js` in
-`node_modules\corepack\dist` auf, das zuvor mit _corepack_ installiert wurde.
-
-Abschließend wird mit `corepack prepare pnpm@... --activate` die spezifizierte
-Version von _pnpm_ heruntergeladen und im Cache von _corepack_ gespeichert. Das
-Cache-Verzeichnis von _corepack_ befindet sich bei Windows in `$env:LOCALAPPDATA\node\corepack`
-und _pnpm_ wird in `$env:LOCALAPPDATA\node\corepack\v1\pnpm` gespeichert. Diese
-Version von _pnpm_ wird dann zur globalen Default-Version für das "Dispatcher"-Skript
-`pnpm.js`.
 
 ### Konfigurationsdateien für Bun löschen
 
