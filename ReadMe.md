@@ -135,6 +135,10 @@ Das Prisma-Schema in der Datei `prisma/schema.prisma` ist unverändert gültig,
 aber der Prisma-Client muss aufgrund der Änderungen in `tsconfig.json` und
 `package.json` neu generiert werden, d.h.
 
+- in `prisma.config.ts` muss als erste Anweisung `import 'dotenv/config';`
+  ergänzt werden, damit die Umgebungsvariable `DATABASE_URL` aus der Datei `.env`
+  gelesen wird (_bun_ konnte mit der Option `--env-file` aufgerufen werden, um
+  die Datei `.env` einzulesen)
 - das Verzeichnis `src\generated` wird gelöscht und
 - `pnpx prisma generate` wird in der PowerShell aufgerufen.
 
