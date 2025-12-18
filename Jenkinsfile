@@ -130,7 +130,6 @@ pipeline {
 
         stage('Compile') {
             steps {
-                // TODO Warum funktioniert npx nicht?
                 sh '''
                     pnpm tsc --version
                     pnpm run tsc
