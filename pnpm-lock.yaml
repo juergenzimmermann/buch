@@ -132,8 +132,8 @@ importers:
         specifier: 2.0.2
         version: 2.0.2
       validator:
-        specifier: 13.15.23
-        version: 13.15.23
+        specifier: 13.15.26
+        version: 13.15.26
       ws:
         specifier: 8.18.3
         version: 8.18.3
@@ -2848,8 +2848,8 @@ packages:
     resolution: {integrity: sha512-rNjApaLzuwaOTjCiT8lSDdGN1APCiqkChLMJxJPWLunPAt5fy8xgU9/jNOchV84wfIxrA0lRQB7oCT8jrn/wrQ==}
     engines: {node: '>=6.0'}
 
-  chromedriver@143.0.2:
-    resolution: {integrity: sha512-pNNEf19M10V04JfJBa+W8aEXHfUqpEXQqebspKYntMxP4nwNACnQSFGnV/L3EDpeR/hZx628mDs5kp6KiGMC5Q==}
+  chromedriver@143.0.3:
+    resolution: {integrity: sha512-esuTb/QVB3s5A0o/286CBh1Xaxvebp2q7+lQZOiXjQlBxXxhvYz7xySCY+5c9Ku6DJoEbK5yoG96fu5R9jPQWQ==}
     engines: {node: '>=20'}
     hasBin: true
 
@@ -5916,8 +5916,8 @@ packages:
     resolution: {integrity: sha512-bwVk/OK+Qu108aJcMAEiU4yavHUI7aN20TgZNBj9MR2iU1zPUl1Z1Otr7771ExfYTPTvfN8ZJ1pbr5Iklgt4xg==}
     engines: {node: ^20.17.0 || >=22.9.0}
 
-  validator@13.15.23:
-    resolution: {integrity: sha512-4yoz1kEWqUjzi5zsPbAS/903QXSYp0UOtHsPpp7p9rHAw/W+dkInskAE386Fat3oKRROwO98d9ZB0G4cObgUyw==}
+  validator@13.15.26:
+    resolution: {integrity: sha512-spH26xU080ydGggxRyR1Yhcbgx+j3y5jbNXk/8L+iRvdIEQ4uTRH2Sgf2dokud6Q4oAtsbNvJ1Ft+9xmm6IZcA==}
     engines: {node: '>= 0.10'}
 
   vary@1.1.2:
@@ -9222,7 +9222,7 @@ snapshots:
 
   chrome-trace-event@1.0.4: {}
 
-  chromedriver@143.0.2:
+  chromedriver@143.0.3:
     dependencies:
       '@testim/chrome-version': 1.1.4
       axios: 1.13.2
@@ -9248,7 +9248,7 @@ snapshots:
     dependencies:
       '@types/validator': 13.15.10
       libphonenumber-js: 1.12.31
-      validator: 13.15.23
+      validator: 13.15.26
 
   clean-regexp@1.0.0:
     dependencies:
@@ -10887,7 +10887,7 @@ snapshots:
     dependencies:
       jwk-to-pem: 2.0.7
     optionalDependencies:
-      chromedriver: 143.0.2
+      chromedriver: 143.0.3
     transitivePeerDependencies:
       - debug
       - supports-color
@@ -12533,7 +12533,7 @@ snapshots:
 
   validate-npm-package-name@7.0.0: {}
 
-  validator@13.15.23: {}
+  validator@13.15.26: {}
 
   vary@1.1.2: {}
 

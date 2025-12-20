@@ -103,7 +103,7 @@
     "smol-toml": "1.5.2",
     "sonic-boom": "4.2.0",
     "statuses": "2.0.2",
-    "validator": "13.15.23",
+    "validator": "13.15.26",
     "ws": "8.18.3",
     "xss": "1.0.15"
   },
@@ -169,7 +169,7 @@
     "weak-napi": "2.0.2",
     "yaml": "2.8.2"
   },
-  "packageManager": "pnpm@10.26.0",
+  "packageManager": "pnpm@10.26.1",
   "engines": {
     "node": ">=25.2.1"
   },

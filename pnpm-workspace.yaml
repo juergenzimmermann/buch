@@ -17,8 +17,7 @@
 
 # Keine Dependencies von Git-Repositories git+ssh://... und von direkten URLs zu TARs https://.../package.tgz
 # https://pnpm.io/settings#blockexoticsubdeps
-# Problem: @asciidoctor/opal-runtime
-#blockExoticSubdeps : true
+blockExoticSubdeps: true
 
 # Keine Ausfuehrung von (pre-/post-) install-Skripten
 # https://pnpm.io/settings#ignoredbuiltdependencies
