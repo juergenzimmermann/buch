@@ -19,9 +19,9 @@ import {
     BuchService,
 } from '../../src/buch/service/buch-service.js';
 import { type Pageable } from '../../src/buch/service/pageable.js';
-import { PrismaService } from '../../src/buch/service/prisma-service.js';
 import { type Suchparameter } from '../../src/buch/service/suchparameter.js';
 import { WhereBuilder } from '../../src/buch/service/where-builder.js';
+import { PrismaService } from '../../src/config/prisma-service.js';
 import { Prisma, PrismaClient } from '../../src/generated/prisma/client.js';
 import { Buchart } from '../../src/generated/prisma/enums.js';
 
@@ -95,8 +95,8 @@ describe('BuchService find', () => {
         (prismaServiceMock.client.buch.findMany as any).mockResolvedValue([]);
 
         // when / then
-        await expect(service.find(suchparameter, pageable)).rejects.toThrow(
-            /^Keine Buecher gefunden/,
-        );
+        await expect(
+            service.find(suchparameter, pageable),
+        ).rejects.toThrowError(/^Keine Buecher gefunden/);
     });
 });

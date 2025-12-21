@@ -14,6 +14,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 import { Module } from '@nestjs/common';
+import { ConfigModule } from '../config/module.js';
 import { MailModule } from '../mail/module.js';
 import { KeycloakModule } from '../security/keycloak/module.js';
 import { BuchController } from './controller/buch-controller.js';
@@ -22,7 +23,6 @@ import { BuchMutationResolver } from './resolver/mutation.js';
 import { BuchQueryResolver } from './resolver/query.js';
 import { BuchService } from './service/buch-service.js';
 import { BuchWriteService } from './service/buch-write-service.js';
-import { PrismaService } from './service/prisma-service.js';
 import { WhereBuilder } from './service/where-builder.js';
 
 /**
@@ -36,7 +36,7 @@ import { WhereBuilder } from './service/where-builder.js';
  * Funktionalität für Prisma.
  */
 @Module({
-    imports: [KeycloakModule, MailModule],
+    imports: [ConfigModule, KeycloakModule, MailModule],
     controllers: [BuchController, BuchWriteController],
     // Provider sind z.B. Service-Klassen fuer DI
     providers: [
@@ -44,7 +44,6 @@ import { WhereBuilder } from './service/where-builder.js';
         BuchWriteService,
         BuchQueryResolver,
         BuchMutationResolver,
-        PrismaService,
         WhereBuilder,
     ],
     // Export der Provider fuer DI in anderen Modulen

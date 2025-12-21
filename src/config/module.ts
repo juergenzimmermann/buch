@@ -14,14 +14,15 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 import { Module } from '@nestjs/common';
-import { KeycloakModule } from '../../security/keycloak/module.js';
-import { DbPopulateService } from './db-populate.js';
-import { DevController } from './dev-controller.js';
+import { KeycloakModule } from '../security/keycloak/module.js';
+import { DbPopulateService } from './dev/db-populate.js';
+import { DevController } from './dev/dev-controller.js';
+import { PrismaService } from './prisma-service.js';
 
 @Module({
     imports: [KeycloakModule],
     controllers: [DevController],
-    providers: [DbPopulateService],
-    exports: [DbPopulateService],
+    providers: [DbPopulateService, PrismaService],
+    exports: [DbPopulateService, PrismaService],
 })
-export class DevModule {}
+export class ConfigModule {}

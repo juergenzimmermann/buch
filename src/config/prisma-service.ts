@@ -16,8 +16,9 @@
 // https://docs.nestjs.com/recipes/prisma#use-prisma-client-in-your-nestjs-services
 import { Injectable, OnModuleInit } from '@nestjs/common';
 import { PrismaPg } from '@prisma/adapter-pg';
-import { PrismaClient } from '../../generated/prisma/client.js';
-import { getLogger } from '../../logger/logger.js';
+import { prismaQueryInsights } from '@prisma/sqlcommenter-query-insights';
+import { PrismaClient } from '../generated/prisma/client.js';
+import { getLogger } from '../logger/logger.js';
 
 // https://docs.nestjs.com/recipes/prisma#use-prisma-client-in-your-nestjs-services
 @Injectable()
@@ -28,7 +29,7 @@ export class PrismaService implements OnModuleInit {
     readonly #logger = getLogger(PrismaService.name);
 
     constructor() {
-        // PrismaClient fuer DB "buch" (siehe Umgebungsvariable DATABASE_URL in ".env")
+        // PrismaClient passend zur Umgebungsvariable DATABASE_URL in ".env"
         // d.h. mit PostgreSQL-User "buch" und Schema "buch"
         const adapter = new PrismaPg({
             connectionString: process.env['DATABASE_URL'],
@@ -40,6 +41,7 @@ export class PrismaService implements OnModuleInit {
                 errorFormat: 'pretty',
                 log: [
                     {
+                        // siehe unten: prisma.$on('query', ...);
                         emit: 'event',
                         level: 'query',
                     },
@@ -47,10 +49,16 @@ export class PrismaService implements OnModuleInit {
                     'warn',
                     'error',
                 ],
+                // Kommentar zu Log-Ausgabe:
+                // /*prismaQuery='Buch.findMany%3A...
+                // https://www.prisma.io/docs/orm/reference/prisma-client-reference#comments
+                comments: [prismaQueryInsights()],
             });
+
             prisma.$on('query', (e) => {
                 console.log(`Query: ${e.query}`);
             });
+
             this.client = prisma;
         } else {
             this.client = new PrismaClient({ adapter });

@@ -19,6 +19,7 @@
  */
 
 import { Injectable, NotFoundException } from '@nestjs/common';
+import { PrismaService } from '../../config/prisma-service.js';
 import {
     BuchFile,
     Prisma,
@@ -27,7 +28,6 @@ import {
 import { type BuchInclude } from '../../generated/prisma/models/Buch.js';
 import { getLogger } from '../../logger/logger.js';
 import { type Pageable } from './pageable.js';
-import { PrismaService } from './prisma-service.js';
 import { type Slice } from './slice.js';
 import { type Suchparameter, suchparameterNamen } from './suchparameter.js';
 import { WhereBuilder } from './where-builder.js';

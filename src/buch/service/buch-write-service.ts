@@ -21,6 +21,7 @@
 
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { fileTypeFromBuffer } from 'file-type';
+import { PrismaService } from '../../config/prisma-service.js';
 import {
     BuchFile,
     type Prisma,
@@ -34,7 +35,6 @@ import {
     VersionInvalidException,
     VersionOutdatedException,
 } from './exceptions.js';
-import { PrismaService } from './prisma-service.js';
 
 export type BuchCreate = Prisma.BuchCreateInput;
 type BuchCreated = Prisma.BuchGetPayload<{

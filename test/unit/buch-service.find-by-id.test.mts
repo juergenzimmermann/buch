@@ -18,8 +18,8 @@ import {
     type BuchMitTitel,
     BuchService,
 } from '../../src/buch/service/buch-service.js';
-import { PrismaService } from '../../src/buch/service/prisma-service.js';
 import { WhereBuilder } from '../../src/buch/service/where-builder.js';
+import { PrismaService } from '../../src/config/prisma-service.js';
 import { Prisma, PrismaClient } from '../../src/generated/prisma/client.js';
 import { Buchart } from '../../src/generated/prisma/enums.js';
 
@@ -85,7 +85,7 @@ describe('BuchService findById', () => {
         );
 
         // when / then
-        await expect(service.findById({ id })).rejects.toThrow(
+        await expect(service.findById({ id })).rejects.toThrowError(
             `Es gibt kein Buch mit der ID ${id}.`,
         );
     });
