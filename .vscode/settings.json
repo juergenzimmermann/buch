@@ -36,5 +36,6 @@
   },
   "npm.packageManager": "pnpm",
   "peacock.color": "#215732",
+  "typescript.experimental.useTsgo": true,
   "asciidoc.antora.showEnableAntoraPrompt": false
 }
