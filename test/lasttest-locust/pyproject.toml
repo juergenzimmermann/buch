@@ -65,12 +65,12 @@ changelog = "https://github.com/juergenzimmermann/locust/blob/master/CHANGELOG.m
 # https://docs.astral.sh/uv/concepts/projects/dependencies/#dependency-groups
 [dependency-groups]
 # https://docs.astral.sh/uv/concepts/projects/dependencies/#development-dependencies
-dev = ["locust>=2.42.6"]
+dev = ["locust>=2.43.0"]
 lint = [
   # https://docs.astral.sh/ruff
-  "ruff>=0.14.9",
+  "ruff>=0.14.10",
   # https://github.com/astral-sh/ty
-  "ty>=0.0.1a34",
+  "ty>=0.0.8",
 ]
 
 [tool.ruff]
@@ -114,6 +114,6 @@ case-sensitive = true
 
 # https://github.com/microsoft/pyright/blob/main/docs/configuration.md#sample-pyprojecttoml-file
 [tool.pyright]
-pythonVersion = "3.13"
+pythonVersion = "3.14"
 include = ["src"]
 exclude = ["**/__pycache__"]
