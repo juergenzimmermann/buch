@@ -21,19 +21,39 @@
 
 ## Inhalt
 
-- [Server mit selbst-signiertem Zertifikat](#server-mit-selbst-signiertem-zertifikat)
+- [Desktop App für ein selbst-signiertes Zertifikat](#desktop-app-für-ein-selbst-signiertes-zertifikat)
+- [Erweiterung für VS Code](#erweiterung-für-vs-code)
+  - [Collection öffnen](#collection-öffnen)
+  - [Selbst-signiertes Zertifikat](#selbst-signiertes-zertifikat)
 - [Sensible Daten](#sensible-daten)
 - [Autorisierung mit OAuth 2](#autorisierung-mit-oauth-2)
   - [Password Credentials](#password-credentials)
   - [Authorization Code](#authorization-code)
 - [Developer Mode](#developer-mode)
 
-## Server mit selbst-signiertem Zertifikat
+## Desktop App für ein selbst-signiertes Zertifikat
 
 Um auf einen Server mit selbst-signiertem Zertifikat zugreifen zu können,
 muss man die _Preferences_ in der linken unteren Ecke anklicken und
 im anschließenden Dialog bei _SSL/TLS Certificate Verification_ den
 Haken entfernen.
+
+## Erweiterung für VS Code
+
+### Collection öffnen
+
+Zunächst klickt man auf das Bruno-Icon in der linken Seitenleiste. Danach auf
+das Plus-Icon oben im Bruno-Fenster (Tooltipp "Collections") und wählt den
+Menüpunkt "Open Collection" aus.
+
+### Selbst-signiertes Zertifikat
+
+Um auf einen Server mit selbst-signiertem Zertifikat zugreifen zu können,
+muss man zunächst auf das Bruno-Icon in der linken Seitenleiste klicken.
+Anschließend klickt man auf das Icon für die Einstellungen (Zahnrad)
+oben rechts im Bruno-Fenster (Tooltipp "Open Bruno Settings"). Danach wählt man
+in der linken Menüleiste den Punkt _General_ aus und entfernt den Haken bei
+_Enable SSL Verification
 
 ## Sensible Daten
 

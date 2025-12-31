@@ -35,12 +35,14 @@ Bei _PostgreSQL_ empfiehlt sich die Erweiterung von _Microsoft_.
 - Apollo GraphQL
 - AsciiDoc
 - Better Comments
+- Bruno
 - Container Tools
 - Docker DX
 - DotENV
 - EditorConfig for VS Code
 - Error Lens
 - ESLint
+- Excel Viewer
 - Even Better TOML
 - German Language Pack for Visual Studio Code
 - GitLens
