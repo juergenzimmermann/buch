@@ -111,9 +111,3 @@ ignore = [
 
 [tool.ruff.lint.isort]
 case-sensitive = true
-
-# https://github.com/microsoft/pyright/blob/main/docs/configuration.md#sample-pyprojecttoml-file
-[tool.pyright]
-pythonVersion = "3.14"
-include = ["src"]
-exclude = ["**/__pycache__"]
