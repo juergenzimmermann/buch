@@ -22,6 +22,6 @@
 # https://docs.docker.com/build/bake/reference
 
 target "default" {
-  tags = ["docker.io/juergenzimmermann/jenkins:2025.10.1"]
+  tags = ["docker.io/juergenzimmermann/jenkins:2026.4.1"]
   #dockerfile = "Dockerfile"
 }

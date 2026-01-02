@@ -27,7 +27,7 @@
 
 services:
   jenkins:
-    image: juergenzimmermann/jenkins:2025.10.1
+    image: juergenzimmermann/jenkins:2026.4.1
     restart: always
     ports:
       - published: 7070
