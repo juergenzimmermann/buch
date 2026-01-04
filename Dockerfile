@@ -19,10 +19,13 @@
 # Aufruf:   docker build --tag juergenzimmermann/buch:2025.10.1-trixie .
 #               ggf. --progress=plain
 #               ggf. --no-cache
-#           Get-Content Dockerfile | docker run --rm --interactive hadolint/hadolint:v2.14.0-debian
-#               Linux:   cat Dockerfile | docker run --rm --interactive hadolint/hadolint:v2.14.0-debian
-#           docker save juergenzimmermann/buch:2025.10.1-trixie > buch.tar
+#
+#           Windows:   Get-Content Dockerfile | docker run --rm --interactive hadolint/hadolint:v2.14.0-debian
+#           macOS:     cat Dockerfile | docker run --rm --interactive hadolint/hadolint:v2.14.0-debian
+#
+#           docker debug juergenzimmermann/buch:2025.10.1-trixie
 #           docker network ls
+#           docker save juergenzimmermann/buch:2025.10.1-trixie > buch.tar
 
 # https://docs.docker.com/engine/reference/builder/#syntax
 # https://github.com/moby/buildkit/blob/master/frontend/dockerfile/docs/reference.md
