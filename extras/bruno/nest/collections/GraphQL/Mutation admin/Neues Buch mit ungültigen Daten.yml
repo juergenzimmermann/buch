@@ -1,0 +1,80 @@
+info:
+  name: Neues Buch mit ungültigen Daten
+  type: graphql
+  seq: 3
+
+graphql:
+  method: POST
+  url: "{{graphqlUrl}}"
+  headers:
+    - name: Accept
+      value: application/graphql-response+json
+  body:
+    query: |-
+      mutation {
+        create(
+          input: {
+            isbn: "falsche-isbn",
+            rating: 999,
+            art: HARDCOVER,
+            preis: 1,
+            rabatt: 0,
+            lieferbar: true,
+            datum: "12345-123-123",
+            homepage: "anyHomepage",
+            schlagwoerter: ["JAVASCRIPT"],
+            titel: {
+              titel: "?!"
+              untertitel: "mutationinvalid"
+            }
+          }
+        ) {
+            id
+        }
+      }
+  auth: inherit
+
+runtime:
+  assertions:
+    - expression: res.status
+      operator: eq
+      value: "200"
+    - expression: res.headers['content-type']
+      operator: matches
+      value: ^application\/graphql-response\+json(; charset=utf-8)?$
+    - expression: res.body.errors
+      operator: isArray
+    - expression: res.body.errors
+      operator: length
+      value: "1"
+    - expression: res.body.errors[0].message
+      operator: contains
+      value: titel
+    - expression: res.body.errors[0].message
+      operator: contains
+      value: isbn
+    - expression: res.body.errors[0].message
+      operator: contains
+      value: datum
+    - expression: res.body.errors[0].message
+      operator: contains
+      value: homepage
+    - expression: res.body.errors[0].path
+      operator: isArray
+    - expression: res.body.errors[0].path
+      operator: length
+      value: "1"
+    - expression: res.body.errors[0].path[0]
+      operator: eq
+      value: create
+    - expression: res.body.errors[0].extensions.code
+      operator: eq
+      value: BAD_USER_INPUT
+    - expression: res.body.data.create
+      operator: isNull
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

@@ -1,0 +1,11 @@
+info:
+  name: Query
+  type: folder
+  seq: 1
+
+request:
+  auth: inherit
+
+docs:
+  content: Queries mit der GraphQL-Schnittstelle
+  type: text/markdown

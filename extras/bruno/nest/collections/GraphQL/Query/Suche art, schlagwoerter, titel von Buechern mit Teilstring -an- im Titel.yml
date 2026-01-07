@@ -1,0 +1,60 @@
+info:
+  name: Suche art, schlagwoerter, titel von Buechern mit Teilstring "an" im Titel
+  type: graphql
+  seq: 5
+
+graphql:
+  method: POST
+  url: "{{graphqlUrl}}"
+  headers:
+    - name: Accept
+      value: application/graphql-response+json
+  body:
+    query: |-
+      query ($titel: String = "a") {
+        buecher(suchparameter: {titel: $titel}) {
+          art
+          schlagwoerter
+          titel {
+            titel
+          }
+        }
+      }
+    variables: |-
+      {
+        "titel": "an"
+      }
+  auth: inherit
+
+runtime:
+  scripts:
+    - type: tests
+      code: |-
+        test('Body mit art, schlagwoerter, titel', () => {
+          res.getBody()
+            .data
+            .buecher
+            .forEach(buch => {
+              const { art, schlagwoerter, titel } = buch;
+              expect(art).to.be.a('string');
+              expect(schlagwoerter).to.be.an('array');
+              expect(titel.titel).to.be.a('string').that.includes('an');
+            });
+        });
+  assertions:
+    - expression: res.status
+      operator: eq
+      value: "200"
+    - expression: res.headers['content-type']
+      operator: matches
+      value: ^application\/graphql-response\+json(; charset=utf-8)?$
+    - expression: res.body.data.buecher
+      operator: isArray
+    - expression: res.body.data.buecher
+      operator: isNotEmpty
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

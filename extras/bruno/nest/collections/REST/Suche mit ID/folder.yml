@@ -1,0 +1,11 @@
+info:
+  name: Suche mit ID
+  type: folder
+  seq: 1
+
+request:
+  auth: inherit
+
+docs:
+  content: Über die REST-Schnittstelle nach Büchern anhand der ID suchen.
+  type: text/markdown

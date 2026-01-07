@@ -1,0 +1,45 @@
+info:
+  name: JSON Syntaxfehler
+  type: graphql
+  seq: 12
+
+graphql:
+  method: POST
+  url: "{{graphqlUrl}}"
+  headers:
+    - name: Accept
+      value: application/graphql-response+json
+  body:
+    query: |-
+      query ($id: ID! = "1") {
+        buch(id: $id) {
+          version
+      }
+    variables: |-
+      {
+        "id": "1"
+      }
+  auth: inherit
+
+runtime:
+  assertions:
+    - expression: res.status
+      operator: eq
+      value: "400"
+    - expression: res.headers['content-type']
+      operator: matches
+      value: ^application\/graphql-response\+json(; charset=utf-8)?$
+    - expression: res.body.errors
+      operator: isArray
+    - expression: res.body.errors
+      operator: length
+      value: "1"
+    - expression: res.body.errors[0].extensions.code
+      operator: eq
+      value: GRAPHQL_PARSE_FAILED
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

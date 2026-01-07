@@ -1,0 +1,53 @@
+info:
+  name: Nicht-vorhandenes Buch 999999 ändern
+  type: http
+  seq: 5
+
+http:
+  method: PUT
+  url: "{{restUrl}}/:id"
+  headers:
+    - name: If-Match
+      value: '"0"'
+  params:
+    - name: id
+      value: "999999"
+      type: path
+  body:
+    type: json
+    data: |-
+      {
+        "isbn": "978-0-201-63361-0",
+        "rating": 5,
+        "art": "HARDCOVER",
+        "preis": "3333",
+        "rabatt": "0.33",
+        "lieferbar": true,
+        "datum": "2025-03-03T00:00:00Z",
+        "homepage": "https://put.rest",
+        "schlagwoerter": ["JAVASCRIPT"]
+      }
+  auth:
+    type: bearer
+    token: "{{TOKEN}}"
+
+runtime:
+  assertions:
+    - expression: res.status
+      operator: eq
+      value: "404"
+    - expression: res.headers['content-type']
+      operator: matches
+      value: ^application\/json(; charset=utf-8)?
+    - expression: res.body.statusCode
+      operator: eq
+      value: "404"
+    - expression: res.body.message
+      operator: contains
+      value: "999999"
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

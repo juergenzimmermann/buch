@@ -1,0 +1,37 @@
+info:
+  name: Nicht-vorhandene Property
+  type: http
+  seq: 22
+
+http:
+  method: GET
+  url: "{{restUrl}}?php=true"
+  headers:
+    - name: Accept
+      value: application/json
+  params:
+    - name: php
+      value: "true"
+      type: query
+  auth: inherit
+
+runtime:
+  assertions:
+    - expression: res.status
+      operator: eq
+      value: "404"
+    - expression: res.headers['content-type']
+      operator: matches
+      value: ^application\/json(; charset=utf-8)?$
+    - expression: res.body.statusCode
+      operator: eq
+      value: "404"
+    - expression: res.body.error
+      operator: eq
+      value: Not Found
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

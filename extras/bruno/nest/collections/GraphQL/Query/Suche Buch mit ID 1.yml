@@ -1,0 +1,97 @@
+info:
+  name: Suche Buch mit ID 1
+  type: graphql
+  seq: 1
+
+graphql:
+  method: POST
+  url: "{{graphqlUrl}}"
+  headers:
+    - name: Accept
+      value: application/graphql-response+json
+  body:
+    query: |-
+      query ($id: ID! = "1") {
+        buch(id: $id) {
+          isbn
+          version
+          rating
+          art
+          preis
+          lieferbar
+          datum
+          homepage
+          schlagwoerter
+          titel {
+              titel
+          }
+          rabatt(short: true)
+        }
+      }
+    variables: |-
+      {
+        "id": "1"
+      }
+  auth: inherit
+
+runtime:
+  scripts:
+    - type: after-response
+      code: |-
+        test('Body mit den Properties', () => {
+            const body = res.getBody();
+            const { buch } = body.data;
+            const { isbn, version, rating, art, preis, lieferbar, datum, homepage, schlagwoerter, titel, rabatt } = buch;
+            expect(isbn).to.be.a('string');
+            expect(version).to.be.a('number').that.is.gte(0);
+            expect(rating).to.be.a('number').that.is.gte(0);
+            expect(art).to.be.a('string');
+            expect(preis).to.be.a('number').that.is.gte(0);
+            expect(lieferbar).to.be.a('boolean');
+            expect(datum).to.be.a('string');
+            expect(homepage).to.be.a('string');
+            expect(schlagwoerter).to.be.an('array');
+            expect(titel.titel).to.be.a('string');
+            expect(rabatt).to.match(/ %$/u);
+        });
+  assertions:
+    - expression: res.status
+      operator: eq
+      value: "200"
+    - expression: res.headers['content-type']
+      operator: matches
+      value: ^application\/graphql-response\+json(; charset=utf-8)?$
+    - expression: res.body.data.buch.isbn
+      operator: isString
+    - expression: res.body.data.buch.version
+      operator: gte
+      value: "0"
+    - expression: res.body.data.buch.rating
+      operator: gte
+      value: "0"
+    - expression: res.body.data.buch.art
+      operator: isString
+    - expression: res.body.data.buch.preis
+      operator: gte
+      value: "0"
+    - expression: res.body.data.buch.lieferbar
+      operator: isBoolean
+    - expression: res.body.data.buch.datum
+      operator: isString
+    - expression: res.body.data.buch.homepage
+      operator: isString
+    - expression: res.body.data.buch.schlagwoerter
+      operator: isArray
+    - expression: res.body.data.buch.titel.titel
+      operator: isString
+    - expression: res.body.data.buch.titel.titel
+      operator: isNotEmpty
+    - expression: res.body.data.buch.rabatt
+      operator: matches
+      value: " %$"
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

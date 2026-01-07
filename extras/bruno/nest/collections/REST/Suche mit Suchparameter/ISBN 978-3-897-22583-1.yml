@@ -1,0 +1,42 @@
+info:
+  name: ISBN 978-3-897-22583-1
+  type: http
+  seq: 7
+
+http:
+  method: GET
+  url: "{{restUrl}}?isbn=978-3-897-22583-1"
+  headers:
+    - name: Accept
+      value: application/json
+  params:
+    - name: isbn
+      value: 978-3-897-22583-1
+      type: query
+  auth: inherit
+
+runtime:
+  assertions:
+    - expression: res.status
+      operator: eq
+      value: "200"
+    - expression: res.headers['content-type']
+      operator: matches
+      value: ^application\/json(; charset=utf-8)?$
+    - expression: res.body.content
+      operator: isArray
+    - expression: res.body.content
+      operator: length
+      value: "1"
+    - expression: res.body.content[0].isbn
+      operator: eq
+      value: 978-3-897-22583-1
+    - expression: res.body.content[0].id
+      operator: gte
+      value: "0"
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

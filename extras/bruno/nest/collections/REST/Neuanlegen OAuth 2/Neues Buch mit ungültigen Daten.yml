@@ -1,0 +1,64 @@
+info:
+  name: Neues Buch mit ungültigen Daten
+  type: http
+  seq: 3
+
+http:
+  method: POST
+  url: "{{restUrl}}"
+  headers:
+    - name: ""
+      value: ""
+      disabled: true
+  body:
+    type: json
+    data: |-
+      {
+        "isbn": "falsche-ISBN",
+        "rating": -1,
+        "art": "UNSICHTBAR",
+        "preis": -1,
+        "rabatt": 2,
+        "lieferbar": true,
+        "datum": "2025-02-30T00:00:00Z",
+        "homepage": "anyHomepage",
+        "titel": {
+          "titel": "?!",
+          "untertitel": "Untertitelinvalid"
+        }
+      }
+  auth: inherit
+
+runtime:
+  scripts:
+    - type: tests
+      code: |-
+        test('Fehlermeldungen im Response Body', () => {
+          const { message } = res.getBody();
+          const props = ['titel.titel', 'isbn', 'rating', 'art', 'preis', 'rabatt', 'datum', 'homepage'];
+          expect(message).to.be.an('array').that.has.a.lengthOf(props.length);
+          message.forEach(msg => expect(msg).to.be.a('string').that.includes.oneOf(props));
+        });
+  assertions:
+    - expression: res.status
+      operator: eq
+      value: "400"
+    - expression: res.headers['content-type']
+      operator: matches
+      value: ^application\/json(; charset=utf-8)?
+    - expression: res.body
+      operator: isJson
+    - expression: res.body
+      operator: isNotEmpty
+    - expression: res.body.statusCode
+      operator: eq
+      value: "400"
+    - expression: res.body.error
+      operator: eq
+      value: Bad Request
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

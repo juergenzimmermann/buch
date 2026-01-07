@@ -25,7 +25,7 @@ extras/compose/postgres/db_password.txt
 src/config/resources/tls/key.pem
 src/beispiele.ts
 src/beispiele-write.ts
-test/bruno/nest/environments
+extras/bruno/nest/environments
 test/lasttest-locust/__pycache__
 test/lasttest-locust/.venv
 test/postman
@@ -40,15 +40,15 @@ lerna-debug.log*
 .scannerwork
 
 # Bilder, Audio, Video fuer Bruno
-test/bruno/nest/*.png
-test/bruno/nest/*.jpeg
-test/bruno/nest/*.gif
-test/bruno/nest/*.mp4
-test/bruno/nest/*.mpeg
-test/bruno/nest/*.mkv
-test/bruno/nest/*.avi
-test/bruno/nest/*.ogg
-test/bruno/nest/*.webm
+extras/bruno/*.png
+extras/bruno/*.jpeg
+extras/bruno/*.gif
+extras/bruno/*.mp4
+extras/bruno/*.mpeg
+extras/bruno/*.mkv
+extras/bruno/*.avi
+extras/bruno/*.ogg
+extras/bruno/*.webm
 
 # Prometheus und Grafana
 extras/compose/prometheus-grafana/prometheus-data/*

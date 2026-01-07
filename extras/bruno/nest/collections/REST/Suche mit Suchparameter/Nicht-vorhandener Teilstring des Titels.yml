@@ -1,0 +1,40 @@
+info:
+  name: Nicht-vorhandener Teilstring des Titels
+  type: http
+  seq: 6
+
+http:
+  method: GET
+  url: "{{restUrl}}?titel=xxx"
+  headers:
+    - name: Accept
+      value: application/json
+  params:
+    - name: titel
+      value: xxx
+      type: query
+  auth: inherit
+
+runtime:
+  assertions:
+    - expression: res.status
+      operator: eq
+      value: "404"
+    - expression: res.headers['content-type']
+      operator: matches
+      value: ^application\/json(; charset=utf-8)?$
+    - expression: res.body.statusCode
+      operator: eq
+      value: "404"
+    - expression: res.body.error
+      operator: eq
+      value: Not Found
+    - expression: res.body.message
+      operator: contains
+      value: titel
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

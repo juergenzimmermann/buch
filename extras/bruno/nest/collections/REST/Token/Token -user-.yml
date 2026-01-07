@@ -1,0 +1,42 @@
+info:
+  name: Token "user"
+  type: http
+  seq: 2
+
+http:
+  method: POST
+  url: "{{tokenUrl}}"
+  body:
+    type: form-urlencoded
+    data:
+      - name: username
+        value: user
+      - name: password
+        value: p
+
+runtime:
+  assertions:
+    - expression: res.status
+      operator: eq
+      value: "200"
+    - expression: res.headers['content-type']
+      operator: matches
+      value: ^application\/json(; charset=utf-8)?
+    - expression: res.body.access_token
+      operator: matches
+      value: .+\..+\..+
+    - expression: res.body.expires_in
+      operator: eq
+      value: "1800"
+    - expression: res.body.refresh_token
+      operator: matches
+      value: .+\..+\..+
+    - expression: res.body.refresh_expires_in
+      operator: eq
+      value: "3600"
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

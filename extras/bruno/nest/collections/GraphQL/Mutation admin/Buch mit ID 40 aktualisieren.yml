@@ -1,0 +1,53 @@
+info:
+  name: Buch mit ID 40 aktualisieren
+  type: graphql
+  seq: 5
+
+graphql:
+  method: POST
+  url: "{{graphqlUrl}}"
+  headers:
+    - name: Accept
+      value: application/graphql-response+json
+  body:
+    query: |-
+      mutation {
+        update(
+          input: {
+            id: "40",
+            version: 1,
+            isbn: "978-0-007-09732-6",
+            rating: 5,
+            art: HARDCOVER,
+            preis: 444.44,
+            rabatt: 0.099,
+            lieferbar: false,
+            datum: "2025-04-04T00:00:00Z",
+            homepage: "https://update.mutation",
+            schlagwoerter: ["JAVASCRIPT", "TYPESCRIPT"]
+          }
+        ) {
+            version
+        }
+      }
+  auth: inherit
+
+runtime:
+  assertions:
+    - expression: res.status
+      operator: eq
+      value: "200"
+    - expression: res.headers['content-type']
+      operator: matches
+      value: ^application\/graphql-response\+json(; charset=utf-8)?$
+    - expression: res.body.data.update.version
+      operator: isNumber
+    - expression: res.body.data.update.version
+      operator: gte
+      value: "0"
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

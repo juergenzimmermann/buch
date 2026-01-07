@@ -1,0 +1,47 @@
+info:
+  name: Token admin
+  type: http
+  seq: 1
+
+http:
+  method: POST
+  url: "{{tokenUrl}}"
+  headers:
+    - name: ""
+      value: ""
+      disabled: true
+  body:
+    type: form-urlencoded
+    data:
+      - name: username
+        value: "{{username}}"
+      - name: password
+        value: "{{password}}"
+  auth: inherit
+
+runtime:
+  assertions:
+    - expression: res.status
+      operator: eq
+      value: "200"
+    - expression: res.headers['content-type']
+      operator: matches
+      value: ^application\/json(; charset=utf-8)?
+    - expression: res.body.access_token
+      operator: matches
+      value: .+\..+\..+
+    - expression: res.body.expires_in
+      operator: eq
+      value: "1800"
+    - expression: res.body.refresh_token
+      operator: matches
+      value: .+\..+\..+
+    - expression: res.body.refresh_expires_in
+      operator: eq
+      value: "3600"
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

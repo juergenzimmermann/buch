@@ -1,0 +1,52 @@
+info:
+  name: Suche art von Buechern mit Titel Alpha
+  type: graphql
+  seq: 4
+
+graphql:
+  method: POST
+  url: "{{graphqlUrl}}"
+  headers:
+    - name: Accept
+      value: application/graphql-response+json
+  body:
+    query: |-
+      query ($titel: String = "Alice") {
+        buecher(suchparameter: {titel: $titel}) {
+          art
+        }
+      }
+    variables: |-
+      {
+        "titel": "Alice"
+      }
+  auth: inherit
+
+runtime:
+  scripts:
+    - type: tests
+      code: |-
+        test('Body mit art', () => {
+          res.getBody()
+            .data
+            .buecher
+            .map(buch => buch.art)
+            .forEach(art => expect(art).to.be.a('string'));
+        });
+  assertions:
+    - expression: res.status
+      operator: eq
+      value: "200"
+    - expression: res.headers['content-type']
+      operator: matches
+      value: ^application\/graphql-response\+json(; charset=utf-8)?$
+    - expression: res.body.data.buecher
+      operator: isArray
+    - expression: res.body.data.buecher
+      operator: isNotEmpty
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

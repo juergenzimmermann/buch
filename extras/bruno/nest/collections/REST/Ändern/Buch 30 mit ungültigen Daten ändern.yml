@@ -1,0 +1,64 @@
+info:
+  name: Buch 30 mit ungültigen Daten ändern
+  type: http
+  seq: 6
+
+http:
+  method: PUT
+  url: "{{restUrl}}/:id"
+  headers:
+    - name: If-Match
+      value: '"0"'
+  params:
+    - name: id
+      value: "30"
+      type: path
+  body:
+    type: json
+    data: |-
+      {
+        "isbn": "falsche-ISBN",
+        "rating": -1,
+        "art": "UNSICHTBAR",
+        "preis": "-1",
+        "rabatt": "2",
+        "lieferbar": true,
+        "datum": "12345-123-123",
+        "homepage": "anyHomepage"
+      }
+  auth:
+    type: bearer
+    token: "{{TOKEN}}"
+
+runtime:
+  scripts:
+    - type: tests
+      code: |-
+        test('Fehlermeldungen im Response Body', () => {
+          const { message } = res.getBody();
+          const props = ['isbn', 'rating', 'art', 'preis', 'rabatt', 'datum', 'homepage'];
+          message.forEach(msg => expect(msg).to.be.a('string').that.includes.oneOf(props));
+        });
+  assertions:
+    - expression: res.status
+      operator: eq
+      value: "400"
+    - expression: res.headers['content-type']
+      operator: matches
+      value: ^application\/json(; charset=utf-8)?
+    - expression: res.body.statusCode
+      operator: eq
+      value: "400"
+    - expression: res.body.error
+      operator: eq
+      value: Bad Request
+    - expression: res.body.message
+      operator: isArray
+    - expression: res.body.message
+      operator: isNotEmpty
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

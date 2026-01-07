@@ -1,0 +1,58 @@
+info:
+  name: Suche von Buechern mit lieferbar=true
+  type: graphql
+  seq: 11
+
+graphql:
+  method: POST
+  url: "{{graphqlUrl}}"
+  headers:
+    - name: Accept
+      value: application/graphql-response+json
+  body:
+    query: |-
+      query ($lieferbar: Boolean = true) {
+        buecher(suchparameter: {lieferbar: $lieferbar}) {
+          lieferbar
+          titel {
+            titel
+          }
+        }
+      }
+    variables: |-
+      {
+        "lieferbar": true
+      }
+  auth: inherit
+
+runtime:
+  scripts:
+    - type: tests
+      code: |-
+        test('Body mit lieferbar und titel', () => {
+          res.getBody()
+            .data
+            .buecher
+            .forEach(buch => {
+              const { lieferbar, titel } = buch;
+              expect(lieferbar).to.be.true;
+              expect(titel.titel).to.be.a('string').that.is.not.empty;
+            });
+        });
+  assertions:
+    - expression: res.status
+      operator: eq
+      value: "200"
+    - expression: res.headers['content-type']
+      operator: matches
+      value: ^application\/graphql-response\+json(; charset=utf-8)?$
+    - expression: res.body.data.buecher
+      operator: isArray
+    - expression: res.body.data.buecher
+      operator: isNotEmpty
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

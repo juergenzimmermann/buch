@@ -1,0 +1,30 @@
+info:
+  name: Nicht-vorhandenes Buch 999999 löschen
+  type: http
+  seq: 2
+
+http:
+  method: DELETE
+  url: "{{restUrl}}/:id"
+  params:
+    - name: id
+      value: "999999"
+      type: path
+  body:
+    type: json
+    data: ""
+  auth:
+    type: bearer
+    token: "{{TOKEN}}"
+
+runtime:
+  assertions:
+    - expression: res.status
+      operator: eq
+      value: "204"
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

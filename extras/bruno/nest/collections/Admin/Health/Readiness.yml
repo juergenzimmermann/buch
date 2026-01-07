@@ -1,0 +1,38 @@
+info:
+  name: Readiness
+  type: http
+  seq: 2
+
+http:
+  method: GET
+  url: "{{healthUrl}}/readiness"
+  headers:
+    - name: ""
+      value: ""
+      disabled: true
+  auth: inherit
+
+runtime:
+  assertions:
+    - expression: res.status
+      operator: eq
+      value: "200"
+    - expression: res.headers['content-type']
+      operator: matches
+      value: ^application\/json(; charset=utf-8)?$
+    - expression: res.body.status
+      operator: eq
+      value: ok
+    - expression: res.body.info.appserver.status
+      operator: eq
+      value: up
+    - expression: res.body.error
+      operator: isJson
+    - expression: res.body.error
+      operator: isEmpty
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

@@ -1,0 +1,30 @@
+info:
+  name: Falsche ID xy
+  type: http
+  seq: 5
+
+http:
+  method: GET
+  url: "{{restUrl}}/:id"
+  params:
+    - name: id
+      value: xy
+      type: path
+  auth: inherit
+
+runtime:
+  assertions:
+    - expression: res.status
+      operator: eq
+      value: "404"
+    - expression: res.body
+      operator: isJson
+    - expression: res.body.statusCode
+      operator: eq
+      value: "404"
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

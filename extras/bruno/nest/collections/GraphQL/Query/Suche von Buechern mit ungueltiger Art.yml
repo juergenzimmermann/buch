@@ -1,0 +1,49 @@
+info:
+  name: Suche von Buechern mit ungueltiger Art
+  type: graphql
+  seq: 10
+
+graphql:
+  method: POST
+  url: "{{graphqlUrl}}"
+  headers:
+    - name: Accept
+      value: application/graphql-response+json
+  body:
+    query: |-
+      query ($art: String = "UNGUELTIG") {
+        buecher(suchparameter: {art: $art}) {
+          art
+        }
+      }
+    variables: |-
+      {
+        "art": "UNGUELTIG"
+      }
+  auth: inherit
+
+runtime:
+  assertions:
+    - expression: res.status
+      operator: eq
+      value: "400"
+    - expression: res.headers['content-type']
+      operator: matches
+      value: ^application\/graphql-response\+json(; charset=utf-8)?$
+    - expression: res.body.errors
+      operator: isArray
+    - expression: res.body.errors
+      operator: length
+      value: "1"
+    - expression: res.body.errors[0].message
+      operator: contains
+      value: Art
+    - expression: res.body.errors[0].extensions.code
+      operator: eq
+      value: GRAPHQL_VALIDATION_FAILED
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

@@ -1,0 +1,75 @@
+info:
+  name: Neues Buch mit falschem Token
+  type: graphql
+  seq: 4
+
+graphql:
+  method: POST
+  url: "{{graphqlUrl}}"
+  headers:
+    - name: Accept
+      value: application/graphql-response+json
+  body:
+    query: |-
+      mutation {
+        create(
+          input: {
+            isbn: "978-1-491-95035-7",
+            rating: 1,
+            art: HARDCOVER,
+            preis: 99.99,
+            rabatt: 0.123,
+            lieferbar: true,
+            datum: "2025-01-31T00:00:00Z",
+            homepage: "https://create.mutation",
+            schlagwoerter: ["JAVASCRIPT", "TYPESCRIPT"],
+            titel: {
+              titel: "Titelcreatemutation",
+              untertitel: "untertitelcreatemutation"
+            },
+            abbildungen: [{
+              beschriftung: "Abb. 1",
+              contentType: "img/png"
+            }]
+          }
+        ) {
+            id
+        }
+      }
+  auth:
+    type: bearer
+    token: "{{TOKEN}}x"
+
+runtime:
+  assertions:
+    - expression: res.status
+      operator: eq
+      value: "200"
+    - expression: res.headers['content-type']
+      operator: matches
+      value: ^application\/graphql-response\+json(; charset=utf-8)?$
+    - expression: res.body.errors
+      operator: isArray
+    - expression: res.body.errors
+      operator: length
+      value: "1"
+    - expression: res.body.errors[0].message
+      operator: contains
+      value: Unauthorized
+    - expression: res.body.errors[0].path
+      operator: isArray
+    - expression: res.body.errors[0].path
+      operator: length
+      value: "1"
+    - expression: res.body.errors[0].path[0]
+      operator: eq
+      value: create
+    - expression: res.body.errors[0].extensions.code
+      operator: eq
+      value: BAD_USER_INPUT
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

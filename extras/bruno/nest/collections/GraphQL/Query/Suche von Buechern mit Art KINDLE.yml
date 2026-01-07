@@ -1,0 +1,58 @@
+info:
+  name: Suche von Buechern mit Art KINDLE
+  type: graphql
+  seq: 9
+
+graphql:
+  method: POST
+  url: "{{graphqlUrl}}"
+  headers:
+    - name: Accept
+      value: application/graphql-response+json
+  body:
+    query: |-
+      query ($art: Art = EPUB) {
+        buecher(suchparameter: {art: $art}) {
+          art
+          titel {
+            titel
+          }
+        }
+      }
+    variables: |-
+      {
+        "art": "EPUB"
+      }
+  auth: inherit
+
+runtime:
+  scripts:
+    - type: tests
+      code: |-
+        test('Body mit art und titel', () => {
+          res.getBody()
+            .data
+            .buecher
+            .forEach(buch => {
+              const { art, titel } = buch;
+              expect(art).to.be.a('string').that.is.eq('EPUB');
+              expect(titel.titel).to.be.a('string').that.is.not.empty;
+            });
+        });
+  assertions:
+    - expression: res.status
+      operator: eq
+      value: "200"
+    - expression: res.headers['content-type']
+      operator: matches
+      value: ^application\/graphql-response\+json(; charset=utf-8)?$
+    - expression: res.body.data.buecher
+      operator: isArray
+    - expression: res.body.data.buecher
+      operator: isNotEmpty
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

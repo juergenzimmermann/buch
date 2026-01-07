@@ -1,0 +1,58 @@
+info:
+  name: Suche von Buechern mit rating >= 3
+  type: graphql
+  seq: 7
+
+graphql:
+  method: POST
+  url: "{{graphqlUrl}}"
+  headers:
+    - name: Accept
+      value: application/graphql-response+json
+  body:
+    query: |-
+      query ($rating: Int = 3) {
+        buecher(suchparameter: {rating: $rating}) {
+          rating
+          titel {
+              titel
+          }
+        }
+      }
+    variables: |-
+      {
+        "rating": 3
+      }
+  auth: inherit
+
+runtime:
+  scripts:
+    - type: tests
+      code: |-
+        test('Body mit rating und titel', () => {
+          res.getBody()
+            .data
+            .buecher
+            .forEach(buch => {
+              const { rating, titel } = buch;
+              expect(rating).to.be.a('number').that.is.gte(3);
+              expect(titel.titel).to.be.a('string')
+            });
+        });
+  assertions:
+    - expression: res.status
+      operator: eq
+      value: "200"
+    - expression: res.headers['content-type']
+      operator: matches
+      value: ^application\/graphql-response\+json(; charset=utf-8)?$
+    - expression: res.body.data.buecher
+      operator: isArray
+    - expression: res.body.data.buecher
+      operator: isNotEmpty
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
