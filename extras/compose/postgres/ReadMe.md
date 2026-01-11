@@ -25,8 +25,12 @@
 - [Installation ohne TLS](#installation-ohne-tls)
 - [Konfiguration für Tablespace und TLS](#konfiguration-für-tablespace-und-tls)
 - [Datenbank, Datenbank-User, Schema, Tabellen und Daten anlegen](#datenbank-datenbank-user-schema-tabellen-und-daten-anlegen)
+- [Umgebungsvariable überprüfen](#umgebungsvariable-überprüfen)
 - [Optional: TLS für den PostgreSQL-Server mit OpenSSL überprüfen](#optional-tls-für-den-postgresql-server-mit-openssl-überprüfen)
 - [Erweiterung PostgreSQL für VS Code](#erweiterung-postgresql-für-vs-code)
+  - [Konfiguration](#konfiguration)
+  - [DB-Schema visualisieren](#db-schema-visualisieren)
+  - [Chat mit Copilot](#chat-mit-copilot)
 
 ## Docker Container vs. Installation auf dem Host-Rechner
 
@@ -144,6 +148,15 @@ werden, und zwar Server-seitig.
 Die _Original_-Skripte `create-table.sql` und `copy-csv.sql` sind im Projekt-Verzeichnis
 `src\config\resources\postgresql`. Dort werden sie später für den _Nest_-basierten
 Appserver benötigt.
+
+## Umgebungsvariable überprüfen
+
+Wenn der Container mit _PostgreSQL_ gestartet ist, kann man in der 2. PowerShell
+überprüfen, dass das Passwort **nicht** in einer Umgebungsvariablen gesetzt ist:
+
+```powershell
+   docker compose exec db bash -c printenv
+```
 
 ## Optional: TLS für den PostgreSQL-Server mit OpenSSL überprüfen
 

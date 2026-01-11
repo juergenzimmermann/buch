@@ -1,7 +1,7 @@
 info:
-  name: Ändern
+  name: Mutation user
   type: folder
-  seq: 1
+  seq: 3
 
 request:
   auth:
@@ -13,8 +13,8 @@ request:
       clientSecret: "{{clientSecret}}"
       placement: body
     resourceOwner:
-      username: "{{username}}"
-      password: "{{password}}"
+      username: user
+      password: p
     tokenConfig:
       id: credentials
       placement:
@@ -22,7 +22,3 @@ request:
     settings:
       autoFetchToken: true
       autoRefreshToken: false
-
-docs:
-  content: Über die REST-Schnittstelle vorhandene Bücher löschen
-  type: text/markdown

@@ -1,7 +1,7 @@
 info:
-  name: Neuanlegen user
+  name: Löschen
   type: folder
-  seq: 6
+  seq: 9
 
 request:
   auth:
@@ -13,8 +13,8 @@ request:
       clientSecret: "{{clientSecret}}"
       placement: body
     resourceOwner:
-      username: user
-      password: p
+      username: "{{username}}"
+      password: "{{password}}"
     tokenConfig:
       id: credentials
       placement:
@@ -22,3 +22,7 @@ request:
     settings:
       autoFetchToken: true
       autoRefreshToken: false
+
+docs:
+  content: Über die REST-Schnittstelle vorhandene Bücher löschen
+  type: text/markdown

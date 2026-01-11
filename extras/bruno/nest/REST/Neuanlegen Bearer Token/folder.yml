@@ -1,7 +1,7 @@
 info:
-  name: Neuanlegen Bearer
+  name: Neuanlegen Bearer Token
   type: folder
-  seq: 1
+  seq: 7
 
 request:
   auth:
@@ -19,9 +19,9 @@ request:
          rejectUnauthorized: false,
         });
 
-        const tokenUrl = bru.getGlobalEnvVar('tokenUrl');
-        const username = bru.getGlobalEnvVar('username');
-        const password = bru.getGlobalEnvVar('password');
+        const tokenUrl = bru.getCollectionVar('tokenUrl');
+        const username = bru.getEnvVar('username');
+        const password = bru.getEnvVar('password');
 
         const response = await bru.sendRequest({
           method: 'POST',

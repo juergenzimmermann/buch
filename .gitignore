@@ -20,8 +20,7 @@ dependencies.svg
 
 # Sensible Daten (Passwort, Token, private Schluessel)
 extras/compose/buch/.env
-extras/compose/mysql/db_root_password.txt
-extras/compose/postgres/db_password.txt
+extras/compose/postgres/password.txt
 src/config/resources/tls/key.pem
 src/beispiele.ts
 src/beispiele-write.ts

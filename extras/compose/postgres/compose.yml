@@ -70,10 +70,11 @@ services:
     environment:
       TZ: Europe/Berlin
       PGTZ: Europe/Berlin
-      POSTGRES_PASSWORD: p
-      #PGDATA: /var/lib/postgresql/data
+      #POSTGRES_PASSWORD: p
+      POSTGRES_PASSWORD_FILE: /run/secrets/db_password
       # https://www.postgresql.org/docs/current/auth-trust.html
       POSTGRES_HOST_AUTH_METHOD: trust
+    secrets: [db_password]
     networks: [acme-network]
     user: "postgres:postgres"
     hostname: postgres
@@ -100,6 +101,10 @@ services:
         reservations:
           cpus: "1.0"
           memory: 512M
+
+secrets:
+  db_password:
+    file: ./password.txt
 
 networks:
   acme-network:
