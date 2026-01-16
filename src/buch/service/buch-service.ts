@@ -205,19 +205,22 @@ export class BuchService {
                 `Keine Buecher gefunden: ${JSON.stringify(suchparameter)}, Seite ${pageable.number}}`,
             );
         }
-        const totalElements = await this.count();
+        const totalElements = await this.count(where);
         return this.#createSlice(buecher, totalElements);
     }
 
     /**
-     * Anzahl aller Bücher zurückliefern.
-     * @returns Ein JSON-Array mit den gefundenen Büchern.
+     * Anzahl der gefundenen Bücher zurückliefern.
+     * @param WHERE-Klausel der eigentlichen Suche.
+     * @returns Anzahl der gefundenen Bücher.
      */
-    async count() {
-        this.#logger.debug('count');
-        const count = await this.#prisma.buch.count();
-        this.#logger.debug('count: %d', count);
-        return count;
+    async count(where?: Prisma.BuchWhereInput) {
+        this.#logger.debug('count: where=%o', where ?? 'undefined');
+        const { count } = this.#prisma.buch;
+        const anzahl =
+            where === undefined ? await count() : await count({ where });
+        this.#logger.debug('count: %d', anzahl);
+        return anzahl;
     }
 
     async #findAll(pageable: Pageable): Promise<Readonly<Slice<BuchMitTitel>>> {

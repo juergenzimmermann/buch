@@ -65,12 +65,12 @@ changelog = "https://github.com/juergenzimmermann/locust/blob/master/CHANGELOG.m
 # https://docs.astral.sh/uv/concepts/projects/dependencies/#dependency-groups
 [dependency-groups]
 # https://docs.astral.sh/uv/concepts/projects/dependencies/#development-dependencies
-dev = ["locust>=2.43.0"]
+dev = ["locust>=2.43.1"]
 lint = [
   # https://docs.astral.sh/ruff
-  "ruff>=0.14.10",
+  "ruff>=0.14.13",
   # https://github.com/astral-sh/ty
-  "ty>=0.0.8",
+  "ty>=0.0.12",
 ]
 
 [tool.ruff]

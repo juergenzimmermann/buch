@@ -14,7 +14,6 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 // @ts-check
-// @ts-expect-error keine .d.ts-Datei
 import comments from '@eslint-community/eslint-plugin-eslint-comments/configs';
 import eslint from '@eslint/js';
 import graphql from '@graphql-eslint/eslint-plugin';
