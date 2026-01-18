@@ -1,4 +1,4 @@
-:revealjsdir: ../../../node_modules/reveal.js
+:revealjsdir: ../../../node_modules/.pnpm/reveal.js@4.5.0/node_modules/reveal.js
 :revealjs_slideNumber: true
 :sectnums:
 
@@ -19,7 +19,7 @@
 
 // https://asciidoctor.org/docs/asciidoctor-revealjs
 
-= Beispiel mit Nest, REST, GraphQL, TypeORM, JWT und Jest
+= Beispiel mit Nest, REST, GraphQL, Prisma, Keycloak und Vitest
 
 Jürgen Zimmermann <Juergen.Zimmermann@h-ka.de>
 
@@ -29,7 +29,7 @@ Jürgen Zimmermann <Juergen.Zimmermann@h-ka.de>
 * Nest und REST
 * Nest und GraphQL
 * Prisma
-* Security
+* Security, Keycloak und OIDC
 * Vitest und fetch
 * OpenAPI durch Swagger
 
@@ -44,7 +44,6 @@ Jürgen Zimmermann <Juergen.Zimmermann@h-ka.de>
 
 * pnpm
 * node_modules
-* ts-node
 
 === Entwicklungsumgebung
 
@@ -58,7 +57,7 @@ Jürgen Zimmermann <Juergen.Zimmermann@h-ka.de>
 
 * Dockerfile
 * Docker Compose
-* Continuous Integration (CI) durch eine Jenkins Pipeline
+* Continuous Integration (CI) durch GitHub Actions oder Jenkins
 
 === Dokumentation
 
@@ -73,7 +72,7 @@ Jürgen Zimmermann <Juergen.Zimmermann@h-ka.de>
 * Middleware, z.B. `RequestLoggerMiddleware`
 * Interceptor, z.B. für Antwortzeit und Statuscode
 * `@Module()` für Dependency Injection
-* Postman
+* Bruno
 
 === Decorator für die Controller-Klasse
 
@@ -93,7 +92,7 @@ Jürgen Zimmermann <Juergen.Zimmermann@h-ka.de>
 * Wrapper für Apollo Server
 * Schema-Definition mit Typen, Query und Mutation
 * Resolver mit `@Resolver()`, `@Query()`, `@Mutation()`, `@Args()`
-* Postman
+* Bruno
 
 == Prisma
 
@@ -104,7 +103,7 @@ Jürgen Zimmermann <Juergen.Zimmermann@h-ka.de>
 * Pagination, WhereBuilder
 * $transaction mit Arrow-Function, create(), update(), delete()
 
-== Security
+== Security, Keycloak und OIDC
 
 * JWT
   - Header: alg (z.B. RS256), typ
