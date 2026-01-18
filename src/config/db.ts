@@ -17,12 +17,12 @@
  * Das Modul enthält die Konfiguration für das DB-System.
  * @packageDocumentation
  */
-import path from 'node:path';
+import { URL } from 'node:url';
 import { config } from './app.js';
-import { nodeConfig } from './node.js';
+import { resourcesURL } from './resources.js';
 
-export const dbDir = path.resolve(nodeConfig.resourcesDir, 'postgresql');
-console.debug('dbDir = %s', dbDir);
+export const dbURL = new URL('postgresql/', resourcesURL);
+console.debug('dbURL = %s', dbURL);
 
 const { db } = config;
 export const dbPopulate = db?.populate === true;

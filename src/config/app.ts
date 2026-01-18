@@ -19,12 +19,12 @@
  */
 
 import { readFile } from 'node:fs/promises';
-import path from 'node:path';
+import { URL } from 'node:url';
 import { parse } from 'smol-toml';
-import { resourcesDir } from './resources.js';
+import { resourcesURL } from './resources.js';
 
-const configFile = path.resolve(resourcesDir, 'app.toml');
-console.debug(`configFile=${configFile}`);
+const configURL = new URL('app.toml', resourcesURL);
+console.debug(`configURL=${configURL}`);
 
 export type AppConfig = Record<
     'node' | 'db' | 'keycloak' | 'log' | 'health' | 'mail',
@@ -32,5 +32,5 @@ export type AppConfig = Record<
 >;
 
 export const config = parse(
-    await readFile(configFile, 'utf8'), // eslint-disable-line security/detect-non-literal-fs-filename
+    await readFile(configURL, 'utf8'), // eslint-disable-line security/detect-non-literal-fs-filename
 ) as AppConfig;

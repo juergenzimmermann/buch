@@ -23,11 +23,11 @@
 import { Injectable, type OnApplicationBootstrap } from '@nestjs/common';
 import { PrismaPg } from '@prisma/adapter-pg';
 import { readFile } from 'node:fs/promises';
-import path from 'node:path';
 import process from 'node:process';
+import { URL } from 'node:url';
 import { PrismaClient } from '../../generated/prisma/client.js';
 import { getLogger } from '../../logger/logger.js';
-import { dbDir, dbPopulate } from '../db.js';
+import { dbPopulate, dbURL } from '../db.js';
 
 /**
  * Die Test-DB wird im Development-Modus neu geladen, nachdem die Module
@@ -35,7 +35,7 @@ import { dbDir, dbPopulate } from '../db.js';
  */
 @Injectable()
 export class DbPopulateService implements OnApplicationBootstrap {
-    readonly #dbDir = dbDir;
+    readonly #dbURL = dbURL;
 
     readonly #prisma: PrismaClient;
 
@@ -77,16 +77,16 @@ export class DbPopulateService implements OnApplicationBootstrap {
 
         // Bei TypedSQL ist nur 1 SQL-Anweisung pro Datei moeglich
         // https://www.prisma.io/typedsql
-        const dropScript = path.resolve(this.#dbDir, 'drop-table.sql');
+        const dropScript = new URL('drop-table.sql', this.#dbURL);
         this.#logger.debug('dropScript = %s', dropScript); // eslint-disable-line sonarjs/no-duplicate-string
         // https://nodejs.org/api/fs.html#fspromisesreadfilepath-options
         const dropStatements = await readFile(dropScript, 'utf8'); // eslint-disable-line security/detect-non-literal-fs-filename,n/no-sync
 
-        const createScript = path.resolve(this.#dbDir, 'create-table.sql'); // eslint-disable-line sonarjs/no-duplicate-string
+        const createScript = new URL('create-table.sql', this.#dbURL); // eslint-disable-line sonarjs/no-duplicate-string
         this.#logger.debug('createScript = %s', createScript); // eslint-disable-line sonarjs/no-duplicate-string
         const createStatements = await readFile(createScript, 'utf8'); // eslint-disable-line security/detect-non-literal-fs-filename,n/no-sync
 
-        const copyScript = path.resolve(this.#dbDir, 'copy-csv.sql'); // eslint-disable-line sonarjs/no-duplicate-string
+        const copyScript = new URL('copy-csv.sql', this.#dbURL); // eslint-disable-line sonarjs/no-duplicate-string
         this.#logger.debug('copyScript = %s', copyScript); // eslint-disable-line sonarjs/no-duplicate-string
         const copyStatements = await readFile(copyScript, 'utf8'); // eslint-disable-line security/detect-non-literal-fs-filename,n/no-sync
 

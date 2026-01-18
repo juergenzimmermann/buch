@@ -23,7 +23,6 @@ import { hostname } from 'node:os';
 import { config } from './app.js';
 import { env } from './env.js';
 import { httpsOptions } from './https.js';
-import { resourcesDir } from './resources.js';
 
 const { NODE_ENV } = env;
 
@@ -54,7 +53,6 @@ const port = (node?.port as number | undefined) ?? 3000; // eslint-disable-line 
 type NodeConfig = {
     host: string;
     port: number;
-    resourcesDir: string;
     httpsOptions: HttpsOptions;
     nodeEnv: 'development' | 'PRODUCTION' | 'production' | 'test' | undefined;
 };
@@ -62,7 +60,6 @@ export const nodeConfig: NodeConfig = {
     host: computername,
     // Shorthand Property ab ES 2015
     port,
-    resourcesDir: resourcesDir,
     httpsOptions,
     nodeEnv: NODE_ENV as
         | 'development'

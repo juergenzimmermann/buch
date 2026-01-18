@@ -14,17 +14,25 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 import { ApolloDriver, type ApolloDriverConfig } from '@nestjs/apollo';
-import path from 'node:path';
-import { resourcesDir } from './resources.js';
+import { type } from 'node:os';
+import { resourcesURL } from './resources.js';
 
-const schemaGraphQL = path.join(resourcesDir, 'graphql', 'schema.graphql');
+const graphQlURL = new URL('graphql/', resourcesURL);
+const schemaGraphQL = new URL('schema.graphql', graphQlURL);
 console.debug('schemaGraphQL = %s', schemaGraphQL);
+
+// URL ohne den Praefix "file:///"
+const { href } = schemaGraphQL;
+const schemaGraphQlPath = type().startsWith('Windows')
+    ? href.substring(8)
+    : href.substring(7);
+console.debug('schemaGraphQlPath = %s', schemaGraphQlPath);
 
 /**
  * Das Konfigurationsobjekt für GraphQL (siehe src\app.module.ts).
  */
 export const graphQlModuleOptions: ApolloDriverConfig = {
-    typePaths: [schemaGraphQL],
+    typePaths: [schemaGraphQlPath],
     // alternativ: Mercurius (statt Apollo) fuer Fastify (statt Express)
     driver: ApolloDriver,
     playground: false,

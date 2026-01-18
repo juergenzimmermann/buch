@@ -39,6 +39,7 @@
     "start": "node --env-file=.env dist/src/main.js",
     "predev": "pnpm run copy-resources",
     "dev": "nest start --env-file=.env --watch",
+    "predev:ts": "pnpm run copy-resources",
     "dev:ts": "nest start --env-file=.env src/main.ts",
     "test": "SET NODE_TLS_REJECT_UNAUTHORIZED=0&& vitest --ui",
     "test:unit": "vitest -c ./vitest.config.unit.ts --ui",

@@ -41,7 +41,7 @@ export class BannerService implements OnApplicationBootstrap {
         // IIFE  = Immediately Invoked Function Expression
         // IIAFE = Immediately Invoked Asynchronous Function Expression
         (async () => {
-            const text = await figlet.text('buch 2025.10.1');
+            const text = await figlet.text('buch 2026.4.1');
             console.log(text);
         })();
 

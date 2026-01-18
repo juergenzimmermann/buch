@@ -18,24 +18,7 @@
  * @packageDocumentation
  */
 
-import { access } from 'node:fs/promises';
-import path from 'node:path';
+import { URL } from 'node:url';
 
-// im Docker-Image gibt es kein Unterverzeichnis "src"
-let srcExists: boolean;
-try {
-    // https://nodejs.org/api/fs.html#fspromisesaccesspath-mode
-    await access('src');
-    srcExists = true;
-} catch {
-    srcExists = false;
-}
-export const BASEDIR = srcExists ? 'src' : 'dist';
-
-// https://nodejs.org/api/path.html
-export const resourcesDir = path.resolve(BASEDIR, 'config', 'resources');
-
-console.debug('resourcesDir = %s', resourcesDir);
-
-const resourcesURL = new URL('resources', import.meta.url);
+export const resourcesURL = new URL('resources/', import.meta.url);
 console.debug('resourcesURL = %s', resourcesURL);

@@ -20,18 +20,18 @@
 
 import { type HttpsOptions } from '@nestjs/common/interfaces/external/https-options.interface.js';
 import { readFile } from 'node:fs/promises';
-import path from 'node:path';
-import { resourcesDir } from './resources.js';
+import { URL } from 'node:url';
+import { resourcesURL } from './resources.js';
 
 // https://nodejs.org/api/path.html
 // https://nodejs.org/api/fs.html
 // http://2ality.com/2017/11/import-meta.html
 
-const tlsDir = path.resolve(resourcesDir, 'tls');
-console.debug('tlsDir = %s', tlsDir);
+const tlsURL = new URL('tls/', resourcesURL);
+console.debug('tlsURL = %s', tlsURL);
 
 // public/private keys und Zertifikat fuer TLS
 export const httpsOptions: HttpsOptions = {
-    key: await readFile(path.resolve(tlsDir, 'key.pem')), // eslint-disable-line security/detect-non-literal-fs-filename
-    cert: await readFile(path.resolve(tlsDir, 'certificate.crt')), // eslint-disable-line security/detect-non-literal-fs-filename
+    key: await readFile(new URL('key.pem', tlsURL)), // eslint-disable-line security/detect-non-literal-fs-filename
+    cert: await readFile(new URL('certificate.crt', tlsURL)), // eslint-disable-line security/detect-non-literal-fs-filename
 };
