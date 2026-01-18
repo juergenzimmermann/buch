@@ -18,19 +18,24 @@
  * @packageDocumentation
  */
 
-import { readFile } from 'node:fs/promises';
+import { access } from 'node:fs/promises';
 import path from 'node:path';
-import { parse } from 'smol-toml';
-import { resourcesDir } from './resources.js';
 
-const configFile = path.resolve(resourcesDir, 'app.toml');
-console.debug(`configFile=${configFile}`);
+// im Docker-Image gibt es kein Unterverzeichnis "src"
+let srcExists: boolean;
+try {
+    // https://nodejs.org/api/fs.html#fspromisesaccesspath-mode
+    await access('src');
+    srcExists = true;
+} catch {
+    srcExists = false;
+}
+export const BASEDIR = srcExists ? 'src' : 'dist';
 
-export type AppConfig = Record<
-    'node' | 'db' | 'keycloak' | 'log' | 'health' | 'mail',
-    any
->;
+// https://nodejs.org/api/path.html
+export const resourcesDir = path.resolve(BASEDIR, 'config', 'resources');
 
-export const config = parse(
-    await readFile(configFile, 'utf8'), // eslint-disable-line security/detect-non-literal-fs-filename
-) as AppConfig;
+console.debug('resourcesDir = %s', resourcesDir);
+
+const resourcesURL = new URL('resources', import.meta.url);
+console.debug('resourcesURL = %s', resourcesURL);

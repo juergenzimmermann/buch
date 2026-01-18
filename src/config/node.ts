@@ -20,9 +20,10 @@
 
 import { HttpsOptions } from '@nestjs/common/interfaces/external/https-options.interface.js';
 import { hostname } from 'node:os';
-import { RESOURCES_DIR, config } from './app.js';
+import { config } from './app.js';
 import { env } from './env.js';
 import { httpsOptions } from './https.js';
+import { resourcesDir } from './resources.js';
 
 const { NODE_ENV } = env;
 
@@ -61,7 +62,7 @@ export const nodeConfig: NodeConfig = {
     host: computername,
     // Shorthand Property ab ES 2015
     port,
-    resourcesDir: RESOURCES_DIR,
+    resourcesDir: resourcesDir,
     httpsOptions,
     nodeEnv: NODE_ENV as
         | 'development'
