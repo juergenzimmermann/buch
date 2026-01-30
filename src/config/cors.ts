@@ -19,13 +19,17 @@ export const corsOptions: CorsOptions = {
     // Access-Control-Allow-Origin (nur Requests von origin zulassen)
     origin: [
         // Angular mit devserver
+        'https://localhost:4200',
+        // Angular mit devserver (HTTP)
         'http://localhost:4200',
         // React mit Vite und devserver
+        'https://localhost:5173',
+        // React mit Vite und devserver (HTTP)
         'http://localhost:5173',
         // Keycloak
+        'http://localhost:8843',
+        // Keycloak (HTTP)
         'http://localhost:8880',
-        'https://studio.apollographql.com',
-        'https://localhost:3001',
     ],
     // origin: true,
 

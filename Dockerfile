@@ -1,4 +1,4 @@
-# syntax=docker.io/docker/dockerfile-upstream:1.20.0
+# syntax=docker.io/docker/dockerfile-upstream:1.21.0
 # check=error=true
 
 # Copyright (C) 2023 - present, Juergen Zimmermann, Hochschule Karlsruhe
@@ -16,16 +16,16 @@
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-# Aufruf:   docker build --tag juergenzimmermann/buch:2025.10.1-trixie .
+# Aufruf:   docker build --tag juergenzimmermann/buch:2026.4.1-trixie .
 #               ggf. --progress=plain
 #               ggf. --no-cache
 #
 #           Windows:   Get-Content Dockerfile | docker run --rm --interactive hadolint/hadolint:v2.14.0-debian
 #           macOS:     cat Dockerfile | docker run --rm --interactive hadolint/hadolint:v2.14.0-debian
 #
-#           docker debug juergenzimmermann/buch:2025.10.1-trixie
+#           docker debug juergenzimmermann/buch:2026.4.1-trixie
 #           docker network ls
-#           docker save juergenzimmermann/buch:2025.10.1-trixie > buch.tar
+#           docker save juergenzimmermann/buch:2026.4.1-trixie > buch.tar
 
 # https://docs.docker.com/engine/reference/builder/#syntax
 # https://github.com/moby/buildkit/blob/master/frontend/dockerfile/docs/reference.md
@@ -35,7 +35,7 @@
 # https://snyk.io/blog/10-best-practices-to-containerize-nodejs-web-applications-with-docker
 # https://cheatsheetseries.owasp.org/cheatsheets/NodeJS_Docker_Cheat_Sheet.html
 
-ARG NODE_VERSION=25.3.0
+ARG NODE_VERSION=25.5.0
 
 # ---------------------------------------------------------------------------------------
 # S t a g e   d i s t
@@ -133,7 +133,7 @@ FROM node:${NODE_VERSION}-trixie-slim AS final
 # MAINTAINER ist deprecated https://docs.docker.com/engine/reference/builder/#maintainer-deprecated
 LABEL org.opencontainers.image.title="buch" \
   org.opencontainers.image.description="Appserver buch mit Basis-Image Debian Trixie" \
-  org.opencontainers.image.version="2025.10.1-trixie" \
+  org.opencontainers.image.version="2026.4.1-trixie" \
   org.opencontainers.image.licenses="GPL-3.0-or-later" \
   org.opencontainers.image.authors="Juergen.Zimmermann@h-ka.de"
 

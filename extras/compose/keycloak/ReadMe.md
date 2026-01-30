@@ -1,4 +1,4 @@
-# Hinweise zu Keycloak als "Identity Management and Access" System
+# Hinweise zu Keycloak als "Authorization Server"
 
 <!--
   Copyright (C) 2024 - present Juergen Zimmermann, Hochschule Karlsruhe
@@ -19,61 +19,89 @@
 
 [Juergen Zimmermann](mailto:Juergen.Zimmermann@h-ka.de)
 
-> Diese Datei ist in Markdown geschrieben und kann mit `<Strg><Shift>v` in
-> VS Code leicht gelesen werden.
-
 ## Inhalt
 
-- [JWT](#jwt)
 - [Installation](#installation)
 - [Konfiguration](#konfiguration)
-- [Inspektion der H2-Datenbank](#inspektion-der-h2-datenbank)
-
-## JWT
-
-Ein _JWT_ (= JSON Web Token) ist ein codiertes JSON-Objekt, das Informationen zu
-einem authentifizierten Benutzer enthält. Ein JWT kann verfiziert werden, da er
-digital signiert ist. Mit der URL `https://jwt.io` kann ein JWT in seine Bestandteile
-decodiert werden:
-
-- Algorithm
-- Payload
-- Signature
+- [Client Secret](#client-secret)
+- [Ergänzung des eigenen Server-Projekts](#ergänzung-des-eigenen-server-projekts)
+- [Bruno mit einem Access Token](#bruno-mit-einem-access-token)
+- [JWT](#jwt)
+- [Optional: Inspektion der H2-Datenbank von Keycloak](#optional-inspektion-der-h2-datenbank-von-keycloak)
+- [Initial Access Token](#initial-access-token)
 
 ## Installation
 
-_Keycloak_ wird als Docker Container gestartet, wofür das Verzeichnis
-`C:\Zimmermann\volumes\keycloak` vorhanden sein und ggf. angelegt werden muss:
+_Keycloak_ wird als Docker Container gestartet werden, wobei die Daten sowie das
+Zertifikat und der private Schlüssel in einem _Named Volume_ abgespeichert
+werden. Das selbst-signierte Zertifikat ist in der Datei `extras\compose\keycloak\certificate.crt`
+und der private Schlüssel in `extras\compose\keycloak\key.pem` bereitgestellt.
+Zunächst wird das Named Volume `kc_data` für die künftigen Daten und das Named
+Volume `kc_tls` für das Zertifikat und den privaten Schlüssel angelegt:
 
-```powershell
+```shell
+    docker volume create kc_data
+    docker volume create kc_tls
+```
+
+Danach wird _Keycloak_ initialisiert, wobei das _Hardened Image_ `dhi.io/keycloak`
+verwendet wird. `dhi` steht dabei für _Docker Hardened Image_. Unter der User-ID `0`,
+für die in `/etc/passwd` kein Name eingetragen ist, werden das Zertifikat und der
+private Schlüssel als _Docker Secret_ eingelesen.
+
+```shell
     cd extras\compose\keycloak
+    docker compose -f compose.init.yml up
+```
+
+In einer zweiten Shell werden das Zertifikat und der private Schlüssel, die als
+_Docker Secret_ eingelesen wurden, nach `/opt/keycloak/tls` kopiert. Danach wird
+der Linux-Owner und die -Gruppe jeweils auf `nonroot` gesetzt. Abschließend wird
+der initiale Container heruntergefahren.
+
+```shell
+    cd extras\compose\keycloak
+    docker compose exec keycloak bash -c 'cp /run/secrets/* /opt/keycloak/tls && chown -R nonroot:nonroot /opt/keycloak/tls'
+    docker compose -f compose.init.yml down
+```
+
+Jetzt kann in der ersten Shell der eigentliche Container für _Keycloak_ gestartet werden:
+
+```shell
     docker compose up
+```
+
+Wenn der Container gestartet ist, läuft er intern mit _HTTP_ und Port `8080` sowie
+mit _HTTPS_ und Port `8443`. In der zweiten Shell kann zunächst überprüft werden,
+ob die H2-Datenbank für die Speicherung der Keycloak-Daten angelegt wurde:
+
+```shell
+    docker compose exec keycloak bash -c 'ls -l /opt/keycloak/data/h2/keycloakdb.mv.db'
 ```
 
 In `compose.yml` sind unterhalb von `environment:` der temporäre Administrator
 mit Benutzername und Passwort konfiguriert, und zwar Benutzername `tmp` und
 Passwort `p`.
 
-Außerdem sind die Umgebungsvariablen für die beiden Dateien für den privatem
-Schlüssel und das Zertifikat gesetzt, so dass Keycloak wahlweise über
-`https://localhost:8843` oder `http://localhost:8880` aufgerufen werden kann.
-
 ## Konfiguration
 
 Nachdem Keycloak als Container gestartet ist, sind folgende umfangreiche
 Konfigurationsschritte _sorgfältig_ durchzuführen, nachdem man in einem
-Webbrowser `https://localhost:8843` oder `http://localhost:8880` aufgerufen hat:
+Webbrowser `https://localhost:8843` oder `http://localhost:8880` aufgerufen hat.
+Das Mapping von Port `8443` auf `8843` und von `8080` auf `8880` ist in
+`compose.yml` eingetragen.
 
 ```text
     Username    tmp
     Password    p
-        siehe .env in extras\compose\keycloak
+        siehe extras\compose\keycloak\compose.yml
 
     Menüpunkt "Users"
         Button <Add user> anklicken
             Username    admin
             Email       admin@acme.com
-            Last name   admin
+            First name  Keycloak
+            Last name   Admin
             <Create> anklicken
         Tab "Credentials" anklicken
             Button <Set password> anklicken
@@ -83,8 +111,7 @@ Webbrowser `https://localhost:8843` oder `http://localhost:8880` aufgerufen hat:
                 Button <Save> anklicken
                 Button <Save password> anklicken
         Tab "Role mapping" anklicken
-            Button <Assign role> anklicken
-                Drop-Down-Menü "Filter by realm roles" auswählen
+            Im Drop-Down-Menü "Assign role" den Eintrag "Realm roles" auswählen
                 Checkbox "admin" anklicken
                 Button <Assign> anklicken
         Drop-Down-Menü in der rechten oberen Ecke
@@ -103,17 +130,18 @@ Webbrowser `https://localhost:8843` oder `http://localhost:8880` aufgerufen hat:
         <Create client> anklicken
         Client ID   nest-client
         Name        Nest Client
-        <Next> anklicken
+        <Next>
             "Capability config"
                 Client authentication       On
-                Authorization               Off
+                Authorization               Off (ist voreingestellt)
                 Authentication Flow         Standard flow                   Haken setzen
                                             Direct access grants            Haken setzen
-        <Next> anklicken
-            Root URL                https://localhost:3000
+                                            Service account roles           Haken setzen
+        <Next>
+            Root URL                https://localhost:8443
             Valid redirect URIs     *
             Web origins             +
-        <Save> anklicken
+        <Save>
 
         nest-client
             Tab "Roles"
@@ -128,7 +156,7 @@ Webbrowser `https://localhost:8843` oder `http://localhost:8880` aufgerufen hat:
 
     # https://www.keycloak.org/docs/latest/server_admin/index.html#assigning-permissions-using-roles-and-groups
     Menüpunkt "Users"
-        <Add user> anklicken
+        <Add user>
             Required User Actions:      Überprüfen, dass nichts ausgewählt ist
             Username                    admin
             Email                       admin@acme.com
@@ -142,14 +170,14 @@ Webbrowser `https://localhost:8843` oder `http://localhost:8880` aufgerufen hat:
                     <Save> anklicken
                     <Save password> anklicken
             Tab "Role Mapping"
-                <Assign Role> anklicken
-                    "Filter by clients" auswählen
-                        "nest-client admin"     Haken setzen     (ggf. blättern)
-                        <Assign> anklicken
+                Drop-Down-Menü "Assign role" anklicken und "Client roles" auswählen
+                    "admin"         Haken setzen     (ggf. blättern)
+                    <Assign> anklicken
             Tab "Details"
                 Required user actions       Überprüfen, dass nichts ausgewählt ist
                 <Save> anklicken
-        <Add user> anklicken
+    Menüpunkt "Users"
+        <Add user>
             Required User Actions:      Überprüfen, dass nichts ausgewählt ist
             Username                    user
             Email                       user@acme.com
@@ -165,7 +193,7 @@ Webbrowser `https://localhost:8843` oder `http://localhost:8880` aufgerufen hat:
             Tab "Role Mapping"
                 <Assign Role> anklicken
                     "Filter by clients" auswählen
-                        "nest-client user"     Haken setzen     (ggf. blättern)
+                        "user"          Haken setzen     (ggf. blättern)
                         <Assign> anklicken
             Tab "Details"
                 Required user actions       Überprüfen, dass nichts ausgewählt ist
@@ -188,36 +216,84 @@ Webbrowser `https://localhost:8843` oder `http://localhost:8880` aufgerufen hat:
 Mit der URL `https://localhost:8843/realms/nest/.well-known/openid-configuration`
 kann man in einem Webbrowser die Konfiguration als JSON-Datensatz erhalten.
 
+Die Bestandteile der Basis-URL `https://localhost:8443/realms/nest` sind in der
+Konfigurationsdatei `src\config\resources\app.toml` in der _Table_ `[keycloak]`
+eingetragen:
+
+- `schema`: Defaultwert ist `https`
+- `host`: Defaultwert ist `keycloak`
+- `port`: Defaultwert ist `8443`
+
+Die Defaultwerte sind in `src\config\keycloak.ts` definiert.
+
 ## Client Secret
 
 Im Wurzelverzeichnis des Projekts in der Datei `.env` muss man die
-Umgebungsvariable `CLIENT_SECRET` auf folgenden Wert aus _Keycloak_ setzen
-und ebenso in `extras\compose\buch\.env`:
+Umgebungsvariable `CLIENT_SECRET` auf folgenden Wert aus _Keycloak_ setzen:
 
 - Menüpunkt `Clients`
 - `nest-client` aus der Liste beim voreingestellten Tab `Clients list` auswählen
 - Tab `Credentials` anklicken
-- Die Zeichenkette beim Label `Client Secret` kopieren und in der Datei `.env`
-  bei der Umgebungsvariablen `CLIENT_SECRET` als Wert eintragen.
+- Die Zeichenkette beim Label `Client Secret` kopieren.
 
-Diese Zeichenkette muss man auch in Postman als Wert für die dortige
-Umgebungsvariable `client_secret` eintragen.
+Diese Zeichenkette benötigt man für die Datei `.env` sowie für _Bruno_.
 
-## Inspektion der H2-Datenbank
+## Ergänzung des eigenen Server-Projekts
 
-Im Development-Modus verwaltet Keycloak seine Daten in einer H2-Datenbank. Um
-die _H2 Console_ als DB-Browser zu starten, lädt man zunächst die JAR-Datei
-von `https://repo.maven.apache.org/maven2/com/h2database/h2/2.3.230/h2-2.3.230.jar`.
-herunter und speichert sie z.B. im Verzeichnis `extras\compose\keycloak`.
+Im Wurzelverzeichnis des Projekts in der Datei `.env` muss man die
+Umgebungsvariable `CLIENT_SECRET` auf den Wert vom obigen _Client Secret_ aus
+_Keycloak_ setzen und ebenso in `extras\compose\buch\.env`:
 
-Mit dem Kommando `java -jar h2-2.3.230.jar` startet man nun die H2 Console, wobei
-ein Webbrowser gestartet wird. Dort gibt man folgende Werte ein:
+In der Klasse `AuthController` ist eine REST-Schnittstelle implementiert, mit
+der man durch einen POST-Request mit dem Pfad `/auth/token` einen _Access Token_
+und einen _Refresh Token_ direkt vom eigenen Server anfordern kann, falls im
+Request-Body ein JSON-Datensatz mit den Properties `username` und `password`
+mitgeschickt wird.
 
-- JDBC URL: `jdbc:h2:tcp://localhost/C:/Zimmermann/volumes/keycloak/data/h2/keycloakdb`
-- Benutzername: ``
-- Passwort: ``
+## Bruno mit einem Access Token
 
-Danach kann man z.B. die Tabellen `USER_ENTITY` und `USER_ROLE_MAPPING` inspizieren.
+Siehe `ReadMe.md` in `extras\bruno`.
+
+## Optional: Inspektion der H2-Datenbank von Keycloak
+
+Defaultmäßig verwaltet Keycloak seine Daten in einer _H2_-Datenbank - in einer
+Produktivumgebung würde man stattdessen ein DB-System wie z.B. _PostgreSQL_
+oder _Oracle_ konfigurieren.
+
+**VORSICHT**:Da H2 ein Single-User DB-System ist, sollte man auf keinen Fall die
+H2-Datenbank bei gestartetem Keycloak inspizieren, sondern muss den Keycloak-Server
+mit `docker compose down` unbedingt herunterfahren!!!
+
+Die H2-Datenbank liegt in der (Linux-) Datei `/opt/keycloak/data/h2/keycloakdb.mv.db`,
+und das Verzeichnis `/opt/keycloak/data` liegt wiederum im _Named Volume_ `kc_data`.
+Durch die nachfolgenden Kommandos startet man mit einem _H2_-Image einen Container
+und in diesem Container eine `Bash`-Shell, wobei das Named Volume mit der H2-Datenbank
+von Keycloak als Volume (`-v`) eingebunden wird. Innerhalb der Bash ist dann das
+Java-Archiv (`.jar`) verfügbar, womit das CLI von H2 so gestartet werden kann,
+dass man auf die H2-Datenbank aus dem Named Volume zugreifen kann. Innerhalb vom CLI
+mit dem Prompt `sql>` kann man dann SQL-Kommandos absetzen, z.B. um sich sämtliche
+Tabellen von Keycloak auflisten zu lassen. Abschließend beendet man das zunächst
+das CLI und danach die Bash
+
+```shell
+    docker run --rm -it -v kc_data:/opt/keycloak/data:ro oscarfonts/h2:2.3.232 bash
+        java -cp /opt/h2/bin/h2*.jar org.h2.tools.Shell \
+          -url jdbc:h2:file:/opt/keycloak/data/h2/keycloakdb -user "" -password ""
+              SHOW TABLES;
+              SELECT * FROM USER_ENTITY;
+              SELECT * FROM USER_ROLE_MAPPING;
+              EXIT
+        exit
+```
 
 **VORSICHT: AUF KEINEN FALL IRGENDEINE TABELLE EDITIEREN, WEIL MAN SONST
 KEYCLOAK NEU AUFSETZEN MUSS!**
+
+## Initial Access Token
+
+Ein _Initial Access Token_ für z.B. einen API-Client wurde bei der obigen Konfiguration
+für _Keycloak_ folgendermaßen erzeugt:
+
+- Menüpunkt `Clients`
+- Tab `Initial access token` anklicken
+- Button `Create` anklicken und eine hinreichend lange Gültigkeitsdauer einstellen.

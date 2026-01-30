@@ -14,6 +14,9 @@ generator client {
   /// https://github.com/prisma/prisma/releases/tag/5.7.0
   previewFeatures     = ["nativeDistinct", "relationJoins"]
   engineType          = "client"
+  /// https://github.com/prisma/prisma/releases/tag/7.3.0
+  /// default: "fast"; alternativ: "small"
+  /// compilerBuild = "fast"
   /// https://github.com/prisma/prisma/releases/tag/6.12.0
   // importFileExtension = "ts"
 }

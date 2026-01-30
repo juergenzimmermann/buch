@@ -19,9 +19,20 @@
 
 [Jürgen Zimmermann](mailto:Juergen.Zimmermann@h-ka.de)
 
+## Named Volume
+
+Die Daten zu den eingegangen Emails werden im _Named Volume_ `mailpit_data`
+abgespeichert, was deshalb zuvor erzeugt werden muss.
+
+```shell
+    docker volume create mailpit_data
+```
+
 ## Mailpit als Mailserver starten
 
-In einer PowerShell oder Bash wird _Mailpit_ als Docker Container gestartet:
+In einer PowerShell oder Bash wird _Mailpit_ als Docker Container gestartet.
+Dabei werden die Daten zu den eingegangen Emails im _Named Volume_ `mailpit_data`
+abgespeichert.
 
 ```shell
     cd extras/compose/mailpit

@@ -21,10 +21,11 @@ dependencies.svg
 # Sensible Daten (Passwort, Token, private Schluessel)
 extras/compose/buch/.env
 extras/compose/postgres/password.txt
+extras/compose/postgres/init/tls/server.key
+extras/bruno/nest/environments
 src/config/resources/tls/key.pem
 src/beispiele.ts
 src/beispiele-write.ts
-extras/bruno/nest/environments
 test/lasttest-locust/__pycache__
 test/lasttest-locust/.venv
 test/postman
@@ -39,15 +40,15 @@ lerna-debug.log*
 .scannerwork
 
 # Bilder, Audio, Video fuer Bruno
-extras/bruno/*.png
-extras/bruno/*.jpeg
-extras/bruno/*.gif
-extras/bruno/*.mp4
-extras/bruno/*.mpeg
-extras/bruno/*.mkv
-extras/bruno/*.avi
-extras/bruno/*.ogg
-extras/bruno/*.webm
+extras/bruno/nest/*.png
+extras/bruno/nest/*.jpeg
+extras/bruno/nest/*.gif
+extras/bruno/nest/*.mp4
+extras/bruno/nest/*.mpeg
+extras/bruno/nest/*.mkv
+extras/bruno/nest/*.avi
+extras/bruno/nest/*.ogg
+extras/bruno/nest/*.webm
 
 # Prometheus und Grafana
 extras/compose/prometheus-grafana/prometheus-data/*
@@ -82,3 +83,7 @@ extras/compose/buch/.env
 !.vscode/tasks.json
 !.vscode/launch.json
 !.vscode/extensions.json
+
+/generated/prisma
+
+/src/generated/prisma

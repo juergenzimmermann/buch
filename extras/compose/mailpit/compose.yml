@@ -13,13 +13,15 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
+# Voraussetzung:   docker volume create mailpit_data
+
 # https://mailpit.axllent.org/docs/install/docker
 # https://mailpit.axllent.org/docs/configuration/runtime-options
 
 services:
   mailpit:
     # https://hub.docker.com/r/axllent/mailpit
-    image: axllent/mailpit:v1.28.2
+    image: axllent/mailpit:v1.28.4
     ports:
       # https://mailpit.axllent.org/docs/install
       # https://mailpit.axllent.org/docs/configuration
@@ -33,9 +35,7 @@ services:
         protocol: tcp
     volumes:
       # https://mailpit.axllent.org/docs/configuration/email-storage
-      - type: bind
-        source: C:/Zimmermann/volumes/mailpit/data
-        target: /data
+      - mailpit_data:/data
     environment:
       TZ: Europe/Berlin
       MP_DATABASE: /data/database.db
@@ -55,6 +55,11 @@ services:
         reservations:
           cpus: "0.5"
           memory: 512M
+
+volumes:
+  mailpit_data:
+    name: mailpit_data
+    external: true
 
 networks:
   acme-network:

@@ -13,13 +13,11 @@
 -- You should have received a copy of the GNU General Public License
 -- along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
--- Aufruf:
--- docker compose exec db bash
--- psql --dbname=buch --username=postgres --file=/sql/copy-csv.sql
+-- Aufruf:   psql --dbname=buch --username=postgres --file=/init/buch/sql/copy-csv.sql
 
 SET search_path TO buch;
 
 -- https://www.postgresql.org/docs/current/sql-copy.html
-COPY buch FROM '/csv/buch.csv' (FORMAT csv, DELIMITER ';', HEADER true);
-COPY titel FROM '/csv/titel.csv' (FORMAT csv, DELIMITER ';', HEADER true);
-COPY abbildung FROM '/csv/abbildung.csv' (FORMAT csv, DELIMITER ';', HEADER true);
+COPY buch FROM '/init/buch/csv/buch.csv' (FORMAT csv, DELIMITER ';', HEADER true);
+COPY titel FROM '/init/buch/csv/titel.csv' (FORMAT csv, DELIMITER ';', HEADER true);
+COPY abbildung FROM '/init/buch/csv/abbildung.csv' (FORMAT csv, DELIMITER ';', HEADER true);

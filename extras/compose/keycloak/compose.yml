@@ -16,27 +16,34 @@
 # Aufruf:   docker compose up
 #           docker compose exec keycloak bash
 #             ls -l /opt/keycloak/data/h2/keycloakdb.mv.db
+#             ls -l /opt/keycloak/lib/lib/main/com.h2database.h2-2.3.230.jar
+#
 #           docker compose down
+#
+#           docker run --rm -it -v kc_data:/opt/keycloak/data:ro oscarfonts/h2:2.3.232 bash
+#               java -cp /opt/h2/bin/h2*.jar org.h2.tools.Shell \
+#                 -url jdbc:h2:file:/opt/keycloak/data/h2/keycloakdb -user "" -password ""
+#                     SHOW TABLES;
+#                     EXIT
 
 # https://github.com/keycloak/keycloak/blob/main/quarkus/runtime/src/main/resources/application.properties
 # https://www.keycloak.org/server/db
 # https://www.keycloak.org/docs/latest/upgrading/index.html
-# /opt/keycloak/lib/lib/com.h2database.h2-VERSION.jar
 # /opt/keycloak/conf/keycloak.conf
-# https://github.com/keycloak/keycloak/issues/39046
-# java -jar h2-2.3.230.jar
-#     https://github.com/keycloak/keycloak/blob/main/pom.xml#L97
-#     https://github.com/keycloak/keycloak/blob/main/quarkus/runtime/src/main/java/org/keycloak/quarkus/runtime/configuration/mappers/DatabasePropertyMappers.java#L110
-#     https://repo.maven.apache.org/maven2/com/h2database/h2/VERSION/h2-VERSION.jar
-#     Generic H2 (Embedded)
-#     JDBC URL:       jdbc:h2:tcp://localhost/C:/Zimmermann/volumes/keycloak/data/h2/keycloakdb
-#     Benutzername:
-#     Passwort:
-#         Tabellen: USER_ENTITY, USER_ROLE_MAPPING, ...
+# https://github.com/keycloak/keycloak/blob/main/pom.xml#L97
+# https://github.com/keycloak/keycloak/blob/main/quarkus/runtime/src/main/java/org/keycloak/quarkus/runtime/configuration/mappers/DatabasePropertyMappers.java#L110
 
 services:
   keycloak:
-    image: quay.io/keycloak/keycloak:26.5.1-0
+    image: dhi.io/keycloak:26.5.2-debian13
+    # https://www.keycloak.org/server/all-config
+    # https://www.keycloak.org/server/containers#_trying_keycloak_in_development_mode
+    # /opt/keycloak/bin/kc.sh
+    # --features=token-exchange
+    # --verbose
+    # --help
+    command: ["start", "--hostname-strict=false", "--http-enabled=true"]
+    #entrypoint: ["/bin/bash", "-c", "echo 'Container mit keycloak ist gestartet.' && sleep infinity"]
     ports:
       - published: 8880
         target: 8080
@@ -45,35 +52,15 @@ services:
       # 9000 ist der Port von SonarQube, 9090 ist der Port von Prometheus
       - published: 9990
         target: 9000
-    # command: ["start-dev", "--import-realm"]
     volumes:
-      - type: bind
-        source: C:/Zimmermann/volumes/keycloak/data
-        # mit Unterverzeichnis h2
-        target: /opt/keycloak/data
-      - type: bind
-        source: C:/Zimmermann/volumes/keycloak/tls/key.pem
-        # https://www.keycloak.org/server/enabletls
-        target: /opt/keycloak/conf/key.pem
-        read_only: true
-      - type: bind
-        source: C:/Zimmermann/volumes/keycloak/tls/certificate.crt
-        target: /opt/keycloak/conf/certificate.crt
-        read_only: true
-      #- type: bind
-      #  source: export
-      #  target: /opt/keycloak/data/import
-      # ggf. /opt/keycloak/conf/keycloak.conf
+      - kc_data:/opt/keycloak/data
+      - kc_tls:/opt/keycloak/tls:ro
     environment:
       KC_BOOTSTRAP_ADMIN_USERNAME: tmp
       KC_BOOTSTRAP_ADMIN_PASSWORD: p
-      KC_HTTPS_CERTIFICATE_FILE: /opt/keycloak/conf/certificate.crt
-      KC_HTTPS_CERTIFICATE_KEY_FILE: /opt/keycloak/conf/key.pem
-      # https://www.keycloak.org/observability/health
-      # https://www.keycloak.org/server/all-config#category-health
-      KC_HEALTH_ENABLED: true
-      # https://www.keycloak.org/observability/configuration-metrics
-      KC_METRICS_ENABLED: true
+      KC_HTTPS_CERTIFICATE_FILE: /opt/keycloak/tls/kc_cert
+      KC_HTTPS_CERTIFICATE_KEY_FILE: /opt/keycloak/tls/kc_key
+      KC_HTTPS_PROTOCOLS: "TLSv1.3"
       # https://www.keycloak.org/server/all-config#category-logging
       # https://www.keycloak.org/server/logging#_colors
       KC_LOG: console
@@ -81,12 +68,8 @@ services:
     networks: [acme-network]
     hostname: keycloak
     container_name: keycloak
-    #user: root
-    user: keycloak:keycloak
-    # https://www.keycloak.org/server/containers#_trying_keycloak_in_development_mode
-    # --features=token-exchange
-    entrypoint: ["/opt/keycloak/bin/kc.sh", "start-dev"]
-    #entrypoint: ["/opt/keycloak/bin/kc.sh", "start-dev", "--help"]
+    user: nonroot:nonroot
+    #user: 0:0
     # https://docs.docker.com/reference/compose-file/services/#cap_drop
     # https://man7.org/linux/man-pages/man7/capabilities.7.html
     cap_drop: [ALL]
@@ -97,7 +80,7 @@ services:
       test:
         [
           CMD,
-          "exec 3<>/dev/tcp/127.0.0.1/9000;echo -e 'GET /health/ready HTTP/1.1\r\nhost: http://localhost\r\nConnection: close\r\n\r\n' >&3;if [ $? -eq 0 ]; then echo 'Healthcheck Successful';exit 0;else echo 'Healthcheck Failed';exit 1;fi;",
+          "exec 3<>/dev/tcp/127.0.0.1/9000;echo -e 'GET /health/ready HTTP/1.1\r\nhost: http://localhost\r\nConnection: close\r\n\r\n' >&3;if [ $? -eq 0 ]; then echo 'Healthcheck Successful';exit 0;else echo 'Healthcheck Failed';exit 1;fi;"
         ]
       #test:
       #  [
@@ -117,6 +100,14 @@ services:
         reservations:
           cpus: "2.0"
           memory: 2G
+
+volumes:
+  kc_data:
+    name: kc_data
+    external: true
+  kc_tls:
+    name: kc_tls
+    external: true
 
 networks:
   acme-network:

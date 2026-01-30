@@ -1,0 +1,56 @@
+# Copyright (C) 2026 - present Juergen Zimmermann, Hochschule Karlsruhe
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program. If not, see <https://www.gnu.org/licenses/>.
+
+# Aufruf:   docker volume create pg_data
+#           docker volume create pg_tablespace
+#           docker volume create pg_init
+#
+#           docker compose -f compose.init.yml up
+#           docker compose -f compose.init.yml exec db bash
+#               mkdir /tablespace/buch
+#               cp -r /tmp/init/* /init
+#               chown -R postgres:postgres /tablespace /init
+#               chmod 400 /init/buch/sql/* /init/buch/csv/* /init/tls/*
+#               ls -lR /init
+#               ls -l /tablespace
+#               exit
+#           docker compose -f compose.init.yml down
+#
+#           docker volume inspect pg_init
+#               Mountpoint: /var/lib/docker/volumes/pg_init/_data
+
+services:
+  db:
+    image: dhi.io/postgres:18.1-debian13
+    entrypoint:
+      - "/bin/bash"
+      - "-c"
+      - "echo 'Container (mit Postgres-Image) ist als Bash gestartet.' && sleep infinity"
+    volumes:
+      - pg_tablespace:/tablespace
+      - pg_init:/init
+      - type: bind
+        source: ./init
+        target: /tmp/init
+        read_only: true
+    user: "0:0"
+
+volumes:
+  pg_tablespace:
+    name: pg_tablespace
+    external: true
+  pg_init:
+    name: pg_init
+    external: true

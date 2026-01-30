@@ -22,14 +22,14 @@ import vitest from '@vitest/eslint-plugin';
 // alternativ: https://github.com/un-ts/eslint-plugin-import-x
 import importPlugin from 'eslint-plugin-import';
 import nodePlugin from 'eslint-plugin-n';
-import packageJson from 'eslint-plugin-package-json';
+import { configs as packageJson } from 'eslint-plugin-package-json';
 import { defineConfig } from 'eslint/config';
 // @ts-expect-error keine .d.ts-Datei
 import preferArrow from 'eslint-plugin-prefer-arrow';
 // @ts-expect-error keine .d.ts-Datei
 import promise from 'eslint-plugin-promise';
-import regexp from 'eslint-plugin-regexp';
-import security from 'eslint-plugin-security';
+import { configs as regexp } from 'eslint-plugin-regexp';
+import { configs as security } from 'eslint-plugin-security';
 import sonarjs from 'eslint-plugin-sonarjs';
 import unicorn from 'eslint-plugin-unicorn';
 import globals from 'globals';
@@ -57,11 +57,11 @@ export default defineConfig(
             // https://github.com/eslint-community/eslint-plugin-promise#rules
             nodePlugin.configs['flat/recommended'],
             // https://github.com/eslint-community/eslint-plugin-security?tab=readme-ov-file#flat-config-requires-eslint--v8230
-            security.configs.recommended,
+            security.recommended,
             // https://github.com/eslint-community/eslint-plugin-eslint-comments/blob/main/lib/configs/recommended.js
             comments.recommended,
             // https://github.com/ota-meshi/eslint-plugin-regexp/blob/master/lib/configs/rules/recommended.ts
-            regexp.configs['flat/recommended'],
+            regexp.recommended,
             // https://github.com/eslint-community/eslint-plugin-promise#rules
             promise.configs['flat/recommended'],
             stylistic.configs.recommended,
@@ -624,10 +624,7 @@ export default defineConfig(
     // -------------------------------------------------------------------------
     {
         files: ['package.json'],
-        extends: [
-            packageJson.configs.recommended,
-            packageJson.configs.stylistic,
-        ],
+        extends: [packageJson.recommended, packageJson.stylistic],
         rules: {
             'package-json/sort-collections': [
                 'error',

@@ -22,10 +22,11 @@
 ## Inhalt
 
 - [Docker Container vs. Installation auf dem Host-Rechner](#docker-container-vs-installation-auf-dem-host-rechner)
+- [Named Volumes erstellen](#named-volumes-erstellen)
+- [Named Volumes initialisieren](#named-volumes-initialisieren)
 - [Installation ohne TLS](#installation-ohne-tls)
-- [Konfiguration für Tablespace und TLS](#konfiguration-für-tablespace-und-tls)
 - [Datenbank, Datenbank-User, Schema, Tabellen und Daten anlegen](#datenbank-datenbank-user-schema-tabellen-und-daten-anlegen)
-- [Umgebungsvariable überprüfen](#umgebungsvariable-überprüfen)
+- [Ausgewählte Administrationskommandos für PostgreSQL](#ausgewählte-administrationskommandos-für-postgresql)
 - [Optional: TLS für den PostgreSQL-Server mit OpenSSL überprüfen](#optional-tls-für-den-postgresql-server-mit-openssl-überprüfen)
 - [Erweiterung PostgreSQL für VS Code](#erweiterung-postgresql-für-vs-code)
   - [Konfiguration](#konfiguration)
@@ -40,145 +41,198 @@ diesen - vermutlich ohne TLS - weiter benutzen oder aber man beendet den
 ensprechenden Hintergrund-Prozess bzw. Dienst oder man deinstalliert
 PostgreSQL komplett.
 
+## Named Volumes erstellen
+
+Zunächst werden _Named Volumes_ in Docker eingerichtet für
+
+- die Datenbanken
+- die Tablespaces
+- SQL-Skripte zum Neuanlegen der DB und des Schemas
+- Zertifikat und privater Schlüssel für TLS.
+
+```shell
+    docker volume create pg_data
+    docker volume create pg_tablespace
+    docker volume create pg_init
+```
+
+Für Details zu Volumes siehe https://docs.docker.com/engine/storage/volumes.
+
+## Named Volumes initialisieren
+
+Im Named Volume `pg_tablespace` für die Tablespaces wird das Verzeichnis `/tablespace/buch`
+angelegt, und in das Named Volume `pg_init` werden die SQL-Skripte für die
+Initialisierung der DB `buch` sowie die Dateien für das Zertifikat und den
+privaten Schlüssel kopiert. Dazu wird ein Container mit dem _Hardened Image_
+für _PostgreSQL_ so gestartet, dass nur eine Bash gestartet ist, weil lediglich
+das Dateisystem einschließlich der Named Volumes für die Kopiervorgänge benötigt
+wird. Dazu wird die Datei `compose.init.yml` und der Linux-User mit UID `0` verwendet.
+
+```shell
+    # Windows
+    cd extras\compose\postgres
+
+    # macOS
+    cd extras/compose/postgres
+
+    docker compose -f compose.init.yml up
+```
+
+In einer zweiten Shell findet jetzt die eigentliche Initialisierung der Named Volumes
+`pg_tablespace` und `pg_init` statt, die durch `compose.init.yml` in den
+Verzeichnissen `/tablespace` und `/init` bereitgestellt wurden. Um die Dateien
+kopieren zu können, wurden sie in `compose.init.yml` als _Bind Volume_ in
+`/tmp/init` bereitgestellt. Nach dem Kopieren wird bei den Dateien der Owner und
+die Gruppe auf `postgres` gesetzt sowie die Zugriffsrechte auf Oktal `400`, d.h.
+nur der Owner hat Leserechte. Abschließend wird der Container, in dem nur eine
+Bash läuft heruntergefahren.
+
+```shell
+    # Windows
+    cd extras\compose\postgres
+
+    # macOS
+    cd extras/compose/postgres
+
+    docker compose -f compose.init.yml exec db bash
+        mkdir /tablespace/buch
+        cp -r /tmp/init/* /init
+        chown -R postgres:postgres /tablespace /init
+        chmod 400 /init/buch/sql/* /init/tls/*
+        ls -lR /init
+        ls -l /tablespace
+        exit
+    docker compose -f compose.init.yml down
+```
+
 ## Installation ohne TLS
 
-In der Datei `extras\compose\postgres\compose.yml` muss man folgende Zeilen
-auskommentieren:
+Für _TLS_ erwartet _PostgreSQL_ standardmäßig die Dateien `server.crt` und
+`server.key` im Verzeichnis `/var/lib/postgresql/18/data`, was aber zu Beginn
+der Installation leer sein muss. Deshalb wird der PostgreSQL-Server zunächst
+ohne TLS gestartet, damit `/var/lib/postgresql/18/data` initialisiert wird.
+Dazu muss in `compose.yml` temporär die Zeile `command: ...` auskommentiert
+werden. Danach wird der PostgreSQL-Server mit dem _Hardened Image_ als
+Docker-Container gestartet
 
-- Den Schlüssel `command:` und die nachfolgenden Listenelemente mit führendem `-`,
-  damit der PostgreSQL-Server zunächst ohne TLS gestartet wird.
-- Bei den Zeilen mit den Listenelementen unterhalb vom Schlüssel `volumes:`
-  jeweils die Zeilen mit dem Schlüssel `read_only:` damit die Zugriffsrechte für
-  den privaten Schlüssel und das Zertifikat später gesetzt werden können:
-  - bei `key.pem` und
-  - bei `certificate.crt`
-- Die Zeile mit dem Schlüssel `user:`, damit der PostgreSQL-Server implizit mit
-  dem Linux-User `root` gestartet wird.
-
-Außerdem muss man in derselben Datei `extras\compose\postgres\compose.yml` in
-der Zeile mit `#cap_add: [...]` den Kommentar entfernen.
-
-Nun startet man in einer PowerShell den PostgreSQL-Server:
-
-```powershell
-    cd extras\compose\postgres
+```shell
+    # in der 1. Shell
     docker compose up
 ```
 
-## Konfiguration für Tablespace und TLS
+Nachdem in der ersten Shell der Server erfolgreich gestartet und initialisiert
+ist, werden `server.crt` und `server.key` aus dem Named Volume `pg_init`, d.h.
+aus dem Verzeichnis `/init/tls`, in das Verzeichnis `/var/lib/postgresql/18/data`
+kopiert. Danach wird der Server bzw. Container wieder heruntergefahren, da er
+noch ohne TLS läuft.
 
-Für das _Volume Mounting_ in `extras\compose\postgres\compose.yml` muss man in
-Windows das Verzeichnis `C:/Zimmermann/volumes/postgres/tablespace/buch` anlegen
-oder geeignet anpassen. Danach werden _Owner_, _Group_ und eingeschränkte
-Zugriffsrechte im (Linux-) Docker Container in einer 2. PowerShell gesetzt:
-
-```powershell
-   cd extras\compose\postgres
-   docker compose exec db bash
-      chown postgres:postgres /var/lib/postgresql/tablespace
-      chown postgres:postgres /var/lib/postgresql/tablespace/buch
-      chown postgres:postgres /var/lib/postgresql/key.pem
-      chown postgres:postgres /var/lib/postgresql/certificate.crt
-      chmod 400 /var/lib/postgresql/key.pem
-      chmod 400 /var/lib/postgresql/certificate.crt
-      exit
-   docker compose down
-```
-
-Nachdem der Docker Container heruntergefahren ist, werden in `compose.yml` die
-zuvor gesetzten Kommentare wieder entfernen, d.h.
-
-- Beim Schlüssel `command:` und den nachfolgenden Listenelementen, damit der
-  PostgreSQL-Server mit TLS gestartet wird.
-- Bei den Zeilen mit den Listenelementen unterhalb vom Schlüssel `volumes:`
-  jeweils bei Zeilen mit dem Schlüssel `read_only:`, weil inzwischen die
-  Zugriffsrechte gesetzt bzw. eingeschränkt sind:
-  - bei `key.pem` und
-  - bei `certificate.crt`
-- Bei der Zeile mit dem Schlüssel `user:`, damit der PostgreSQL-Server als
-  normaler Linux-User `postgres` gestartet wird.
-
-Außerdem muss man in derselben Datei `extras\compose\postgres\compose.yml` die
-Zeile mit `cap_add: [...]` wieder auskommentieren.
-
-Jetzt läuft der DB-Server mit folgender Konfiguration:
-
-- Rechnername `localhost` aus Windows-Sicht
-- Default-Port `5432` bei _PostgreSQL_
-- Datenbankname `buch`
-- Administrations-User `postgres` bei _PostgreSQL_
-- Passwort `p` für diesen Administrations-User
-
-## Datenbank, Datenbank-User, Schema, Tabellen und Daten anlegen
-
-In der 1. PowerShell startet man wieder den DB-Server als Docker Container, und
-zwar jetzt mit TLS:
-
-```powershell
-    docker compose up
-```
-
-In der 2. PowerShell werden die beiden SQL-Skripte ausgeführt, um zunächst eine
-neue DB `buch` mit dem DB-User `buch`anzulegen. Mit dem 2. Skript wird das
-Schema `buch` mit dem DB-User `buch` als _Owner_ angelegt:
-
-```powershell
-   docker compose exec db bash
-      psql --dbname=postgres --username=postgres --file=/sql/create-db-buch.sql
-      psql --dbname=buch --username=buch --file=/sql/create-schema-buch.sql
-      psql --dbname=buch --username=buch --file=/sql/create-table.sql
-      psql --dbname=buch --username=postgres --file=/sql/copy-csv.sql
-      exit
+```shell
+    # in der 2. Shell
+    docker compose exec db bash -c 'cp /init/tls/* /var/lib/postgresql/18/data'
     docker compose down
 ```
 
-Die SQL-Skripte liegen z.B. im Windows-Verzeichnis `C:\Zimmermann\volumes\postgres\sql`
-und sind durch _Volume Mount_ in `compose.yml` im PostgreSQL-Server als
-Linux-Verzeichnis `/sql` verfügbar.
+## Datenbank, Datenbank-User, Schema, Tabellen und Daten anlegen
 
-_Kopien_ der SQL-Skripte `create-db-buch.sql` und `create-schema-buch.sql` sind
-im Projekt-Verzeichnis `extras\compose\postgres\sql`, damit man den SQL-Editor
-von VS Code nutzen kann. Eventuelle Änderungen müssen auf jeden Fall in
-`C:\Zimmermann\volumes\postgres\sql` gemacht werden, z.B. durch Kopieren der Dateien.
-Kopien der CSV-Dateien für Testdaten sind im Projekt-Verzeichnis `extras\compose\postgres\csv`
-und die Originale in `C:\Zimmermann\volumes\postgres\csv`. Ein SQL-Skripte zum
-Laden von CSV-Dateien kann ausschließlich vom DB-Administrator `postgres` benutzt
-werden, und zwar Server-seitig.
+In der 1. Shell startet man wieder den DB-Server als Docker Container, und zwar
+jetzt mit TLS:
 
-Die _Original_-Skripte `create-table.sql` und `copy-csv.sql` sind im Projekt-Verzeichnis
-`src\config\resources\postgresql`. Dort werden sie später für den _Nest_-basierten
-Appserver benötigt.
+```shell
+    docker compose up
+```
 
-## Umgebungsvariable überprüfen
+In der 2. Shell werden die beiden SQL-Skripte ausgeführt, um zunächst eine neue
+DB `buch` mit dem DB-User `buch`anzulegen. Mit dem 2. Skript wird das Schema
+`buch` mit dem DB-User `buch` als _Owner_ angelegt. Abschließend werden die
+Tabellen angelegt und mit Testdaten aus den CSV-Dateien aus dem Verzeichnis
+`/init/buch/csv` im Named Volume `pg_init` gefüllt.
 
-Wenn der Container mit _PostgreSQL_ gestartet ist, kann man in der 2. PowerShell
-überprüfen, dass das Passwort **nicht** in einer Umgebungsvariablen gesetzt ist:
+```shell
+    docker compose exec db bash
+        psql --dbname=postgres --username=postgres --file=/init/buch/sql/create-db.sql
+        psql --dbname=buch --username=buch --file=/init/buch/sql/create-schema.sql
 
-```powershell
-   docker compose exec db bash -c printenv
+        psql --dbname=buch --username=buch --file=/init/buch/sql/create-table.sql
+        psql --dbname=buch --username=postgres --file=/init/buch/sql/copy-csv.sql
+        exit
+    docker compose down
+```
+
+Die SQL-Skripte `copy-csv.sql` und `create-table.sql` im Verzeichnis
+`extras\compose\postgres\sql` sind Kopien der Original-Skripte aus dem Verzeichnis
+`src\config\resources\postgresql`, wo sie später für den _Nest_-basierten
+Appserver benötigt werden, d.h. eventuelle Änderungen müssen im Verzeichnis
+`src\config\resources\postgresql` vorgenommen werden. Durch die Kopien kann aber
+die Datenbank nach der Installation über das Named Volume mit Testdaten gefüllt
+werden kann.
+
+## Ausgewählte Administrationskommandos für PostgreSQL
+
+Zunächst muss natürlich der PostgreSQL-Server gestartet sein:
+
+```shell
+    docker compose up
+```
+
+Danach kann man in einer zweiten Shell `psql`, d.h. das CLI von PostgreSQL, aufrufen:
+
+```shell
+    docker compose exec db bash -c 'psql --dbname=postgres --username=postgres'
+        -- absoluter Dateiname fuer i.a. postgresql.conf
+        SHOW config_file;
+
+        -- absoluter Dateiname fuer i.a. pg_hba.conf ("host-based authentication")
+        SHOW hba_file;
+
+        -- Algorithmus zur Verschluesselung von Passwoertern, z.B. scram-sha-256 (siehe pg_hba.conf)
+        -- SCRAM = Salted Challenge Response Authentication Mechanism
+        -- https://www.rfc-editor.org/rfc/rfc7677
+        -- https://www.rfc-editor.org/rfc/rfc9266
+        SHOW password_encryption;
+
+        -- Benutzernamen und verschluesselte Passwoerter
+        SELECT rolname, rolpassword FROM pg_authid;
+
+        -- Laeuft der Server mit TLS?
+        SHOW ssl;
+
+        -- Datei mit dem Zertifikat fuer TLS
+        SHOW ssl_cert_file;
+
+        -- Datei mit dem privaten Schluessel fuer TLS
+        SHOW ssl_key_file;
+
+        -- alle Einstellungen bzw. Konfigurationsparameter
+        SELECT name, setting, source FROM pg_settings;
+
+        -- psql beenden ("quit")
+        \q
 ```
 
 ## Optional: TLS für den PostgreSQL-Server mit OpenSSL überprüfen
 
 Jetzt kann man bei Bedarf noch die TLS-Konfiguration für den PostgreSQL-Server
 überprüfen. Dazu muss der PostgreSQL-Server natürlich gestartet sein (s.o.).
-In einer PowerShell startet man einen Docker Container mit dem Image
-`nicolaka/netshoot`, der dasselbe virtuelle Netzwerk nutzt wie der PostgreSQL-Server:
+In einer Shell startet man einen Docker Container mit dem Image `nicolaka/netshoot`,
+der dasselbe virtuelle Netzwerk nutzt wie der PostgreSQL-Server:
 
-```powershell
-   cd extras\compose\debug
+```shell
+    # Windows
+    cd extras\compose\debug
+
+    # macOS
+   cd extras/compose/debug
+
    docker compose up
 ```
 
-In einer weiteren Powershell startet man eine `bash` für diesen Docker Container,
-um darin mit `openssl` eine TLS-Verbindung über das virtuelle Netzwerk mit dem
+In einer weiteren Shell startet man eine `bash` für diesen Docker Container, um
+darin mit `openssl` eine TLS-Verbindung über das virtuelle Netzwerk mit dem
 PostgreSQL-Server aufzubauen.
 
-```powershell
+```shell
    cd extras\compose\debug
-   docker compose exec netshoot bash
-       openssl s_client -tls1_3 -trace postgres:5432
-       exit
+   docker compose exec netshoot bash -c 'openssl s_client -tls1_3 -trace postgres:5432'
    docker compose down
 ```
 
@@ -219,10 +273,10 @@ Danacht klickt man auf den Button _Erweitert_, klappt das Menü _SSL_ auf und
 gibt folgende Werte ein:
 
 - SSL MODE: _require_ auswählen
-- SSL CERTIFICATE FILENAME: im Verzeichnis `C:\Zimmermann\volumes\postgres\tls`
-  die Datei `certificate.crt` auswählen
-- SSL KEY FILENAME: im Verzeichnis `C:\Zimmermann\volumes\postgres\tls`
-  die Datei `key.pem` auswählen
+- SSL CERTIFICATE FILENAME: im Verzeichnis `extras\compose\postgres\init\tls`
+  die Datei `server.crt` auswählen
+- SSL KEY FILENAME: im Verzeichnis `extras\compose\postgres\init\tls`
+  die Datei `server.key` auswählen
 
 Jetzt den modalen Dialog schließen, d.h. rechts oben auf _X_ klicken, und danach
 den Button _Verbindung testen_ anklicken. Wenn dann im Button ein Haken erscheint,
