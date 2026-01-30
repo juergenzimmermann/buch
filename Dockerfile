@@ -16,16 +16,16 @@
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-# Aufruf:   docker build --tag juergenzimmermann/buch:2026.4.1-trixie .
+# Aufruf:   docker build --tag juergenzimmermann/buch:2026.4.1-hardened .
 #               ggf. --progress=plain
 #               ggf. --no-cache
 #
 #           Windows:   Get-Content Dockerfile | docker run --rm --interactive hadolint/hadolint:v2.14.0-debian
 #           macOS:     cat Dockerfile | docker run --rm --interactive hadolint/hadolint:v2.14.0-debian
 #
-#           docker debug juergenzimmermann/buch:2026.4.1-trixie
+#           docker debug juergenzimmermann/buch:2026.4.1-hardened
 #           docker network ls
-#           docker save juergenzimmermann/buch:2026.4.1-trixie > buch.tar
+#           docker save juergenzimmermann/buch:2026.4.1-hardened > buch.tar
 
 # https://docs.docker.com/engine/reference/builder/#syntax
 # https://github.com/moby/buildkit/blob/master/frontend/dockerfile/docs/reference.md
