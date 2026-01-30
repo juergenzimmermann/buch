@@ -146,6 +146,17 @@ Die bisherigen Beispieldateien `beispiele.mts` und `beispiele-write.mts`
 waren für den "alten" Prisma-Client, so dass die `import`-Klauseln nicht mehr
 funktionieren, weshalb man sie am einfachsten aus dem Projekt löscht.
 
+Mit _pnpm_ statt _bun_ wird der Prisma-Client folgendermaßen generiert:
+
+```shell
+    # Windows:
+    rm -Recurse -Force src\generated
+    # macOS:
+    rm -rf src/generated
+
+    pnpm prisma generate
+```
+
 ---
 
 ## Download- und ggf. Upload Geschwindigkeit
