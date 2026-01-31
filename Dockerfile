@@ -125,44 +125,32 @@ EOF
 # ------------------------------------------------------------------------------
 # S t a g e   f i n a l
 # ------------------------------------------------------------------------------
-FROM node:${NODE_VERSION}-trixie-slim AS final
+FROM dhi.io/node:${NODE_VERSION}-debian13 AS final
 
 # Anzeige bei "docker inspect ..."
 # https://specs.opencontainers.org/image-spec/annotations
 # https://spdx.org/licenses
 # MAINTAINER ist deprecated https://docs.docker.com/engine/reference/builder/#maintainer-deprecated
 LABEL org.opencontainers.image.title="buch" \
-  org.opencontainers.image.description="Appserver buch mit Basis-Image Debian Trixie" \
-  org.opencontainers.image.version="2026.4.1-trixie" \
+  org.opencontainers.image.description="Appserver buch mit 'hardened' Basis-Image Node und Debian 13" \
+  org.opencontainers.image.version="2026.4.1-hardened" \
   org.opencontainers.image.licenses="GPL-3.0-or-later" \
   org.opencontainers.image.authors="Juergen.Zimmermann@h-ka.de"
 
-RUN <<EOF
-set -eux
-# Die "Package Index"-Dateien neu synchronisieren
-apt-get update
-# Die neuesten Versionen der bereits installierten Packages installieren
-apt-get upgrade --yes
-# https://github.com/Yelp/dumb-init
-# https://packages.debian.org/trixie/dumb-init
-# https://packages.debian.org/trixie/wget
-apt-get install --no-install-recommends --yes dumb-init=1.2.5-3 wget=1.25.0-2
-
-apt-get autoremove --yes
-apt-get clean --yes
-rm -rf /var/lib/apt/lists/*
-rm -rf /tmp/*
-EOF
-
 WORKDIR /opt/app
-
-USER node
 
 # ADD hat mehr Funktionalitaet als COPY, z.B. auch Download von externen Dateien
 COPY --chown=node:node package.json .env ./
 COPY --from=dependencies --chown=node:node /home/node/node_modules ./node_modules
-COPY --from=dist --chown=node:node /home/node/dist ./dist
+COPY --from=dist --chown=node:node \
+  --exclude=*.d.ts --exclude=*.js.map \
+  --exclude=*/*.d.ts --exclude=*/*.js.map \
+  --exclude=*/*/*.d.ts --exclude=*/*/*.js.map \
+  --exclude=*/*/*/*.d.ts --exclude=*/*/*/*.js.map \
+  /home/node/dist ./dist
 COPY --chown=node:node src/config/resources ./dist/config/resources
+
+USER node
 
 EXPOSE 3000
 
@@ -171,7 +159,5 @@ HEALTHCHECK --interval=30s --timeout=3s --retries=1 \
 
 # Bei CMD statt ENTRYPOINT kann das Kommando bei "docker run ..." ueberschrieben werden
 # "Array Syntax" damit auch <Strg>C funktioniert
-# https://github.com/Yelp/dumb-init:
-# "a simple process supervisor and init system designed to run as PID 1 inside
-# minimal container environments (such as Docker)""
-ENTRYPOINT ["dumb-init", "/usr/local/bin/node", "dist/main.js"]
+
+ENTRYPOINT ["/usr/local/bin/node", "dist/main.js"]

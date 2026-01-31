@@ -161,7 +161,12 @@ USER node
 # ADD hat mehr Funktionalitaet als COPY, z.B. auch Download von externen Dateien
 COPY --chown=node:node package.json .env ./
 COPY --from=dependencies --chown=node:node /home/node/node_modules ./node_modules
-COPY --from=dist --chown=node:node /home/node/dist ./dist
+COPY --from=dist --chown=node:node \
+  --exclude=*.d.ts --exclude=*.js.map \
+  --exclude=*/*.d.ts --exclude=*/*.js.map \
+  --exclude=*/*/*.d.ts --exclude=*/*/*.js.map \
+  --exclude=*/*/*/*.d.ts --exclude=*/*/*/*.js.map \
+  /home/node/dist ./dist
 COPY --chown=node:node src/config/resources ./dist/config/resources
 
 EXPOSE 3000
@@ -173,5 +178,5 @@ HEALTHCHECK --interval=30s --timeout=3s --retries=1 \
 # "Array Syntax" damit auch <Strg>C funktioniert
 # https://github.com/Yelp/dumb-init:
 # "a simple process supervisor and init system designed to run as PID 1 inside
-# minimal container environments (such as Docker)""
+# minimal container environments (such as Docker)"
 ENTRYPOINT ["dumb-init", "/usr/local/bin/node", "dist/main.js"]

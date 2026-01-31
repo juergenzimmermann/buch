@@ -21,7 +21,11 @@
 # https://docs.docker.com/build/bake/introduction
 # https://docs.docker.com/build/bake/reference
 
-target "default" {
+group "default" {
+  targets = ["hardened"]
+  # targets = ["hardened", "trixie", "alpine"]
+}
+target "hardened" {
   tags = ["docker.io/juergenzimmermann/buch:2026.4.1-hardened"]
   #dockerfile = "Dockerfile"
   #no-cache = true
