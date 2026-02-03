@@ -13,7 +13,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-# Voraussetzung:   docker volume create mailpit_data
+# Voraussetzung:   docker volume create mailpit
 
 # https://mailpit.axllent.org/docs/install/docker
 # https://mailpit.axllent.org/docs/configuration/runtime-options
@@ -35,7 +35,7 @@ services:
         protocol: tcp
     volumes:
       # https://mailpit.axllent.org/docs/configuration/email-storage
-      - mailpit_data:/data
+      - mailpit:/data
     environment:
       TZ: Europe/Berlin
       MP_DATABASE: /data/database.db
@@ -57,8 +57,8 @@ services:
           memory: 512M
 
 volumes:
-  mailpit_data:
-    name: mailpit_data
+  mailpit:
+    name: mailpit
     external: true
 
 networks:

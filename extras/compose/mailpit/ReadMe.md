@@ -21,24 +21,23 @@
 
 ## Named Volume
 
-Die Daten zu den eingegangen Emails werden im _Named Volume_ `mailpit_data`
+Die Daten zu den eingegangen Emails werden im _Named Volume_ `mailpit`
 abgespeichert, was deshalb zuvor erzeugt werden muss.
 
 ```shell
-    docker volume create mailpit_data
+    docker volume create mailpit
 ```
 
 ## Mailpit als Mailserver starten
 
 In einer PowerShell oder Bash wird _Mailpit_ als Docker Container gestartet.
-Dabei werden die Daten zu den eingegangen Emails im _Named Volume_ `mailpit_data`
+Dabei werden die Daten zu den eingegangen Emails im _Named Volume_ `mailpit`
 abgespeichert.
 
 ```shell
     cd extras/compose/mailpit
     docker compose up
 ```
-
 ## Netshoot als Mailclient
 
 Zunächst wird in einer 2. PowerShell oder Bash ein Docker Container mit _Netshoot_

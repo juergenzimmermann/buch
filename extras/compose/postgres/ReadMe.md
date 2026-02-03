@@ -60,13 +60,11 @@ Für Details zu Volumes siehe https://docs.docker.com/engine/storage/volumes.
 
 ## Named Volumes initialisieren
 
-Im Named Volume `pg_tablespace` für die Tablespaces wird das Verzeichnis `/tablespace/buch`
-angelegt, und in das Named Volume `pg_init` werden die SQL-Skripte für die
-Initialisierung der DB `buch` sowie die Dateien für das Zertifikat und den
-privaten Schlüssel kopiert. Dazu wird ein Container mit dem _Hardened Image_
-für _PostgreSQL_ so gestartet, dass nur eine Bash gestartet ist, weil lediglich
-das Dateisystem einschließlich der Named Volumes für die Kopiervorgänge benötigt
-wird. Dazu wird die Datei `compose.init.yml` und der Linux-User mit UID `0` verwendet.
+Mit dem _Hardened Image_ für _PostgreSQL_ wird ein Container so gestartet, dass
+nur eine Bash gestartet ist, weil lediglich das Dateisystem einschließlich der
+Named Volumes für Kopiervorgänge in die neu angelegten Named Volumes benötigt
+wird. Dazu wird die Datei `compose.init.yml` und der Linux-Superuser mit UID
+`0` verwendet.
 
 ```shell
     # Windows
@@ -78,14 +76,18 @@ wird. Dazu wird die Datei `compose.init.yml` und der Linux-User mit UID `0` verw
     docker compose -f compose.init.yml up
 ```
 
-In einer zweiten Shell findet jetzt die eigentliche Initialisierung der Named Volumes
+In einer zweiten Shell findet jetzt die Initialisierung der Named Volumes
 `pg_tablespace` und `pg_init` statt, die durch `compose.init.yml` in den
-Verzeichnissen `/tablespace` und `/init` bereitgestellt wurden. Um die Dateien
-kopieren zu können, wurden sie in `compose.init.yml` als _Bind Volume_ in
-`/tmp/init` bereitgestellt. Nach dem Kopieren wird bei den Dateien der Owner und
-die Gruppe auf `postgres` gesetzt sowie die Zugriffsrechte auf Oktal `400`, d.h.
-nur der Owner hat Leserechte. Abschließend wird der Container, in dem nur eine
-Bash läuft heruntergefahren.
+Verzeichnissen `/tablespace` und `/init` bereitgestellt wurden. Um die SQL-Skripte
+sowie Zertifikat und privater Schlüssel für TLS aus dem Original-Verzeichnis
+`init\kunde\sql` bzw. `init\kunde\tls` in das Named Volume `pg_init`
+kopieren zu können, wurden das lokale Verzeichnis `.\init` in `compose.init.yml`
+als _Bind Volume_ in `/tmp/init` bereitgestellt.
+
+Nach dem Kopieren wird bei den Dateien der Owner und die Gruppe auf `postgres`
+gesetzt sowie die Zugriffsrechte auf Oktal `400`, d.h. nur der Owner hat Leserechte.
+Deshalb wurde der erste Container auch mit der User-ID `0` gestartet.
+Abschließend wird der Container, in dem nur eine Bash läuft heruntergefahren.
 
 ```shell
     # Windows
