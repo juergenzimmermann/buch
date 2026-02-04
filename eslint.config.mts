@@ -30,10 +30,10 @@ import preferArrow from 'eslint-plugin-prefer-arrow';
 import promise from 'eslint-plugin-promise';
 import { configs as regexp } from 'eslint-plugin-regexp';
 import { configs as security } from 'eslint-plugin-security';
-import sonarjs from 'eslint-plugin-sonarjs';
+import { configs as sonarjs } from 'eslint-plugin-sonarjs';
 import unicorn from 'eslint-plugin-unicorn';
 import globals from 'globals';
-import tseslint from 'typescript-eslint';
+import { configs as tseslint } from 'typescript-eslint';
 
 // https://eslint.org/docs/latest/use/getting-started#manual-set-up
 // https://typescript-eslint.io/troubleshooting/typed-linting/performance#eslint-plugin-prettier
@@ -47,13 +47,13 @@ export default defineConfig(
             // https://github.com/eslint/eslint/blob/main/packages/js/src/configs/eslint-recommended.js
             eslint.configs.recommended,
             // https://github.com/typescript-eslint/typescript-eslint/blob/main/packages/eslint-plugin/src/configs/strict-type-checked.ts
-            ...tseslint.configs.strictTypeChecked,
-            ...tseslint.configs.stylistic,
+            ...tseslint.strictTypeChecked,
+            ...tseslint.stylistic,
             // https://github.com/sindresorhus/eslint-plugin-unicorn/tree/main?tab=readme-ov-file#rules
             unicorn.configs.recommended,
             // https://github.com/SonarSource/eslint-plugin-sonarjs
             // https://github.com/SonarSource/eslint-plugin-sonarjs/blob/master/src/index.ts
-            sonarjs.configs.recommended,
+            sonarjs.recommended,
             // https://github.com/eslint-community/eslint-plugin-promise#rules
             nodePlugin.configs['flat/recommended'],
             // https://github.com/eslint-community/eslint-plugin-security?tab=readme-ov-file#flat-config-requires-eslint--v8230
@@ -550,8 +550,8 @@ export default defineConfig(
 
         extends: [
             eslint.configs.recommended,
-            ...tseslint.configs.strict,
-            ...tseslint.configs.stylistic,
+            ...tseslint.strict,
+            ...tseslint.stylistic,
             vitest.configs.all,
         ],
 
@@ -596,8 +596,8 @@ export default defineConfig(
 
         extends: [
             eslint.configs.recommended,
-            ...tseslint.configs.strict,
-            ...tseslint.configs.stylistic,
+            ...tseslint.strict,
+            ...tseslint.stylistic,
         ],
 
         languageOptions: {
