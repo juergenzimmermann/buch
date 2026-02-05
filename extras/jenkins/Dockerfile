@@ -25,7 +25,7 @@
 
 # https://manpages.debian.org/bullseye/apt/apt-get.8.en.html
 
-ARG JENKINS_VERSION=2.548-jdk25
+ARG JENKINS_VERSION=2.549-jdk25
 
 FROM jenkins/jenkins:${JENKINS_VERSION}
 
