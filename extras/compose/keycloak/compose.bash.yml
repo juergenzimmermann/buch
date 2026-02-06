@@ -16,12 +16,12 @@
 # Aufruf:   docker volume create kc_data
 #           docker volume create kc_tls
 #
-#           docker compose -f compose.init.yml up
+#           docker compose -f compose.bash.yml up
 #           docker compose exec keycloak bash
 #               cp /run/secrets/* /opt/keycloak/tls
 #               chown -R nonroot:nonroot /opt/keycloak/tls
 #               exit
-#           docker compose -f compose.init.yml down
+#           docker compose -f compose.bash.yml down
 #
 #           docker volume inspect kc_tls
 #               Mountpoint: /var/lib/docker/volumes/kc_tls/_data

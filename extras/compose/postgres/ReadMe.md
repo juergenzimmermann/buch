@@ -60,11 +60,12 @@ Für Details zu Volumes siehe https://docs.docker.com/engine/storage/volumes.
 
 ## Named Volumes initialisieren
 
-Mit dem _Hardened Image_ für _PostgreSQL_ wird ein Container so gestartet, dass
-nur eine Bash gestartet ist, weil lediglich das Dateisystem einschließlich der
-Named Volumes für Kopiervorgänge in die neu angelegten Named Volumes benötigt
-wird. Dazu wird die Datei `compose.init.yml` und der Linux-Superuser mit UID
-`0` verwendet.
+Mit dem _Hardened Image_ für _PostgreSQL_ `dhi.io/postgres` wird ein Container
+so gestartet, dass nur eine _Bash_ gestartet ist, weil lediglich das Dateisystem
+vom PostgreSQL-Image einschließlich der Named Volumes für Kopiervorgänge in die
+neu angelegten Named Volumes benötigt wird. Dazu wird die Datei `compose.bash.yml`
+und der Linux-Superuser mit UID `0` verwendet. `dhi` steht übrigens für _Docker
+Hardened Image_.
 
 ```shell
     # Windows
@@ -73,15 +74,15 @@ wird. Dazu wird die Datei `compose.init.yml` und der Linux-Superuser mit UID
     # macOS
     cd extras/compose/postgres
 
-    docker compose -f compose.init.yml up
+    docker compose -f compose.bash.yml up
 ```
 
 In einer zweiten Shell findet jetzt die Initialisierung der Named Volumes
-`pg_tablespace` und `pg_init` statt, die durch `compose.init.yml` in den
+`pg_tablespace` und `pg_init` statt, die durch `compose.bash.yml` in den
 Verzeichnissen `/tablespace` und `/init` bereitgestellt wurden. Um die SQL-Skripte
 sowie Zertifikat und privater Schlüssel für TLS aus dem Original-Verzeichnis
 `init\kunde\sql` bzw. `init\kunde\tls` in das Named Volume `pg_init`
-kopieren zu können, wurden das lokale Verzeichnis `.\init` in `compose.init.yml`
+kopieren zu können, wurden das lokale Verzeichnis `.\init` in `compose.bash.yml`
 als _Bind Volume_ in `/tmp/init` bereitgestellt.
 
 Nach dem Kopieren wird bei den Dateien der Owner und die Gruppe auf `postgres`
@@ -96,15 +97,15 @@ Abschließend wird der Container, in dem nur eine Bash läuft heruntergefahren.
     # macOS
     cd extras/compose/postgres
 
-    docker compose -f compose.init.yml exec db bash
+    docker compose -f compose.bash.yml exec db bash
         mkdir /tablespace/buch
         cp -r /tmp/init/* /init
         chown -R postgres:postgres /tablespace /init
-        chmod 400 /init/buch/sql/* /init/tls/*
+        chmod 400 /init/*/sql/* /init/tls/*
         ls -lR /init
         ls -l /tablespace
         exit
-    docker compose -f compose.init.yml down
+    docker compose -f compose.bash.yml down
 ```
 
 ## Installation ohne TLS
@@ -119,7 +120,7 @@ Docker-Container gestartet
 
 ```shell
     # in der 1. Shell
-    docker compose up
+    docker compose up db
 ```
 
 Nachdem in der ersten Shell der Server erfolgreich gestartet und initialisiert

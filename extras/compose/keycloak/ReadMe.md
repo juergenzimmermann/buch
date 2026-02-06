@@ -44,14 +44,18 @@ Volume `kc_tls` für das Zertifikat und den privaten Schlüssel angelegt:
     docker volume create kc_tls
 ```
 
-Danach wird _Keycloak_ initialisiert, wobei das _Hardened Image_ `dhi.io/keycloak`
-verwendet wird. `dhi` steht dabei für _Docker Hardened Image_. Unter der User-ID `0`,
-für die in `/etc/passwd` kein Name eingetragen ist, werden das Zertifikat und der
-private Schlüssel als _Docker Secret_ eingelesen.
+Für Details zu Volumes siehe https://docs.docker.com/engine/storage/volumes.
+
+Mit dem _Hardened Image_ für _Keycloak_ `dhi.io/keycloak` wird ein Container so
+gestartet, dass nur eine _Bash_ gestartet ist, weil lediglich das Dateisystem
+vom Keycloak-Image einschließlich der Named Volumes für Kopiervorgänge in die
+neu angelegten Named Volumes benötigt wird. Dazu wird die Datei `compose.bash.yml`
+und der Linux-Superuser mit UID `0` verwendet. `dhi` steht übrigens für
+_Docker Hardened Image_.
 
 ```shell
     cd extras\compose\keycloak
-    docker compose -f compose.init.yml up
+    docker compose -f compose.bash.yml up
 ```
 
 In einer zweiten Shell werden das Zertifikat und der private Schlüssel, die als
@@ -62,7 +66,7 @@ der initiale Container heruntergefahren.
 ```shell
     cd extras\compose\keycloak
     docker compose exec keycloak bash -c 'cp /run/secrets/* /opt/keycloak/tls && chown -R nonroot:nonroot /opt/keycloak/tls'
-    docker compose -f compose.init.yml down
+    docker compose -f compose.bash.yml down
 ```
 
 Jetzt kann in der ersten Shell der eigentliche Container für _Keycloak_ gestartet werden:
