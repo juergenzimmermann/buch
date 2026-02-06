@@ -1,0 +1,10 @@
+name: javascript
+variables:
+  - name: clientId
+    value: javascript-client
+  - secret: true
+    name: clientSecret
+  - name: username
+    value: admin
+  - secret: true
+    name: password

@@ -1,7 +1,7 @@
 opencollection: 1.0.0
 
 info:
-  name: nest
+  name: javascript
 config:
   proxy:
     inherit: true
@@ -21,7 +21,7 @@ request:
     - name: keycloakUrl
       value: https://localhost:8843
     - name: realm
-      value: nest
+      value: javascript
     - name: realmUrl
       value: "{{keycloakUrl}}/realms/{{realm}}"
     - name: oidcUrl

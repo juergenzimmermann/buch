@@ -20,7 +20,7 @@ http:
       - name: file
         type: file
         value:
-          - C:\workspace\software-engineering\nest\extras\bruno\video.mp4
+          - C:\workspace\javascript\nest\extras\bruno\video.mp4
   auth:
     type: oauth2
     flow: resource_owner_password_credentials

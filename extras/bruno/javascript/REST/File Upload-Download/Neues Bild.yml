@@ -20,7 +20,7 @@ http:
       - name: file
         type: file
         value:
-          - C:\workspace\software-engineering\nest\extras\bruno\logo.png
+          - C:\workspace\javascript\nest\extras\bruno\logo.png
   auth:
     type: oauth2
     flow: resource_owner_password_credentials
