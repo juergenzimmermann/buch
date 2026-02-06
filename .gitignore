@@ -22,7 +22,7 @@ dependencies.svg
 extras/compose/buch/.env
 extras/compose/postgres/password.txt
 extras/compose/postgres/init/tls/server.key
-extras/bruno/nest/environments
+extras/bruno/javascript/environments
 src/config/resources/tls/key.pem
 src/beispiele.ts
 src/beispiele-write.ts
@@ -40,15 +40,15 @@ lerna-debug.log*
 .scannerwork
 
 # Bilder, Audio, Video fuer Bruno
-extras/bruno/nest/*.png
-extras/bruno/nest/*.jpeg
-extras/bruno/nest/*.gif
-extras/bruno/nest/*.mp4
-extras/bruno/nest/*.mpeg
-extras/bruno/nest/*.mkv
-extras/bruno/nest/*.avi
-extras/bruno/nest/*.ogg
-extras/bruno/nest/*.webm
+extras/bruno/javascript/*.png
+extras/bruno/javascript/*.jpeg
+extras/bruno/javascript/*.gif
+extras/bruno/javascript/*.mp4
+extras/bruno/javascript/*.mpeg
+extras/bruno/javascript/*.mkv
+extras/bruno/javascript/*.avi
+extras/bruno/javascript/*.ogg
+extras/bruno/javascript/*.webm
 
 # Prometheus und Grafana
 extras/compose/prometheus-grafana/prometheus-data/*
