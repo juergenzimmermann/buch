@@ -36,9 +36,9 @@ populate = true
 #schema = "http"
 #host = "keycloak"
 #port = 8080
-#realm = "nest"
+#realm = "javascript"
 # siehe Keycloak Menuepunkt "Clients" > Tab "Clients list" > Spalte "Client ID"
-#clientId = "nest-client"
+#clientId = "javascript-client"
 #tokenValidation = "online"
 
 # ==============================================================================

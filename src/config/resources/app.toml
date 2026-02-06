@@ -35,9 +35,9 @@ populate = true
 #schema = "https"
 host = "localhost"
 port = 8843
-#realm = "nest"
+#realm = "javascript"
 # siehe Keycloak Menuepunkt "Clients" > Tab "Clients list" > Spalte "Client ID"
-#clientId = "nest-client"
+#clientId = "javascript-client"
 #tokenValidation = "online"
 
 # ==============================================================================

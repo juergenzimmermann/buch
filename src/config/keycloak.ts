@@ -68,9 +68,10 @@ const schema = (keycloak?.schema as string | undefined) ?? 'https';
 const host = (keycloak?.host as string | undefined) ?? 'keycloak';
 const port = (keycloak?.port as number | undefined) ?? 8443;
 const authServerUrl = `${schema}://${host}:${port}`;
-// Keycloak ist in Sicherheits-Bereich (= realms) unterteilt
-const realm = (keycloak?.realm as string | undefined) ?? 'nest';
-const clientId = (keycloak?.clientId as string | undefined) ?? 'nest-client';
+// Keycloak ist in Sicherheits-Bereiche (= realms) unterteilt
+const realm = (keycloak?.realm as string | undefined) ?? 'javascript';
+const clientId =
+    (keycloak?.clientId as string | undefined) ?? 'javascript-client';
 const tokenValidation =
     (keycloak?.tokenValidation as TokenValidation | undefined) ??
     (TokenValidation.ONLINE as TokenValidation);
