@@ -26,7 +26,6 @@
 - [Client Secret](#client-secret)
 - [Ergänzung des eigenen Server-Projekts](#ergänzung-des-eigenen-server-projekts)
 - [Bruno mit einem Access Token](#bruno-mit-einem-access-token)
-- [JWT](#jwt)
 - [Optional: Inspektion der H2-Datenbank von Keycloak](#optional-inspektion-der-h2-datenbank-von-keycloak)
 - [Initial Access Token](#initial-access-token)
 
