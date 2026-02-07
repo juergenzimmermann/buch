@@ -127,13 +127,13 @@ Das Mapping von Port `8443` auf `8843` und von `8080` auf `8880` ist in
 
     Menüpunkt "Manage realms" anklicken
         Button <Create realm> anklicken
-            Realm name      nest
+            Realm name      javascript
             <Create> anklicken
 
     Menüpunkt "Clients"
         <Create client> anklicken
-        Client ID   nest-client
-        Name        Nest Client
+        Client ID   javascript-client
+        Name        JavaScript Client
         <Next>
             "Capability config"
                 Client authentication       On
@@ -147,7 +147,7 @@ Das Mapping von Port `8443` auf `8843` und von `8080` auf `8880` ist in
             Web origins             +
         <Save>
 
-        nest-client
+        javascript-client
             Tab "Roles"
                 <Create Role> anklicken
                 Role name       admin
@@ -164,7 +164,7 @@ Das Mapping von Port `8443` auf `8843` und von `8080` auf `8880` ist in
             Required User Actions:      Überprüfen, dass nichts ausgewählt ist
             Username                    admin
             Email                       admin@acme.com
-            First name                  Nest
+            First name                  JavaScript
             Last name                   Admin
             <Create> anklicken
             Tab "Credentials"
@@ -185,7 +185,7 @@ Das Mapping von Port `8443` auf `8843` und von `8080` auf `8880` ist in
             Required User Actions:      Überprüfen, dass nichts ausgewählt ist
             Username                    user
             Email                       user@acme.com
-            First name                  Nest
+            First name                  JavaScript
             Last name                   User
             <Create> anklicken
             Tab "Credentials"
@@ -217,10 +217,10 @@ Das Mapping von Port `8443` auf `8843` und von `8080` auf `8880` ist in
                 <Save> anklicken
 ```
 
-Mit der URL `https://localhost:8843/realms/nest/.well-known/openid-configuration`
+Mit der URL `https://localhost:8843/realms/javascript/.well-known/openid-configuration`
 kann man in einem Webbrowser die Konfiguration als JSON-Datensatz erhalten.
 
-Die Bestandteile der Basis-URL `https://localhost:8443/realms/nest` sind in der
+Die Bestandteile der Basis-URL `https://localhost:8443/realms/javascript` sind in der
 Konfigurationsdatei `src\config\resources\app.toml` in der _Table_ `[keycloak]`
 eingetragen:
 
@@ -236,7 +236,7 @@ Im Wurzelverzeichnis des Projekts in der Datei `.env` muss man die
 Umgebungsvariable `CLIENT_SECRET` auf folgenden Wert aus _Keycloak_ setzen:
 
 - Menüpunkt `Clients`
-- `nest-client` aus der Liste beim voreingestellten Tab `Clients list` auswählen
+- `javascript-client` aus der Liste beim voreingestellten Tab `Clients list` auswählen
 - Tab `Credentials` anklicken
 - Die Zeichenkette beim Label `Client Secret` kopieren.
 
