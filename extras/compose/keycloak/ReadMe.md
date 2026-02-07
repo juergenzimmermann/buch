@@ -175,6 +175,10 @@ Das Mapping von Port `8443` auf `8843` und von `8080` auf `8880` ist in
             Tab "Role Mapping"
                 Drop-Down-Menü "Assign role" anklicken und "Client roles" auswählen
                     "admin"         Haken setzen     (ggf. blättern)
+                    "manage-users"  Haken setzen
+                    "query-users"   Haken setzen
+                    "realm-admin"   Haken setzen
+                    "view-users"    Haken setzen
                     <Assign> anklicken
             Tab "Details"
                 Required user actions       Überprüfen, dass nichts ausgewählt ist
