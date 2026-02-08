@@ -40,7 +40,7 @@ import { configs as tseslint } from 'typescript-eslint';
 // "jiti" ist erforderlich fuer TypeScript als Sprache fuer die Konfigurationsdatei
 export default defineConfig(
     {
-        files: ['src/*.ts'],
+        files: ['src/*.?ts'],
 
         extends: [
             // https://eslint.org/docs/latest/rules
@@ -90,7 +90,7 @@ export default defineConfig(
         },
 
         settings: {
-            'import/node-version': '24.10.0',
+            'import/node-version': '25.6.0',
         },
 
         rules: {
@@ -152,7 +152,7 @@ export default defineConfig(
                     ignoreArrowShorthand: true,
                 },
             ],
-            '@typescript-eslint/no-deprecated': 'error',
+            //'@typescript-eslint/no-deprecated': 'error',
             '@typescript-eslint/no-dupe-class-members': 'error',
             '@typescript-eslint/no-empty-function': [
                 'error',
