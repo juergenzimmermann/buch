@@ -76,7 +76,6 @@ coverage
 *.launch
 .settings/
 .sonarlint
-extras/compose/buch/.env
 
 # IDE - VSCode
 .vscode/*
