@@ -46,27 +46,30 @@ Volume `kc_tls` für das Zertifikat und den privaten Schlüssel angelegt:
 Für Details zu Volumes siehe https://docs.docker.com/engine/storage/volumes.
 
 Mit dem _Hardened Image_ für _Keycloak_ `dhi.io/keycloak` wird ein Container so
-gestartet, dass nur eine _Bash_ gestartet ist, weil lediglich das Dateisystem
-vom Keycloak-Image einschließlich der Named Volumes für Kopiervorgänge in die
-neu angelegten Named Volumes benötigt wird. Dazu wird die Datei `compose.bash.yml`
-und der Linux-Superuser mit UID `0` verwendet. `dhi` steht übrigens für
-_Docker Hardened Image_.
+gestartet, dass nur eine _Bash_ mit dem Linux-Superuser mit UID `0` und GID `0`
+läuft. Es wird lediglich das Dateisystem vom Keycloak-Image einschließlich der
+Named Volumes für Kopiervorgänge in die neu angelegten Named Volumes benötigt
+sowie die Berechtigung zum Ändern vom Linux-Owner und von der Linux-Group (s.u.).
+`dhi` steht übrigens für _Docker Hardened Image_.
 
 ```shell
+    # Windows
     cd extras\compose\keycloak
-    docker compose -f compose.bash.yml up
+    docker run -v kc_tls:/opt/keycloak/tls -v ./tls:/tmp/tls:ro `
+      --rm -it -u 0:0 --entrypoint '' dhi.io/keycloak:26.5.2-debian13 /bin/bash
+
+    # macOS
+    cd extras/compose/keycloak
+    docker run -v kc_tls:/opt/keycloak/tls -v ./tls:/tmp/tls:ro \
+      --rm -it -u 0:0 --entrypoint '' dhi.io/keycloak:26.5.2-debian13 /bin/bash
 ```
 
-In einer zweiten Shell werden das Zertifikat und der private Schlüssel, die als
-_Docker Secret_ eingelesen wurden, nach `/opt/keycloak/tls` kopiert. Danach wird
-der Linux-Owner und die -Gruppe jeweils auf `nonroot` gesetzt. Abschließend wird
-der initiale Container heruntergefahren.
-
-```shell
-    cd extras\compose\keycloak
-    docker compose exec keycloak bash -c 'cp /run/secrets/* /opt/keycloak/tls && chown -R nonroot:nonroot /opt/keycloak/tls'
-    docker compose -f compose.bash.yml down
-```
+Um das Zertifikat und den privaten Schlüssel in das Named Volume `kc_tls` kopieren
+zu können, wurde das lokale Verzeichnis `.\tls` in `/tmp/tls` bereitgestellt.
+In der _bash_ werden deshalb das Zertifikat und der private Schlüssel aus dem
+Verzeichnis `/tmp/tls` nach `/opt/keycloak/tls` und deshalb in das Named Volume
+`kc_tls` kopiert. Danach wird der Linux-Owner und die -Gruppe jeweils auf `nonroot`
+gesetzt.
 
 Jetzt kann in der ersten Shell der eigentliche Container für _Keycloak_ gestartet werden:
 
@@ -75,10 +78,16 @@ Jetzt kann in der ersten Shell der eigentliche Container für _Keycloak_ gestart
 ```
 
 Wenn der Container gestartet ist, läuft er intern mit _HTTP_ und Port `8080` sowie
-mit _HTTPS_ und Port `8443`. In der zweiten Shell kann zunächst überprüft werden,
+mit _HTTPS_ und Port `8443`. In einer zweiten Shell kann zunächst überprüft werden,
 ob die H2-Datenbank für die Speicherung der Keycloak-Daten angelegt wurde:
 
 ```shell
+    # Windows
+    cd extras\compose\keycloak
+
+    # macOS
+    cd extras/compose/keycloak
+
     docker compose exec keycloak bash -c 'ls -l /opt/keycloak/data/h2/keycloakdb.mv.db'
 ```
 

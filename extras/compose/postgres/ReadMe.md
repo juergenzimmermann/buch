@@ -61,51 +61,42 @@ Für Details zu Volumes siehe https://docs.docker.com/engine/storage/volumes.
 ## Named Volumes initialisieren
 
 Mit dem _Hardened Image_ für _PostgreSQL_ `dhi.io/postgres` wird ein Container
-so gestartet, dass nur eine _Bash_ gestartet ist, weil lediglich das Dateisystem
-vom PostgreSQL-Image einschließlich der Named Volumes für Kopiervorgänge in die
-neu angelegten Named Volumes benötigt wird. Dazu wird die Datei `compose.bash.yml`
-und der Linux-Superuser mit UID `0` verwendet. `dhi` steht übrigens für _Docker
-Hardened Image_.
+so gestartet, dass nur eine _Bash_ mit dem Linux-Superuser mit UID `0` läuft.
+Es wird lediglich das Dateisystem vom PostgreSQL-Image einschließlich der Named Volumes
+für Kopiervorgänge in die neu angelegten Named Volumes benötigt sowie die
+Berechtigung zum Ändern vom Linux-Owner und von der Linux-Group (s.u.).
+`dhi` steht übrigens für _Docker Hardened Image_.
 
 ```shell
     # Windows
     cd extras\compose\postgres
+    docker run -v pg_init:/init -v pg_tablespace:/tablespace -v ./init:/tmp/init:ro `
+      --rm -it -u 0 --entrypoint '' dhi.io/postgres:18.1-debian13 /bin/bash
 
     # macOS
     cd extras/compose/postgres
-
-    docker compose -f compose.bash.yml up
+    docker run -v pg_init:/init -v pg_tablespace:/tablespace -v ./init:/tmp/init:ro \
+    --rm -it -u 0 --entrypoint '' dhi.io/postgres:18.1-debian13 /bin/bash
 ```
 
-In einer zweiten Shell findet jetzt die Initialisierung der Named Volumes
-`pg_tablespace` und `pg_init` statt, die durch `compose.bash.yml` in den
-Verzeichnissen `/tablespace` und `/init` bereitgestellt wurden. Um die SQL-Skripte
-sowie Zertifikat und privater Schlüssel für TLS aus dem Original-Verzeichnis
-`init\kunde\sql` bzw. `init\kunde\tls` in das Named Volume `pg_init`
-kopieren zu können, wurden das lokale Verzeichnis `.\init` in `compose.bash.yml`
-als _Bind Volume_ in `/tmp/init` bereitgestellt.
-
-Nach dem Kopieren wird bei den Dateien der Owner und die Gruppe auf `postgres`
-gesetzt sowie die Zugriffsrechte auf Oktal `400`, d.h. nur der Owner hat Leserechte.
-Deshalb wurde der erste Container auch mit der User-ID `0` gestartet.
-Abschließend wird der Container, in dem nur eine Bash läuft heruntergefahren.
+Um die SQL-Skripte sowie Zertifikat und privater Schlüssel für TLS aus dem
+Original-Verzeichnis `init\buch\sql` bzw. `init\buch\tls` in das Named Volume
+`pg_init` kopieren zu können, wurde das lokale Verzeichnis `.\init` in `/tmp/init`
+bereitgestellt. In der _bash_ werden deshalb die SQL-Skripte sowie Zertifikat und
+privater Schlüssel aus dem Verzeichnis `/tmp/init` nach `/init` und deshalb in
+das Named Volume `pg_init` kopiert. Danach wird das Verzeichnis `/tablespace/buch`
+angelegt, welches im Named Volume `pg_tablespace` liegt. Jetzt wird bei den Dateien
+der Owner und die Gruppe auf `postgres` gesetzt sowie die Zugriffsrechte auf Oktal
+`400`, d.h. nur der Owner hat Leserechte.
 
 ```shell
-    # Windows
-    cd extras\compose\postgres
-
-    # macOS
-    cd extras/compose/postgres
-
-    docker compose -f compose.bash.yml exec db bash
-        mkdir /tablespace/buch
-        cp -r /tmp/init/* /init
-        chown -R postgres:postgres /tablespace /init
-        chmod 400 /init/*/sql/* /init/tls/*
-        ls -lR /init
-        ls -l /tablespace
-        exit
-    docker compose -f compose.bash.yml down
+    cp -r /tmp/init/* /init
+    mkdir /tablespace/buch
+    chown -R postgres:postgres /init /tablespace
+    chmod 400 /init/*/sql/* /init/tls/*
+    ls -lR /init
+    ls -l /tablespace
+    exit
 ```
 
 ## Installation ohne TLS
