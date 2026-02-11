@@ -14,11 +14,6 @@
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 # Aufruf:   docker compose up
-#           docker compose exec keycloak bash
-#             ls -l /opt/keycloak/data/h2/keycloakdb.mv.db
-#             ls -l /opt/keycloak/lib/lib/main/com.h2database.h2-2.3.230.jar
-#
-#           docker compose down
 #
 #           docker run --rm -it -v kc_data:/opt/keycloak/data:ro oscarfonts/h2:2.3.232 bash
 #               java -cp /opt/h2/bin/h2*.jar org.h2.tools.Shell \
@@ -35,7 +30,7 @@
 
 services:
   keycloak:
-    image: dhi.io/keycloak:26.5.2-debian13
+    image: dhi.io/keycloak:26.5.3-debian13
     # https://www.keycloak.org/server/all-config
     # https://www.keycloak.org/server/containers#_trying_keycloak_in_development_mode
     # /opt/keycloak/bin/kc.sh
@@ -80,7 +75,7 @@ services:
       test:
         [
           CMD,
-          "exec 3<>/dev/tcp/127.0.0.1/9000;echo -e 'GET /health/ready HTTP/1.1\r\nhost: http://localhost\r\nConnection: close\r\n\r\n' >&3;if [ $? -eq 0 ]; then echo 'Healthcheck Successful';exit 0;else echo 'Healthcheck Failed';exit 1;fi;"
+          "exec 3<>/dev/tcp/127.0.0.1/9000;echo -e 'GET /health/ready HTTP/1.1\r\nhost: http://localhost\r\nConnection: close\r\n\r\n' >&3;if [ $? -eq 0 ]; then echo 'Healthcheck Successful';exit 0;else echo 'Healthcheck Failed';exit 1;fi;",
         ]
       #test:
       #  [

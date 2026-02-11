@@ -21,11 +21,11 @@
 #           docker compose exec jenkins bash
 #               cat /etc/os-release
 #                   ID=debian
-#                   VERSION="12 (bookworm)"
+#                   VERSION="13 (trixie)"
 
 # https://manpages.debian.org/bullseye/apt/apt-get.8.en.html
 
-ARG JENKINS_VERSION=2.549-jdk25
+ARG JENKINS_VERSION=2.550-jdk25
 
 FROM jenkins/jenkins:${JENKINS_VERSION}
 

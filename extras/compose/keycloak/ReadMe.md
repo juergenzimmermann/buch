@@ -56,12 +56,12 @@ sowie die Berechtigung zum Ändern vom Linux-Owner und von der Linux-Group (s.u.
     # Windows
     cd extras\compose\keycloak
     docker run -v kc_tls:/opt/keycloak/tls -v ./tls:/tmp/tls:ro `
-      --rm -it -u 0:0 --entrypoint '' dhi.io/keycloak:26.5.2-debian13 /bin/bash
+      --rm -it -u 0:0 --entrypoint '' dhi.io/keycloak:26.5.3-debian13 /bin/bash
 
     # macOS
     cd extras/compose/keycloak
     docker run -v kc_tls:/opt/keycloak/tls -v ./tls:/tmp/tls:ro \
-      --rm -it -u 0:0 --entrypoint '' dhi.io/keycloak:26.5.2-debian13 /bin/bash
+      --rm -it -u 0:0 --entrypoint '' dhi.io/keycloak:26.5.3-debian13 /bin/bash
 ```
 
 Um das Zertifikat und den privaten Schlüssel in das Named Volume `kc_tls` kopieren
@@ -71,7 +71,7 @@ Verzeichnis `/tmp/tls` nach `/opt/keycloak/tls` und deshalb in das Named Volume
 `kc_tls` kopiert. Danach wird der Linux-Owner und die -Gruppe jeweils auf `nonroot`
 gesetzt.
 
-Jetzt kann in der ersten Shell der eigentliche Container für _Keycloak_ gestartet werden:
+Jetzt kann der Container für _Keycloak_ gestartet werden:
 
 ```shell
     docker compose up
