@@ -54,7 +54,7 @@ export default defineConfig(
             // https://github.com/SonarSource/eslint-plugin-sonarjs
             // https://github.com/SonarSource/eslint-plugin-sonarjs/blob/master/src/index.ts
             sonarjs.recommended,
-            // https://github.com/eslint-community/eslint-plugin-promise#rules
+            // https://github.com/eslint-community/eslint-plugin-n#-rules
             nodePlugin.configs['flat/recommended'],
             // https://github.com/eslint-community/eslint-plugin-security?tab=readme-ov-file#flat-config-requires-eslint--v8230
             security.recommended,
