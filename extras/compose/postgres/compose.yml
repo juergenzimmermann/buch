@@ -22,7 +22,7 @@
 services:
   db:
     # https://github.com/docker-library/postgres/blob/master/18/trixie/Dockerfile
-    image: dhi.io/postgres:18.1-debian13
+    image: dhi.io/postgres:18.2-debian13
     ports:
       - published: 5432
         target: 5432

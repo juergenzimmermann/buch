@@ -71,12 +71,12 @@ Berechtigung zum Ändern vom Linux-Owner und von der Linux-Group (s.u.).
     # Windows
     cd extras\compose\postgres
     docker run -v pg_init:/init -v pg_tablespace:/tablespace -v ./init:/tmp/init:ro `
-      --rm -it -u 0 --entrypoint '' dhi.io/postgres:18.1-debian13 /bin/bash
+      --rm -it -u 0 --entrypoint '' dhi.io/postgres:18.2-debian13 /bin/bash
 
     # macOS
     cd extras/compose/postgres
     docker run -v pg_init:/init -v pg_tablespace:/tablespace -v ./init:/tmp/init:ro \
-    --rm -it -u 0 --entrypoint '' dhi.io/postgres:18.1-debian13 /bin/bash
+    --rm -it -u 0 --entrypoint '' dhi.io/postgres:18.2-debian13 /bin/bash
 ```
 
 Um die SQL-Skripte sowie Zertifikat und privater Schlüssel für TLS aus dem
