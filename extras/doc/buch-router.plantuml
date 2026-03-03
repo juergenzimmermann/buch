@@ -1,0 +1,68 @@
+' Copyright (C) 2019 - present Juergen Zimmermann, Hochschule Karlsruhe
+'
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+'
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+'
+' You should have received a copy of the GNU General Public License
+' along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
+' Preview durch <Alt>d
+
+@startuml Controller-Klasse
+
+interface Promise<T>
+
+package hono.context {
+  class Context<E, P, I>
+  interface JSONRespondReturn<T, U> <<type>>
+
+  Context .down[hidden].> JSONRespondReturn
+}
+
+package generated.prisma {
+  class Prisma
+  note left: + bedeutet innere Klasse
+
+  class BuchGetPayload<T>
+  Prisma +-- BuchGetPayload
+}
+
+package buch {
+  package service {
+    class BuchService << control >>
+  }
+
+  package router #DDDDDD {
+    object "get('/:id', async handler): JSONRespondReturn" as getById <<function>>
+    object "get('/', async handler): JSONRespondReturn" as get <<function>>
+
+    getById .down[hidden].> get
+    get .down[hidden].> BuchService
+    get .down[hidden].> Prisma
+
+    getById .up.> Promise
+    getById .right.> Context
+    getById .right.> JSONRespondReturn
+    getById .right.> BuchService
+    getById .down.> BuchGetPayload
+
+    get .up.> Promise
+    get .right.> Context
+    get .right.> JSONRespondReturn
+    get .right.> BuchService
+    get .down.> BuchGetPayload
+  }
+}
+
+hide empty members
+
+footer (c) Juergen Zimmermann
+
+@enduml

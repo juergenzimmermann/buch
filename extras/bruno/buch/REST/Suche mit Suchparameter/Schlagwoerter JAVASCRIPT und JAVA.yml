@@ -1,0 +1,50 @@
+info:
+  name: Schlagwoerter JAVASCRIPT und JAVA
+  type: http
+  seq: 12
+
+http:
+  method: GET
+  url: "{{restUrl}}?javascript=true&java=true"
+  headers:
+    - name: Accept
+      value: application/json
+  params:
+    - name: javascript
+      value: "true"
+      type: query
+    - name: java
+      value: "true"
+      type: query
+  auth: inherit
+
+runtime:
+  scripts:
+    - type: tests
+      code: |-
+        test('Body: Schlagwoerter JAVASCRIPT und JAVA sowie ID', () => {
+          res.getBody()
+            .content
+            .forEach(buch => {
+              const { schlagwoerter, id } = buch;
+              expect(schlagwoerter).to.be.an('array').that.includes.members(['JAVASCRIPT', 'JAVA']);
+              expect(id).to.be.above(0);
+            });
+        });
+  assertions:
+    - expression: res.status
+      operator: eq
+      value: "200"
+    - expression: res.headers['content-type']
+      operator: matches
+      value: ^application\/json(; charset=utf-8)?$
+    - expression: res.body.content
+      operator: isArray
+    - expression: res.body.content
+      operator: isNotEmpty
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

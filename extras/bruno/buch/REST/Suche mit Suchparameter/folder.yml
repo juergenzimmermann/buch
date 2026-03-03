@@ -1,0 +1,11 @@
+info:
+  name: Suche mit Suchparameter
+  type: folder
+  seq: 2
+
+request:
+  auth: inherit
+
+docs:
+  content: Über die REST-Schnittstelle nach Bücher mit Suchparametern suchen.
+  type: text/markdown

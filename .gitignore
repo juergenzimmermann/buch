@@ -1,0 +1,87 @@
+# https://git-scm.com/docs/gitignore#_pattern_format
+
+# compiled output
+dist
+
+# Abhaengige Dateien durch npm
+node_modules
+
+# Generierte Dateien
+src/generated
+build
+extras/doc/html/*
+extras/doc/ReadMe.html
+scripts/dependency-check-report.html
+temp
+tmp
+dependencies.svg
+
+# Sensible Daten (Passwort, Token, private Schluessel)
+extras/compose/buch/.env
+extras/compose/keycloak/tls/key.pem
+extras/compose/postgres/password.txt
+extras/compose/postgres/init/tls/server.key
+extras/bruno/javascript/environments
+src/config/resources/tls/key.pem
+src/beispiele.ts
+src/beispiele-write.ts
+test/lasttest-locust/__pycache__
+test/lasttest-locust/.venv
+test/postman
+sonar-project.properties
+
+# Logs
+log
+logs
+*.log
+pnpm-debug.log*
+lerna-debug.log*
+.scannerwork
+
+# Bilder, Audio, Video fuer Bruno
+extras/bruno/javascript/*.png
+extras/bruno/javascript/*.jpeg
+extras/bruno/javascript/*.gif
+extras/bruno/javascript/*.mp4
+extras/bruno/javascript/*.mpeg
+extras/bruno/javascript/*.mkv
+extras/bruno/javascript/*.avi
+extras/bruno/javascript/*.ogg
+extras/bruno/javascript/*.webm
+
+# Prometheus und Grafana
+extras/compose/prometheus-grafana/prometheus-data/*
+extras/compose/prometheus-grafana/grafana.db
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Tests
+coverage
+.nyc_output
+
+# SonarQube
+.sonar
+
+# IDEs and editors
+.idea
+*.iml
+.env
+.project
+.classpath
+.c9/
+*.launch
+.settings/
+.sonarlint
+
+# IDE - VSCode
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+
+/generated/prisma
+
+/src/generated/prisma

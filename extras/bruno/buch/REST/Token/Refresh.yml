@@ -1,0 +1,24 @@
+info:
+  name: Refresh
+  type: http
+  seq: 6
+
+http:
+  method: POST
+  url: "{{tokenUrl}}/refresh"
+  headers:
+    - name: ""
+      value: ""
+      disabled: true
+  body:
+    type: form-urlencoded
+    data:
+      - name: refresh_token
+        value: eyJhbGciOiJIUzUxMiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICIzZGU5ZDdhMC1jY2NlLTQ5MzItOGE3OS05NjY2ZGRhNzUxZDEifQ.eyJleHAiOjE3MTk0NjU3MTksImlhdCI6MTcxOTQ2MjExOSwianRpIjoiM2FlODEzZjctYWZlZi00ZGE5LWJhNGItNmE0Mjc4ODk5OTRjIiwiaXNzIjoiaHR0cDovL2xvY2FsaG9zdDo4ODgwL3JlYWxtcy9hY21lIiwiYXVkIjoiaHR0cDovL2xvY2FsaG9zdDo4ODgwL3JlYWxtcy9hY21lIiwic3ViIjoiZjkxNTZhYmYtNmRhNS00OGJmLWJjMWMtODEzM2FhZTI3NDE0IiwidHlwIjoiUmVmcmVzaCIsImF6cCI6Im5lc3QtY2xpZW50Iiwic2lkIjoiYzNjYWQ5MTEtNjA5ZC00NmMyLTljOTYtMzU3MGYyN2VjNjE2Iiwic2NvcGUiOiJ3ZWItb3JpZ2lucyBwcm9maWxlIGFjciByb2xlcyBiYXNpYyBlbWFpbCJ9.6HV6Junz-ONh1-ZZg3VGBO1rnFrjN_ULwh3dW6n6slCy8WvllVs5EKa7hD7OlwM9ASlklyFniAiP1OvyH_CS3g
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

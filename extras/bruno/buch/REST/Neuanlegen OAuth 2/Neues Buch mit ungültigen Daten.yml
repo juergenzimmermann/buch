@@ -1,0 +1,68 @@
+info:
+  name: Neues Buch mit ungültigen Daten
+  type: http
+  seq: 3
+
+http:
+  method: POST
+  url: "{{restUrl}}"
+  headers:
+    - name: ""
+      value: ""
+      disabled: true
+  body:
+    type: json
+    data: |-
+      {
+        "isbn": "falsche-ISBN",
+        "rating": -1,
+        "art": "UNSICHTBAR",
+        "preis": -1,
+        "rabatt": 2,
+        "lieferbar": true,
+        "datum": "2025-02-30T00:00:00Z",
+        "homepage": "anyHomepage",
+        "titel": {
+          "titel": "?!",
+          "untertitel": "Untertitelinvalid"
+        }
+      }
+  auth: inherit
+
+runtime:
+  scripts:
+    - type: tests
+      code: |-
+        test('Fehlermeldungen im Response Body', () => {
+          const props = ['titel', 'isbn', 'rating', 'art', 'preis', 'rabatt', 'homepage'];
+          const { detail } = res.getBody();
+          expect(detail).to.be.an('array').that.has.a.lengthOf(props.length);
+          const paths = detail.map(det => det.path);
+          paths.forEach(path => {
+            expect(path).to.be.an('array').that.is.not.empty;
+            expect(path[0]).to.be.a('string').that.includes.oneOf(props);
+          });
+        });
+  assertions:
+    - expression: res.status
+      operator: eq
+      value: "422"
+    - expression: res.headers['content-type']
+      operator: eq
+      value: application/problem+json
+    - expression: res.body
+      operator: isJson
+    - expression: res.body
+      operator: isNotEmpty
+    - expression: res.body.statusCode
+      operator: eq
+      value: "422"
+    - expression: res.body.title
+      operator: eq
+      value: Unprocessable Content
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

@@ -1,0 +1,62 @@
+info:
+  name: Buchart EPUB
+  type: http
+  seq: 14
+
+http:
+  method: GET
+  url: "{{restUrl}}?art=EPUB"
+  headers:
+    - name: Cache-Control
+      value: no-cache
+    - name: Postman-Token
+      value: <calculated when request is sent>
+    - name: Host
+      value: <calculated when request is sent>
+    - name: User-Agent
+      value: PostmanRuntime/7.31.1
+    - name: Accept-Encoding
+      value: gzip, deflate, br
+    - name: Connection
+      value: keep-alive
+    - name: Accept
+      value: application/json
+    - name: Accept
+      value: "*/*"
+      disabled: true
+  params:
+    - name: art
+      value: EPUB
+      type: query
+  auth: inherit
+
+runtime:
+  scripts:
+    - type: tests
+      code: |-
+        test('Body: Schlagwort TYPESCRIPT und ID', () => {
+          res.getBody()
+            .content
+            .forEach(buch => {
+                const { art, id } = buch;
+                expect(art).to.be.equal('EPUB');
+                expect(id).to.be.above(0);
+            });
+        });
+  assertions:
+    - expression: res.status
+      operator: eq
+      value: "200"
+    - expression: res.headers['content-type']
+      operator: matches
+      value: ^application\/json(; charset=utf-8)?$
+    - expression: res.body.content
+      operator: isArray
+    - expression: res.body.content
+      operator: isNotEmpty
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

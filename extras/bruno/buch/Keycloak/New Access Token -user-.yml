@@ -1,0 +1,48 @@
+info:
+  name: New Access Token "user"
+  type: http
+  seq: 3
+
+http:
+  method: POST
+  url: "{{oidcTokenUrl}}"
+  body:
+    type: form-urlencoded
+    data:
+      - name: grant_type
+        value: password
+      - name: username
+        value: user
+      - name: password
+        value: p
+  auth:
+    type: basic
+    username: "{{clientId}}"
+    password: "{{clientSecret}}"
+
+runtime:
+  assertions:
+    - expression: res.status
+      operator: eq
+      value: "200"
+    - expression: res.headers['content-type']
+      operator: eq
+      value: application/json
+    - expression: res.body.access_token
+      operator: matches
+      value: .+\..+\..+
+    - expression: res.body.expires_in
+      operator: eq
+      value: "1800"
+    - expression: res.body.refresh_token
+      operator: matches
+      value: .+\..+\..+
+    - expression: res.body.refresh_expires_in
+      operator: eq
+      value: "3600"
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

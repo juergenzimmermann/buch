@@ -1,0 +1,66 @@
+info:
+  name: Neues Buch
+  type: graphql
+  seq: 2
+
+graphql:
+  method: POST
+  url: "{{graphqlUrl}}"
+  headers:
+    - name: Accept
+      value: application/graphql-response+json
+  body:
+    query: |-
+      mutation {
+        create(
+          input: {
+            isbn: "978-3-864-90958-0",
+            rating: 1,
+            art: HARDCOVER,
+            preis: 99.99,
+            rabatt: 0.123,
+            lieferbar: true,
+            datum: "2025-01-31T00:00:00Z",
+            homepage: "https://create.mutation",
+            schlagwoerter: ["JAVASCRIPT", "TYPESCRIPT"],
+            titel: {
+              titel: "Titelcreatemutation",
+              untertitel: "untertitelcreatemutation"
+            },
+            abbildungen: [{
+              beschriftung: "Abb. 1",
+              contentType: "img/png"
+            }]
+          }
+        ) {
+            id
+        }
+      }
+  auth: inherit
+
+runtime:
+  scripts:
+    - type: tests
+      code: |-
+        test('Body mit id', () => {
+          const { data } = res.getBody();
+          const id = parseInt(data.create.id, 10);
+          expect(id).to.be.gte(0);
+        });
+  assertions:
+    - expression: res.status
+      operator: eq
+      value: "200"
+    - expression: res.headers['content-type']
+      operator: matches
+      value: ^application\/graphql-response\+json(; charset=utf-8)?$
+    - expression: res.body.data.create
+      operator: isJson
+    - expression: res.body.data.create.id
+      operator: isString
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

@@ -1,0 +1,97 @@
+# Hinweise zu VS Code
+
+<!--
+  Copyright (C) 2025 - present Juergen Zimmermann, Hochschule Karlsruhe
+
+  This program is free software: you can redistribute it and/or modify
+  it under the terms of the GNU General Public License as published by
+  the Free Software Foundation, either version 3 of the License, or
+  (at your option) any later version.
+
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+
+  You should have received a copy of the GNU General Public License
+  along with this program. If not, see <http://www.gnu.org/licenses/>.
+-->
+
+> Mit Chrome und der Erweiterung _Markdown Viewer_ https://chromewebstore.google.com/detail/markdown-viewer/ckkdlimhmcjmikdlpkmbgfkaikojcbjk?hl=de&pli=1
+> kann man Markdown-Dateien mit der Endung `.md` schön lesen.
+> Für diese Erweiterung muss man die Option _Zugriff auf Datei-URLs zulassen_
+> aktivieren.
+
+## Installation
+
+Visual Studio Code kann man von https://code.visualstudio.com/Download herunterladen.
+Natürlich kann auch WebStorm, IntelliJ IDEA, Visual Studio oder ... benutzt werden.
+
+## Erweiterungen
+
+Die folgenden _Erweiterungen_ (Menüpunkt am linken Rand) sind empfehlenswert.
+Bei _PostgreSQL_ empfiehlt sich die Erweiterung von _Microsoft_.
+
+- AsciiDoc
+- Better Comments
+- Bun for Visual Studio Code
+- Codex – OpenAI’s coding agent
+- Container Tools
+- Docker DX
+- DotENV
+- EditorConfig for VS Code
+- Error Lens
+- ESLint
+- Even Better TOML
+- German Language Pack for Visual Studio Code
+- GitHub Copilot
+- GitLens
+- Git Graph
+- Git History
+- GraphQL
+  - Language Feature Support
+  - Syntax Highlighting
+- HashiCorp HCL
+- JavaScript and TypeScript Nightly
+- MarkdownLint
+- Material Icon Theme
+- PlantUML
+- PostgreSQL
+- Prettier - Code formatter
+- Pretty TypeScript Errors
+- Prisma
+- Rainbow CSV
+- Todo Tree
+- TypeScript Importer
+- Version Lens
+- Vitest
+- YAML
+
+_GitHub Copilot Chat_ und _Codex – OpenAI’s coding agent_ sind KI-Werkzeuge für
+_Code Completion_ und _Chat_. Wenn in der kostenlosen Variante die Anzahl der
+Anfragen pro Monat aufgebraucht ist, wird nach folgenden Zeiten zurückgesetzt:
+
+- _GitHub Copilot Chat_: Reset zum 1. des nächsten Monats
+- _Codex – OpenAI’s coding agent_: nach 4 Tagen
+
+## Tipps
+
+- `<Strg>#` : Kommentare setzen und entfernen
+- `<F1>`: Die Kommandopalette erscheint
+- `<Strg><Shift>v`: Vorschau für MarkDown und AsciiDoctor
+- `<Alt>d`: Vorschau für PlantUml
+- https://vscodecandothat.com: Kurze Videos zu VS Code
+- https://www.youtube.com/watch?v=beNIDKgdzwQ: Video für Debugging
+
+### Einstellungen
+
+Man öffnet die Einstellungen über das Icon am linken Rand ganz unten und wählt den
+Menüpunkt `Einstellungen` oder `Settings`. Danach im Suchfeld folgendes eingeben
+und jeweils den Haken setzen:
+
+- editor.foldingImportsByDefault
+- eslint.enable
+- typescript.inlayHints.variableTypes.enabled
+- typescript.inlayHints.propertyDeclarationTypes.enabled
+- typescript.inlayHints.parameterTypes.enabled
+- typescript.inlayHints.functionLikeReturnTypes.enabled

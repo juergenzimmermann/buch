@@ -1,0 +1,54 @@
+info:
+  name: Neues Buch
+  type: http
+  seq: 1
+
+http:
+  method: POST
+  url: "{{restUrl}}"
+  headers:
+    - name: ""
+      value: ""
+      disabled: true
+  body:
+    type: json
+    data: |-
+      {
+        "isbn": "978-1-098-16630-4",
+        "rating": 1,
+        "art": "HARDCOVER",
+        "preis": 99.99,
+        "rabatt": 0.123,
+        "lieferbar": true,
+        "datum": "2025-02-28T00:00:00Z",
+        "homepage": "https://post.rest",
+        "schlagwoerter": ["JAVASCRIPT", "TYPESCRIPT"],
+        "titel": {
+          "titel": "Titelpost",
+          "untertitel": "untertitelpost"
+        },
+        "abbildungen": [{
+          "beschriftung": "Abb. 1",
+          "contentType": "img/png"
+        }]
+      }
+  auth: inherit
+
+runtime:
+  assertions:
+    - expression: res.status
+      operator: eq
+      value: "201"
+    - expression: res.headers.location
+      operator: matches
+      value: /rest\/[1-9]\d*$
+    - expression: res.body
+      operator: isString
+    - expression: res.body
+      operator: isEmpty
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

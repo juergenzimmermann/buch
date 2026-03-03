@@ -1,0 +1,80 @@
+' Copyright (C) 2019 - present Juergen Zimmermann, Hochschule Karlsruhe
+'
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+'
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+'
+' You should have received a copy of the GNU General Public License
+' along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
+' Preview durch <Alt>d
+
+@startuml Controller-Klasse
+
+interface Promise<T>
+
+package hono.context {
+  class Context<E, P, I>
+  interface JSONRespondReturn<T, U> <<type>>
+
+  Context .down[hidden].> JSONRespondReturn
+}
+
+package generated.prisma {
+  class Prisma
+  note left: + bedeutet innere Klasse
+
+  class BuchCreateInput
+  class BuchUpdateInput
+  Prisma +-- BuchCreateInput
+  Prisma +-- BuchUpdateInput
+
+}
+
+package buch {
+  package service {
+    class BuchWriteService << control >>
+  }
+
+  package router #DDDDDD {
+    object "post('/', async handler): JSONRespondReturn" as post <<function>>
+    object "put('/:id', async handler): JSONRespondReturn" as put <<function>>
+    object "delete('/:id', async handler): JSONRespondReturn" as delete <<function>>
+
+    post .down[hidden].> put
+    put .down[hidden].> delete
+
+    post .right[hidden].> BuchWriteService
+    delete .right[hidden].> BuchWriteService
+    delete .down[hidden].> Prisma
+
+    post .up.> Promise
+    post .right.> Context
+    post .right.> JSONRespondReturn
+    post .right.> BuchWriteService
+    post .down.> BuchCreateInput
+
+    put .up.> Promise
+    put .right.> Context
+    put .right.> JSONRespondReturn
+    put .right.> BuchWriteService
+    put .down.> BuchUpdateInput
+
+    delete .up.> Promise
+    delete .right.> Context
+    delete .right.> JSONRespondReturn
+    delete .right.> BuchWriteService
+  }
+}
+
+hide empty members
+
+footer (c) Juergen Zimmermann
+
+@enduml

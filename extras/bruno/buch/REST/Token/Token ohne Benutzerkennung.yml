@@ -1,0 +1,31 @@
+info:
+  name: Token ohne Benutzerkennung
+  type: http
+  seq: 5
+
+http:
+  method: POST
+  url: "{{tokenUrl}}"
+  headers:
+    - name: ""
+      value: ""
+      disabled: true
+  body:
+    type: form-urlencoded
+    data:
+      - name: ""
+        value: ""
+        disabled: true
+  auth: inherit
+
+runtime:
+  assertions:
+    - expression: res.status
+      operator: eq
+      value: "401"
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

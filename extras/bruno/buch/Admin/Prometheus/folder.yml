@@ -1,0 +1,10 @@
+info:
+  name: Prometheus
+  type: folder
+  seq: 2
+
+request:
+  auth: inherit
+  variables:
+    - name: prometheusUrl
+      value: "{{baseUrl}}/metrics"

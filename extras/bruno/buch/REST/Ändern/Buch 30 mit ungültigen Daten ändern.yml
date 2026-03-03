@@ -1,0 +1,67 @@
+info:
+  name: Buch 30 mit ungültigen Daten ändern
+  type: http
+  seq: 6
+
+http:
+  method: PUT
+  url: "{{restUrl}}/:id"
+  headers:
+    - name: If-Match
+      value: '"0"'
+  params:
+    - name: id
+      value: "30"
+      type: path
+  body:
+    type: json
+    data: |-
+      {
+        "isbn": "falsche-ISBN",
+        "rating": -1,
+        "art": "UNSICHTBAR",
+        "preis": -1,
+        "rabatt": 2,
+        "lieferbar": true,
+        "datum": "12345-123-123",
+        "homepage": "anyHomepage"
+      }
+  auth: inherit
+
+runtime:
+  scripts:
+    - type: tests
+      code: |-
+        test('Fehlermeldungen im Response Body', () => {
+          const props = ['isbn', 'rating', 'art', 'preis', 'rabatt', 'datum', 'homepage'];
+          const { detail } = res.getBody();
+          expect(detail).to.be.an('array').that.has.a.lengthOf(props.length);
+          const paths = detail.map(det => det.path);
+          paths.forEach(path => {
+            expect(path).to.be.an('array').that.is.not.empty;
+            expect(path[0]).to.be.a('string').that.includes.oneOf(props);
+          });
+        });
+  assertions:
+    - expression: res.status
+      operator: eq
+      value: "422"
+    - expression: res.headers['content-type']
+      operator: eq
+      value: application/problem+json
+    - expression: res.body.statusCode
+      operator: eq
+      value: "422"
+    - expression: res.body.title
+      operator: eq
+      value: Unprocessable Content
+    - expression: res.body.detail
+      operator: isArray
+    - expression: res.body.detail
+      operator: isNotEmpty
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

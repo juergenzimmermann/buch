@@ -1,0 +1,67 @@
+info:
+  name: Neues Buch falsche Datentypen
+  type: graphql
+  seq: 2
+
+graphql:
+  method: POST
+  url: "{{graphqlUrl}}"
+  headers:
+    - name: Accept
+      value: application/graphql-response+json
+  body:
+    query: |-
+      mutation {
+        create(
+          input: {
+            isbn: "978-1-491-95035-7",
+            rating: "1",
+            art: "HARDCOVER",
+            preis: "99.99",
+            rabatt: "0.123",
+            lieferbar: 1,
+            datum: 1,
+            homepage: "https://create.falsch",
+            schlagwoerter: [0, true],
+            titel: {
+              titel: "falsch",
+              untertitel: false
+            },
+            abbildungen: false
+          }
+        ) {
+            id
+        }
+      }
+  auth:
+    type: bearer
+    token: "{{TOKEN}}"
+
+runtime:
+  scripts:
+    - type: tests
+      code: |-
+        test('Body mit errors', () => {
+          res.getBody()
+            .errors
+            .map(error => error.extensions.code)
+            .forEach(code => expect(code).to.be.a('string').that.is.eql('GRAPHQL_VALIDATION_FAILED'));
+        });
+  assertions:
+    - expression: res.status
+      operator: eq
+      value: "400"
+    - expression: res.headers['content-type']
+      operator: matches
+      value: ^application\/graphql-response\+json(; charset=utf-8)?$
+    - expression: res.body.errors
+      operator: isArray
+    - expression: res.body.errors.length
+      operator: gte
+      value: "1"
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

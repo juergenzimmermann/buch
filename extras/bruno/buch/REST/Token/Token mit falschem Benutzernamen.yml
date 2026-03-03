@@ -1,0 +1,32 @@
+info:
+  name: Token mit falschem Benutzernamen
+  type: http
+  seq: 3
+
+http:
+  method: POST
+  url: "{{tokenUrl}}"
+  headers:
+    - name: ""
+      value: ""
+      disabled: true
+  body:
+    type: form-urlencoded
+    data:
+      - name: username
+        value: FALSCH
+      - name: password
+        value: p
+  auth: inherit
+
+runtime:
+  assertions:
+    - expression: res.status
+      operator: eq
+      value: "401"
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
