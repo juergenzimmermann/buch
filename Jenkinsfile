@@ -18,11 +18,16 @@
  */
 
 pipeline {
-    agent any
-    tools {
-        // Einstellungen > Tools > NodeJS Installationen
-        nodejs 'node-25.3.0'
+    agent {
+        docker {
+            image 'oven/bun:1.3.10'
+        }
     }
+    // agent any
+    // tools {
+    //     // Einstellungen > Tools > NodeJS Installationen
+    //     nodejs 'node-25.3.0'
+    // }
 
     // globale Umgebungsvariable:
     //environment {
