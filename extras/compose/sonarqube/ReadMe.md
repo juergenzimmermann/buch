@@ -25,7 +25,11 @@ Für eine statische Codeanalyse durch _SonarQube_ muss zunächst der
 SonarQube-Server mit _Docker Compose_ als Docker-Container gestartet werden:
 
 ```shell
+    # Windows:
     cd extras\compose\sonarqube
+    # macOS/Linux:
+    cd extras/compose/sonarqube
+
     docker compose up
 ```
 
@@ -39,10 +43,10 @@ wird man weitergeleitet, um das initiale Passwort zu ändern.
 ## Token generieren
 
 Nun wählt man in der Webseite rechts oben das Profil über _MyAccount_ aus und
-klickt auf den Karteireiter _Security_. Im Abschnitt _Generate Tokens_ macht man
-nun die folgende Eingaben:
+klickt auf den Menüpunkt _Security_ links. Im Abschnitt _Generate Tokens_ macht
+man nun die folgende Eingaben:
 
-- _Name_: z.B. Software Engineering
+- _Name_: z.B. HKA
 - _Type_: _Global Analysis Token_ auswählen
 - _Expires in_: z.B. _90 days_ auswählen
 
