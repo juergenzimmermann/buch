@@ -53,13 +53,17 @@ services:
     environment:
       KC_BOOTSTRAP_ADMIN_USERNAME: tmp
       KC_BOOTSTRAP_ADMIN_PASSWORD: p
+      # https://www.keycloak.org/server/all-config#category-http
       KC_HTTPS_CERTIFICATE_FILE: /opt/keycloak/tls/kc_cert
       KC_HTTPS_CERTIFICATE_KEY_FILE: /opt/keycloak/tls/kc_key
       KC_HTTPS_PROTOCOLS: "TLSv1.3"
       # https://www.keycloak.org/server/all-config#category-logging
       # https://www.keycloak.org/server/logging#_colors
-      KC_LOG: console
       KC_LOG_CONSOLE_COLOR: true
+      # https://localhost:9990/health/ready
+      # https://localhost:9990/health/live
+      # https://www.keycloak.org/server/all-config#category-health
+      KC_HEALTH_ENABLED: "true"
     networks: [acme-network]
     hostname: keycloak
     container_name: keycloak
