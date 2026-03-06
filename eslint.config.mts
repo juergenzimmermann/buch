@@ -21,6 +21,7 @@ import vitest from '@vitest/eslint-plugin';
 // alternativ: https://github.com/un-ts/eslint-plugin-import-x
 import importPlugin from 'eslint-plugin-import';
 import nodePlugin from 'eslint-plugin-n';
+import noSecrets from 'eslint-plugin-no-secrets';
 import { configs as packageJson } from 'eslint-plugin-package-json';
 import { defineConfig } from 'eslint/config';
 // @ts-expect-error keine .d.ts-Datei
@@ -65,6 +66,10 @@ export default defineConfig(
             importPlugin.flatConfigs.recommended,
             importPlugin.flatConfigs.typescript,
         ],
+
+        plugins: {
+            'no-secrets': noSecrets,
+        },
 
         languageOptions: {
             ecmaVersion: 2025,
