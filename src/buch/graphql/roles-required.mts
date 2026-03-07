@@ -21,7 +21,7 @@ import { getLogger } from '../../logger/logger.mts';
 
 const { issuer, jwksUri, clientId, audience } = keycloakConfig;
 const jwks = createRemoteJWKSet(new URL(jwksUri));
-const logger = getLogger('graphql/role-required', 'file');
+const logger = getLogger('graphql/roles-required', 'file');
 
 // Token aus dem Request Header extrahieren
 const getToken = (headers: Headers) => {
@@ -89,7 +89,7 @@ const getRollen = (payload: any) => {
     return roles;
 };
 
-export const roleRequired = async (request: Request, ...roles: string[]) => {
+export const rolesRequired = async (request: Request, ...roles: string[]) => {
     // Token aus dem Request Header extrahieren
     const token = getToken(request.headers);
 
@@ -97,7 +97,7 @@ export const roleRequired = async (request: Request, ...roles: string[]) => {
     let jwt = await verifyToken(token);
 
     const { payload } = jwt;
-    logger.debug('roleRequired: payload=%o', payload);
+    logger.debug('rolesRequired: payload=%o', payload);
 
     // Rollen aus der Payload bei resource_access.CLIENT_ID.roles extrahieren
     const rollenToken = getRollen(payload);

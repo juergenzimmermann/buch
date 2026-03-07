@@ -20,7 +20,7 @@
 
 import { Hono } from 'hono';
 import { container } from '../../container.mts';
-import { roleRequired } from '../../security/role-required.mts';
+import { rolesRequired } from '../../security/roles-required.mts';
 
 /**
  * Router für die Entwicklung, z.B. Neuladen der DB.
@@ -28,7 +28,7 @@ import { roleRequired } from '../../security/role-required.mts';
  */
 export const router = new Hono();
 
-router.post('/db_populate', roleRequired('admin'), async (c) => {
+router.post('/db_populate', rolesRequired('admin'), async (c) => {
     await container.dbPopulateService.populate();
     const success = {
         // eslint-disable-next-line @typescript-eslint/naming-convention, camelcase

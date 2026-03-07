@@ -24,7 +24,7 @@ import {
     UnauthorizedError,
 } from './errors.mts';
 
-const logger = getLogger('role-required', 'file');
+const logger = getLogger('roles-required', 'file');
 
 const { issuer, jwksUri, clientId, audience } = keycloakConfig;
 const jwks = createRemoteJWKSet(new URL(jwksUri));
@@ -83,7 +83,7 @@ const getRollen = (payload: any) => {
  * Prüft den JWT hinsichtlich Audience, Expiration und Rollen.
  * @param roles Rollen als einzelne String-Argumente
  */
-export const roleRequired = (...roles: string[]) => {
+export const rolesRequired = (...roles: string[]) => {
     // @ts-ignore
     return async (c: Context, next: Next) => {
         const { req } = c;
@@ -99,7 +99,7 @@ export const roleRequired = (...roles: string[]) => {
 
         // Payload aus dem verifizierten JWT extrahieren
         const { payload } = verifyResult;
-        logger.debug('roleRequired: payload=%o', payload);
+        logger.debug('rolesRequired: payload=%o', payload);
 
         // Rollen aus der Payload bei resource_access.CLIENT_ID.roles extrahieren
         const rollenResult = getRollen(payload);

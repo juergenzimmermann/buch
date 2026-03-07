@@ -28,7 +28,7 @@ import {
     updateHandler,
 } from './mutation-handler.mts';
 import { buchHandler, buecherHandler } from './query-handler.mts';
-import { roleRequired } from './role-required.mts';
+import { rolesRequired } from './roles-required.mts';
 import {
     type BuchNeuInput,
     type BuchUpdateInput,
@@ -57,7 +57,7 @@ const resolvers = {
             { input }: { input: BuchNeuInput },
             { request }: GraphqlContext,
         ) => {
-            await roleRequired(request, 'admin', 'user');
+            await rolesRequired(request, 'admin', 'user');
             return createHandler(input);
         },
         update: async (
@@ -65,7 +65,7 @@ const resolvers = {
             { input }: { input: BuchUpdateInput },
             { request }: GraphqlContext,
         ) => {
-            await roleRequired(request, 'admin', 'user');
+            await rolesRequired(request, 'admin', 'user');
             return updateHandler(input);
         },
         delete: async (
@@ -73,7 +73,7 @@ const resolvers = {
             { id }: { id: ID },
             { request }: GraphqlContext,
         ) => {
-            await roleRequired(request, 'admin');
+            await rolesRequired(request, 'admin');
             return deleteHandler(id);
         },
         token: (
