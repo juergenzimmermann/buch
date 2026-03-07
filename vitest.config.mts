@@ -13,7 +13,18 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 
+import process from 'node:process';
 import { defineConfig } from 'vitest/config';
+
+const rejectSelfSigned = process.env['NODE_TLS_REJECT_UNAUTHORIZED'];
+if (rejectSelfSigned !== '0') {
+    console.error();
+    console.error(
+        '>>> ABBRUCH: Umgebungsvariable NODE_TLS_REJECT_UNAUTHORIZED nicht auf "0" gesetzt <<<',
+    );
+    console.error();
+    process.exit(-1);
+}
 
 // https://vitest.dev/config
 export default defineConfig({
