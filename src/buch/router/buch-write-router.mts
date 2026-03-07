@@ -105,7 +105,7 @@ const buchDtoToBuchCreateInput = (buchDTO: BuchNeuType): BuchCreate => {
 // -----------------------------------------------------------------------------
 router.put('/:id', roleRequired('admin', 'user'), async (c) => {
     const { req } = c;
-    const id = req.param('id');
+    const id = req.param('id') ?? '-1';
     logger.debug('put: id=%s', id);
     const idNumber = Number.parseInt(id, 10);
     if (Number.isNaN(idNumber)) {
@@ -162,7 +162,7 @@ const buchDtoToBuchUpdate = (buchDTO: BuchUpdateType): BuchUpdate => {
 // L o e s c h e n
 // -----------------------------------------------------------------------------
 router.delete('/:id', roleRequired('admin'), async (c) => {
-    const id = c.req.param('id');
+    const id = c.req.param('id') ?? '-1';
     logger.debug('delete: id=%s', id);
     const idNumber = Number.parseInt(id, 10);
     const { body } = c;
@@ -178,7 +178,7 @@ router.delete('/:id', roleRequired('admin'), async (c) => {
 // F i l e   U p l o a d
 // -----------------------------------------------------------------------------
 router.post('/:id', roleRequired('admin', 'user'), async (c) => {
-    const id = c.req.param('id');
+    const id = c.req.param('id') ?? '-1';
     logger.debug('upload: id=%s', id);
     const idNumber = Number.parseInt(id, 10);
     if (Number.isNaN(idNumber)) {
