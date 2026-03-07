@@ -26,6 +26,8 @@ import {
 
 const logger = getLogger('roles-required', 'file');
 
+type Rolle = 'admin' | 'user';
+
 const { issuer, jwksUri, clientId, audience } = keycloakConfig;
 const jwks = createRemoteJWKSet(new URL(jwksUri));
 
@@ -83,7 +85,7 @@ const getRollen = (payload: any) => {
  * Prüft den JWT hinsichtlich Audience, Expiration und Rollen.
  * @param roles Rollen als einzelne String-Argumente
  */
-export const rolesRequired = (...roles: string[]) => {
+export const rolesRequired = (...roles: Rolle[]) => {
     // @ts-ignore
     return async (c: Context, next: Next) => {
         const { req } = c;
