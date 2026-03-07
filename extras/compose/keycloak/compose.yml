@@ -30,7 +30,7 @@
 
 services:
   keycloak:
-    image: dhi.io/keycloak:26.5.4-debian13
+    image: dhi.io/keycloak:26.5.5-debian13
     # /opt/keycloak/bin/kc.sh
     # https://www.keycloak.org/server/all-config
     # https://www.keycloak.org/server/containers#_trying_keycloak_in_development_mode
