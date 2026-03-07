@@ -52,6 +52,7 @@
 - [OpenAPI](#openapi)
 - [AsciiDoctor und PlantUML](#asciidoctor-und-plantuml)
 - [Empfohlene Code-Konventionen](#empfohlene-code-konventionen)
+- [Port bereits belegt?](#port-bereits-belegt)
 
 ---
 
@@ -362,3 +363,23 @@ In Anlehnung an die
 - Geschweifte Klammern bei if-Anweisungen
 - Maximale Dateigröße: 400 Zeilen
 - Maximale Funktionslänge: 75 Zeilen
+
+### Port bereits belegt?
+
+Falls der Server nicht gestartet werden kann, weil z.B. der Port `3000` belegt ist,
+kann man bei Windows in der Powershell zunächst die ID vom Betriebssystem-Prozess ermitteln,
+der den Port belegt und danach diesen Prozess beenden:
+
+```powershell
+    netstat -ano | findstr ':3000'
+    taskkill /F /PID <Prozess-ID>
+```
+
+Bei macOS:
+
+```shell
+    ps -af
+    kill <Prozess-ID>
+    # ggf.
+    kill -9 <Prozess-ID>
+```
