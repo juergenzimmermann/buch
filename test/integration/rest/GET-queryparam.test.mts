@@ -47,9 +47,11 @@ const schlagwoerterNichtVorhanden = ['csharp', 'cobol'];
 describe('GET /rest', () => {
     test.concurrent('Alle Buecher', async () => {
         // given
+        const requestHeaders = new Headers();
+        requestHeaders.append('Accept', 'application/json');
 
         // when
-        const response = await fetch(restURL);
+        const response = await fetch(restURL, { headers: requestHeaders });
         const { status, headers } = response;
 
         // then
@@ -71,9 +73,11 @@ describe('GET /rest', () => {
             // given
             const params = new URLSearchParams({ titel });
             const url = `${restURL}?${params}`;
+            const requestHeaders = new Headers();
+            requestHeaders.append('Accept', 'application/json');
 
             // when
-            const response = await fetch(url);
+            const response = await fetch(url, { headers: requestHeaders });
             const { status, headers } = response;
 
             // then
@@ -101,9 +105,11 @@ describe('GET /rest', () => {
             // given
             const params = new URLSearchParams({ titel });
             const url = `${restURL}?${params}`;
+            const requestHeaders = new Headers();
+            requestHeaders.append('Accept', 'application/json');
 
             // when
-            const { status } = await fetch(url);
+            const { status } = await fetch(url, { headers: requestHeaders });
 
             // then
             expect(status).toBe(404);
@@ -114,9 +120,11 @@ describe('GET /rest', () => {
         // given
         const params = new URLSearchParams({ isbn });
         const url = `${restURL}?${params}`;
+        const requestHeaders = new Headers();
+        requestHeaders.append('Accept', 'application/json');
 
         // when
-        const response = await fetch(url);
+        const response = await fetch(url, { headers: requestHeaders });
         const { status, headers } = response;
 
         // then
@@ -144,9 +152,11 @@ describe('GET /rest', () => {
             // given
             const params = new URLSearchParams({ rating: rating.toString() });
             const url = `${restURL}?${params}`;
+            const requestHeaders = new Headers();
+            requestHeaders.append('Accept', 'application/json');
 
             // when
-            const response = await fetch(url);
+            const response = await fetch(url, { headers: requestHeaders });
             const { status, headers } = response;
 
             // then
@@ -168,9 +178,11 @@ describe('GET /rest', () => {
             // given
             const params = new URLSearchParams({ preis: preis.toString() });
             const url = `${restURL}?${params}`;
+            const requestHeaders = new Headers();
+            requestHeaders.append('Accept', 'application/json');
 
             // when
-            const response = await fetch(url);
+            const response = await fetch(url, { headers: requestHeaders });
             const { status, headers } = response;
 
             // then
@@ -192,9 +204,11 @@ describe('GET /rest', () => {
             // given
             const params = new URLSearchParams({ [schlagwort]: 'true' });
             const url = `${restURL}?${params}`;
+            const requestHeaders = new Headers();
+            requestHeaders.append('Accept', 'application/json');
 
             // when
-            const response = await fetch(url);
+            const response = await fetch(url, { headers: requestHeaders });
             const { status, headers } = response;
 
             // then
@@ -222,9 +236,11 @@ describe('GET /rest', () => {
         async (schlagwort) => {
             const params = new URLSearchParams({ [schlagwort]: 'true' });
             const url = `${restURL}?${params}`;
+            const requestHeaders = new Headers();
+            requestHeaders.append('Accept', 'application/json');
 
             // when
-            const { status } = await fetch(url);
+            const { status } = await fetch(url, { headers: requestHeaders });
 
             // then
             expect(status).toBe(404);
@@ -237,9 +253,11 @@ describe('GET /rest', () => {
             // given
             const params = new URLSearchParams({ foo: 'bar' });
             const url = `${restURL}?${params}`;
+            const requestHeaders = new Headers();
+            requestHeaders.append('Accept', 'application/json');
 
             // when
-            const { status } = await fetch(url);
+            const { status } = await fetch(url, { headers: requestHeaders });
 
             // then
             expect(status).toBe(404);
