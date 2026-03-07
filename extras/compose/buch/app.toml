@@ -47,7 +47,6 @@ log = false
 #realm = "javascript"
 # siehe Keycloak Menuepunkt "Clients" > Tab "Clients list" > Spalte "Client ID"
 #clientId = "javascript-client"
-#tokenValidation = "online"
 
 # ==============================================================================
 # L o g g i n g

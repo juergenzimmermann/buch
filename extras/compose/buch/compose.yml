@@ -43,20 +43,17 @@ services:
   buch:
     image: juergenzimmermann/buch:2026.4.1-hardened
     #image: juergenzimmermann/buch:2026.4.1-trixie
-    #entrypoint:
-    #  [
-    #    "/bin/bash",
-    #    "-c",
-    #    "echo 'Container als bash gestartet.' && sleep infinity",
-    #  ]
-
     #image: juergenzimmermann/buch:2026.4.1-alpine
+    #entrypoint:["/bin/bash", "-c", "echo 'Container als bash gestartet.' && sleep infinity"]
     # (d)ash = (Debian) Almquist Shell
     #entrypoint: ["/bin/ash", "-c", "echo 'Container als ash gestartet.' && sleep infinity"]
 
     depends_on:
       db:
         condition: service_healthy
+      keycloak:
+        condition: service_healthy
+
     ports:
       - published: 3000
         target: 3000

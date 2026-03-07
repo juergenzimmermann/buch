@@ -31,20 +31,22 @@
 services:
   keycloak:
     image: dhi.io/keycloak:26.5.4-debian13
+    # /opt/keycloak/bin/kc.sh
     # https://www.keycloak.org/server/all-config
     # https://www.keycloak.org/server/containers#_trying_keycloak_in_development_mode
-    # /opt/keycloak/bin/kc.sh
+    # https://www.keycloak.org/server/all-config#category-hostname_v2
     # --features=token-exchange
     # --verbose
     # --help
-    command: ["start", "--hostname-strict=false", "--http-enabled=true"]
+    command: ["start", "--hostname-strict=false"]
     #entrypoint: ["/bin/bash", "-c", "echo 'Container mit keycloak ist gestartet.' && sleep infinity"]
+    #entrypoint: ["/opt/keycloak/bin/kc.sh show-config > /dev/null 2>&1 || exit 1"]
     ports:
       - published: 8880
         target: 8080
       - published: 8843
         target: 8443
-      # 9000 ist der Port von SonarQube, 9090 ist der Port von Prometheus
+      # 9000 ist der Default-Port von SonarQube, 9090 ist der Default-Port von Prometheus
       - published: 9990
         target: 9000
     volumes:
@@ -57,13 +59,19 @@ services:
       KC_HTTPS_CERTIFICATE_FILE: /opt/keycloak/tls/kc_cert
       KC_HTTPS_CERTIFICATE_KEY_FILE: /opt/keycloak/tls/kc_key
       KC_HTTPS_PROTOCOLS: "TLSv1.3"
+      KC_HTTP_ENABLED: true
+      # https://www.keycloak.org/server/all-config#category-hostname_v2
+      KC_HOSTNAME_STRICT: false
       # https://www.keycloak.org/server/all-config#category-logging
       # https://www.keycloak.org/server/logging#_colors
       KC_LOG_CONSOLE_COLOR: true
       # https://localhost:9990/health/ready
       # https://localhost:9990/health/live
       # https://www.keycloak.org/server/all-config#category-health
-      KC_HEALTH_ENABLED: "true"
+      # Rebuild bei jedem Server- bzw. Container-Start
+      KC_HEALTH_ENABLED: true
+      # https://www.keycloak.org/server/all-config#category-http_access_log
+      #KC_HTTP_ACCESS_LOG_ENABLED: true
     networks: [acme-network]
     hostname: keycloak
     container_name: keycloak
@@ -78,14 +86,9 @@ services:
       # https://www.reddit.com/r/KeyCloak/comments/14a5a1y/how_to_enable_healthcheck_on_keycloak_on
       test:
         [
-          CMD,
+          "CMD-SHELL",
           "exec 3<>/dev/tcp/127.0.0.1/9000;echo -e 'GET /health/ready HTTP/1.1\r\nhost: http://localhost\r\nConnection: close\r\n\r\n' >&3;if [ $? -eq 0 ]; then echo 'Healthcheck Successful';exit 0;else echo 'Healthcheck Failed';exit 1;fi;",
         ]
-      #test:
-      #  [
-      #    CMD,
-      #    '[ -f /tmp/HealthCheck.java ] || echo "public class HealthCheck { public static void main(String[] args) throws java.lang.Throwable { java.net.URI uri = java.net.URI.create(args[0]); System.exit(java.net.HttpURLConnection.HTTP_OK == ((java.net.HttpURLConnection)uri.toURL().openConnection()).getResponseCode() ? 0 : 1); } }" > /tmp/HealthCheck.java && java /tmp/HealthCheck.java http://localhost:9000/health/live'
-      #  ]
       interval: 30s
       timeout: 5s
       retries: 2
