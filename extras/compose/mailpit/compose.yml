@@ -19,8 +19,9 @@
 # https://mailpit.axllent.org/docs/configuration/runtime-options
 
 services:
-  mailpit:
+  mail:
     # https://hub.docker.com/r/axllent/mailpit
+    # mit Alpine und ash als Shell
     image: axllent/mailpit:v1.29.2
     ports:
       # https://mailpit.axllent.org/docs/install
@@ -42,9 +43,17 @@ services:
       # default: 500
       MP_MAX_MESSAGES: 50
     networks: [acme-network]
-    hostname: mailpit
-    container_name: mailpit
+    hostname: mail
+    container_name: mail
     cap_drop: [ALL]
+    healthcheck:
+      # nc = netcat
+      test: ["CMD", "nc", "-z", "localhost", "1025"]
+      #test: ["CMD", "wget", "--spider", "-q", "http://localhost:8025/readyz"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 30s
     stop_grace_period: 3s
     restart: unless-stopped
     deploy:

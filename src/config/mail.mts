@@ -38,7 +38,7 @@ if (mail !== undefined) {
     }
 }
 // "Optional Chaining" und "Nullish Coalescing"
-const host = (mail?.host as string | undefined) ?? 'smtp';
+const host = (mail?.host as string | undefined) ?? 'mail';
 const port = (mail?.port as number | undefined) ?? 25; // eslint-disable-line @typescript-eslint/no-magic-numbers
 const useLogger = mail?.log === true;
 const from =

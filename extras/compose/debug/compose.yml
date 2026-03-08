@@ -35,8 +35,13 @@
 
 services:
   netshoot:
-    image: nicolaka/netshoot:v0.14
-    command: ["sh", "-c", "echo 'Container mit netshoot ist gestartet.' && sleep infinity"]
+    image: nicolaka/netshoot:v0.15
+    command:
+      [
+        "sh",
+        "-c",
+        "echo 'Container mit netshoot ist gestartet.' && sleep infinity",
+      ]
     networks: [acme-network]
     hostname: netshoot
     cap_drop: [ALL]

@@ -213,11 +213,10 @@ der dasselbe virtuelle Netzwerk nutzt wie der PostgreSQL-Server:
 ```shell
     # Windows
     cd extras\compose\debug
-
     # macOS
-   cd extras/compose/debug
+    cd extras/compose/debug
 
-   docker compose up
+    docker compose up
 ```
 
 In einer weiteren Shell startet man eine `bash` für diesen Docker Container, um
@@ -225,9 +224,13 @@ darin mit `openssl` eine TLS-Verbindung über das virtuelle Netzwerk mit dem
 PostgreSQL-Server aufzubauen.
 
 ```shell
-   cd extras\compose\debug
-   docker compose exec netshoot bash -c 'openssl s_client -tls1_3 -trace postgres:5432'
-   docker compose down
+    # Windows
+    cd extras\compose\debug
+    # macOS/Linux
+    cd extras/compose/debug
+
+    docker compose exec netshoot bash -c 'openssl s_client -tls1_3 -trace postgres:5432'
+    docker compose down
 ```
 
 Die Ausgabe vom Kommando `openssl` zeigt u.a. folgendes an:

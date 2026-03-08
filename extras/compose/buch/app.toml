@@ -30,7 +30,7 @@ populate = true
 # ==============================================================================
 [mail]
 #activated = false
-host = "mailpit"
+#host = "mail"
 port = 1025
 log = false
 #from = '"Joe Doe" <Joe.Doe@acme.com>'

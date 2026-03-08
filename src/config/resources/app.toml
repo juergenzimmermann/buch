@@ -32,6 +32,7 @@ populate = true
 [mail]
 #activated = false
 host = "localhost"
+# host = "mail"
 port = 1025
 log = false
 #from = '"Joe Doe" <Joe.Doe@acme.com>'
@@ -44,6 +45,7 @@ log = false
 [keycloak]
 #schema = "https"
 host = "localhost"
+# host = "smtp"
 port = 8843
 #realm = "javascript"
 # siehe Keycloak Menuepunkt "Clients" > Tab "Clients list" > Spalte "Client ID"
