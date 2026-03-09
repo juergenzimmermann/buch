@@ -13,10 +13,10 @@
     "moduleResolution": "nodenext",
     "moduleDetection": "force",
     // https://www.typescriptlang.org/tsconfig/#target: node24
-    "target": "ES2024",
-    "lib": ["ES2024"],
+    "target": "esnext",
+    "lib": ["esnext"],
 
-    // "rootDir": ".",
+    // "rootDir": ".", // default ab TypeScript 6
     "outDir": "./dist",
     "declaration": true,
     "removeComments": true,
