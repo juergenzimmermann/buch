@@ -106,8 +106,8 @@ die Option _prometheus default_ aus, was in der Datei `datasource.yml` im Verzei
 `extras\compose\prometheus-grafana\grafana-datasources` konfiguriert ist.
 Abschließend klickt man auf den Button _Import_.
 
-Als Monitoring-Zeitraum ist 1 Stunde ("Last 1 hour") rechts oben voreingestellt.
-Das sollte man im Dropdown-Menü auf z.B. _Last 5 minutes_ ändern.
+Leider ist das Dashboard mit der ID `11159` nicht mehr aktuell, weshalb es ab
+Grafana `12.4.1` nicht mehr funktioniert.
 
 ### Aufruf eines existierenden Dashboards
 
