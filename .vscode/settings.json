@@ -37,5 +37,8 @@
   "npm.packageManager": "pnpm",
   "peacock.color": "#215732",
   "typescript.experimental.useTsgo": true,
-  "asciidoc.antora.showEnableAntoraPrompt": false
+  "asciidoc.antora.showEnableAntoraPrompt": false,
+  "vitest.nodeEnv": {
+    "NODE_TLS_REJECT_UNAUTHORIZED": "0"
+  }
 }

@@ -16,8 +16,7 @@
 import process from 'node:process';
 import { defineConfig } from 'vitest/config';
 
-const rejectSelfSigned = process.env['NODE_TLS_REJECT_UNAUTHORIZED'];
-if (rejectSelfSigned !== '0') {
+if (process.env['NODE_TLS_REJECT_UNAUTHORIZED'] !== '0') {
     console.error();
     console.error(
         '>>> ABBRUCH: Umgebungsvariable NODE_TLS_REJECT_UNAUTHORIZED nicht auf "0" gesetzt <<<',
