@@ -43,11 +43,10 @@ export type ProblemDetails = {
 export const createProblemDetails = (
     ctx: Context,
     statusCode: ClientErrorStatusCode,
-    detail: any,
+    detail: unknown,
 ): Response => {
     let problemDetails: ProblemDetails;
 
-    /* eslint-disable @typescript-eslint/no-unsafe-assignment */
     switch (statusCode) {
         case badRequest: {
             problemDetails = { title: 'Bad Request', statusCode, detail };
@@ -89,7 +88,6 @@ export const createProblemDetails = (
             problemDetails = { title: 'Client Error', statusCode, detail };
         }
     }
-    /* eslint-enable @typescript-eslint/no-unsafe-assignment */
 
     // https://hono.dev/docs/api/context#json
     const response: Response = ctx.json(problemDetails, statusCode);
