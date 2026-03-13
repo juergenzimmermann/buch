@@ -594,6 +594,7 @@ export default defineConfig(
                 'error',
                 ['dependencies', 'devDependencies'],
             ],
+            'package-json/require-devEngines': 'error',
         },
     },
 );
