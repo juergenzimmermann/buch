@@ -71,5 +71,9 @@ export default defineConfig({
 
         // https://vitest.dev/config/ui.html
         ui: true,
+        // https://vitest.dev/config/bail.html
+        bail: 1,
+        // https://vitest.dev/config/slowtestthreshold.html
+        // slowTestThreshold: 300,
     },
 });

@@ -35,7 +35,7 @@
   "type": "module",
   "scripts": {
     "start": "bun src/index.mts",
-    "test": "vitest --config ./vitest.config.mts --bail 1",
+    "test": "vitest",
     "asciidoctor": "node scripts/asciidoctor.mts",
     "dev": "bun --watch src/index.mts",
     "eslint": "eslint --concurrency auto src test package.json",
