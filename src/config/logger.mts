@@ -13,7 +13,7 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-import path from 'node:path';
+import { resolve } from 'node:path';
 import { styleText } from 'node:util';
 import pino from 'pino';
 import { type PrettyOptions } from 'pino-pretty';
@@ -27,7 +27,7 @@ import { env } from './env.mts';
 
 const logDirDefault = '/tmp';
 const logFileNameDefault = 'server.log';
-const logFileDefault = path.resolve(logDirDefault, logFileNameDefault);
+const logFileDefault = resolve(logDirDefault, logFileNameDefault);
 
 const { log } = config;
 
@@ -42,9 +42,7 @@ const logDir: string | undefined =
         ? undefined
         : log.dir.trimEnd(); // eslint-disable-line @typescript-eslint/no-unsafe-call
 const logFile =
-    logDir === undefined
-        ? logFileDefault
-        : path.resolve(logDir, logFileNameDefault);
+    logDir === undefined ? logFileDefault : resolve(logDir, logFileNameDefault);
 const pretty = log?.pretty === true;
 
 // https://getpino.io
