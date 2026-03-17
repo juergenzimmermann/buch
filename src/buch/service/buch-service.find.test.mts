@@ -98,8 +98,8 @@ describe('BuchService find', () => {
         findManyMock.mockResolvedValue([]);
 
         // when / then
-        await expect(
-            service.find(suchparameter, pageable),
-        ).rejects.toThrowError(/^Keine Buecher gefunden/);
+        await expect(service.find(suchparameter, pageable)).rejects.toThrow(
+            /^Keine Buecher gefunden/,
+        );
     });
 });

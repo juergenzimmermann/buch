@@ -84,7 +84,7 @@ describe('BuchService findById', () => {
         findUniqueMock.mockResolvedValue(null);
 
         // when / then
-        await expect(service.findById({ id })).rejects.toThrowError(
+        await expect(service.findById({ id })).rejects.toThrow(
             `Es gibt kein Buch mit der ID ${id}.`,
         );
     });
