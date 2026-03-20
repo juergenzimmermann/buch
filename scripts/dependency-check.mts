@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 // Copyright (C) 2023 - present Juergen Zimmermann, Hochschule Karlsruhe
 //
 // This program is free software: you can redistribute it and/or modify
@@ -13,8 +14,12 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-// Aufruf:      cd scripts
-//              bun dependency-check.mts
+// Aufruf:      npm i --package-lock-only --legacy-peer-deps
+//              cd scripts
+//              node dependency-check.mts
+//              cd ..
+//              Remove-Item package-lock.json
+//
 // ggf. z.B.    bun why hono
 
 import { exec } from 'node:child_process';
@@ -24,29 +29,31 @@ import { resolve } from 'node:path';
 const nvdApiKey = '47fbc0a4-9240-4fda-9a26-d7d5624c16bf';
 const project = 'buch';
 
-let baseExecPath;
+let rootDir;
 let baseScript = 'dependency-check';
-let baseDataPath;
 
 // https://nodejs.org/api/os.html#osplatform
 const betriebssystem = platform(); // win32, linux, ...
 if (betriebssystem === 'win32') {
-    baseExecPath = resolve('C:/', 'Zimmermann');
-    baseDataPath = resolve('C:/', 'Zimmermann');
+    rootDir = resolve('C:/');
     baseScript += '.bat';
 } else {
-    baseExecPath = resolve('/', 'Zimmermann');
-    baseDataPath = resolve('/', 'Zimmermann');
+    rootDir = resolve('/');
 }
-const script = resolve(baseExecPath, 'dependency-check', 'bin', baseScript);
+const script = resolve(
+    rootDir,
+    'Zimmermann',
+    'dependency-check',
+    'bin',
+    baseScript,
+);
 console.log(`script=${script}`);
 
-const dataPath = resolve(baseDataPath, 'dependency-check-data');
-const pnpmPath = 'C:/Zimmermann/node/pnpm.cmd';
+const dataPath = resolve(rootDir, 'Zimmermann', 'dependency-check-data');
 const reportPath = '.';
 
 let options = `--nvdApiKey ${nvdApiKey} --project ${project} `.concat(
-    `--pnpm ${pnpmPath} --scan .. --suppression dependency-check-suppression.xml `,
+    `--scan .. --suppression dependency-check-suppression.xml `,
     `--out ${reportPath} --data ${dataPath} `,
     // https://jeremylong.github.io/DependencyCheck/dependency-check-cli/arguments.html
     // dependency-check.bat --advancedHelp

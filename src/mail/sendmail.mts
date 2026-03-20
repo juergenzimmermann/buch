@@ -52,7 +52,7 @@ export const sendmail = async ({ subject, body }: SendMailParams) => {
     logger.debug('mailOptions=%o', mailOptions);
 
     try {
-        await createTransport(mailConfig.options).sendMail(mailOptions);
+        await createTransport(mailConfig.options).sendMail(mailOptions); // NOSONAR
     } catch (err) {
         logger.warn('Fehler %o', err as object);
     }

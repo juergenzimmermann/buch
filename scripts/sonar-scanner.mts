@@ -1,3 +1,4 @@
+#!/usr/bin/env bun
 /*
  * Copyright (C) 2023 - present Juergen Zimmermann, Hochschule Karlsruhe
  *

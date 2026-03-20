@@ -1,3 +1,4 @@
+#!/usr/bin/env bun
 // Copyright (C) 2024 - present, Juergen Zimmermann, Hochschule Karlsruhe
 //
 // This program is free software: you can redistribute it and/or modify

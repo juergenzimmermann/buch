@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 /*
  * Copyright (C) 2020 - present Juergen Zimmermann, Hochschule Karlsruhe
  *
