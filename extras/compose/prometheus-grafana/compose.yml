@@ -49,6 +49,15 @@ services:
         read_only: true
     networks: [acme-network]
     container_name: prometheus
+    # https://docs.docker.com/reference/compose-file/services/#cap_drop
+    # https://man7.org/linux/man-pages/man7/capabilities.7.html
+    cap_drop: [ALL]
+    healthcheck:
+      test: ["CMD", "wget", "--spider", "-q", "http://localhost:9090/-/ready"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
     restart: unless-stopped
     deploy:
       resources:
@@ -82,7 +91,16 @@ services:
       #- GF_AUTH_ANONYMOUS_ORG_ROLE=Viewer
       #- GF_AUTH_DISABLE_LOGIN_FORM=true
     networks: [acme-network]
+    #user: "grafana"
     container_name: grafana
+    cap_drop: [ALL]
+    healthcheck:
+      test:
+        ["CMD", "wget", "--spider", "-q", "http://localhost:3000/api/health"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 60s
     restart: unless-stopped
     deploy:
       resources:
