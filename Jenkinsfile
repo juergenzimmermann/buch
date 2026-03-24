@@ -192,7 +192,7 @@ pipeline {
 
         stage('Deployment fuer Kubernetes') {
             steps {
-                echo 'TODO: Deployment fuer Kubernetes mit z.B. Ansible, Terraform'
+                echo 'TODO: Deployment fuer Kubernetes mit z.B. Terraform, Pulumi'
             }
         }
     }
