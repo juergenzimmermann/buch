@@ -50,6 +50,8 @@
   },
   "overrides": {
     "@hono/node-server": "1.19.11",
+    "effect": "3.21.0",
+    "flatted": "3.4.2",
     "hono": "4.12.8",
     "lodash": "4.17.23",
     "tar": "7.5.9"
@@ -92,6 +94,7 @@
     "@vitest/eslint-plugin": "1.6.13",
     "@vitest/ui": "4.1.0",
     "asciidoctor-kroki": "0.18.1",
+    "effect": "3.21.0",
     "eslint": "9.39.2",
     "eslint-plugin-import": "2.32.0",
     "eslint-plugin-n": "17.24.0",
