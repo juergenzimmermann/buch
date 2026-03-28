@@ -26,14 +26,18 @@ import process from 'node:process';
 import { URL } from 'node:url';
 import { PrismaClient } from '../../generated/prisma/client.ts';
 import { getLogger } from '../../logger/logger.mts';
-import { dbPopulate, dbPopulateURL } from '../db.mts';
+import { config } from '../app.mts';
+import { adapter } from '../prisma-client.mts';
+import { resourcesURL } from '../resources.mts';
 
 /**
  * Die Test-DB wird im Development-Modus neu geladen, nachdem die Module
  * initialisiert sind, was durch `OnApplicationBootstrap` realisiert wird.
  */
 export class DbPopulateService {
-    readonly #dbURL = dbPopulateURL;
+    readonly #dbPopulate = config.db?.populate === true;
+
+    readonly #dbURL = new URL('postgresql/', resourcesURL);
 
     readonly #prisma: PrismaClient;
 
@@ -45,9 +49,6 @@ export class DbPopulateService {
      * Initialisierung durch DI mit `DataSource` für SQL-Queries.
      */
     constructor() {
-        const adapter = new PrismaPg({
-            connectionString: process.env['DATABASE_URL'],
-        });
         // PrismaClient fuer DB "buch" (siehe Umgebungsvariable DATABASE_URL in ".env")
         // d.h. mit PostgreSQL-User "buch" und Schema "buch"
         // aber OHNE Logging der Queries
@@ -63,7 +64,7 @@ export class DbPopulateService {
     }
 
     async populate() {
-        if (!dbPopulate) {
+        if (!this.#dbPopulate) {
             return;
         }
 

@@ -30,7 +30,7 @@ const logger = getLogger('prisma-client', 'file');
 
 // PrismaClient passend zur Umgebungsvariable DATABASE_URL in ".env"
 // d.h. mit PostgreSQL-User "buch" und Schema "buch"
-const adapter = new PrismaPg({
+export const adapter = new PrismaPg({
     connectionString: process.env['DATABASE_URL'],
 });
 

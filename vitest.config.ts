@@ -71,6 +71,12 @@ export default defineConfig({
 
         // https://vitest.dev/config/ui.html
         ui: true,
+        // IPv4 mit Port 3001 statt 51204
+        // https://vitest.dev/config/api.html
+        // Kommando "netsh interface ipv4 show excludedportrange protocol=tcp"
+        // -> u.a. WSL2, Docker Desktop, Windows Netzwerk-Stack
+        api: 3001,
+
         // https://vitest.dev/config/bail.html
         bail: 1,
         // https://vitest.dev/config/slowtestthreshold.html
