@@ -18,18 +18,13 @@ import comments from '@eslint-community/eslint-plugin-eslint-comments/configs';
 import eslint from '@eslint/js';
 import stylistic from '@stylistic/eslint-plugin';
 import vitest from '@vitest/eslint-plugin';
-// alternativ: https://github.com/un-ts/eslint-plugin-import-x
-import importPlugin from 'eslint-plugin-import';
-import nodePlugin from 'eslint-plugin-n';
 import noSecrets from 'eslint-plugin-no-secrets';
 import { configs as packageJson } from 'eslint-plugin-package-json';
-import { defineConfig } from 'eslint/config';
-// @ts-expect-error keine .d.ts-Datei
-import promise from 'eslint-plugin-promise';
 import { configs as regexp } from 'eslint-plugin-regexp';
 import { configs as security } from 'eslint-plugin-security';
 import { configs as sonarjs } from 'eslint-plugin-sonarjs';
 import unicorn from 'eslint-plugin-unicorn';
+import { defineConfig } from 'eslint/config';
 import globals from 'globals';
 import { configs as tseslint } from 'typescript-eslint';
 
@@ -52,8 +47,6 @@ export default defineConfig(
             // https://github.com/SonarSource/eslint-plugin-sonarjs
             // https://github.com/SonarSource/eslint-plugin-sonarjs/blob/master/src/index.ts
             sonarjs.recommended,
-            // https://github.com/eslint-community/eslint-plugin-n#-rules
-            nodePlugin.configs['flat/recommended'],
             // https://github.com/eslint-community/eslint-plugin-security?tab=readme-ov-file#flat-config-requires-eslint--v8230
             security.recommended,
             // https://github.com/eslint-community/eslint-plugin-eslint-comments/blob/main/lib/configs/recommended.js
@@ -61,10 +54,7 @@ export default defineConfig(
             // https://github.com/ota-meshi/eslint-plugin-regexp/blob/master/lib/configs/rules/recommended.ts
             regexp.recommended,
             // https://github.com/eslint-community/eslint-plugin-promise#rules
-            promise.configs['flat/recommended'],
             stylistic.configs.recommended,
-            importPlugin.flatConfigs.recommended,
-            importPlugin.flatConfigs.typescript,
         ],
 
         plugins: {
@@ -225,34 +215,6 @@ export default defineConfig(
                 },
             ],
 
-            // https://github.com/weiran-zsd/eslint-plugin-node/blob/master/lib/configs/_commons.js
-            'n/callback-return': ['error', ['next']],
-            'n/exports-style': 'error',
-            'n/file-extension-in-import': 'off',
-            'n/global-require': 'error',
-            'n/handle-callback-err': 'error',
-            'n/no-callback-literal': 'error',
-            'n/no-missing-import': 'off',
-            'n/no-mixed-requires': 'error',
-            'n/no-new-require': 'error',
-            'n/no-path-concat': 'error',
-            'n/no-process-env': 'error',
-            'n/no-sync': [
-                'error',
-                {
-                    allowAtRootLevel: true,
-                },
-            ],
-            'n/prefer-global/buffer': 'error',
-            'n/prefer-global/console': 'error',
-            'n/prefer-global/process': ['error', 'never'],
-            'n/prefer-global/text-decoder': 'error',
-            'n/prefer-global/text-encoder': 'error',
-            'n/prefer-global/url': 'error',
-            'n/prefer-global/url-search-params': 'error',
-            'n/prefer-promises/dns': 'error',
-            'n/prefer-promises/fs': 'error',
-
             'regexp/prefer-regexp-exec': 'error',
 
             // https://github.com/sindresorhus/eslint-plugin-unicorn/blob/main/configs/recommended.js
@@ -275,9 +237,6 @@ export default defineConfig(
 
             'sonarjs/fixme-tag': 'off',
             'sonarjs/todo-tag': 'off',
-
-            'promise/no-multiple-resolved': 'error',
-            'promise/prefer-catch': 'error',
 
             // https://eslint.org/docs/rules
             // https://github.com/prettier/eslint-config-prettier#arrow-body-style-and-prefer-arrow-callback
@@ -449,58 +408,6 @@ export default defineConfig(
             '@stylistic/operator-linebreak': 'off',
             '@stylistic/quote-props': ['error', 'as-needed'],
             '@stylistic/semi': ['error', 'always'],
-
-            'import/consistent-type-specifier-style': [
-                'error',
-                'prefer-inline',
-            ],
-            // https://typescript-eslint.io/troubleshooting/typed-linting/performance#eslint-plugin-import
-            'import/default': 'off',
-            'import/enforce-node-protocol-usage': ['error', 'always'],
-            'import/extensions': 'off',
-            'import/first': 'error',
-            // https://typescript-eslint.io/troubleshooting/typed-linting/performance#eslint-plugin-import
-            'import/named': 'off',
-            // https://typescript-eslint.io/troubleshooting/typed-linting/performance#eslint-plugin-import
-            'import/namespace': 'off',
-            'import/newline-after-import': 'error',
-            'import/no-absolute-path': 'error',
-            'import/no-commonjs': 'error',
-            // https://typescript-eslint.io/troubleshooting/typed-linting/performance#eslint-plugin-import
-            // 'import/no-cycle': 'error',
-            'import/no-default-export': 'error',
-            // https://typescript-eslint.io/troubleshooting/typed-linting/performance#eslint-plugin-import
-            // 'import/no-deprecated': 'error',
-            'import/no-dynamic-require': 'error',
-            'import/no-empty-named-blocks': 'error',
-            'import/no-extraneous-dependencies': 'error',
-            'import/no-mutable-exports': 'error',
-            // https://typescript-eslint.io/troubleshooting/typed-linting/performance#eslint-plugin-import
-            'import/no-named-as-default-member': 'off',
-            'import/no-named-default': 'error',
-            'import/no-namespace': 'error',
-            'import/no-self-import': 'error',
-            'import/no-unassigned-import': 'error',
-            // https://typescript-eslint.io/troubleshooting/typed-linting/performance#eslint-plugin-import
-            'import/no-unresolved': 'off',
-            // https://typescript-eslint.io/troubleshooting/typed-linting/performance#eslint-plugin-import
-            // 'import/no-unused-modules': 'error',
-            'import/no-useless-path-segments': 'error',
-            'import/order': [
-                'error',
-                {
-                    groups: [
-                        'builtin',
-                        'external',
-                        'internal',
-                        'parent',
-                        'sibling',
-                        'index',
-                        'object',
-                        'type',
-                    ],
-                },
-            ],
         },
     },
 
@@ -545,10 +452,11 @@ export default defineConfig(
             ],
             'vitest/max-expects': 'off',
             'vitest/no-hooks': 'off',
-            'vitest/prefer-import-in-mock': 'off',
             'vitest/no-importing-vitest-globals': 'off',
             'vitest/prefer-expect-assertions': 'off',
+            'vitest/prefer-importing-vitest-globals': 'off',
             'vitest/prefer-lowercase-title': 'off',
+            'vitest/require-hook': 'off',
         },
     },
 
