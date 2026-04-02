@@ -1,4 +1,4 @@
-# syntax=docker.io/docker/dockerfile-upstream:1.22.0
+# syntax=docker.io/docker/dockerfile-upstream:1.23.0
 # check=error=true
 
 # Copyright (C) 2026 - present, Juergen Zimmermann, Hochschule Karlsruhe
