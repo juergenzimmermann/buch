@@ -10,7 +10,7 @@
     // uebersetzter JS-Code im Hinblick auf Module. "nodenext" erfordert dasselbe fuer "moduleResolution"
     "module": "nodenext",
     "moduleResolution": "nodenext",
-    "moduleDetection": "force",
+    // "moduleDetection": "force", // default ab TS 5.9
     // https://www.typescriptlang.org/tsconfig/#target: node24
     "target": "esnext",
     "lib": ["esnext"],
@@ -24,12 +24,12 @@
     "allowSyntheticDefaultImports": true,
     "sourceMap": true,
     "incremental": true,
-    // "skipLibCheck": true, // strictest, node24: wegen @nestjs/graphql und @nestjs/apollo
+    // "skipLibCheck": true, // default ab TS 5.9
     // "allowUnreachableCode": false, // strictest: return bei then-else und try-catch
     // "allowUnusedLabels": false, // strictest: Labels muessen auch benutzt werden
     // "esModuleInterop": true, // strictest, node24: Kompatibilitaet zwischen CommonJS und ES Modulen
     // "exactOptionalPropertyTypes": true, // strictest: bei optionalen Properties ggf. explizit undefined spezifizieren
-    "forceConsistentCasingInFileNames": true, // Gross-/Kleinschreibung bei Dateinamen
+    // "forceConsistentCasingInFileNames": true, // default: true
     "noErrorTruncation": true,
     // "noFallthroughCasesInSwitch": true, // strictest: "break" muss bei switch vorhanden sein
     // "noImplicitAny": true, // Fehler bei implizitem Typ "any", default bei Option "strict"
