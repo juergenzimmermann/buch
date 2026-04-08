@@ -56,18 +56,18 @@ sowie die Berechtigung zum Ändern vom Linux-Owner und von der Linux-Group (s.u.
     # Windows
     cd extras\compose\keycloak
     docker run -v kc_tls:/opt/keycloak/tls -v ./tls:/tmp/tls:ro `
-      --rm -it -u 0:0 --entrypoint '' dhi.io/keycloak:26.5.6-debian13 /bin/bash
+      --rm -it -u 0:0 --entrypoint '' dhi.io/keycloak:26.5.7-debian13 /bin/bash
 
     # macOS/Linux
     cd extras/compose/keycloak
     docker run -v kc_tls:/opt/keycloak/tls -v ./tls:/tmp/tls:ro \
-      --rm -it -u 0:0 --entrypoint '' dhi.io/keycloak:26.5.6-debian13 /bin/bash
+      --rm -it -u 0:0 --entrypoint '' dhi.io/keycloak:26.5.7-debian13 /bin/bash
 
         cp /tmp/tls/certificate.crt /opt/keycloak/tls/kc_cert
         cp /tmp/tls/key.pem /opt/keycloak/tls/kc_key
         chown -R nonroot:nonroot /opt/keycloak/tls
-        chmod 400 tls/*
-        chmod 500 tls
+        chmod 400 /opt/keycloak/tls/*
+        chmod 500 /opt/keycloak/tls
         exit
 ```
 
