@@ -22,6 +22,7 @@
 > Diese Datei ist in Markdown geschrieben und kann mit `<Strg><Shift>v` in
 > Visual Studio Code leicht gelesen werden. Näheres zu Markdown gibt es z.B. bei
 > [Markdown Guide](https://www.markdownguide.org/).
+> Wenn _Bun_ installiert ist, kann man die Datei auch mit `bun ReadMe.md` lesen.
 > Die Anleitung ist für _Windows 11_; für _andere Betriebssysteme_ oder
 > _Windows-Emulationen_ sind Anpassungen notwendig.
 

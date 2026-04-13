@@ -20,12 +20,11 @@
 [Juergen Zimmermann](mailto:Juergen.Zimmermann@h-ka.de)
 
 > Diese Datei ist in Markdown geschrieben und kann mit `<Strg><Shift>v` in
-> Visual Studio Code leicht gelesen werden.
->
-> Näheres zu Markdown gibt es z.B. bei [Markdown Guide](https://www.markdownguide.org/)
->
-> Nur in den ersten beiden Vorlesungswochen kann es Unterstützung bei
-> Installationsproblemen geben.
+> Visual Studio Code leicht gelesen werden. Näheres zu Markdown gibt es z.B. bei
+> [Markdown Guide](https://www.markdownguide.org/).
+> Wenn _Bun_ installiert ist, kann man die Datei auch mit `bun ReadMe.md` lesen.
+> Die Anleitung ist für _Windows 11_; für _andere Betriebssysteme_ oder
+> _Windows-Emulationen_ sind Anpassungen notwendig.
 
 ## Inhalt
 
@@ -161,21 +160,17 @@ Ob das Dockerfile gemäß _Best Practices_ (https://docs.docker.com/develop/deve
 erstellt wurde, kann man mit _Hadolint_ überprüfen.
 
 ```shell
-    # Debian Trixie (13) slim
+    # Hardened Image mit Debian 13 (Trixie) slim
     Get-Content Dockerfile | docker run --rm --interactive hadolint/hadolint:v2.13.1-beta4-debian
-    docker build --tag juergenzimmermann/buch:2026.4.1-trixie .
+    docker build bake
+
+    # Debian Trixie slim
+    Get-Content Dockerfile.trixie | docker run --rm --interactive hadolint/hadolint:v2.13.1-beta4-debian
+    docker build bake trixie
 
     # Alpine
     Get-Content Dockerfile.alpine | docker run --rm --interactive hadolint/hadolint:v2.13.1-beta4-debian
-    docker build --tag juergenzimmermann/buch:2026.4.1-alpine --file Dockerfile.alpine .
-```
-
-Mit Docker _Bake_:
-
-```shell
-    # Debian als default
-    docker buildx bake
-    docker buildx bake alpine
+    docker build bake alpine
 ```
 
 ### Image inspizieren
@@ -186,6 +181,7 @@ Mit dem Unterkommando `history` kann man ein Docker-Image und die einzelnen Laye
 inspizieren:
 
 ```shell
+    docker history juergenzimmermann/buch:2026.4.1-hardened
     docker history juergenzimmermann/buch:2026.4.1-trixie
     docker history juergenzimmermann/buch:2026.4.1-alpine
 ```
@@ -196,6 +192,7 @@ Mit dem Unterkommando `inspect` kann man die Metadaten, z.B. Labels, zu einem
 Image inspizieren:
 
 ```shell
+    docker inspect juergenzimmermann/buch:2026.4.1-hardened
     docker inspect juergenzimmermann/buch:2026.4.1-trixie
     docker inspect juergenzimmermann/buch:2026.4.1-alpine
 ```
@@ -207,6 +204,7 @@ inspizieren, welche Bestandteilen in einem Docker-Images enthalten sind, z.B.
 npm-Packages oder Debian-Packages.
 
 ```shell
+    docker sbom juergenzimmermann/buch:2026.4.1-hardened
     docker sbom juergenzimmermann/buch:2026.4.1-trixie
     docker sbom juergenzimmermann/buch:2026.4.1-alpine
 ```
@@ -221,23 +219,25 @@ PowerShell herunterfahren.
 ```shell
     cd extras\compose\buch
 
-    # PowerShell fuer buch-Server mit Trixie-Image zzgl. DB-Server und Mailserver
+    # Shell fuer buch-Server mit Trixie-Image zzgl. DB-Server und Mailserver
     docker compose up
 
-    # Nur zur Fehlersuche: weitere PowerShell für bash
+    # Nur zur Fehlersuche: weitere Shell für bash/ash bei Trixie oder Alpine
     cd extras\compose\buch
     docker compose exec buch bash
         id
         env
         exit
 
-    # Fehlersuche im Netzwerk:
-    docker compose -f compose.busybox.yml up
+    # 2 Shells fuerFehlersuche im Netzwerk:
+    cd extras\compose\debug
+    docker compose up
+
     docker compose exec busybox sh
         nslookup postgres
         exit
 
-    # 2. Powershell: buch-Server einschl. DB-Server und Mailserver herunterfahren
+    # Shell: buch-Server einschl. DB-Server und Mailserver herunterfahren
     cd extras\compose\buch
     docker compose down
 ```
@@ -248,8 +248,8 @@ PowerShell herunterfahren.
 
 ### ESLint
 
-_ESLint_ wird durch `eslint.config.mts` (rc = run command) konfiguriert und durch
-folgendes pnpm-Skript ausgeführt:
+_ESLint_ wird durch `eslint.config.mts` konfiguriert und durch folgendes Skript
+ausgeführt:
 
 ```shell
     bun run eslint
@@ -257,8 +257,8 @@ folgendes pnpm-Skript ausgeführt:
 
 ### Prettier
 
-`Prettier` ist ein Formatierer, der durch `prettier.config.mts` (rc = run command)
-konfiguriert und durch folgendes pnpm-Skript ausgeführt wird:
+`Prettier` ist ein Formatierer, der durch `prettier.config.mts` konfiguriert und
+durch folgendes Skript ausgeführt wird:
 
 ```shell
     bun run prettier
@@ -274,7 +274,7 @@ Siehe `extras\compose\sonarqube\ReadMe.md`.
 
 ### bun audit
 
-Mit dem Unterkommando `audit` von _pnpm_ kann man `npm_modules` auf Sicherheitslücken
+Mit dem Unterkommando `audit` von _Bun_ kann man `npm_modules` auf Sicherheitslücken
 analysieren. Wenn man - sinnvollerweise - nur die `dependencies` aus `package.json`
 berücksichtigen möchte, ergänzt man die Option `-P` ("Production"):
 
@@ -304,6 +304,7 @@ groben Überblick verschaffen, wieviele Sicherheitslücken in den Bibliotheken i
 Image enthalten sind:
 
 ```shell
+    docker scout quickview juergenzimmermann/buch:2026.4.1-hardened
     docker scout quickview juergenzimmermann/buch:2026.4.1-trixie
     docker scout quickview juergenzimmermann/buch:2026.4.1-alpine
 ```
@@ -322,8 +323,8 @@ Die Details zu den CVE-Records im Image kann man durch das Unterkommando `cves`
 von _Scout_ auflisten:
 
 ```shell
-    docker scout cves juergenzimmermann/buch:2026.4.1-trixie
-    docker scout cves --format only-packages juergenzimmermann/buch:2026.4.1-trixie
+    docker scout cves juergenzimmermann/buch:2026.4.1-hardened
+    docker scout cves --format only-packages juergenzimmermann/buch:2026.4.1-hardened
 ```
 
 Statt der Kommandozeile kann man auch den Menüpunkt "Docker Scout" im
