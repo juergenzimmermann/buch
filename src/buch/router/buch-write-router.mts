@@ -55,10 +55,10 @@ const logger = getLogger('buch-write-router', 'file');
 // N e u a n l e g e n
 // -----------------------------------------------------------------------------
 router.post('/', rolesRequired('admin', 'user'), async (c) => {
-    const json = await c.req.json();
+    const requestBody = await c.req.json();
 
     // Validierung mit Zod: ZodError wird geworfen, falls Validierung nicht erfolgreich
-    const buchDTO: BuchNeuType = BuchNeuSchema.parse(json);
+    const buchDTO: BuchNeuType = BuchNeuSchema.parse(requestBody);
     logger.debug('post: buchDTO=%o', buchDTO);
 
     const buch = buchDtoToBuchCreateInput(buchDTO);
@@ -124,10 +124,10 @@ router.put('/:id', rolesRequired('admin', 'user'), async (c) => {
         );
     }
 
-    const json = await c.req.json();
+    const requestBody = await c.req.json();
 
     // Validierung mit Zod
-    const buchDTO: BuchUpdateType = BuchUpdateSchema.parse(json);
+    const buchDTO: BuchUpdateType = BuchUpdateSchema.parse(requestBody);
     logger.debug('put: buchDTO=%o', buchDTO);
 
     const buch = buchDtoToBuchUpdate(buchDTO);
