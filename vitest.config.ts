@@ -16,14 +16,8 @@
 import process from 'node:process';
 import { defineConfig } from 'vitest/config';
 
-if (process.env['NODE_TLS_REJECT_UNAUTHORIZED'] !== '0') {
-    console.error();
-    console.error(
-        '>>> ABBRUCH: Umgebungsvariable NODE_TLS_REJECT_UNAUTHORIZED nicht auf "0" gesetzt <<<',
-    );
-    console.error();
-    process.exit(-1);
-}
+// selbst-signiertes Zertifikat
+process.env['NODE_TLS_REJECT_UNAUTHORIZED'] = '0';
 
 // https://vitest.dev/config
 export default defineConfig({

@@ -100,17 +100,9 @@ Folgende Voraussetzungen müssen oder sollten erfüllt sein:
 - Der Mailserver muss gestartet sein.
 - Der Appserver muss gestartet sein.
 
-Nun können die Tests in einer Shell aufgerufen werden, wobei die Umgebungsvariable
-`NODE_TLS_REJECT_UNAUTHORIZED` auf `0` gesetzt werden muss, weil ein selbstsigniertes
-Zertifikat für HTTPS beim Appserver verwendet wird:
+Nun können die Tests in einer Shell aufgerufen werden:
 
 ```shell
-    # Windows:
-    $env:NODE_TLS_REJECT_UNAUTHORIZED = '0'
-
-    # macOS / Linux:
-    export NODE_TLS_REJECT_UNAUTHORIZED=0
-
     bun run test
 ```
 

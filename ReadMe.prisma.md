@@ -182,11 +182,11 @@ Bei Linux und macOS in einer Shell die nachfolgenden Kommandos eingeben:
     npm --version
 ```
 
-Ohne _npm_ zu verwenden, wird _Bun_ folgendermaßen installiert. Bei Windows
-erfolgt die Installation im Pfad `${env:USERPROFILE}\.bun\bin`, welcher auch in
-der Umgebungsvariablen `PATH` ergänzt wird. Bei macOS und Linux ist es analog
-`$HOME/.bun/bin`. Außerdem wird bei Windows dann auch _Bun_ in _Installierte Apps_
-eingetragen.
+Ohne _npm_ zu verwenden, kann _Bun_ übrigens folgendermaßen installieren.
+Bei Windows erfolgt die Installation im Pfad `${env:USERPROFILE}\.bun\bin`,
+welcher auch in der Umgebungsvariablen `PATH` ergänzt wird. Bei macOS und Linux
+ist es analog `$HOME/.bun/bin`. Außerdem wird bei Windows dann auch _Bun_ in
+_Installierte Apps_ eingetragen.
 
 ```shell
     # Windows:
