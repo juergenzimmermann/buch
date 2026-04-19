@@ -22,7 +22,7 @@ services:
   mail:
     # https://hub.docker.com/r/axllent/mailpit
     # mit Alpine und ash als Shell
-    image: axllent/mailpit:v1.29.6
+    image: axllent/mailpit:v1.29.7
     ports:
       # https://mailpit.axllent.org/docs/install
       # https://mailpit.axllent.org/docs/configuration
