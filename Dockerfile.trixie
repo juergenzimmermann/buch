@@ -31,7 +31,7 @@
 # https://github.com/moby/buildkit/blob/master/frontend/dockerfile/docs/reference.md
 # https://hub.docker.com/r/docker/dockerfile
 
-ARG BUN_VERSION=1.3.12
+ARG BUN_VERSION=1.3.13
 
 FROM oven/bun:${BUN_VERSION}-slim AS dist
 
