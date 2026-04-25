@@ -36,8 +36,10 @@
   - [Datenbank mit PostgreSQL](#datenbank-mit-postgresql)
   - [Umgebungsvariable](#umgebungsvariable)
 - [Installation](#installation)
+  - [Node und npm](#node-und-npm)
   - [Bun installieren](#bun-installieren)
   - [Bun überprüfen](#bun-überprüfen)
+  - [Bun ggf. deinstallieren](#bun-ggf-deinstallieren)
   - [Software-Pakete in node_modules mit Bun installieren](#software-pakete-in-node_modules-mit-bun-installieren)
   - [Indirekt genutzte Packages](#indirekt-genutzte-packages)
   - [Meta-Informationen zu einem Package](#meta-informationen-zu-einem-package)
@@ -191,11 +193,14 @@ Außerdem wird bei Windows _Bun_ auch in _Installierte Apps_ eingetragen.
 
 ```shell
     # Windows:
-    powershell -c "irm bun.sh/install.ps1 | iex"
+    irm bun.sh/install.ps1 | iex
 
     # macOS / Linux:
     curl -fsSL https://bun.sh/install | bash
 ```
+
+`irm` ist ein Alias für `Invoke-RestMethod`, was durch `Get-Alias irm` überprüft
+werden kann.
 
 ### Bun überprüfen
 
@@ -210,6 +215,22 @@ Zur Überprüfung kann man die nachfolgenden Kommandos eingeben:
     which bun
     bun --version
 ```
+
+### Bun ggf. deinstallieren
+
+Bun wird folgendermaßen deinstalliert:
+
+```shell
+    # Windows:
+    Remove-Item  -Recurse -Force "$env:USERPROFILE\.bun"
+
+    # macOS / Linux:
+    rm -rf $HOME/.bun
+```
+
+Danach muss `%USERPROFILE%\.bun` bzw. `$HOME/.bun` aus der Umgebungsvariable `PATH`
+entfernt werden. Außerdem sollte bei Windows _Bun_ aus _Installierte Apps_
+entfernt werden.
 
 ### Software-Pakete in node_modules mit Bun installieren
 
