@@ -155,14 +155,14 @@ Bei _Systemvariable_ (**nicht** bei _Benutzervariable_) folgende
 Umgebungsvariable mit den jeweiligen Werten eintragen. Die Werte für `PATH`
 _vor_ Pfaden mit _Leerzeichen_ eintragen.
 
-| Name der Umgebungsvariable | Wert der Umgebungsvariable                                                                              |
-| -------------------------- | ------------------------------------------------------------------------------------------------------- |
-| `GIT_HOME`                 | `C:\Zimmermann\git`                                                                                     |
-| `PATH`                     | `C:\Zimmermann\node`;`%GIT_HOME%\cmd`;`%GIT_HOME%\bin`;`C:\Zimmermann\k6`;`C:\Zimmermann\Graphviz\bin`; |
+| Name der Umgebungsvariable | Wert der Umgebungsvariable                                                                                                       |
+| -------------------------- | -------------------------------------------------------------------------------------------------------------------------------- |
+| `GIT_HOME`                 | `C:\Zimmermann\git`                                                                                                              |
+| `PATH`                     | `%USERPROFILE%\.bun\bin`;`C:\Zimmermann\node`;`%GIT_HOME%\cmd`;`%GIT_HOME%\bin`;`C:\Zimmermann\k6`;`C:\Zimmermann\Graphviz\bin`; |
 
 ## Installation
 
-### Bun installieren
+### Node und npm
 
 Wenn bereits _Node_ und _npm_ installiert sind, kann damit _Bun_ installiert werden:
 
@@ -182,15 +182,16 @@ Bei Linux und macOS in einer Shell die nachfolgenden Kommandos eingeben:
     npm --version
 ```
 
-Ohne _npm_ zu verwenden, kann _Bun_ übrigens folgendermaßen installieren.
+### Bun installieren
+
 Bei Windows erfolgt die Installation im Pfad `${env:USERPROFILE}\.bun\bin`,
-welcher auch in der Umgebungsvariablen `PATH` ergänzt wird. Bei macOS und Linux
-ist es analog `$HOME/.bun/bin`. Außerdem wird bei Windows dann auch _Bun_ in
-_Installierte Apps_ eingetragen.
+welcher ggf. als `%USERPROFILE%\.bun\bin` in der Umgebungsvariablen `PATH`
+eingetragen werden muss (s.o.). Bei macOS und Linux ist es analog `$HOME/.bun/bin`.
+Außerdem wird bei Windows _Bun_ auch in _Installierte Apps_ eingetragen.
 
 ```shell
     # Windows:
-    powershell -c "irm bun.sh/install.ps1|iex"
+    powershell -c "irm bun.sh/install.ps1 | iex"
 
     # macOS / Linux:
     curl -fsSL https://bun.sh/install | bash

@@ -26,3 +26,6 @@ MD033: false
 
 # no-bare-urls
 MD034: false
+
+# table-column-style
+MD060: false
