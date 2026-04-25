@@ -200,7 +200,7 @@ Außerdem wird bei Windows _Bun_ auch in _Installierte Apps_ eingetragen.
 ```
 
 `irm` ist ein Alias für `Invoke-RestMethod`, was durch `Get-Alias irm` überprüft
-werden kann.
+werden kann. Ebenso ist `iex` ein Alias für `Invoke-Expression`.
 
 ### Bun überprüfen
 
