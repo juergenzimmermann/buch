@@ -30,7 +30,8 @@ Natürlich kann auch WebStorm, IntelliJ IDEA, Visual Studio oder ... benutzt wer
 ## Erweiterungen
 
 Die folgenden _Erweiterungen_ (Menüpunkt am linken Rand) sind empfehlenswert.
-Bei _PostgreSQL_ empfiehlt sich die Erweiterung von _Microsoft_.
+_GitHub Copilot_ ist seit VS Code _1.116_ in VS Code enthalten und muss nicht separat
+installiert werden. Bei _PostgreSQL_ empfiehlt sich die Erweiterung von _Microsoft_.
 
 - AsciiDoc
 - Better Comments
@@ -44,7 +45,6 @@ Bei _PostgreSQL_ empfiehlt sich die Erweiterung von _Microsoft_.
 - ESLint
 - Even Better TOML
 - German Language Pack for Visual Studio Code
-- GitHub Copilot
 - GitLens
 - Git Graph
 - Git History

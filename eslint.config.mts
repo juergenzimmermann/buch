@@ -20,6 +20,8 @@ import stylistic from '@stylistic/eslint-plugin';
 import vitest from '@vitest/eslint-plugin';
 import noSecrets from 'eslint-plugin-no-secrets';
 import { configs as packageJson } from 'eslint-plugin-package-json';
+// @ts-expect-error keine .d.ts-Datei
+import promise from 'eslint-plugin-promise';
 import { configs as regexp } from 'eslint-plugin-regexp';
 import { configs as security } from 'eslint-plugin-security';
 import { configs as sonarjs } from 'eslint-plugin-sonarjs';
@@ -53,6 +55,8 @@ export default defineConfig(
             comments.recommended,
             // https://github.com/ota-meshi/eslint-plugin-regexp/blob/master/lib/configs/rules/recommended.ts
             regexp.recommended,
+            // https://github.com/eslint-community/eslint-plugin-promise#rules
+            promise.configs['flat/recommended'],
             // https://github.com/eslint-community/eslint-plugin-promise#rules
             stylistic.configs.recommended,
         ],
@@ -237,6 +241,9 @@ export default defineConfig(
 
             'sonarjs/fixme-tag': 'off',
             'sonarjs/todo-tag': 'off',
+
+            'promise/no-multiple-resolved': 'error',
+            'promise/prefer-catch': 'error',
 
             // https://eslint.org/docs/rules
             // https://github.com/prettier/eslint-config-prettier#arrow-body-style-and-prefer-arrow-callback

@@ -106,10 +106,6 @@ die Option _prometheus default_ aus, was in der Datei `datasource.yml` im Verzei
 `extras\compose\prometheus-grafana\grafana-datasources` konfiguriert ist.
 Abschließend klickt man auf den Button _Import_.
 
-Leider ist das Dashboard mit der ID `11159` nicht mehr aktuell, weshalb es ab
-Grafana `12.4.1` nicht mehr funktioniert. Außerdem ist es für Node konzipiert
-und nicht für Bun.
-
 ### Aufruf eines existierenden Dashboards
 
 Wenn man einmal das obige Dashboard konfiguriert hat, kann man später die beiden

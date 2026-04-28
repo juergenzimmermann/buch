@@ -112,7 +112,7 @@ if (logger.isLevelEnabled('debug')) {
 app.onError((error, c) => {
     if (error instanceof NotFoundError) {
         // https://hono.dev/docs/api/context#notfound
-        return c.notFound() as Response;
+        return c.notFound();
     }
 
     if (error.name === 'ZodError') {
