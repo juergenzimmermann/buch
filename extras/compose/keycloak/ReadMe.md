@@ -21,13 +21,58 @@
 
 ## Inhalt
 
+- [PostgreSQL als Datenbanksystem](#postgresql-als-datenbanksystem)
 - [Installation](#installation)
 - [Konfiguration](#konfiguration)
 - [Client Secret](#client-secret)
 - [Ergänzung des eigenen Server-Projekts](#ergänzung-des-eigenen-server-projekts)
 - [Bruno mit einem Access Token](#bruno-mit-einem-access-token)
-- [Optional: Inspektion der H2-Datenbank von Keycloak](#optional-inspektion-der-h2-datenbank-von-keycloak)
 - [Initial Access Token](#initial-access-token)
+
+## PostgreSQL als Datenbanksystem
+
+Für die Daten von Keycloak wird PostgreSQL als Datenbanksystem verwendet. Dazu
+wird eine Datenbank `keycloak`, ein Schema `keycloak` und ein Datenbank-Benutzer
+`keycloak` mit Passwort `p` angelegt.
+
+Zunächst wird PostgreSQL als Container im Verzeichnis `extras\compose\postgres`
+gestartet:
+
+```shell
+    # Windows
+    cd extras\compose\postgres
+    # macOS
+    cd extras/compose/postgres
+
+    docker compose up db
+```
+
+In einer 2-ten Shell wird auf den PostgreSQL-Container mit dem PostgreSQL-Server
+zugegriffen:
+
+```shell
+    # Windows
+    cd extras\compose\postgres
+    # macOS
+    cd extras/compose/postgres
+
+    docker compose exec db bash
+        mkdir /tablespace/keycloak
+        chown -R postgres:postgres /tablespace/keycloak
+
+        psql --dbname=postgres --username=postgres
+            CREATE USER keycloak PASSWORD 'p';
+            CREATE DATABASE keycloak;
+            GRANT ALL ON DATABASE keycloak TO keycloak;
+            CREATE TABLESPACE keycloakspace OWNER keycloak LOCATION '/tablespace/keycloak';
+            \q
+
+        psql --dbname=keycloak --username=keycloak
+            CREATE SCHEMA IF NOT EXISTS AUTHORIZATION keycloak;
+            ALTER ROLE keycloak SET search_path = 'keycloak';
+            \q
+        exit
+```
 
 ## Installation
 
@@ -56,12 +101,12 @@ sowie die Berechtigung zum Ändern vom Linux-Owner und von der Linux-Group (s.u.
     # Windows
     cd extras\compose\keycloak
     docker run -v kc_tls:/opt/keycloak/tls -v ./tls:/tmp/tls:ro `
-      --rm -it -u 0:0 --entrypoint '' dhi.io/keycloak:26.5.7-debian13 /bin/bash
+      --rm -it -u 0:0 --entrypoint '' dhi.io/keycloak:26.6.0-debian13 /bin/bash
 
     # macOS/Linux
     cd extras/compose/keycloak
     docker run -v kc_tls:/opt/keycloak/tls -v ./tls:/tmp/tls:ro \
-      --rm -it -u 0:0 --entrypoint '' dhi.io/keycloak:26.5.7-debian13 /bin/bash
+      --rm -it -u 0:0 --entrypoint '' dhi.io/keycloak:26.6.0-debian13 /bin/bash
 
         cp /tmp/tls/certificate.crt /opt/keycloak/tls/kc_cert
         cp /tmp/tls/key.pem /opt/keycloak/tls/kc_key
@@ -85,22 +130,9 @@ Jetzt kann der Container für _Keycloak_ gestartet werden:
 ```
 
 Wenn der Container gestartet ist, läuft er intern mit _HTTP_ und Port `8080` sowie
-mit _HTTPS_ und Port `8443`. In einer zweiten Shell kann zunächst überprüft werden,
-ob die H2-Datenbank für die Speicherung der Keycloak-Daten angelegt wurde:
-
-```shell
-    # Windows
-    cd extras\compose\keycloak
-
-    # macOS
-    cd extras/compose/keycloak
-
-    docker compose exec keycloak bash -c 'ls -l /opt/keycloak/data/h2/keycloakdb.mv.db'
-```
-
-In `compose.yml` sind unterhalb von `environment:` der temporäre Administrator
-mit Benutzername und Passwort konfiguriert, und zwar Benutzername `tmp` und
-Passwort `p`.
+mit _HTTPS_ und Port `8443`. In `compose.yml` sind unterhalb von `environment:`
+der temporäre Administrator mit Benutzername und Passwort konfiguriert, und zwar
+Benutzername `tmp` und Passwort `p`.
 
 ## Konfiguration
 
@@ -111,9 +143,10 @@ Das Mapping von Port `8443` auf `8843` und von `8080` auf `8880` ist in
 `compose.yml` eingetragen.
 
 ```text
-    Username    tmp
-    Password    p
-        siehe extras\compose\keycloak\compose.yml
+    Einloggen
+      Username    tmp
+      Password    p
+          siehe extras\compose\keycloak\compose.yml
 
     Menüpunkt "Users"
         Button <Add user> anklicken
@@ -157,7 +190,7 @@ Das Mapping von Port `8443` auf `8843` und von `8080` auf `8880` ist in
                                             Direct access grants            Haken setzen
                                             Service account roles           Haken setzen
         <Next>
-            Root URL                https://localhost:8443
+            Root URL                https://localhost:3000
             Valid redirect URIs     *
             Web origins             +
         <Save>
@@ -276,41 +309,6 @@ mitgeschickt wird.
 ## Bruno mit einem Access Token
 
 Siehe `ReadMe.md` in `extras\bruno`.
-
-## Optional: Inspektion der H2-Datenbank von Keycloak
-
-Defaultmäßig verwaltet Keycloak seine Daten in einer _H2_-Datenbank - in einer
-Produktivumgebung würde man stattdessen ein DB-System wie z.B. _PostgreSQL_
-oder _Oracle_ konfigurieren.
-
-**VORSICHT**:Da H2 ein Single-User DB-System ist, sollte man auf keinen Fall die
-H2-Datenbank bei gestartetem Keycloak inspizieren, sondern muss den Keycloak-Server
-mit `docker compose down` unbedingt herunterfahren!!!
-
-Die H2-Datenbank liegt in der (Linux-) Datei `/opt/keycloak/data/h2/keycloakdb.mv.db`,
-und das Verzeichnis `/opt/keycloak/data` liegt wiederum im _Named Volume_ `kc_data`.
-Durch die nachfolgenden Kommandos startet man mit einem _H2_-Image einen Container
-und in diesem Container eine `Bash`-Shell, wobei das Named Volume mit der H2-Datenbank
-von Keycloak als Volume (`-v`) eingebunden wird. Innerhalb der Bash ist dann das
-Java-Archiv (`.jar`) verfügbar, womit das CLI von H2 so gestartet werden kann,
-dass man auf die H2-Datenbank aus dem Named Volume zugreifen kann. Innerhalb vom CLI
-mit dem Prompt `sql>` kann man dann SQL-Kommandos absetzen, z.B. um sich sämtliche
-Tabellen von Keycloak auflisten zu lassen. Abschließend beendet man das zunächst
-das CLI und danach die Bash
-
-```shell
-    docker run --rm -it -v kc_data:/opt/keycloak/data:ro oscarfonts/h2:2.3.232 bash
-        java -cp /opt/h2/bin/h2*.jar org.h2.tools.Shell \
-          -url jdbc:h2:file:/opt/keycloak/data/h2/keycloakdb -user "" -password ""
-              SHOW TABLES;
-              SELECT * FROM USER_ENTITY;
-              SELECT * FROM USER_ROLE_MAPPING;
-              EXIT
-        exit
-```
-
-**VORSICHT: AUF KEINEN FALL IRGENDEINE TABELLE EDITIEREN, WEIL MAN SONST
-KEYCLOAK NEU AUFSETZEN MUSS!**
 
 ## Initial Access Token
 
