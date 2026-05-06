@@ -18,6 +18,8 @@
 // Die Integration vom Apollo Server in Hono ist aufwaendig:
 // https://www.oluwasetemi.dev/blog/building-apollo-server-hono-integration
 
+// @hono/graphql-server ist eher fuer Demo-Zwecke
+
 import { createSchema, createYoga } from 'graphql-yoga';
 import { Hono } from 'hono';
 import { getLogger } from '../../logger/logger.mts';

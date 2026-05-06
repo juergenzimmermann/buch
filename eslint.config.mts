@@ -18,6 +18,7 @@ import comments from '@eslint-community/eslint-plugin-eslint-comments/configs';
 import eslint from '@eslint/js';
 import stylistic from '@stylistic/eslint-plugin';
 import vitest from '@vitest/eslint-plugin';
+import nodePlugin from 'eslint-plugin-n';
 import noSecrets from 'eslint-plugin-no-secrets';
 import { configs as packageJson } from 'eslint-plugin-package-json';
 // @ts-expect-error keine .d.ts-Datei
@@ -49,6 +50,8 @@ export default defineConfig(
             // https://github.com/SonarSource/eslint-plugin-sonarjs
             // https://github.com/SonarSource/eslint-plugin-sonarjs/blob/master/src/index.ts
             sonarjs.recommended,
+            // https://github.com/eslint-community/eslint-plugin-n#-rules
+            nodePlugin.configs['flat/recommended-module'],
             // https://github.com/eslint-community/eslint-plugin-security?tab=readme-ov-file#flat-config-requires-eslint--v8230
             security.recommended,
             // https://github.com/eslint-community/eslint-plugin-eslint-comments/blob/main/lib/configs/recommended.js
@@ -63,6 +66,7 @@ export default defineConfig(
 
         plugins: {
             'no-secrets': noSecrets,
+            n: nodePlugin,
         },
 
         languageOptions: {
@@ -218,6 +222,34 @@ export default defineConfig(
                     requireDefaultForNonUnion: true,
                 },
             ],
+
+            // https://github.com/weiran-zsd/eslint-plugin-node/blob/master/lib/configs/_commons.js
+            'n/callback-return': ['error', ['next']],
+            'n/exports-style': 'error',
+            'n/file-extension-in-import': 'off',
+            'n/global-require': 'error',
+            'n/handle-callback-err': 'error',
+            'n/no-callback-literal': 'error',
+            'n/no-missing-import': 'off',
+            'n/no-mixed-requires': 'error',
+            'n/no-new-require': 'error',
+            'n/no-path-concat': 'error',
+            'n/no-process-env': 'error',
+            'n/no-sync': [
+                'error',
+                {
+                    allowAtRootLevel: true,
+                },
+            ],
+            'n/prefer-global/buffer': 'error',
+            'n/prefer-global/console': 'error',
+            'n/prefer-global/process': ['error', 'never'],
+            'n/prefer-global/text-decoder': 'error',
+            'n/prefer-global/text-encoder': 'error',
+            'n/prefer-global/url': 'error',
+            'n/prefer-global/url-search-params': 'error',
+            'n/prefer-promises/dns': 'error',
+            'n/prefer-promises/fs': 'error',
 
             'regexp/prefer-regexp-exec': 'error',
 

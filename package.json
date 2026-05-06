@@ -97,7 +97,7 @@
     "effect": "3.21.2",
     "eslint": "10.3.0",
     "eslint-plugin-import": "2.32.0",
-    "eslint-plugin-n": "17.24.0",
+    "eslint-plugin-n": "18.0.1",
     "eslint-plugin-no-secrets": "2.3.3",
     "eslint-plugin-package-json": "0.91.2",
     "eslint-plugin-promise": "7.3.0",

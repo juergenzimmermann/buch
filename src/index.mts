@@ -26,7 +26,7 @@ import { banner } from './logger/banner.mts';
 const { NODE_ENV } = env;
 if (NODE_ENV === 'development' || NODE_ENV === 'test') {
     // selbst-signiertes Zertifikat: Umgebungsvariable NODE_TLS_REJECT_UNAUTHORIZED setzen
-    process.env['NODE_TLS_REJECT_UNAUTHORIZED'] = '0';
+    process.env['NODE_TLS_REJECT_UNAUTHORIZED'] = '0'; // eslint-disable-line n/no-process-env
 }
 
 // app.fetch ist ist eine Funktion passend zur Signatur von fetch von Bun (s.u.):
