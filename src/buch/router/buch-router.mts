@@ -42,8 +42,9 @@ const logger = getLogger('buch-router', 'file');
 router.get('/:id', async (c) => {
     const { req } = c;
     // https://hono.dev/docs/api/request
-    const accept = req.header('Accept')?.toLowerCase();
-    if (accept !== undefined && !/(json|html)/.test(accept)) {
+    // "Optional Chaining" und "Nullish Coaleshing"
+    const accept = req.header('Accept')?.toLowerCase() ?? '*/*';
+    if (!/(json|html)/.test(accept)) {
         logger.debug('get: Accept=%s', accept);
         // https://hono.dev/docs/api/context#body
         // Not Acceptable
@@ -84,12 +85,8 @@ router.get('/:id', async (c) => {
 // -----------------------------------------------------------------------------
 router.get('/', async (c) => {
     const { req } = c;
-    const accept = req.header('Accept')?.toLowerCase();
-    if (
-        accept !== undefined &&
-        accept !== '*/*' &&
-        !/(json|html)/.test(accept)
-    ) {
+    const accept = req.header('Accept')?.toLowerCase() ?? '*/*';
+    if (accept !== '*/*' && !/(json|html)/.test(accept)) {
         logger.debug('get: Accept=%s', accept);
         return c.body(null, 406);
     }
