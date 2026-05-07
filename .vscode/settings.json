@@ -4,9 +4,10 @@
     "*.csv": "csv (semicolon)"
   },
   "material-icon-theme.activeIconPack": "nest",
-  "typescript.tsdk": "node_modules/typescript/lib",
+  "js/ts.tsdk.path": "node_modules/typescript/lib",
+  "oxc.fmt.configPath": "oxfmt.config.ts",
   "eslint.useFlatConfig": true,
-  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.defaultFormatter": "oxc.oxc-vscode",
   "editor.formatOnSave": true,
   "editor.codeActionsOnSave": {
     "source.sortImports": "explicit",
@@ -36,7 +37,7 @@
   },
   "npm.packageManager": "pnpm",
   "peacock.color": "#215732",
-  "typescript.experimental.useTsgo": true,
+  "js/ts.experimental.useTsgo": true,
   "asciidoc.antora.showEnableAntoraPrompt": false,
   "vitest.nodeEnv": {
     "NODE_TLS_REJECT_UNAUTHORIZED": "0"
