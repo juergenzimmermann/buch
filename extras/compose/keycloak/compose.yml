@@ -41,7 +41,7 @@ services:
     # --features=token-exchange
     # --verbose
     # --help
-    command: [ "start", "--hostname-strict=false" ]
+    command: ["start", "--hostname-strict=false"]
     #entrypoint: ["/bin/bash", "-c", "echo 'Container mit keycloak ist gestartet.' && sleep infinity"]
     #entrypoint: ["/opt/keycloak/bin/kc.sh show-config > /dev/null 2>&1 || exit 1"]
 
@@ -94,32 +94,31 @@ services:
       KC_HEALTH_ENABLED: true
       # https://www.keycloak.org/server/all-config#category-http_access_log
       #KC_HTTP_ACCESS_LOG_ENABLED: true
-    networks: [ acme-network ]
+    networks: [acme-network]
     hostname: keycloak
     container_name: keycloak
     user: nonroot:nonroot
     #user: 0:0
     # https://docs.docker.com/reference/compose-file/services/#cap_drop
     # https://man7.org/linux/man-pages/man7/capabilities.7.html
-    cap_drop: [ ALL ]
+    cap_drop: [ALL]
     healthcheck:
       # https://www.keycloak.org/server/health
       # https://gist.github.com/sarath-soman/5d9aec06953bbd0990c648605d4dba07
       # https://www.reddit.com/r/KeyCloak/comments/14a5a1y/how_to_enable_healthcheck_on_keycloak_on
-      test:
-        [
+      test: [
           "CMD-SHELL",
           "exec 3<>/dev/tcp/127.0.0.1/9000;echo -e 'GET /health/ready
-            HTTP/1.1\r
+          HTTP/1.1\r
 
-            host: http://localhost\r
+          host: http://localhost\r
 
-            Connection: close\r
+          Connection: close\r
 
-            \r
+          \r
 
-            ' >&3;if [ $? -eq 0 ]; then echo 'Healthcheck Successful';exit
-            0;else echo 'Healthcheck Failed';exit 1;fi;",
+          ' >&3;if [ $? -eq 0 ]; then echo 'Healthcheck Successful';exit
+          0;else echo 'Healthcheck Failed';exit 1;fi;",
         ]
       interval: 30s
       timeout: 5s

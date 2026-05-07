@@ -42,7 +42,7 @@
   - [Docker Compose](#docker-compose)
 - [Statische Codeanalyse und Formattierer](#statische-codeanalyse-und-formatierer)
   - [ESLint](#eslint)
-  - [Prettier](#prettier)
+  - [Oxfmt](#oxfmt)
   - [SonarQube](#sonarqube)
 - [Sicherheitslücken](#sicherheitslücken)
   - [bun audit](#bun-audit)
@@ -60,7 +60,7 @@
 - Das Beispiel _nicht_ in einem Pfad mit _Leerzeichen_ installieren.
   Viele Javascript-Bibliotheken werden unter Linux entwickelt und dort benutzt
   man **keine** Leerzeichen in Pfaden. Ebenso würde ich das Beispiel nicht auf
-  dem  _Desktop_ auspacken bzw. installieren.
+  dem _Desktop_ auspacken bzw. installieren.
 
 - Bei [GitHub](https://github.com) oder [GitLab](https://gitlab.com)
   registrieren, falls man dort noch nicht registriert ist.
@@ -204,9 +204,9 @@ npm-Packages oder Debian-Packages.
 ### Docker Compose
 
 Mit _Docker Compose_ und der Konfigurationsdatei `compose.yml` im Verzeichnis
-`extras\compose` lässt sich der Container mit dem Basis-Image mit _Debian
-Trixie (13) Slim_ folgendermaßen starten und später in einer weiteren
-PowerShell herunterfahren.
+`extras\compose\buch` lässt sich der Container mit dem "hardened" Basis-Image mit
+_Bun_ und _Debian Trixie (13) Slim_ folgendermaßen starten und später in einer
+weiteren PowerShell herunterfahren.
 
 ```shell
     cd extras\compose\buch
@@ -221,7 +221,7 @@ PowerShell herunterfahren.
         env
         exit
 
-    # 2 Shells fuerFehlersuche im Netzwerk:
+    # 2 Shells fuer Fehlersuche im Netzwerk:
     cd extras\compose\debug
     docker compose up
 
@@ -247,13 +247,13 @@ ausgeführt:
     bun run eslint
 ```
 
-### Prettier
+### Oxfmt
 
-`Prettier` ist ein Formatierer, der durch `prettier.config.mts` konfiguriert und
-durch folgendes Skript ausgeführt wird:
+_Oxfmt_ (statt _Prettier_) ist ein Formatierer, der durch `oxfmt.config.mts`
+konfiguriert und durch folgendes Skript ausgeführt wird:
 
 ```shell
-    bun run prettier
+    bun run fmt
 ```
 
 ### SonarQube

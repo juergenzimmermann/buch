@@ -247,20 +247,17 @@ describe('GET /rest', () => {
         },
     );
 
-    test.concurrent(
-        'Keine Buecher zu einer nicht-vorhandenen Property',
-        async () => {
-            // given
-            const params = new URLSearchParams({ foo: 'bar' });
-            const url = `${restURL}?${params}`;
-            const requestHeaders = new Headers();
-            requestHeaders.append('Accept', 'application/json');
+    test.concurrent('Keine Buecher zu einer nicht-vorhandenen Property', async () => {
+        // given
+        const params = new URLSearchParams({ foo: 'bar' });
+        const url = `${restURL}?${params}`;
+        const requestHeaders = new Headers();
+        requestHeaders.append('Accept', 'application/json');
 
-            // when
-            const { status } = await fetch(url, { headers: requestHeaders });
+        // when
+        const { status } = await fetch(url, { headers: requestHeaders });
 
-            // then
-            expect(status).toBe(404);
-        },
-    );
+        // then
+        expect(status).toBe(404);
+    });
 });
