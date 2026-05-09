@@ -2,6 +2,7 @@
 // npm install --save-dev prisma
 import { defineConfig, env } from 'prisma/config';
 
+// oxlint-disable-next-line import/no-default-export
 export default defineConfig({
     schema: 'prisma/schema.prisma',
     //migrations: {

@@ -13,12 +13,12 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-import { resolve } from 'node:path';
-import { styleText } from 'node:util';
-import pino from 'pino';
 import { type PrettyOptions } from 'pino-pretty';
 import { config } from './app.mts';
 import { env } from './env.mts';
+import pino from 'pino';
+import { resolve } from 'node:path';
+import { styleText } from 'node:util';
 
 /**
  * Das Modul enthält die Konfiguration für den Logger.
@@ -31,18 +31,17 @@ const logFileDefault = resolve(logDirDefault, logFileNameDefault);
 
 const { log } = config;
 
-if (log?.dir !== undefined && typeof log.dir !== 'string') {
+if (typeof log?.dir !== 'string') {
     console.debug(`log.dir=${log.dir}`);
     throw new TypeError('Das konfigurierte Log-Verzeichnis ist kein String');
 }
 
-// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-const logDir: string | undefined =
-    (log?.dir as string | undefined) === undefined
-        ? undefined
-        : log.dir.trimEnd(); // eslint-disable-line @typescript-eslint/no-unsafe-call
+const logDir: string | null =
+    typeof (log?.dir as string | undefined) === 'undefined'
+        ? null
+        : log.dir.trimEnd();
 const logFile =
-    logDir === undefined ? logFileDefault : resolve(logDir, logFileNameDefault);
+    logDir === null ? logFileDefault : resolve(logDir, logFileNameDefault);
 const pretty = log?.pretty === true;
 
 // https://getpino.io
@@ -53,14 +52,14 @@ const pretty = log?.pretty === true;
 
 export type LogLevel = 'error' | 'warn' | 'info' | 'debug';
 let logLevelTmp: LogLevel = 'info';
-if (env.LOG_LEVEL !== undefined) {
+if (typeof env.LOG_LEVEL !== 'undefined') {
     logLevelTmp = env.LOG_LEVEL as LogLevel;
-} else if (log?.level !== undefined) {
+} else if (typeof log?.level !== 'undefined') {
     logLevelTmp = log?.level as LogLevel;
 }
 export const logLevel = logLevelTmp;
 
-let message = styleText(['black', 'bgWhite'], 'logger config:');
+const message = styleText(['black', 'bgWhite'], 'logger config:');
 console.log(
     `${message} logLevel=${logLevel}, logFile=${logFile}, pretty=${pretty}`,
 );
@@ -87,10 +86,10 @@ const options: pino.TransportMultiOptions | pino.TransportSingleOptions = pretty
     : { targets: [fileOptions] };
 // in pino: type ThreadStream = any
 // type-coverage:ignore-next-line
-const transports = pino.transport(options); // eslint-disable-line @typescript-eslint/no-unsafe-assignment
+const transports = pino.transport(options);
 
 // https://github.com/pinojs/pino/issues/1160#issuecomment-944081187
 export const parentLogger: pino.Logger<string> = pino(
     { level: logLevel },
     transports,
-); // eslint-disable-line @typescript-eslint/no-unsafe-argument
+);

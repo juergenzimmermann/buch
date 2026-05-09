@@ -13,11 +13,11 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-import { GraphQLError } from 'graphql';
 import { createRemoteJWKSet, jwtVerify } from 'jose';
+import { GraphQLError } from 'graphql';
 import { JOSEError } from 'jose/errors';
-import { keycloakConfig } from '../../config/keycloak.mts';
 import { getLogger } from '../../logger/logger.mts';
+import { keycloakConfig } from '../../config/keycloak.mts';
 
 const { issuer, jwksUri, clientId, audience } = keycloakConfig;
 const jwks = createRemoteJWKSet(new URL(jwksUri));
@@ -33,7 +33,7 @@ const getToken = (headers: Headers) => {
             },
         });
     }
-    const token = auth.slice(7);
+    const token = auth.slice(7); // oxlint-disable-line no-magic-numbers
     logger.debug('getToken: token=%s', token);
     return token;
 };
@@ -94,7 +94,7 @@ export const rolesRequired = async (request: Request, ...roles: string[]) => {
     const token = getToken(request.headers);
 
     // Base64 in JSON decodieren und verifizieren
-    let jwt = await verifyToken(token);
+    const jwt = await verifyToken(token);
 
     const { payload } = jwt;
     logger.debug('rolesRequired: payload=%o', payload);

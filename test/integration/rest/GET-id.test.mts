@@ -1,3 +1,4 @@
+// oxlint-disable max-lines-per-function, no-magic-numbers
 // Copyright (C) 2025 - present Juergen Zimmermann, Hochschule Karlsruhe
 //
 // This program is free software: you can redistribute it and/or modify
@@ -26,8 +27,8 @@
 //    axios       https://axios-http.co
 //    got         https://github.com/sindresorhus/got
 
-import { describe, expect, test } from 'vitest';
 import { CONTENT_TYPE, IF_NONE_MATCH, restURL } from '../constants.mts';
+import { describe, expect, test } from 'vitest';
 
 // -----------------------------------------------------------------------------
 // T e s t d a t e n

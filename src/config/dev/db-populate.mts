@@ -18,16 +18,14 @@
  * @packageDocumentation
  */
 
-/* eslint-disable @stylistic/quotes */
-
-import { PrismaPg } from '@prisma/adapter-pg';
-import { readFile } from 'node:fs/promises';
-import process from 'node:process';
-import { URL } from 'node:url';
 import { PrismaClient } from '../../generated/prisma/client.ts';
-import { getLogger } from '../../logger/logger.mts';
-import { config } from '../app.mts';
+import { PrismaPg } from '@prisma/adapter-pg';
+import { URL } from 'node:url';
 import { adapter } from '../prisma-client.mts';
+import { config } from '../app.mts';
+import { getLogger } from '../../logger/logger.mts';
+import process from 'node:process';
+import { readFile } from 'node:fs/promises';
 import { resourcesURL } from '../resources.mts';
 
 /**
@@ -71,17 +69,17 @@ export class DbPopulateService {
         // Bei TypedSQL ist nur 1 SQL-Anweisung pro Datei moeglich
         // https://www.prisma.io/typedsql
         const dropScript = new URL('drop-table.sql', this.#dbURL);
-        this.#logger.debug('dropScript = %s', dropScript); // eslint-disable-line sonarjs/no-duplicate-string
+        this.#logger.debug('dropScript = %s', dropScript);
         // https://nodejs.org/api/fs.html#fspromisesreadfilepath-options
-        const dropStatements = await readFile(dropScript, 'utf8'); // eslint-disable-line security/detect-non-literal-fs-filename,n/no-sync
+        const dropStatements = await readFile(dropScript, 'utf8');
 
-        const createScript = new URL('create-table.sql', this.#dbURL); // eslint-disable-line sonarjs/no-duplicate-string
-        this.#logger.debug('createScript = %s', createScript); // eslint-disable-line sonarjs/no-duplicate-string
-        const createStatements = await readFile(createScript, 'utf8'); // eslint-disable-line security/detect-non-literal-fs-filename,n/no-sync
+        const createScript = new URL('create-table.sql', this.#dbURL);
+        this.#logger.debug('createScript = %s', createScript);
+        const createStatements = await readFile(createScript, 'utf8');
 
-        const copyScript = new URL('copy-csv.sql', this.#dbURL); // eslint-disable-line sonarjs/no-duplicate-string
-        this.#logger.debug('copyScript = %s', copyScript); // eslint-disable-line sonarjs/no-duplicate-string
-        const copyStatements = await readFile(copyScript, 'utf8'); // eslint-disable-line security/detect-non-literal-fs-filename,n/no-sync
+        const copyScript = new URL('copy-csv.sql', this.#dbURL);
+        this.#logger.debug('copyScript = %s', copyScript);
+        const copyStatements = await readFile(copyScript, 'utf8');
 
         await this.#prisma.$connect();
         await this.#prisma.$transaction(async (tx) => {
@@ -99,4 +97,3 @@ export class DbPopulateService {
         await this.#prismaAdmin.$disconnect();
     }
 }
-/* eslint-enable @stylistic/quotes */

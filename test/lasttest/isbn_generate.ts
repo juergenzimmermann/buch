@@ -1,3 +1,4 @@
+// oxlint-disable no-magic-numbers, func-style
 export function generateISBN() {
     const praefix = '978'; // oder '979'
     const gruppe = '3'; // Deutsche Publikationen

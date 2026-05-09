@@ -15,7 +15,6 @@
 
 // https://vitest.dev/config/#globalsetup
 
-import { type GraphQLQuery } from './graphql.mts';
 import {
     ACCEPT,
     APPLICATION_JSON,
@@ -24,6 +23,7 @@ import {
     POST,
     graphqlURL,
 } from '../constants.mts';
+import { type GraphQLQuery } from './graphql.mts';
 
 export const getToken = async (
     username: string,
@@ -56,7 +56,7 @@ export const getToken = async (
         data: { token: { access_token: string } };
     };
     const { access_token } = body.data.token;
-    if (access_token === undefined || typeof access_token !== 'string') {
+    if (typeof access_token !== 'string') {
         throw new Error('Der Token fuer GraphQL ist kein String');
     }
     return access_token;

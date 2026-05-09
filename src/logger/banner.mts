@@ -18,12 +18,12 @@
  * @packageDocumentation
  */
 
+import { release, type, userInfo } from 'node:os';
 import Bun from 'bun';
 import figlet from 'figlet';
-import { release, type, userInfo } from 'node:os';
+import { getLogger } from './logger.mts';
 import process from 'node:process';
 import { serverConfig } from '../config/server.mts';
-import { getLogger } from './logger.mts';
 
 const logger = getLogger('banner', 'func');
 

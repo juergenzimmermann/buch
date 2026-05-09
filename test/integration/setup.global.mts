@@ -15,7 +15,7 @@
 
 // https://vitest.dev/config/#globalsetup
 
-import { AUTHORIZATION, baseURL, BEARER, POST } from './constants.mjs';
+import { AUTHORIZATION, BEARER, POST, baseURL } from './constants.mjs';
 import { getToken } from './token.mjs';
 
 const dbPopulate = async (token: string) => {
@@ -36,6 +36,7 @@ const dbPopulate = async (token: string) => {
 };
 
 // https://vitest.dev/config/#globalsetup
+// oxlint-disable-next-line import/no-default-export
 export default async function setup() {
     const token = await getToken('admin', 'p');
     console.log(`setup: token=${token}`);

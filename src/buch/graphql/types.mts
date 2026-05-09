@@ -1,3 +1,4 @@
+// oxlint-disable max-lines
 // Copyright (C) 2026 - present Juergen Zimmermann, Hochschule Karlsruhe
 //
 // This program is free software: you can redistribute it and/or modify
@@ -13,11 +14,11 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-import { type BuchMitTitelUndAbbildungen } from '../service/buch-service.mts';
 import {
     type BuchCreate,
     type BuchUpdate,
 } from '../service/buch-write-service.mts';
+import { type BuchMitTitelUndAbbildungen } from '../service/buch-service.mts';
 import { type Suchparameter } from '../service/suchparameter.mts';
 
 // -----------------------------------------------------------------------------
@@ -40,7 +41,9 @@ export const toInt = (num: number): Int =>
     (Number.isInteger(num) ? num : Math.round(num)) as Int;
 export const toNumber = (id: ID): number => Number.parseInt(id, 10);
 const toDateOrNull = (dateStr?: string | null): Date | null =>
-    dateStr === undefined || dateStr === null ? null : new Date(dateStr);
+    typeof dateStr === 'undefined' || dateStr === null
+        ? null
+        : new Date(dateStr);
 
 // -----------------------------------------------------------------------------
 // G r a p h Q L   S c h e m a
@@ -189,7 +192,7 @@ export const toBuchType = (buch: BuchMitTitelUndAbbildungen): Buch => {
         rating: toInt(buch.rating),
         art: buch.art ?? 'HARDCOVER',
         preis: buch.preis.toNumber(),
-        rabatt: buch.rabatt.mul(100).toFixed(2),
+        rabatt: buch.rabatt.mul(100).toFixed(2), // oxlint-disable-line no-magic-numbers
         lieferbar: buch.lieferbar,
         schlagwoerter: [],
         titel: {
@@ -221,25 +224,25 @@ export type SuchParameterInput = {
 };
 
 export const toSuchparameter = (param?: SuchParameterInput) => {
-    if (param === undefined) {
-        return undefined;
+    if (typeof param === 'undefined') {
+        return null;
     }
 
     const { titel, isbn, rating, art, lieferbar } = param;
     const suchparameter: Record<string, any> = {};
-    if (titel !== undefined) {
+    if (typeof titel !== 'undefined') {
         suchparameter['titel'] = titel;
     }
-    if (isbn !== undefined) {
+    if (typeof isbn !== 'undefined') {
         suchparameter['isbn'] = isbn;
     }
-    if (rating !== undefined) {
+    if (typeof rating !== 'undefined') {
         suchparameter['rating'] = rating;
     }
-    if (art !== undefined) {
+    if (typeof art !== 'undefined') {
         suchparameter['art'] = art;
     }
-    if (lieferbar !== undefined) {
+    if (typeof lieferbar !== 'undefined') {
         // Boole'scher Wert bei GraphQL-Query
         // String bei Query-Parameter bei REST
         suchparameter['lieferbar'] = lieferbar.toString();

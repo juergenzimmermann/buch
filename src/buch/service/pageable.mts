@@ -51,7 +51,7 @@ export type PageableProps = {
  * @returns Objekt vom Typ `Pageable`.
  */
 export const createPageable = ({ number, size }: PageableProps): Pageable => {
-    let numberFloat = Number(number);
+    const numberFloat = Number(number);
     let numberInt: number;
     if (Number.isNaN(numberFloat) || !Number.isInteger(numberFloat)) {
         numberInt = DEFAULT_PAGE_NUMBER;
@@ -62,7 +62,7 @@ export const createPageable = ({ number, size }: PageableProps): Pageable => {
         }
     }
 
-    let sizeFloat = Number(size);
+    const sizeFloat = Number(size);
     let sizeInt: number;
     if (Number.isNaN(sizeFloat) || !Number.isInteger(sizeFloat)) {
         sizeInt = DEFAULT_PAGE_SIZE;

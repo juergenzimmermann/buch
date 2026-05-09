@@ -20,17 +20,6 @@
 
 // @hono/graphql-server ist eher fuer Demo-Zwecke
 
-import { createSchema, createYoga } from 'graphql-yoga';
-import { Hono } from 'hono';
-import { getLogger } from '../../logger/logger.mts';
-import {
-    createHandler,
-    deleteHandler,
-    tokenHandler,
-    updateHandler,
-} from './mutation-handler.mts';
-import { buchHandler, buecherHandler } from './query-handler.mts';
-import { rolesRequired } from './roles-required.mts';
 import {
     type BuchNeuInput,
     type BuchUpdateInput,
@@ -38,6 +27,17 @@ import {
     type SuchParameterInput,
     typeDefs,
 } from './types.mts';
+import { buchHandler, buecherHandler } from './query-handler.mts';
+import {
+    createHandler,
+    deleteHandler,
+    tokenHandler,
+    updateHandler,
+} from './mutation-handler.mts';
+import { createSchema, createYoga } from 'graphql-yoga';
+import { Hono } from 'hono';
+import { getLogger } from '../../logger/logger.mts';
+import { rolesRequired } from './roles-required.mts';
 
 const logger = getLogger('query-handler', 'file');
 type GraphqlContext = {

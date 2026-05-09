@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-non-null-assertion */
+// oxlint-disable max-lines, max-lines-per-function, no-magic-numbers
 // Copyright (C) 2025 - present Juergen Zimmermann, Hochschule Karlsruhe
 //
 // This program is free software: you can redistribute it and/or modify
@@ -14,8 +14,6 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-import { beforeAll, describe, expect, test } from 'vitest';
-import { Buchart, type Prisma } from '../../../src/generated/prisma/client.ts';
 import {
     ACCEPT,
     APPLICATION_JSON,
@@ -24,6 +22,8 @@ import {
     POST,
     graphqlURL,
 } from '../constants.mts';
+import { Buchart, type Prisma } from '../../../src/generated/prisma/client.ts';
+import { beforeAll, describe, expect, test } from 'vitest';
 import { type GraphQLQuery } from './graphql.mts';
 
 export type BuchDTO = Omit<
@@ -211,8 +211,8 @@ describe('GraphQL Queries', () => {
 
             buecher
                 .map((buch) => buch.titel)
-                .forEach((t) =>
-                    expect(t?.titel?.toLowerCase()).toStrictEqual(
+                .forEach((tit) =>
+                    expect(tit?.titel?.toLowerCase()).toStrictEqual(
                         expect.stringContaining(titel),
                     ),
                 );
@@ -569,5 +569,3 @@ describe('GraphQL Queries', () => {
         });
     });
 });
-
-/* eslint-enable @typescript-eslint/no-non-null-assertion */

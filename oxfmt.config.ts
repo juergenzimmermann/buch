@@ -11,17 +11,17 @@
 // GNU General Public License for more details.
 //
 // You should have received a copy of the GNU General Public License
-// along with this program.  If not, see <https://www.gnu.org/licenses/>.
+// along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 // https://oxc.rs/docs/guide/usage/formatter/config.html
 // https://oxc.rs/docs/guide/usage/formatter/config-file-reference.html
 
 import { defineConfig } from 'oxfmt';
 
+// oxlint-disable-next-line import/no-default-export
 export default defineConfig({
     singleQuote: true,
     trailingComma: 'all',
-    sortPackageJson: false,
     overrides: [
         {
             files: ['*.toml', '*.yml', '*.yaml'],
@@ -43,4 +43,7 @@ export default defineConfig({
     // indent_size -> tabWidth
     // max_line_length -> printWidth
     // insert_final_newline -> insertFinalNewline
+
+    // default:
+    // sortPackageJson: true,
 });

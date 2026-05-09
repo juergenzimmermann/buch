@@ -13,18 +13,11 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-import { Hono } from 'hono';
-import { register } from 'prom-client';
-
-/**
- * Router für die Metriken für Prometheus.
- * @author [Jürgen Zimmermann](mailto:Juergen.Zimmermann@h-ka.de)
- */
-export const router = new Hono();
-
-router.get('/', async (c) => {
-    const text = await register.metrics();
-    return c.text(text, 200, {
-        'Content-Type': register.contentType,
-    });
-});
+export const statuscode = {
+    OK: 200,
+    CREATED: 201,
+    NO_CONTENT: 204,
+    NOT_MODIFIED: 304,
+    BAD_REQUEST: 400,
+    NOT_FOUND: 404,
+};

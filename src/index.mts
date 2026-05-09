@@ -13,20 +13,20 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-import Bun from 'bun'; // eslint-disable-line @typescript-eslint/naming-convention
-import process from 'node:process';
-import { app } from './app.mts';
-import { env } from './config/env.mts';
 import { connectDB, disconnectDB } from './config/prisma-client.mts';
-import { serverConfig } from './config/server.mts';
-import { container } from './container.mts';
+import Bun from 'bun';
+import { app } from './app.mts';
 import { banner } from './logger/banner.mts';
+import { container } from './container.mts';
+import { env } from './config/env.mts';
+import process from 'node:process';
+import { serverConfig } from './config/server.mts';
 
 // Destructuring
 const { NODE_ENV } = env;
 if (NODE_ENV === 'development' || NODE_ENV === 'test') {
     // selbst-signiertes Zertifikat: Umgebungsvariable NODE_TLS_REJECT_UNAUTHORIZED setzen
-    process.env['NODE_TLS_REJECT_UNAUTHORIZED'] = '0'; // eslint-disable-line n/no-process-env
+    process.env['NODE_TLS_REJECT_UNAUTHORIZED'] = '0';
 }
 
 // app.fetch ist ist eine Funktion passend zur Signatur von fetch von Bun (s.u.):

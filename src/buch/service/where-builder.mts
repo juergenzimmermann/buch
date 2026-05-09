@@ -20,8 +20,8 @@
 
 import { type Buchart, Prisma } from '../../generated/prisma/client.ts';
 import { type BuchWhereInput } from '../../generated/prisma/models/Buch.ts';
-import { getLogger } from '../../logger/logger.mts';
 import { type Suchparameter } from './suchparameter.mts';
+import { getLogger } from '../../logger/logger.mts';
 
 const buildSchlagwoerter = ({
     javascript,
@@ -68,7 +68,7 @@ const logger = getLogger('buildWher', 'func');
  * @returns BuchWhereInput
  */
 // "rest properties" ab ES 2018 https://github.com/tc39/proposal-object-rest-spread
-// eslint-disable-next-line max-lines-per-function, prettier/prettier, sonarjs/cognitive-complexity
+// oxlint-disable-next-line max-lines-per-function
 export const buildWhere = ({
     javascript,
     typescript,
@@ -88,7 +88,7 @@ export const buildWhere = ({
     // Beispiel: { titel: 'a', rating: 4, preis: 22.5, javascript: true }
     // wird zu:
     // WHERE titel ILIKE %a% AND rating >= 4 AND preis <= 22.5 AND schlagwoerter @> '["JAVASCRIPT"]'
-    let where: BuchWhereInput = {};
+    const where: BuchWhereInput = {};
 
     // Properties vom Typ number, enum, boolean, Date
     // diverse Vergleiche, z.B. Gleichheit, <= (lte), >= (gte)
@@ -108,7 +108,7 @@ export const buildWhere = ({
                 where.isbn = { equals: value as string };
                 break;
             case 'rating': {
-                const ratingNumber = Number.parseInt(value as string);
+                const ratingNumber = Number.parseInt(value as string, 10);
                 if (!Number.isNaN(ratingNumber)) {
                     where.rating = { gte: ratingNumber };
                 }
@@ -136,6 +136,8 @@ export const buildWhere = ({
                 break;
             case 'homepage':
                 where.homepage = { equals: value as string };
+                break;
+            default:
                 break;
         }
     });

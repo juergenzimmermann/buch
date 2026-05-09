@@ -1,3 +1,4 @@
+// oxlint-disable max-classes-per-file
 // Copyright (C) 2016 - present Juergen Zimmermann, Hochschule Karlsruhe
 //
 // This program is free software: you can redistribute it and/or modify
@@ -12,8 +13,6 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
-
-/* eslint-disable max-classes-per-file */
 
 /**
  * Das Modul besteht aus den Klassen für die Fehlerbehandlung bei der Verwaltung
@@ -61,5 +60,3 @@ export class VersionOutdatedError extends Error {
         this.version = version;
     }
 }
-
-/* eslint-enable max-classes-per-file */

@@ -19,19 +19,20 @@
  */
 
 import { type Options } from 'nodemailer/lib/smtp-transport/index.js';
-import { getLogger } from '../logger/logger.mts';
 import { config } from './app.mts';
+import { getLogger } from '../logger/logger.mts';
 
 const logger = getLogger('config/mail', 'file');
 const { mail } = config;
 
-const activated = mail?.activated === undefined || mail?.activated === true;
+const activated =
+    typeof mail?.activated === 'undefined' || mail?.activated === true;
 
-if (mail !== undefined) {
-    if (mail.host !== undefined && typeof mail.host !== 'string') {
+if (typeof mail === 'object') {
+    if (Object.hasOwn(mail, 'host') && typeof mail.host !== 'string') {
         throw new TypeError('Der konfigurierte Mailserver ist kein String');
     }
-    if (mail.port !== undefined && typeof mail.port !== 'number') {
+    if (Object.hasOwn(mail, 'port') && typeof mail.port !== 'number') {
         throw new TypeError(
             'Der konfigurierte Port für den Mailserver ist keine Zahl',
         );
@@ -39,7 +40,7 @@ if (mail !== undefined) {
 }
 // "Optional Chaining" und "Nullish Coalescing"
 const host = (mail?.host as string | undefined) ?? 'mail';
-const port = (mail?.port as number | undefined) ?? 25; // eslint-disable-line @typescript-eslint/no-magic-numbers
+const port = (mail?.port as number | undefined) ?? 25; // oxlint-disable-line no-magic-numbers
 const useLogger = mail?.log === true;
 const from =
     (mail?.from as string | undefined) ?? '"Joe Doe" <Joe.Doe@acme.com>';

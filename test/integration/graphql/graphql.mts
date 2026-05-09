@@ -13,6 +13,6 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-import type { GraphQLParams } from 'graphql-yoga';
+import { type GraphQLParams } from 'graphql-yoga';
 
 export type GraphQLQuery = Pick<GraphQLParams, 'query'>;

@@ -13,14 +13,6 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-import { GraphQLError } from 'graphql';
-import { container } from '../../container.mts';
-import { getLogger } from '../../logger/logger.mts';
-import {
-    BuchNeuSchema,
-    BuchUpdateGraphQLSchema,
-} from '../router/buch-validation.mts';
-import { NotFoundError } from '../service/errors.mts';
 import {
     type BuchNeuInput,
     type BuchUpdateInput,
@@ -34,6 +26,14 @@ import {
     toNumber,
     toUpdate,
 } from './types.mts';
+import {
+    BuchNeuSchema,
+    BuchUpdateGraphQLSchema,
+} from '../router/buch-validation.mts';
+import { GraphQLError } from 'graphql';
+import { NotFoundError } from '../service/errors.mts';
+import { container } from '../../container.mts';
+import { getLogger } from '../../logger/logger.mts';
 
 const logger = getLogger('mutation-handler', 'file');
 const { buchWriteService, keycloakService } = container;
@@ -185,7 +185,7 @@ export const tokenHandler = async ({
 }) => {
     logger.debug('tokenHandler: username=%s', username);
     const token = await keycloakService.token({ username, password });
-    if (token === undefined) {
+    if (typeof token === 'undefined') {
         throw new GraphQLError('Fehler bei username und/oder Passwort', {
             extensions: {
                 code: 'BAD_USER_INPUT',

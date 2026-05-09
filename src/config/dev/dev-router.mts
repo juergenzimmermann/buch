@@ -31,7 +31,6 @@ export const router = new Hono();
 router.post('/db_populate', rolesRequired('admin'), async (c) => {
     await container.dbPopulateService.populate();
     const success = {
-        // eslint-disable-next-line @typescript-eslint/naming-convention, camelcase
         db_populate: 'ok',
     };
     return c.json(success);

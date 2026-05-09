@@ -13,12 +13,12 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 
+import { PrismaClient } from '../generated/prisma/client.ts';
 import { PrismaPg } from '@prisma/adapter-pg';
+import { getLogger } from '../logger/logger.mts';
 import { prismaQueryInsights } from '@prisma/sqlcommenter-query-insights';
 import process from 'node:process';
 import { styleText } from 'node:util';
-import { PrismaClient } from '../generated/prisma/client.ts';
-import { getLogger } from '../logger/logger.mts';
 
 /**
  * Das Modul besteht aus dem Objekt {@linkcode prismaClient} als DB-Client
@@ -56,10 +56,10 @@ if (logger.isLevelEnabled('debug')) {
         comments: [prismaQueryInsights()],
     });
 
-    debugClient.$on('query', (e) => {
+    debugClient.$on('query', (event) => {
         // console.log(), weil der Pino-Logger asynchron ist
         const message = styleText(['black', 'bgWhite'], 'Query:');
-        console.log(`${message} ${e.query}`);
+        console.log(`${message} ${event.query}`);
     });
 
     tmpClient = debugClient;

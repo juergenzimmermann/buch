@@ -13,10 +13,8 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-/* eslint-disable camelcase, @typescript-eslint/naming-convention */
-
-import { keycloakConfig } from '../config/keycloak.mts';
 import { getLogger } from '../logger/logger.mts';
+import { keycloakConfig } from '../config/keycloak.mts';
 
 const { accessTokenUrl, clientId, secret } = keycloakConfig;
 const AUTHORIZATION = 'Authorization';
@@ -51,7 +49,7 @@ export class KeycloakService {
 
     async token({ username, password }: TokenData) {
         this.#logger.debug('token: username=%s', username);
-        if (username === undefined || password === undefined) {
+        if (typeof username !== 'string' || typeof password !== 'string') {
             return;
         }
 
@@ -96,7 +94,7 @@ export class KeycloakService {
     // Logging der Rollen: wird auf Client-Seite benoetigt
     // { ..., "azp": "nest-client", "exp": ..., "resource_access": { "nest-client": { "roles": ["admin"] } ...}
     // azp = authorized party
-    async #logPayload(responseBody: unknown) {
+    #logPayload(responseBody: unknown) {
         if (
             !this.#logger.isLevelEnabled('debug') ||
             responseBody === null ||
@@ -111,21 +109,18 @@ export class KeycloakService {
         const [, payloadStr] = access_token.split('.');
 
         // Base64 decodieren
-        if (payloadStr === undefined) {
+        if (typeof payloadStr !== 'string') {
             return;
         }
         const payloadDecoded = atob(payloadStr);
 
         // JSON-Objekt fuer Payload aus dem decodierten String herstellen
 
-        /* eslint-disable @typescript-eslint/no-unsafe-assignment */
         const payload = JSON.parse(payloadDecoded);
         const { azp, exp, resource_access } = payload;
         this.#logger.debug('#logPayload: exp=%s', exp);
-        const { roles } = resource_access[azp]; // eslint-disable-line security/detect-object-injection
-        /* eslint-enable @typescript-eslint/no-unsafe-assignment */
+        const { roles } = resource_access[azp];
 
         this.#logger.debug('#logPayload: roles=%o', roles);
     }
 }
-/* eslint-enable camelcase, @typescript-eslint/naming-convention */

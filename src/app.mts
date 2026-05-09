@@ -13,32 +13,14 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-import { Hono, type Context, type Next } from 'hono';
-import { compress } from 'hono/compress';
-import { cors } from 'hono/cors';
-import { showRoutes } from 'hono/dev';
-import { createMiddleware } from 'hono/factory';
-import { secureHeaders } from 'hono/secure-headers';
-import { type ZodError } from 'zod';
-import { router as healthRouter } from './admin/health-router.mts';
-import { graphqlApp } from './buch/graphql/graphql-app.mts';
-import { router } from './buch/router/buch-router.mts';
-import { router as buchWriteRouter } from './buch/router/buch-write-router.mts';
+import { type Context, Hono, type Next } from 'hono';
+import { ForbiddenError, UnauthorizedError } from './security/errors.mts';
 import {
     IsbnExistsError,
     NotFoundError,
     VersionInvalidError,
     VersionOutdatedError,
 } from './buch/service/errors.mts';
-import { corsOptions } from './config/cors.mts';
-import { router as devRouter } from './config/dev/dev-router.mts';
-import { env } from './config/env.mts';
-import { paths } from './config/paths.mts';
-import { getLogger } from './logger/logger.mts';
-import { requestLogger } from './logger/request-logger.mts';
-import { responseTime } from './logger/response-time.mts';
-import { trackMetrics } from './monitoring/prometheus-metrics.mts';
-import { router as prometheusRouter } from './monitoring/prometheus-router.mts';
 import {
     createProblemDetails,
     forbidden,
@@ -46,8 +28,26 @@ import {
     unauthorized,
     unprocessableContent,
 } from './problem-details.mts';
+import { type ZodError } from 'zod';
 import { router as authRouter } from './security/auth-router.mts';
-import { ForbiddenError, UnauthorizedError } from './security/errors.mts';
+import { router as buchWriteRouter } from './buch/router/buch-write-router.mts';
+import { compress } from 'hono/compress';
+import { cors } from 'hono/cors';
+import { corsOptions } from './config/cors.mts';
+import { createMiddleware } from 'hono/factory'; // oxlint-disable-line import/max-dependencies
+import { router as devRouter } from './config/dev/dev-router.mts';
+import { env } from './config/env.mts';
+import { getLogger } from './logger/logger.mts';
+import { graphqlApp } from './buch/graphql/graphql-app.mts';
+import { router as healthRouter } from './admin/health-router.mts';
+import { paths } from './config/paths.mts';
+import { router as prometheusRouter } from './monitoring/prometheus-router.mts';
+import { requestLogger } from './logger/request-logger.mts';
+import { responseTime } from './logger/response-time.mts';
+import { router } from './buch/router/buch-router.mts';
+import { secureHeaders } from 'hono/secure-headers';
+import { showRoutes } from 'hono/dev';
+import { trackMetrics } from './monitoring/prometheus-metrics.mts';
 
 /**
  * Web-Applikation mit Hono.
@@ -69,7 +69,7 @@ const securityHeaders = createMiddleware(async (c: Context, next: Next) => {
     c.header('X-Content-Type-Options', 'nosniff');
     // siehe CORS
     c.header('X-Frame-Options', 'SAMEORIGIN');
-    await next(); // eslint-disable-line n/callback-return
+    await next();
 });
 
 // https://hono.dev/docs/middleware/builtin/secure-headers
@@ -109,6 +109,7 @@ if (logger.isLevelEnabled('debug')) {
 // E r r o r   H a n d l e r
 // -----------------------------------------------------------------------------
 // https://hono.dev/docs/api/exception#handling-httpexceptions
+// oxlint-disable-next-line promise/prefer-await-to-callbacks
 app.onError((error, c) => {
     if (error instanceof NotFoundError) {
         // https://hono.dev/docs/api/context#notfound
@@ -144,5 +145,5 @@ app.onError((error, c) => {
 
     logger.error('Interner Fehler: %o', error);
     console.log(error.stack);
-    return c.body('Interner Fehler', 500); // eslint-disable-line @typescript-eslint/no-magic-numbers
+    return c.body('Interner Fehler', 500);
 });

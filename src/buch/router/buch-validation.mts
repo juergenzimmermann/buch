@@ -1,3 +1,4 @@
+// oxlint-disable no-magic-numbers
 // Copyright (C) 2026 - present Juergen Zimmermann, Hochschule Karlsruhe
 //
 // This program is free software: you can redistribute it and/or modify
@@ -20,7 +21,7 @@ export const MAX_RATING = 5;
 
 const BuchComplete = z.strictObject({
     // bei GraphQL ist der Typ ID i.a. ein String
-    id: z.union([z.number().int().gt(0), z.string().regex(/^[1-9]\d*$/)]),
+    id: z.union([z.number().int().gt(0), z.string().regex(/^[1-9]\d*$/u)]),
     version: z.int().gte(0),
     isbn: z
         .string()
@@ -38,7 +39,7 @@ const BuchComplete = z.strictObject({
     schlagwoerter: z.array(z.string()).optional(),
 
     titel: z.strictObject({
-        titel: z.string().regex(/^\w.*/).max(40),
+        titel: z.string().regex(/^\w.*/u).max(40),
         untertitel: z.string().max(40).optional(),
     }),
     abbildungen: z

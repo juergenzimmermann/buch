@@ -1,3 +1,5 @@
+// oxlint-disable max-lines-per-function
+// oxlint-disable no-magic-numbers
 // Copyright (C) 2025 - present Juergen Zimmermann, Hochschule Karlsruhe
 //
 // This program is free software: you can redistribute it and/or modify
@@ -13,36 +15,42 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-import { beforeEach, describe, expect, test, vi } from 'vitest';
-import { Prisma } from '../../generated/prisma/client.ts';
-import { Buchart } from '../../generated/prisma/enums.ts';
-import { BuchService } from './buch-service.mts';
 import { type BuchCreate, BuchWriteService } from './buch-write-service.mts';
+import { Prisma, PrismaClient } from '../../generated/prisma/client.ts';
+import { beforeEach, describe, expect, test, vi } from 'vitest';
+import { BuchService } from './buch-service.mts';
+import { Buchart } from '../../generated/prisma/enums.ts';
 
 // Hoisting: wird an den (Datei-) Anfang verschoben
 const { createMock, countMock, transactionMock, sendmailMock } = vi.hoisted(
-    () => ({
-        createMock: vi.fn<Prisma.BuchDelegate['create']>(),
-        countMock: vi.fn<Prisma.BuchDelegate['count']>(),
-        transactionMock: vi.fn(), // eslint-disable-line vitest/require-mock-type-parameters
-        sendmailMock: vi.fn(),
-    }),
+    () => {
+        return {
+            createMock: vi.fn<Prisma.BuchDelegate['create']>(),
+            countMock: vi.fn<Prisma.BuchDelegate['count']>(),
+            transactionMock: vi.fn(), // oxlint-disable-line vitest/require-mock-type-parameters
+            sendmailMock: vi.fn(), // oxlint-disable-line vitest/require-mock-type-parameters
+        };
+    },
 );
 
 // vi.mock() bewirkt Hoisting
-vi.mock('../../config/prisma-client.mts', () => ({
-    prismaClient: {
-        buch: {
-            create: createMock,
-            count: countMock,
-        },
-        $transaction: transactionMock,
-    },
-}));
+vi.mock(import('../../config/prisma-client.mts'), () => {
+    return {
+        prismaClient: {
+            buch: {
+                create: createMock,
+                count: countMock,
+            },
+            $transaction: transactionMock,
+        } as unknown as PrismaClient,
+    };
+});
 
-vi.mock('../../mail/sendmail.mts', () => ({
-    sendmail: sendmailMock,
-}));
+vi.mock(import('../../mail/sendmail.mts'), () => {
+    return {
+        sendmail: sendmailMock,
+    };
+});
 
 describe('BuchWriteService create', () => {
     let service: BuchWriteService;
@@ -57,14 +65,19 @@ describe('BuchWriteService create', () => {
         transactionMock.mockReset();
         sendmailMock.mockReset();
 
-        transactionMock.mockImplementation(async (callback) => {
-            return callback({
-                buch: {
-                    create: createMock,
-                    count: countMock,
-                },
-            });
-        });
+        transactionMock.mockImplementation(
+            async (
+                transactionBody: (
+                    tx: Prisma.TransactionClient,
+                ) => Promise<unknown>,
+            ) =>
+                await transactionBody({
+                    buch: {
+                        create: createMock,
+                        count: countMock,
+                    },
+                } as unknown as Prisma.TransactionClient),
+        );
     });
 
     test('Neues Buch', async () => {
@@ -94,13 +107,13 @@ describe('BuchWriteService create', () => {
         // return von tx.buch.create()
         createMock.mockResolvedValue(buchTmp);
         // sendmail ist eine void-Funktion
-        sendmailMock.mockResolvedValue(undefined);
+        sendmailMock.mockResolvedValue(null);
 
         // when
         const id = await service.create(buch);
 
         // then
         expect(id).toBe(idMock);
-        expect(sendmailMock).toHaveBeenCalledTimes(1);
+        expect(sendmailMock).toHaveBeenCalledOnce();
     });
 });

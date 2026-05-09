@@ -20,12 +20,12 @@
  * @author [Jürgen Zimmermann](mailto:Juergen.Zimmermann@h-ka.de)
  */
 
-import { readFile } from 'node:fs/promises';
-import { hostname } from 'node:os';
 import { URL } from 'node:url';
-import { getLogger } from '../logger/logger.mts';
 import { config } from './app.mts';
 import { env } from './env.mts';
+import { getLogger } from '../logger/logger.mts';
+import { hostname } from 'node:os';
+import { readFile } from 'node:fs/promises';
 import { resourcesURL } from './resources.mts';
 
 const logger = getLogger('config/server', 'file');
@@ -35,16 +35,15 @@ const { NODE_ENV } = env;
 const computername = hostname();
 const { server } = config;
 if (
-    server !== undefined &&
-    ((server.port !== undefined && typeof server.port !== 'number') ||
-        (server.portHttp !== undefined && typeof server.portHttp !== 'number'))
+    typeof server === 'object' &&
+    (typeof server.port !== 'number' || typeof server.portHttp !== 'number')
 ) {
     throw new TypeError('Ein konfigurierter Port ist keine Zahl');
 }
 // "Optional Chaining" und "Nullish Coalescing" ab ES2020
-const port = (server?.port as number | undefined) ?? 3000; // eslint-disable-line @typescript-eslint/no-magic-numbers
+const port = (server?.port as number | undefined) ?? 3000; // oxlint-disable-line no-magic-numbers
 logger.debug('port = %d', port);
-const portHttp = (server?.portHttp as number | undefined) ?? 3030; // eslint-disable-line @typescript-eslint/no-magic-numbers
+const portHttp = (server?.portHttp as number | undefined) ?? 3030; // oxlint-disable-line no-magic-numbers
 logger.debug('portHttp = %d', portHttp);
 
 // https://nodejs.org/api/fs.html
@@ -52,7 +51,7 @@ const tlsURL = new URL('tls/', resourcesURL);
 logger.debug('tlsURL = %s', tlsURL);
 
 // public/private keys und Zertifikat fuer TLS
-const key = await readFile(new URL('key.pem', tlsURL), { encoding: 'utf8' }); // eslint-disable-line security/detect-non-literal-fs-filename
+const key = await readFile(new URL('key.pem', tlsURL), { encoding: 'utf8' });
 const cert = await readFile(new URL('certificate.crt', tlsURL), {
     encoding: 'utf8',
 });

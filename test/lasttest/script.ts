@@ -1,3 +1,6 @@
+// oxlint-disable max-lines
+// oxlint-disable func-style
+// oxlint-disable no-magic-numbers
 // Copyright (C) 2024 - present Juergen Zimmermann, Hochschule Karlsruhe
 //
 // This program is free software: you can redistribute it and/or modify
@@ -13,13 +16,13 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-import http from 'k6/http';
+import { BuchNeuType } from '../../src/buch/router/buch-validation.mts';
+import { type Options } from 'k6/options';
 // @ts-expect-error https://github.com/grafana/k6-jslib-testing
 import { expect } from 'https://jslib.k6.io/k6-testing/0.6.1/index.js';
-import { sleep } from 'k6';
-import { type Options } from 'k6/options';
-import { BuchNeuType } from '../../src/buch/router/buch-validation.mts';
 import { generateISBN } from './isbn_generate.ts';
+import http from 'k6/http';
+import { sleep } from 'k6';
 
 const baseUrl = 'https://localhost:3000';
 const restUrl = `${baseUrl}/rest`;
@@ -88,7 +91,7 @@ export function setup() {
     }
 
     const headers = { Authorization: `Bearer ${token}` };
-    const res = http.post(dbPopulateUrl, undefined, { headers });
+    const res = http.post(dbPopulateUrl, null, { headers });
     if (res.status === 200) {
         console.log('DB neu geladen');
     } else {

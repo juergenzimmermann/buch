@@ -20,8 +20,8 @@
  */
 
 import { type SendMailOptions, createTransport } from 'nodemailer';
-import { mailConfig } from '../config/mail.mts';
 import { getLogger } from '../logger/logger.mts';
+import { mailConfig } from '../config/mail.mts';
 
 /** Typdefinition für das Senden einer Email. */
 export type SendMailParams = {

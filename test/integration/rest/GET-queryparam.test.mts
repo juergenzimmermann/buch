@@ -1,3 +1,4 @@
+// oxlint-disable max-lines-per-function, no-magic-numbers
 // Copyright (C) 2025 - present Juergen Zimmermann, Hochschule Karlsruhe
 //
 // This program is free software: you can redistribute it and/or modify
@@ -13,11 +14,11 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-import { describe, expect, test } from 'vitest';
-import { type Page } from '../../../src/buch/router/page.mts';
-import { BuchMitTitel } from '../../../src/buch/service/buch-service.mts';
-import { Buch } from '../../../src/generated/prisma/client.ts';
 import { CONTENT_TYPE, restURL } from '../constants.mts';
+import { describe, expect, test } from 'vitest';
+import { Buch } from '../../../src/generated/prisma/client.ts';
+import { BuchMitTitel } from '../../../src/buch/service/buch-service.mts';
+import { type Page } from '../../../src/buch/router/page.mts';
 
 type BuchType = Omit<Buch, 'preis' | 'rabatt'> & {
     preis: string;
@@ -91,8 +92,8 @@ describe('GET /rest', () => {
             // Jedes Buch hat einen Titel mit dem Teilstring
             body.content
                 .map((buch) => buch.titel)
-                .forEach((t) =>
-                    expect(t?.titel?.toLowerCase()).toStrictEqual(
+                .forEach((tit) =>
+                    expect(tit?.titel?.toLowerCase()).toStrictEqual(
                         expect.stringContaining(titel),
                     ),
                 );
@@ -168,7 +169,7 @@ describe('GET /rest', () => {
             // Jedes Buch hat eine Bewertung >= rating
             body.content
                 .map((buch) => buch.rating)
-                .forEach((r) => expect(r).toBeGreaterThanOrEqual(rating));
+                .forEach((rat) => expect(rat).toBeGreaterThanOrEqual(rating));
         },
     );
 
@@ -194,7 +195,7 @@ describe('GET /rest', () => {
             // Jedes Buch hat einen Preis <= preis
             body.content
                 .map((buch) => buch?.preis ?? 0)
-                .forEach((p) => expect(Number(p)).toBeLessThanOrEqual(preis));
+                .forEach((pr) => expect(Number(pr)).toBeLessThanOrEqual(preis));
         },
     );
 
@@ -223,8 +224,8 @@ describe('GET /rest', () => {
             // Jedes Buch hat im Array der Schlagwoerter z.B. "javascript"
             body.content
                 .map((buch) => buch.schlagwoerter)
-                .forEach((schlagwoerter) =>
-                    expect(schlagwoerter).toStrictEqual(
+                .forEach((sw) =>
+                    expect(sw).toStrictEqual(
                         expect.arrayContaining([schlagwort.toUpperCase()]),
                     ),
                 );

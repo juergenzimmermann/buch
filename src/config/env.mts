@@ -32,7 +32,6 @@ export type EnvType = {
     LOG_LEVEL: string | undefined;
 };
 
-/* eslint-disable @typescript-eslint/naming-convention */
 /**
  * Umgebungsvariable zur Konfiguration
  */
@@ -46,7 +45,6 @@ export const env: EnvType = {
     CLIENT_SECRET,
     LOG_LEVEL,
 } as const;
-/* eslint-enable @typescript-eslint/naming-convention */
 
-let message = styleText(['black', 'bgWhite'], 'NODE_ENV:');
+const message = styleText(['black', 'bgWhite'], 'NODE_ENV:');
 console.log(`${message} ${NODE_ENV}`);

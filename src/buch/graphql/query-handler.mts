@@ -13,23 +13,23 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-import { GraphQLError } from 'graphql';
-import { container } from '../../container.mts';
-import { getLogger } from '../../logger/logger.mts';
+import {
+    type Buch,
+    type ID,
+    SuchParameterInput,
+    toBuchType,
+    toSuchparameter,
+} from './types.mts';
 import {
     type BuchMitTitel,
     type BuchMitTitelUndAbbildungen,
 } from '../service/buch-service.mts';
+import { GraphQLError } from 'graphql';
 import { NotFoundError } from '../service/errors.mts';
-import { createPageable } from '../service/pageable.mts';
 import { type Slice } from '../service/slice.mts';
-import {
-    SuchParameterInput,
-    toBuchType,
-    toSuchparameter,
-    type Buch,
-    type ID,
-} from './types.mts';
+import { container } from '../../container.mts';
+import { createPageable } from '../service/pageable.mts';
+import { getLogger } from '../../logger/logger.mts';
 
 const logger = getLogger('query-handler', 'file');
 
@@ -58,7 +58,7 @@ export const buchHandler = async (id: ID) => {
             });
         }
 
-        const message = (err as Error).message;
+        const { message } = err as Error;
         throw new GraphQLError(message, {
             extensions: {
                 code: 'INTERNAL_SERVER_ERROR',
@@ -93,7 +93,7 @@ export const buecherHandler = async (
             });
         }
 
-        const message = (err as Error).message;
+        const { message } = err as Error;
         throw new GraphQLError(message, {
             extensions: {
                 code: 'INTERNAL_SERVER_ERROR',

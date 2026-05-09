@@ -21,11 +21,7 @@ import { Hono } from 'hono';
  */
 export const router = new Hono();
 
-router.get('/liveness', (c) => {
-    return c.json({ status: 'up' });
-});
+router.get('/liveness', (c) => c.json({ status: 'up' }));
 
-router.get('/readiness', (c) => {
-    // TODO "SELECT 1" mit Prisma
-    return c.json({ status: 'up' });
-});
+// TODO "SELECT 1" mit Prisma
+router.get('/readiness', (c) => c.json({ status: 'up' }));

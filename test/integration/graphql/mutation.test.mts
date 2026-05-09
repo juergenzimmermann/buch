@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-non-null-assertion */
+// oxlint-disable max-lines, max-lines-per-function
 // Copyright (C) 2016 - present Juergen Zimmermann, Hochschule Karlsruhe
 //
 // This program is free software: you can redistribute it and/or modify
@@ -14,7 +14,6 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-import { beforeAll, describe, expect, test } from 'vitest';
 import {
     ACCEPT,
     APPLICATION_JSON,
@@ -25,8 +24,9 @@ import {
     POST,
     graphqlURL,
 } from '../constants.mts';
-import { type GraphQLQuery } from './graphql.mts';
+import { beforeAll, describe, expect, test } from 'vitest';
 import { ErrorsType } from './query.test.mts';
+import { type GraphQLQuery } from './graphql.mts';
 import { getToken } from './token.mts';
 
 // -----------------------------------------------------------------------------
@@ -486,4 +486,3 @@ describe('GraphQL Mutations', () => {
         expect(extensions.code).toBe('FORBIDDEN');
     });
 });
-/* eslint-enable @typescript-eslint/no-non-null-assertion */

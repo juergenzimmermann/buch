@@ -1,3 +1,4 @@
+// oxlint-disable max-lines-per-function
 // Copyright (C) 2025 - present Juergen Zimmermann, Hochschule Karlsruhe
 //
 // This program is free software: you can redistribute it and/or modify
@@ -13,8 +14,8 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-import { beforeAll, describe, expect, test } from 'vitest';
 import { AUTHORIZATION, BEARER, DELETE, restURL } from '../constants.mts';
+import { beforeAll, describe, expect, test } from 'vitest';
 import { getToken } from '../token.mts';
 
 // -----------------------------------------------------------------------------

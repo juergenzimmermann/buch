@@ -20,8 +20,8 @@
  * @packageDocumentation
  */
 
-import type pino from 'pino';
 import { parentLogger } from '../config/logger.mts';
+import type pino from 'pino';
 
 /**
  * Eine Funktion, um ein Logger-Objekt von `Pino` zu erzeugen, so dass ein
@@ -38,7 +38,6 @@ export const getLogger: (
 ) => pino.Logger<string> = (context: string, kind = 'class') => {
     const bindings: Record<string, string> = {};
     // "indexed access" auf eine Property, deren Name als Wert im Argument "kind" uebergeben wird
-    // eslint-disable-next-line security/detect-object-injection
     bindings[kind] = context;
     // https://getpino.io/#/docs/child-loggers
     return parentLogger.child(bindings);

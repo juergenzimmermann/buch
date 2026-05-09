@@ -20,9 +20,9 @@
 
 import { Hono } from 'hono';
 import { container } from '../../container.mts';
-import { getLogger } from '../../logger/logger.mts';
-import { createPageable } from '../service/pageable.mts';
 import { createPage } from './page.mts';
+import { createPageable } from '../service/pageable.mts';
+import { getLogger } from '../../logger/logger.mts';
 
 const { buchService } = container;
 
@@ -44,7 +44,7 @@ router.get('/:id', async (c) => {
     // https://hono.dev/docs/api/request
     // "Optional Chaining" und "Nullish Coaleshing"
     const accept = req.header('Accept')?.toLowerCase() ?? '*/*';
-    if (!/(json|html)/.test(accept)) {
+    if (accept !== '*/*' && !/(json|html)/u.test(accept)) {
         logger.debug('get: Accept=%s', accept);
         // https://hono.dev/docs/api/context#body
         // Not Acceptable
@@ -86,14 +86,15 @@ router.get('/:id', async (c) => {
 router.get('/', async (c) => {
     const { req } = c;
     const accept = req.header('Accept')?.toLowerCase() ?? '*/*';
-    if (accept !== '*/*' && !/(json|html)/.test(accept)) {
+    if (accept !== '*/*' && !/(json|html)/u.test(accept)) {
         logger.debug('get: Accept=%s', accept);
         return c.body(null, 406);
     }
 
     const queryParams = req.query();
+    logger.debug('get: queryParams=%o', queryParams);
     const countOnly = queryParams['count-only'];
-    if (countOnly !== undefined) {
+    if (typeof countOnly !== 'undefined') {
         const count = await buchService.count();
         logger.debug('get: count=%d', count);
         return c.json({ count });
@@ -128,7 +129,7 @@ router.get('/file/:id', async (c) => {
     }
 
     const buchFile = await buchService.findFileByBuchId(idNumber);
-    if (buchFile === undefined) {
+    if (typeof buchFile === 'undefined') {
         return c.notFound();
     }
 

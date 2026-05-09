@@ -26,6 +26,7 @@ export type Page<T> = {
     };
 };
 
+// oxlint-disable-next-line func-style
 export function createPage<T>(slice: Slice<T>, pageable: Pageable): Page<T> {
     const { content, totalElements } = slice;
     const { size, number } = pageable;

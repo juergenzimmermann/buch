@@ -18,8 +18,8 @@
  * @packageDocumentation
  */
 
-import type { HonoRequest } from 'hono';
 import { BuchService } from '../service/buch-service.mts';
+import { type HonoRequest } from 'hono';
 
 export const createBaseUrl: (req: HonoRequest) => string = (
     req: HonoRequest,

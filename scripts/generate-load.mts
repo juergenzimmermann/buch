@@ -1,4 +1,5 @@
 #!/usr/bin/env bun
+// oxlint-disable no-magic-numbers
 // Copyright (C) 2024 - present, Juergen Zimmermann, Hochschule Karlsruhe
 //
 // This program is free software: you can redistribute it and/or modify
@@ -17,12 +18,9 @@
 // Aufruf:   bun scripts/generate-load.mts
 
 import { env } from 'node:process';
+import { setTimeout as sleep } from 'node:timers/promises';
 
 const SLEEP_IN_MILLIS = 50;
-
-const sleep = (millis: number) => {
-    return new Promise((resolve) => setTimeout(resolve, millis));
-};
 
 // selbst-signiertes Zertifikat ignorieren
 // https://github.com/orgs/nodejs/discussions/44038
@@ -52,10 +50,10 @@ for (let index = 1; ; index++) {
     const url = `https://localhost:3000/rest/${id}`;
 
     // https://nodejs.org/dist/latest-v23.x/docs/api/globals.html#fetch
-    const response = await fetch(url, options);
+    const response = await fetch(url, options); // oxlint-disable-line no-await-in-loop
     if (response.status !== 200) {
         console.error(`Fehler bei id=${id}`);
     }
 
-    await sleep(SLEEP_IN_MILLIS);
+    await sleep(SLEEP_IN_MILLIS); // oxlint-disable-line no-await-in-loop
 }

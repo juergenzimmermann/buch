@@ -52,7 +52,7 @@ console.log(`script=${script}`);
 const dataPath = resolve(rootDir, 'Zimmermann', 'dependency-check-data');
 const reportPath = '.';
 
-let options = `--nvdApiKey ${nvdApiKey} --project ${project} `.concat(
+const options = `--nvdApiKey ${nvdApiKey} --project ${project} `.concat(
     `--scan .. --suppression dependency-check-suppression.xml `,
     `--out ${reportPath} --data ${dataPath} `,
     // https://jeremylong.github.io/DependencyCheck/dependency-check-cli/arguments.html
@@ -93,6 +93,7 @@ console.log(`options=${options}`);
 console.log('');
 
 // https://nodejs.org/api/child_process.html#spawning-bat-and-cmd-files-on-windows
+// oxlint-disable-next-line promise/prefer-await-to-callbacks
 exec(`${script} ${options}`, (err, stdout) => {
     if (err) {
         console.error(err);

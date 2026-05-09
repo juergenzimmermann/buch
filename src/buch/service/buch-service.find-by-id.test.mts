@@ -1,3 +1,4 @@
+// oxlint-disable no-magic-numbers
 // Copyright (C) 2025 - present Juergen Zimmermann, Hochschule Karlsruhe
 //
 // This program is free software: you can redistribute it and/or modify
@@ -13,27 +14,31 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-import { beforeEach, describe, expect, test, vi } from 'vitest';
-import { Prisma, PrismaClient } from '../../generated/prisma/client.ts';
-import { Buchart } from '../../generated/prisma/enums.ts';
 import {
     type BuchMitTitelUndAbbildungen,
     BuchService,
 } from './buch-service.mts';
+import { Prisma, PrismaClient } from '../../generated/prisma/client.ts';
+import { beforeEach, describe, expect, test, vi } from 'vitest';
+import { Buchart } from '../../generated/prisma/enums.ts';
 
 // Hoisting: wird an den (Datei-) Anfang verschoben
-const { findUniqueMock } = vi.hoisted(() => ({
-    findUniqueMock: vi.fn<PrismaClient['buch']['findUnique']>(),
-}));
+const { findUniqueMock } = vi.hoisted(() => {
+    return {
+        findUniqueMock: vi.fn<PrismaClient['buch']['findUnique']>(),
+    };
+});
 
 // vi.mock() bewirkt Hoisting
-vi.mock('../../config/prisma-client.mts', () => ({
-    prismaClient: {
-        buch: {
-            findUnique: findUniqueMock,
-        },
-    },
-}));
+vi.mock(import('../../config/prisma-client.mts'), () => {
+    return {
+        prismaClient: {
+            buch: {
+                findUnique: findUniqueMock,
+            },
+        } as unknown as PrismaClient,
+    };
+});
 
 describe('BuchService findById', () => {
     let service: BuchService;

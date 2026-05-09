@@ -14,15 +14,15 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 import { type Context, type HonoRequest, type Next } from 'hono';
-import { createRemoteJWKSet, jwtVerify } from 'jose';
-import { JOSEError } from 'jose/errors';
-import { keycloakConfig } from '../config/keycloak.mts';
-import { getLogger } from '../logger/logger.mts';
 import {
     ForbiddenError,
     InternalServerError,
     UnauthorizedError,
 } from './errors.mts';
+import { createRemoteJWKSet, jwtVerify } from 'jose';
+import { JOSEError } from 'jose/errors';
+import { getLogger } from '../logger/logger.mts';
+import { keycloakConfig } from '../config/keycloak.mts';
 
 const logger = getLogger('roles-required', 'file');
 
@@ -37,7 +37,7 @@ const getToken = (req: HonoRequest) => {
     if (!auth?.startsWith('Bearer ')) {
         throw new UnauthorizedError('Authorization fehlt im Header');
     }
-    const token = auth.slice(7);
+    const token = auth.slice(7); // oxlint-disable-line no-magic-numbers
     logger.debug('getToken: token=%s', token);
     return token;
 };
@@ -85,9 +85,10 @@ const getRollen = (payload: any) => {
  * Prüft den JWT hinsichtlich Audience, Expiration und Rollen.
  * @param roles Rollen als einzelne String-Argumente
  */
-export const rolesRequired = (...roles: Rolle[]) => {
+export const rolesRequired =
+    (...roles: Rolle[]) =>
     // @ts-ignore
-    return async (c: Context, next: Next) => {
+    async (c: Context, next: Next) => {
         const { req } = c;
 
         // Token aus dem Request Header extrahieren
@@ -119,4 +120,3 @@ export const rolesRequired = (...roles: Rolle[]) => {
 
         await next();
     };
-};

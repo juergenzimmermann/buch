@@ -19,17 +19,17 @@
  * @packageDocumentation
  */
 
-import { prismaClient } from '../../config/prisma-client.mts';
 import { type BuchFile, type Prisma } from '../../generated/prisma/client.ts';
-import { getLogger } from '../../logger/logger.mts';
-import { sendmail } from '../../mail/sendmail.mts';
-import { BuchService } from './buch-service.mts';
 import {
     IsbnExistsError,
     NotFoundError,
     VersionInvalidError,
     VersionOutdatedError,
 } from './errors.mts';
+import { BuchService } from './buch-service.mts';
+import { getLogger } from '../../logger/logger.mts';
+import { prismaClient } from '../../config/prisma-client.mts';
+import { sendmail } from '../../mail/sendmail.mts';
 
 export type BuchCreate = Prisma.BuchCreateInput;
 type BuchCreated = Prisma.BuchGetPayload<{
@@ -65,7 +65,6 @@ export class BuchWriteService {
 
     readonly #logger = getLogger(BuchWriteService.name);
 
-    // eslint-disable-next-line max-params
     constructor(readService: BuchService) {
         this.#readService = readService;
     }
@@ -88,7 +87,7 @@ export class BuchWriteService {
                 include: { titel: true, abbildungen: true },
             });
         });
-        await this.#sendmail({
+        await BuchWriteService.#sendmail({
             id: buchDb?.id ?? 'N/A',
             titel: buchDb?.titel?.titel ?? 'N/A',
         });
@@ -106,7 +105,7 @@ export class BuchWriteService {
      * @param type MIME-Typ, z.B. image/png
      * @returns Entity-Objekt für `BuchFile`
      */
-    // eslint-disable-next-line max-params
+    // oxlint-disable-next-line max-params
     async addFile(
         buchId: number,
         data: Buffer,
@@ -175,7 +174,7 @@ export class BuchWriteService {
             buch,
             version,
         );
-        if (id === undefined) {
+        if (typeof id === 'undefined') {
             this.#logger.debug('update: Keine gueltige ID');
             throw new NotFoundError(`Es gibt kein Buch mit der ID ${id}.`);
         }
@@ -227,7 +226,7 @@ export class BuchWriteService {
         isbn,
     }: Prisma.BuchCreateInput): Promise<undefined> {
         this.#logger.debug('#validateCreate: isbn=%s', isbn);
-        if (isbn === undefined) {
+        if (typeof isbn === 'undefined') {
             this.#logger.debug('#validateCreate: ok');
             return;
         }
@@ -240,7 +239,13 @@ export class BuchWriteService {
         this.#logger.debug('#validateCreate: ok');
     }
 
-    async #sendmail({ id, titel }: { id: number | 'N/A'; titel: string }) {
+    static async #sendmail({
+        id,
+        titel,
+    }: {
+        id: number | 'N/A';
+        titel: string;
+    }) {
         const subject = `Neues Buch ${id}`;
         const body = `Das Buch mit dem Titel <strong>${titel}</strong> ist angelegt`;
         await sendmail({ subject, body });

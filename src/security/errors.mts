@@ -1,3 +1,4 @@
+// oxlint-disable max-classes-per-file
 // Copyright (C) 2026 - present Juergen Zimmermann, Hochschule Karlsruhe
 //
 // This program is free software: you can redistribute it and/or modify

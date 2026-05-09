@@ -18,15 +18,15 @@
  * @packageDocumentation
  */
 
-import { prismaClient } from '../../config/prisma-client.mts';
 import { type BuchFile, type Prisma } from '../../generated/prisma/client.ts';
+import { type Suchparameter, suchparameterNamen } from './suchparameter.mts';
 import { type BuchInclude } from '../../generated/prisma/models/Buch.ts';
-import { getLogger } from '../../logger/logger.mts';
 import { NotFoundError } from './errors.mts';
 import { type Pageable } from './pageable.mts';
 import { type Slice } from './slice.mts';
-import { type Suchparameter, suchparameterNamen } from './suchparameter.mts';
 import { buildWhere } from './where-builder.mts';
+import { getLogger } from '../../logger/logger.mts';
+import { prismaClient } from '../../config/prisma-client.mts';
 
 // Typdefinition für `findById`
 type FindByIdParams = {
@@ -153,7 +153,7 @@ export class BuchService {
      * @throws NotFoundError falls keine Bücher gefunden wurden.
      */
     async find(
-        suchparameter: Suchparameter | undefined,
+        suchparameter: Suchparameter | null,
         pageable: Pageable,
     ): Promise<Readonly<Slice<Readonly<BuchMitTitel>>>> {
         this.#logger.debug(
@@ -163,7 +163,7 @@ export class BuchService {
         );
 
         // Keine Suchparameter?
-        if (suchparameter === undefined) {
+        if (suchparameter === null) {
             return await this.#findAll(pageable);
         }
         const keys = Object.keys(suchparameter);
@@ -206,7 +206,9 @@ export class BuchService {
         this.#logger.debug('count: where=%o', where ?? 'undefined');
         const { count } = prismaClient.buch;
         const anzahl =
-            where === undefined ? await count() : await count({ where });
+            typeof where === 'undefined'
+                ? await count()
+                : await count({ where });
         this.#logger.debug('count: %d', anzahl);
         return anzahl;
     }
@@ -267,9 +269,8 @@ export class BuchService {
     #checkEnums(suchparameter: Suchparameter) {
         const { art } = suchparameter;
         this.#logger.debug('#checkEnums: Suchparameter "art=%s"', art);
-        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
         return (
-            art === undefined ||
+            typeof art === 'undefined' ||
             art === 'EPUB' ||
             art === 'HARDCOVER' ||
             art === 'PAPERBACK'

@@ -19,15 +19,14 @@
  * @packageDocumentation
  */
 
-// eslint-disable-next-line max-classes-per-file
+import { createProblemDetails, unauthorized } from '../problem-details.mts';
 import { Hono } from 'hono';
-import { paths } from '../config/paths.mts';
 import { container } from '../container.mts';
 import { getLogger } from '../logger/logger.mts';
-import { createProblemDetails, unauthorized } from '../problem-details.mts';
+import { paths } from '../config/paths.mts';
 
 const logger = getLogger('auth-router', 'file');
-const keycloakService = container.keycloakService;
+const { keycloakService } = container;
 
 /** Entity-Klasse für Token-Daten. */
 export class TokenData {
@@ -46,15 +45,14 @@ export const router = new Hono();
 
 router.post(paths.token, async (c) => {
     const body: Record<string, string> = await c.req.parseBody();
-    const username = body['username'];
-    const password = body['password'];
+    const { username, password } = body;
     logger.debug('post: username=%s', username);
 
     const result = await keycloakService.token({
         username,
         password,
     });
-    if (result === undefined) {
+    if (typeof result === 'undefined') {
         return createProblemDetails(
             c,
             unauthorized,

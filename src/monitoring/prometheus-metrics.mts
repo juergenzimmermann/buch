@@ -1,3 +1,4 @@
+// oxlint-disable no-magic-numbers
 // Copyright (C) 2026 - present Juergen Zimmermann, Hochschule Karlsruhe
 //
 // This program is free software: you can redistribute it and/or modify
@@ -16,8 +17,8 @@
 // https://medium.com/@tiffanyadisuryo/setting-up-a-prometheus-and-grafana-monitoring-system-for-my-bun-js-backend-243c4c3cd29d
 
 import { type Context, type Next } from 'hono';
-import { createMiddleware } from 'hono/factory';
 import { Counter, Histogram, collectDefaultMetrics } from 'prom-client';
+import { createMiddleware } from 'hono/factory';
 
 // Metriken für Prometheus mit Default-Daten konfigurieren
 collectDefaultMetrics();

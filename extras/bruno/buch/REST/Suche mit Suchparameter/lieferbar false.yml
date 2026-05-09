@@ -23,8 +23,8 @@ runtime:
           res.getBody()
             .content
             .forEach(buch => {
-              const { preis, id } = buch;
-              expect(Number(preis)).to.be.lte(70);
+              const { lieferbar, id } = buch;
+              expect(lieferbar).to.be.equal(false);
               expect(id).to.be.above(0);
             });
         });

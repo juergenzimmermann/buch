@@ -18,16 +18,6 @@
  * @packageDocumentation
  */
 
-import { Hono } from 'hono';
-import { File } from 'node:buffer';
-import { container } from '../../container.mts';
-import { getLogger } from '../../logger/logger.mts';
-import {
-    badRequest,
-    createProblemDetails,
-    preconditionRequired,
-} from '../../problem-details.mts';
-import { rolesRequired } from '../../security/roles-required.mts';
 import {
     type BuchCreate,
     type BuchFileCreated,
@@ -35,11 +25,21 @@ import {
 } from '../service/buch-write-service.mts';
 import {
     BuchNeuSchema,
-    BuchUpdateSchema,
     type BuchNeuType,
+    BuchUpdateSchema,
     type BuchUpdateType,
 } from './buch-validation.mts';
+import {
+    badRequest,
+    createProblemDetails,
+    preconditionRequired,
+} from '../../problem-details.mts';
+import { File } from 'node:buffer';
+import { Hono } from 'hono';
+import { container } from '../../container.mts';
 import { createBaseUrl } from './create-base-url.mts';
+import { getLogger } from '../../logger/logger.mts';
+import { rolesRequired } from '../../security/roles-required.mts';
 
 const { buchWriteService } = container;
 
@@ -54,22 +54,6 @@ const logger = getLogger('buch-write-router', 'file');
 // -----------------------------------------------------------------------------
 // N e u a n l e g e n
 // -----------------------------------------------------------------------------
-router.post('/', rolesRequired('admin', 'user'), async (c) => {
-    const requestBody = await c.req.json();
-
-    // Validierung mit Zod: ZodError wird geworfen, falls Validierung nicht erfolgreich
-    const buchDTO: BuchNeuType = BuchNeuSchema.parse(requestBody);
-    logger.debug('post: buchDTO=%o', buchDTO);
-
-    const buch = buchDtoToBuchCreateInput(buchDTO);
-    const id = await buchWriteService.create(buch);
-
-    const location = `${createBaseUrl(c.req)}/${id}`;
-    const { header, body } = c;
-    header('Location', location);
-    return body(null, 201);
-});
-
 const buchDtoToBuchCreateInput = (buchDTO: BuchNeuType): BuchCreate => {
     const abbildungen = buchDTO.abbildungen?.map((abbildungDTO) => {
         const abbildung = {
@@ -100,9 +84,40 @@ const buchDtoToBuchCreateInput = (buchDTO: BuchNeuType): BuchCreate => {
     return buch;
 };
 
+router.post('/', rolesRequired('admin', 'user'), async (c) => {
+    const requestBody = await c.req.json();
+
+    // Validierung mit Zod: ZodError wird geworfen, falls Validierung nicht erfolgreich
+    const buchDTO: BuchNeuType = BuchNeuSchema.parse(requestBody);
+    logger.debug('post: buchDTO=%o', buchDTO);
+
+    const buch = buchDtoToBuchCreateInput(buchDTO);
+    const id = await buchWriteService.create(buch);
+
+    const location = `${createBaseUrl(c.req)}/${id}`;
+    const { header, body } = c;
+    header('Location', location);
+    return body(null, 201);
+});
+
 // -----------------------------------------------------------------------------
 // A e n d e r n
 // -----------------------------------------------------------------------------
+const buchDtoToBuchUpdate = (buchDTO: BuchUpdateType): BuchUpdate => {
+    return {
+        version: 0,
+        isbn: buchDTO.isbn,
+        rating: buchDTO.rating,
+        art: buchDTO.art ?? null,
+        preis: buchDTO.preis,
+        rabatt: buchDTO.rabatt ?? 0,
+        lieferbar: buchDTO.lieferbar ?? false,
+        datum: buchDTO.datum ?? null,
+        homepage: buchDTO.homepage ?? null,
+        schlagwoerter: buchDTO.schlagwoerter ?? [],
+    };
+};
+
 router.put('/:id', rolesRequired('admin', 'user'), async (c) => {
     const { req } = c;
     const id = req.param('id') ?? '-1';
@@ -115,7 +130,7 @@ router.put('/:id', rolesRequired('admin', 'user'), async (c) => {
 
     // https://hono.dev/docs/api/request#header
     const version = req.header('If-Match');
-    if (version === undefined) {
+    if (typeof version === 'undefined') {
         logger.debug('put: version === undefined');
         return createProblemDetails(
             c,
@@ -142,21 +157,6 @@ router.put('/:id', rolesRequired('admin', 'user'), async (c) => {
     };
     return c.body(null, 204, headers);
 });
-
-const buchDtoToBuchUpdate = (buchDTO: BuchUpdateType): BuchUpdate => {
-    return {
-        version: 0,
-        isbn: buchDTO.isbn,
-        rating: buchDTO.rating,
-        art: buchDTO.art ?? null,
-        preis: buchDTO.preis,
-        rabatt: buchDTO.rabatt ?? 0,
-        lieferbar: buchDTO.lieferbar ?? false,
-        datum: buchDTO.datum ?? null,
-        homepage: buchDTO.homepage ?? null,
-        schlagwoerter: buchDTO.schlagwoerter ?? [],
-    };
-};
 
 // -----------------------------------------------------------------------------
 // L o e s c h e n
@@ -191,8 +191,11 @@ router.post('/:id', rolesRequired('admin', 'user'), async (c) => {
     // https://hono.dev/examples/file-upload
     // https://dev.to/aaronksaunders/quick-rest-api-file-upload-with-hono-js-and-drizzle-49ok
     const body = await c.req.parseBody();
-    const file = body['file'];
-    if (file === undefined || (Array.isArray(file) && file.length !== 1)) {
+    const { file } = body;
+    if (
+        typeof file === 'undefined' ||
+        (Array.isArray(file) && file.length !== 1)
+    ) {
         return createProblemDetails(
             c,
             badRequest,

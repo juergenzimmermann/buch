@@ -1,3 +1,4 @@
+// oxlint-disable max-lines-per-function, no-magic-numbers
 // Copyright (C) 2025 - present Juergen Zimmermann, Hochschule Karlsruhe
 //
 // This program is free software: you can redistribute it and/or modify
@@ -13,31 +14,35 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-import { beforeEach, describe, expect, test, vi } from 'vitest';
-import { Prisma, PrismaClient } from '../../generated/prisma/client.ts';
-import { Buchart } from '../../generated/prisma/enums.ts';
 import {
     type BuchMitTitelUndAbbildungen,
     BuchService,
 } from './buch-service.mts';
+import { Prisma, PrismaClient } from '../../generated/prisma/client.ts';
+import { beforeEach, describe, expect, test, vi } from 'vitest';
+import { Buchart } from '../../generated/prisma/enums.ts';
 import { type Pageable } from './pageable.mts';
 import { type Suchparameter } from './suchparameter.mts';
 
 // Hoisting: wird an den (Datei-) Anfang verschoben
-const { findManyMock, countMock } = vi.hoisted(() => ({
-    findManyMock: vi.fn<PrismaClient['buch']['findMany']>(),
-    countMock: vi.fn<PrismaClient['buch']['count']>(),
-}));
+const { findManyMock, countMock } = vi.hoisted(() => {
+    return {
+        findManyMock: vi.fn<PrismaClient['buch']['findMany']>(),
+        countMock: vi.fn<PrismaClient['buch']['count']>(),
+    };
+});
 
 // vi.mock() bewirkt Hoisting
-vi.mock('../../config/prisma-client.mts', () => ({
-    prismaClient: {
-        buch: {
-            findMany: findManyMock,
-            count: countMock,
-        },
-    },
-}));
+vi.mock(import('../../config/prisma-client.mts'), () => {
+    return {
+        prismaClient: {
+            buch: {
+                findMany: findManyMock,
+                count: countMock,
+            },
+        } as unknown as PrismaClient,
+    };
+});
 
 describe('BuchService find', () => {
     let service: BuchService;
@@ -99,7 +104,7 @@ describe('BuchService find', () => {
 
         // when / then
         await expect(service.find(suchparameter, pageable)).rejects.toThrow(
-            /^Keine Buecher gefunden/,
+            /^Keine Buecher gefunden/u,
         );
     });
 });

@@ -1,3 +1,4 @@
+// oxlint-disable max-lines-per-function
 // Copyright (C) 2025 - present Juergen Zimmermann, Hochschule Karlsruhe
 //
 // This program is free software: you can redistribute it and/or modify
@@ -13,9 +14,6 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-import { beforeAll, describe, expect, test } from 'vitest';
-import { type BuchUpdateType } from '../../../src/buch/router/buch-validation.mts';
-import { ProblemDetails } from '../../../src/problem-details.mts';
 import {
     APPLICATION_JSON,
     AUTHORIZATION,
@@ -25,6 +23,9 @@ import {
     PUT,
     restURL,
 } from '../constants.mts';
+import { beforeAll, describe, expect, test } from 'vitest';
+import { type BuchUpdateType } from '../../../src/buch/router/buch-validation.mts';
+import { ProblemDetails } from '../../../src/problem-details.mts';
 import { getToken } from '../token.mts';
 
 // -----------------------------------------------------------------------------
@@ -167,7 +168,7 @@ describe('PUT /rest/:id', () => {
         expect(detail).toBeDefined();
         expect(detail).toHaveLength(expectedPaths.length);
 
-        const paths = detail.map((d: any) => d.path[0]);
+        const paths = detail.map((det: any) => det.path[0]);
 
         expect(paths).toStrictEqual(expect.arrayContaining(expectedPaths));
     });

@@ -27,5 +27,5 @@ import { styleText } from 'node:util';
 // https://nodejs.org/api/esm.html
 // http://2ality.com/2017/11/import-meta.html
 export const resourcesURL = new URL('resources/', import.meta.url);
-let message = styleText(['black', 'bgWhite'], 'resourcesURL:');
+const message = styleText(['black', 'bgWhite'], 'resourcesURL:');
 console.log(`${message} ${resourcesURL}`);

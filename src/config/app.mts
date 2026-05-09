@@ -21,8 +21,8 @@
 // TOML mit Bun einlesen: inkompatibel mit Node
 // https://bun.com/docs/guides/runtime/import-toml
 
-import { readFile } from 'node:fs/promises';
 import { parse } from 'smol-toml';
+import { readFile } from 'node:fs/promises';
 import { resourcesURL } from './resources.mts';
 
 export type AppConfig = Record<

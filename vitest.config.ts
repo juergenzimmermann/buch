@@ -13,13 +13,14 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-import process from 'node:process';
 import { defineConfig } from 'vitest/config';
+import process from 'node:process';
 
 // selbst-signiertes Zertifikat
 process.env['NODE_TLS_REJECT_UNAUTHORIZED'] = '0';
 
 // https://vitest.dev/config
+// oxlint-disable-next-line import/no-default-export
 export default defineConfig({
     test: {
         projects: [
