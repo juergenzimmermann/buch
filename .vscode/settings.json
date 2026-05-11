@@ -32,7 +32,7 @@
     "titleBar.inactiveBackground": "#21573299",
     "titleBar.inactiveForeground": "#e7e7e799"
   },
-  "npm.packageManager": "pnpm",
+  "npm.packageManager": "bun",
   "peacock.color": "#215732",
   "js/ts.experimental.useTsgo": true,
   "asciidoc.antora.showEnableAntoraPrompt": false,
