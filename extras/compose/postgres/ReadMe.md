@@ -93,7 +93,7 @@ der Owner und die Gruppe auf `postgres` gesetzt sowie die Zugriffsrechte auf Okt
     cp -r /tmp/init/* /init
     mkdir /tablespace/buch
     chown -R postgres:postgres /init /tablespace
-    chmod 400 /init/*/sql/* /init/tls/*
+    chmod 400 /init/*/sql/* /init/*/csv/* /init/tls/*
     ls -lR /init
     ls -l /tablespace
     exit
@@ -129,7 +129,8 @@ noch ohne TLS läuft.
 ## Datenbank, Datenbank-User, Schema, Tabellen und Daten anlegen
 
 In der 1. Shell startet man wieder den DB-Server als Docker Container, und zwar
-jetzt mit TLS:
+jetzt mit TLS, d.h. in `compose.yml` muss in der Zeile `command: ...` der Kommentar
+wieder entfernt werden.
 
 ```shell
     docker compose up

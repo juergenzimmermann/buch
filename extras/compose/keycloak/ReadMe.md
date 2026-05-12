@@ -57,14 +57,10 @@ zugegriffen:
     cd extras/compose/postgres
 
     docker compose exec db bash
-        mkdir /tablespace/keycloak
-        chown -R postgres:postgres /tablespace/keycloak
-
         psql --dbname=postgres --username=postgres
             CREATE USER keycloak PASSWORD 'p';
             CREATE DATABASE keycloak;
             GRANT ALL ON DATABASE keycloak TO keycloak;
-            CREATE TABLESPACE keycloakspace OWNER keycloak LOCATION '/tablespace/keycloak';
             \q
 
         psql --dbname=keycloak --username=keycloak
