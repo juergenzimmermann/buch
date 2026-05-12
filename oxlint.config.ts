@@ -249,8 +249,6 @@ export default defineConfig({
         curly: ['error', 'all'],
         'default-case-last': 'error',
         'default-param-last': 'error',
-        // siehe typescript/dot-notation
-        'dot-notation': 'off',
         eqeqeq: 'error',
         'func-name-matching': 'error',
         'func-names': ['error', 'never'],
