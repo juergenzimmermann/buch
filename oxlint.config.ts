@@ -81,9 +81,10 @@ export default defineConfig({
         'typescript/consistent-type-exports': 'error',
         'typescript/consistent-type-imports': 'error',
         'typescript/default-param-last': 'error',
-        'typescript/explicit-function-return-type': 'off',
-        'typescript/explicit-member-accessibility': 'off',
-        'typescript/explicit-module-boundary-types': 'off',
+        'typescript/explicit-member-accessibility': [
+            'error',
+            { accessibility: 'no-public' },
+        ],
         'typescript/no-base-to-string': [
             'error',
             {
@@ -96,7 +97,6 @@ export default defineConfig({
                 ignoreArrowShorthand: true,
             },
         ],
-        //'typescript/no-deprecated': 'error',
         'typescript/no-dupe-class-members': 'error',
         'typescript/no-empty-function': [
             'error',
@@ -154,8 +154,6 @@ export default defineConfig({
                 requireDefaultForNonUnion: true,
             },
         ],
-        // 'typescript/member-ordering': 'error',
-        // 'typescript/method-signature-style': 'error',
         // 'typescript/naming-convention': [
         //     'error',
         //     {
@@ -187,9 +185,6 @@ export default defineConfig({
         //         format: ['PascalCase'],
         //     },
         // ],
-        // 'typescript/no-invalid-this': 'error',
-        // 'typescript/no-unused-private-class-members': 'error',
-        // 'typescript/prefer-destructuring': 'error',
 
         'import/consistent-type-specifier-style': ['error', 'prefer-inline'],
         // https://typescript-eslint.io/troubleshooting/typed-linting/performance#eslint-plugin-import
@@ -217,35 +212,12 @@ export default defineConfig({
         'import/no-unassigned-import': 'error',
         'import/no-relative-parent-imports': 'off',
         'import/prefer-default-export': 'off',
-        // 'import/enforce-node-protocol-usage': ['error', 'always'],
-        // 'import/newline-after-import': 'error',
-        // 'import/no-extraneous-dependencies': 'error',
-        // 'import/no-useless-path-segments': 'error',
 
         'node/global-require': 'error',
         'node/handle-callback-err': 'error',
         'node/no-new-require': 'error',
         'node/no-path-concat': 'error',
         'node/no-process-env': 'error',
-        // 'node/callback-return': ['error', ['next']],
-        // 'node/exports-style': 'error',
-        // 'node/no-callback-literal': 'error',
-        // 'node/no-mixed-requires': 'error',
-        // 'node/no-sync': [
-        //     'error',
-        //     {
-        //         allowAtRootLevel: true,
-        //     },
-        // ],
-        // 'node/prefer-global/buffer': 'error',
-        // 'node/prefer-global/console': 'error',
-        // 'node/prefer-global/process': ['error', 'never'],
-        // 'node/prefer-global/text-decoder': 'error',
-        // 'node/prefer-global/text-encoder': 'error',
-        // 'node/prefer-global/url': 'error',
-        // 'node/prefer-global/url-search-params': 'error',
-        // 'node/prefer-promises/dns': 'error',
-        // 'node/prefer-promises/fs': 'error',
 
         // https://github.com/sindresorhus/eslint-plugin-unicorn/blob/main/configs/recommended.js
         'unicorn/catch-error-name': [
@@ -260,9 +232,6 @@ export default defineConfig({
         'unicorn/no-process-exit': 'off',
         'unicorn/prefer-array-flat-map': 'error',
         'unicorn/prefer-string-replace-all': 'error',
-        // 'unicorn/no-keyword-prefix': 'error',
-        // 'unicorn/no-unused-properties': 'error',
-        // 'unicorn/string-content': 'error',
 
         'promise/no-multiple-resolved': 'error',
         'promise/prefer-catch': 'error',
@@ -403,23 +372,6 @@ export default defineConfig({
         'sort-keys': 'off',
         'symbol-description': 'error',
         yoda: ['error', 'never'],
-
-        // camelcase: 'error',
-        // 'consistent-this': 'error',
-        // 'no-implicit-globals': 'error',
-        // 'no-restricted-syntax': ['error', 'SequenceExpression'],
-        // 'no-undef-init': 'error',
-        // 'no-unreachable-loop': 'error',
-        // 'one-var': ['error', 'never'],
-        // 'prefer-arrow-callback': 'error',
-        // 'prefer-regex-literals': [
-        //     'error',
-        //     {
-        //         disallowRedundantWrapping: true,
-        //     },
-        // ],
-        // 'require-atomic-updates': 'error',
-        // strict: 'error',
 
         '@stylistic/arrow-parens': ['error', 'always'],
         '@stylistic/brace-style': ['error', '1tbs'],
