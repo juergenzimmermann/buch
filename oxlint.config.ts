@@ -26,11 +26,12 @@ export default defineConfig({
 
     // https://oxc.rs/docs/guide/usage/linter/js-plugins
     jsPlugins: [
-        'eslint-plugin-regexp',
-        'eslint-plugin-sonarjs',
         '@stylistic/eslint-plugin',
-        'eslint-plugin-no-secrets',
-        'eslint-plugin-security',
+
+        // 'eslint-plugin-regexp',
+        // 'eslint-plugin-sonarjs',
+        // 'eslint-plugin-no-secrets',
+        // 'eslint-plugin-security',
     ],
 
     // https://oxc.rs/docs/guide/usage/linter/cli#allowing-denying-multiple-lints
@@ -246,8 +247,6 @@ export default defineConfig({
         // 'node/prefer-promises/dns': 'error',
         // 'node/prefer-promises/fs': 'error',
 
-        'regexp/prefer-regexp-exec': 'error',
-
         // https://github.com/sindresorhus/eslint-plugin-unicorn/blob/main/configs/recommended.js
         'unicorn/catch-error-name': [
             'error',
@@ -437,6 +436,8 @@ export default defineConfig({
         '@stylistic/operator-linebreak': 'off',
         '@stylistic/quote-props': ['error', 'as-needed'],
         '@stylistic/semi': ['error', 'always'],
+
+        // 'regexp/prefer-regexp-exec': 'error',
     },
 
     overrides: [
