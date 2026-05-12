@@ -77,6 +77,7 @@ router.get('/:id', async (c) => {
     header('ETag', `"${version}"`);
 
     logger.debug('get: %o', buch);
+    console.log(`x=${buch.preis}`);
     return json(buch);
 });
 

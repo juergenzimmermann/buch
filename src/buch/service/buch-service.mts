@@ -1,3 +1,4 @@
+// oxlint-disable max-lines
 // Copyright (C) 2016 - present Juergen Zimmermann, Hochschule Karlsruhe
 //
 // This program is free software: you can redistribute it and/or modify
@@ -40,12 +41,27 @@ export type BuchMitTitel = Prisma.BuchGetPayload<{
     include: { titel: true };
 }>;
 
+// "preis" und "rabatt" sind vom Prisma-internen Typ "Decimal"
+export type BuchMitTitelDTO = Omit<BuchMitTitel, 'preis' | 'rabatt'> & {
+    preis: number;
+    rabatt: number;
+};
+
 export type BuchMitTitelUndAbbildungen = Prisma.BuchGetPayload<{
     include: {
         titel: true;
         abbildungen: true;
     };
 }>;
+
+// "preis" und "rabatt" sind vom Prisma-internen Typ "Decimal"
+export type BuchMitTitelUndAbbildungenDTO = Omit<
+    BuchMitTitelUndAbbildungen,
+    'preis' | 'rabatt'
+> & {
+    preis: number;
+    rabatt: number;
+};
 
 /**
  * Die Klasse `BuchService` implementiert das Lesen für Bücher und greift
@@ -84,7 +100,7 @@ export class BuchService {
     async findById({
         id,
         mitAbbildungen,
-    }: FindByIdParams): Promise<Readonly<BuchMitTitelUndAbbildungen>> {
+    }: FindByIdParams): Promise<Readonly<BuchMitTitelUndAbbildungenDTO>> {
         this.#logger.debug('findById: id=%d', id);
 
         // Das Resultat ist null, falls kein Datensatz gefunden
@@ -109,8 +125,15 @@ export class BuchService {
         // nullish coalescing operator
         buch.schlagwoerter ??= [];
 
-        this.#logger.debug('findById: buch=%o', buch);
-        return buch;
+        const { preis, rabatt, ...buchRest } = buch;
+        const buchDTO: BuchMitTitelUndAbbildungenDTO = {
+            ...buchRest,
+            preis: preis.toNumber(),
+            rabatt: rabatt.toNumber(),
+        };
+
+        this.#logger.debug('findById: buchDTO=%o', buchDTO);
+        return buchDTO;
     }
 
     /**
@@ -155,7 +178,7 @@ export class BuchService {
     async find(
         suchparameter: Suchparameter | null,
         pageable: Pageable,
-    ): Promise<Readonly<Slice<Readonly<BuchMitTitel>>>> {
+    ): Promise<Readonly<Slice<Readonly<BuchMitTitelDTO>>>> {
         this.#logger.debug(
             'find: suchparameter=%s, pageable=%o',
             JSON.stringify(suchparameter),
@@ -213,7 +236,9 @@ export class BuchService {
         return anzahl;
     }
 
-    async #findAll(pageable: Pageable): Promise<Readonly<Slice<BuchMitTitel>>> {
+    async #findAll(
+        pageable: Pageable,
+    ): Promise<Readonly<Slice<BuchMitTitelDTO>>> {
         const { number, size } = pageable;
         const buecher: BuchMitTitel[] = await prismaClient.buch.findMany({
             skip: number * size,
@@ -231,12 +256,19 @@ export class BuchService {
     #createSlice(
         buecher: BuchMitTitel[],
         totalElements: number,
-    ): Readonly<Slice<BuchMitTitel>> {
-        buecher.forEach((buch) => {
-            buch.schlagwoerter ??= [];
+    ): Readonly<Slice<BuchMitTitelDTO>> {
+        const buecherDTO = buecher.map((buch) => {
+            const { preis, rabatt, ...buchRest } = buch;
+            const buchDTO: BuchMitTitelDTO = {
+                ...buchRest,
+                preis: preis.toNumber(),
+                rabatt: rabatt.toNumber(),
+            };
+            buchDTO.schlagwoerter = buch.schlagwoerter ?? [];
+            return buchDTO;
         });
-        const buchSlice: Slice<BuchMitTitel> = {
-            content: buecher,
+        const buchSlice: Slice<BuchMitTitelDTO> = {
+            content: buecherDTO,
             totalElements,
         };
         this.#logger.debug('createSlice: buchSlice=%o', buchSlice);

@@ -15,6 +15,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 import {
+    type BuchMitTitelDTO,
     type BuchMitTitelUndAbbildungen,
     BuchService,
 } from './buch-service.mts';
@@ -80,6 +81,12 @@ describe('BuchService find', () => {
             },
             abbildungen: [],
         };
+        const { preis, rabatt, ...buchRest } = buchMock;
+        const buchMockDTO: BuchMitTitelDTO = {
+            ...buchRest,
+            preis: preis.toNumber(),
+            rabatt: rabatt.toNumber(),
+        };
         // return von prismaClient.buch.findMany()
         findManyMock.mockResolvedValueOnce([buchMock]);
         // return von prismaClient.buch.count()
@@ -92,7 +99,7 @@ describe('BuchService find', () => {
         const { content } = result;
 
         expect(content).toHaveLength(1);
-        expect(content[0]).toStrictEqual(buchMock);
+        expect(content[0]).toStrictEqual(buchMockDTO);
     });
 
     test('titel nicht vorhanden', async () => {

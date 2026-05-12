@@ -18,7 +18,7 @@ import {
     type BuchCreate,
     type BuchUpdate,
 } from '../service/buch-write-service.mts';
-import { type BuchMitTitelUndAbbildungen } from '../service/buch-service.mts';
+import { type BuchMitTitelUndAbbildungenDTO } from '../service/buch-service.mts';
 import { type Suchparameter } from '../service/suchparameter.mts';
 
 // -----------------------------------------------------------------------------
@@ -176,7 +176,7 @@ export type Buch = {
     rating?: Int;
     art?: 'EPUB' | 'HARDCOVER' | 'PAPERBACK';
     preis: number;
-    rabatt: string;
+    rabatt: number;
     lieferbar: boolean;
     datum?: string | undefined;
     homepage?: string;
@@ -184,15 +184,15 @@ export type Buch = {
     titel: { titel: string; untertitel?: string };
 };
 
-export const toBuchType = (buch: BuchMitTitelUndAbbildungen): Buch => {
+export const toBuchType = (buch: BuchMitTitelUndAbbildungenDTO): Buch => {
     const result: Buch = {
         id: toID(buch.id),
         version: buch.version,
         isbn: buch.isbn,
         rating: toInt(buch.rating),
         art: buch.art ?? 'HARDCOVER',
-        preis: buch.preis.toNumber(),
-        rabatt: buch.rabatt.mul(100).toFixed(2), // oxlint-disable-line no-magic-numbers
+        preis: buch.preis,
+        rabatt: buch.rabatt,
         lieferbar: buch.lieferbar,
         schlagwoerter: [],
         titel: {

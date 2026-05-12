@@ -21,8 +21,8 @@ import {
     toSuchparameter,
 } from './types.mts';
 import {
-    type BuchMitTitel,
-    type BuchMitTitelUndAbbildungen,
+    type BuchMitTitelDTO,
+    type BuchMitTitelUndAbbildungenDTO,
 } from '../service/buch-service.mts';
 import { GraphQLError } from 'graphql';
 import { NotFoundError } from '../service/errors.mts';
@@ -38,7 +38,7 @@ export const buchHandler = async (id: ID) => {
 
     let buch: Buch;
     try {
-        const buchDB: BuchMitTitelUndAbbildungen =
+        const buchDB: BuchMitTitelUndAbbildungenDTO =
             await container.buchService.findById({
                 id: Number.parseInt(id, 10),
             });
@@ -77,7 +77,7 @@ export const buecherHandler = async (
     const pageable = createPageable({});
     const suchparameter = toSuchparameter(input);
 
-    let buecherSlice: Readonly<Slice<Readonly<BuchMitTitel>>>;
+    let buecherSlice: Readonly<Slice<Readonly<BuchMitTitelDTO>>>;
     try {
         buecherSlice = await container.buchService.find(
             suchparameter,
@@ -103,7 +103,7 @@ export const buecherHandler = async (
     logger.debug('buecherHandler: buecherSlice=%o', buecherSlice);
 
     const result = buecherSlice.content.map((buch) =>
-        toBuchType(buch as BuchMitTitelUndAbbildungen),
+        toBuchType(buch as BuchMitTitelUndAbbildungenDTO),
     );
     logger.debug('buecherHandler: result=%o', result);
     return result;

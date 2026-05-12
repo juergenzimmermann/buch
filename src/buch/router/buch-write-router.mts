@@ -130,6 +130,7 @@ router.put('/:id', rolesRequired('admin', 'user'), async (c) => {
 
     // https://hono.dev/docs/api/request#header
     const version = req.header('If-Match');
+    logger.debug('put: version=%s', version);
     if (typeof version === 'undefined') {
         logger.debug('put: version === undefined');
         return createProblemDetails(
@@ -140,6 +141,7 @@ router.put('/:id', rolesRequired('admin', 'user'), async (c) => {
     }
 
     const requestBody = await c.req.json();
+    logger.debug('put: requestBody=%o', requestBody);
 
     // Validierung mit Zod
     const buchDTO: BuchUpdateType = BuchUpdateSchema.parse(requestBody);

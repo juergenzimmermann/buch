@@ -16,6 +16,7 @@
 
 import {
     type BuchMitTitelUndAbbildungen,
+    type BuchMitTitelUndAbbildungenDTO,
     BuchService,
 } from './buch-service.mts';
 import { Prisma, PrismaClient } from '../../generated/prisma/client.ts';
@@ -73,6 +74,12 @@ describe('BuchService findById', () => {
             },
             abbildungen: [],
         };
+        const { preis, rabatt, ...buchRest } = buchMock;
+        const buchMockDTO: BuchMitTitelUndAbbildungenDTO = {
+            ...buchRest,
+            preis: preis.toNumber(),
+            rabatt: rabatt.toNumber(),
+        };
         // return von prismaClient.buch.findUnique()
         findUniqueMock.mockResolvedValueOnce(buchMock);
 
@@ -80,7 +87,7 @@ describe('BuchService findById', () => {
         const buch = await service.findById({ id });
 
         // then
-        expect(buch).toStrictEqual(buchMock);
+        expect(buch).toStrictEqual(buchMockDTO);
     });
 
     test('id nicht vorhanden', async () => {
