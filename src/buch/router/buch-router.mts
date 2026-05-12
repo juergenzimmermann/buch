@@ -71,7 +71,7 @@ router.get('/:id', async (c) => {
         return c.body(null, 304);
     }
 
-    logger.debug('get: version=%d', version ?? -1);
+    logger.debug('get: version=%d', version);
     // https://hono.dev/docs/api/context#header
     const { header, json } = c;
     header('ETag', `"${version}"`);
