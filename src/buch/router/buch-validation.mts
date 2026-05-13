@@ -14,6 +14,13 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 
+// Alternativen zu Zod:
+//      ajv -> JSON schema statt TypeScript-Code
+//      valibot <- Bachelorthesis an der HdM Stuttgart mit Miško Hevery (→ Angular) als Zweitbetreuer
+//      arktype
+//      joi von Hapi
+//      class-validator (ursprüngl. in Nest integriert)
+
 import ISBN from 'isbn3';
 import { z } from 'zod';
 

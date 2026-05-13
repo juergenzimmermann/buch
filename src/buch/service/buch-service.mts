@@ -125,8 +125,10 @@ export class BuchService {
         // nullish coalescing operator
         buch.schlagwoerter ??= [];
 
+        // Rest Properties
         const { preis, rabatt, ...buchRest } = buch;
         const buchDTO: BuchMitTitelUndAbbildungenDTO = {
+            // Spread Properties
             ...buchRest,
             preis: preis.toNumber(),
             rabatt: rabatt.toNumber(),
@@ -258,8 +260,10 @@ export class BuchService {
         totalElements: number,
     ): Readonly<Slice<BuchMitTitelDTO>> {
         const buecherDTO = buecher.map((buch) => {
+            // Rest Properties
             const { preis, rabatt, ...buchRest } = buch;
             const buchDTO: BuchMitTitelDTO = {
+                // Spread Properties
                 ...buchRest,
                 preis: preis.toNumber(),
                 rabatt: rabatt.toNumber(),
