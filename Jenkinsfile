@@ -125,8 +125,8 @@ pipeline {
         stage('Compile') {
             steps {
                 sh '''
-                    bun tsc --version
-                    bun run tsc
+                    bun tsgo --version
+                    bun run tsgo
                 '''
             }
         }
@@ -138,10 +138,10 @@ pipeline {
                         echo 'TODO: Rechnername/IP-Adresse des DB-Servers fuer Tests konfigurieren'
                         //sh 'npm run test:coverage'
                     },
-                    'ESLint': {
+                    'Lint': {
                         sh '''
-                            bun eslint --version
-                            bun run eslint
+                            bun lint --version
+                            bun run lint
                         '''
                     },
                     'Security Audit': {
