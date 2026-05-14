@@ -33,7 +33,7 @@ export const getToken = async (username: string, password: string) => {
     const body = (await response.json()) as { access_token: string };
     if (
         response.status !== 200 ||
-        typeof body.access_token === 'undefined' ||
+        body.access_token === undefined ||
         typeof body.access_token !== 'string'
     ) {
         console.error(`!!!username=${username}, password=${password}`);

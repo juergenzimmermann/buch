@@ -337,6 +337,11 @@ export default defineConfig({
         'no-template-curly-in-string': 'error',
         'no-ternary': 'off',
         'no-throw-literal': 'error',
+        // https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/no-typeof-undefined.md
+        // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/typeof
+        // https://github.com/SonarSource/SonarJS/blob/master/packages/analysis/src/jsts/rules/README.md S7741
+        // https://oxc.rs/docs/guide/usage/linter/rules/eslint/no-undefined.html
+        'no-undefined': 'off',
         'no-underscore-dangle': 'error',
         'no-unmodified-loop-condition': 'error',
         'no-unneeded-ternary': 'error',

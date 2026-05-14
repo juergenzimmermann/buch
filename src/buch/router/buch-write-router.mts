@@ -131,7 +131,7 @@ router.put('/:id', rolesRequired('admin', 'user'), async (c) => {
     // https://hono.dev/docs/api/request#header
     const version = req.header('If-Match');
     logger.debug('put: version=%s', version);
-    if (typeof version === 'undefined') {
+    if (version === undefined) {
         logger.debug('put: version === undefined');
         return createProblemDetails(
             c,
@@ -194,10 +194,7 @@ router.post('/:id', rolesRequired('admin', 'user'), async (c) => {
     // https://dev.to/aaronksaunders/quick-rest-api-file-upload-with-hono-js-and-drizzle-49ok
     const body = await c.req.parseBody();
     const { file } = body;
-    if (
-        typeof file === 'undefined' ||
-        (Array.isArray(file) && file.length !== 1)
-    ) {
+    if (file === undefined || (Array.isArray(file) && file.length !== 1)) {
         return createProblemDetails(
             c,
             badRequest,

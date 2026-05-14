@@ -37,9 +37,7 @@ if (typeof log?.dir !== 'string') {
 }
 
 const logDir: string | null =
-    typeof (log?.dir as string | undefined) === 'undefined'
-        ? null
-        : log.dir.trimEnd();
+    (log?.dir as string | undefined) === undefined ? null : log.dir.trimEnd();
 const logFile =
     logDir === null ? logFileDefault : resolve(logDir, logFileNameDefault);
 const pretty = log?.pretty === true;
@@ -52,9 +50,9 @@ const pretty = log?.pretty === true;
 
 export type LogLevel = 'error' | 'warn' | 'info' | 'debug';
 let logLevelTmp: LogLevel = 'info';
-if (typeof env.LOG_LEVEL !== 'undefined') {
+if (env.LOG_LEVEL !== undefined) {
     logLevelTmp = env.LOG_LEVEL as LogLevel;
-} else if (typeof log?.level !== 'undefined') {
+} else if (log?.level !== undefined) {
     logLevelTmp = log?.level as LogLevel;
 }
 export const logLevel = logLevelTmp;

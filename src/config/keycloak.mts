@@ -28,26 +28,22 @@ const { keycloak } = config;
 
 if (typeof keycloak === 'object') {
     if (
-        (typeof keycloak.schema !== 'undefined' &&
+        (keycloak.schema !== undefined &&
             typeof keycloak.schema !== 'string') ||
-        (typeof keycloak.port !== 'undefined' &&
-            typeof keycloak.port !== 'number')
+        (keycloak.port !== undefined && typeof keycloak.port !== 'number')
     ) {
         console.error('!!!keycloak=%j', keycloak);
         throw new TypeError(
             'Die Konfiguration für Keycloak (Schema und Port) ist falsch',
         );
     }
-    if (
-        typeof keycloak.realm !== 'undefined' &&
-        typeof keycloak.realm !== 'string'
-    ) {
+    if (keycloak.realm !== undefined && typeof keycloak.realm !== 'string') {
         throw new TypeError(
             'Der konfigurierte Realm-Name für Keycloak ist kein String',
         );
     }
     if (
-        typeof keycloak.clientId !== 'undefined' &&
+        keycloak.clientId !== undefined &&
         typeof keycloak.clientId !== 'string'
     ) {
         throw new TypeError(

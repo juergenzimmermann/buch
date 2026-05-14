@@ -185,7 +185,7 @@ export const tokenHandler = async ({
 }) => {
     logger.debug('tokenHandler: username=%s', username);
     const token = await keycloakService.token({ username, password });
-    if (typeof token === 'undefined') {
+    if (token === undefined) {
         throw new GraphQLError('Fehler bei username und/oder Passwort', {
             extensions: {
                 code: 'BAD_USER_INPUT',

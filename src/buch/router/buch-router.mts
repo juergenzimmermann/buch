@@ -95,7 +95,7 @@ router.get('/', async (c) => {
     const queryParams = req.query();
     logger.debug('get: queryParams=%o', queryParams);
     const countOnly = queryParams['count-only'];
-    if (typeof countOnly !== 'undefined') {
+    if (countOnly !== undefined) {
         const count = await buchService.count();
         logger.debug('get: count=%d', count);
         return c.json({ count });
@@ -130,7 +130,7 @@ router.get('/file/:id', async (c) => {
     }
 
     const buchFile = await buchService.findFileByBuchId(idNumber);
-    if (typeof buchFile === 'undefined') {
+    if (buchFile === undefined) {
         return c.notFound();
     }
 

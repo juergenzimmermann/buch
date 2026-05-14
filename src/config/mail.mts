@@ -25,8 +25,7 @@ import { getLogger } from '../logger/logger.mts';
 const logger = getLogger('config/mail', 'file');
 const { mail } = config;
 
-const activated =
-    typeof mail?.activated === 'undefined' || mail?.activated === true;
+const activated = mail?.activated === undefined || mail?.activated === true;
 
 if (typeof mail === 'object') {
     if (Object.hasOwn(mail, 'host') && typeof mail.host !== 'string') {

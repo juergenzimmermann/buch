@@ -52,7 +52,7 @@ router.post(paths.token, async (c) => {
         username,
         password,
     });
-    if (typeof result === 'undefined') {
+    if (result === undefined) {
         return createProblemDetails(
             c,
             unauthorized,

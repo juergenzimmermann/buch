@@ -41,9 +41,7 @@ export const toInt = (num: number): Int =>
     (Number.isInteger(num) ? num : Math.round(num)) as Int;
 export const toNumber = (id: ID): number => Number.parseInt(id, 10);
 const toDateOrNull = (dateStr?: string | null): Date | null =>
-    typeof dateStr === 'undefined' || dateStr === null
-        ? null
-        : new Date(dateStr);
+    dateStr === undefined || dateStr === null ? null : new Date(dateStr);
 
 // -----------------------------------------------------------------------------
 // G r a p h Q L   S c h e m a
@@ -224,25 +222,25 @@ export type SuchParameterInput = {
 };
 
 export const toSuchparameter = (param?: SuchParameterInput) => {
-    if (typeof param === 'undefined') {
+    if (param === undefined) {
         return null;
     }
 
     const { titel, isbn, rating, art, lieferbar } = param;
     const suchparameter: Record<string, any> = {};
-    if (typeof titel !== 'undefined') {
+    if (titel !== undefined) {
         suchparameter['titel'] = titel;
     }
-    if (typeof isbn !== 'undefined') {
+    if (isbn !== undefined) {
         suchparameter['isbn'] = isbn;
     }
-    if (typeof rating !== 'undefined') {
+    if (rating !== undefined) {
         suchparameter['rating'] = rating;
     }
-    if (typeof art !== 'undefined') {
+    if (art !== undefined) {
         suchparameter['art'] = art;
     }
-    if (typeof lieferbar !== 'undefined') {
+    if (lieferbar !== undefined) {
         // Boole'scher Wert bei GraphQL-Query
         // String bei Query-Parameter bei REST
         suchparameter['lieferbar'] = lieferbar.toString();

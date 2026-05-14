@@ -174,7 +174,7 @@ export class BuchWriteService {
             buch,
             version,
         );
-        if (typeof id === 'undefined') {
+        if (id === undefined) {
             this.#logger.debug('update: Keine gueltige ID');
             throw new NotFoundError(`Es gibt kein Buch mit der ID ${id}.`);
         }
@@ -226,7 +226,7 @@ export class BuchWriteService {
         isbn,
     }: Prisma.BuchCreateInput): Promise<undefined> {
         this.#logger.debug('#validateCreate: isbn=%s', isbn);
-        if (typeof isbn === 'undefined') {
+        if (isbn === undefined) {
             this.#logger.debug('#validateCreate: ok');
             return;
         }

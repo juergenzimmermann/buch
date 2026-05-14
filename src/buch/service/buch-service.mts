@@ -231,9 +231,7 @@ export class BuchService {
         this.#logger.debug('count: where=%o', where ?? 'undefined');
         const { count } = prismaClient.buch;
         const anzahl =
-            typeof where === 'undefined'
-                ? await count()
-                : await count({ where });
+            where === undefined ? await count() : await count({ where });
         this.#logger.debug('count: %d', anzahl);
         return anzahl;
     }
@@ -306,7 +304,7 @@ export class BuchService {
         const { art } = suchparameter;
         this.#logger.debug('#checkEnums: Suchparameter "art=%s"', art);
         return (
-            typeof art === 'undefined' ||
+            art === undefined ||
             art === 'EPUB' ||
             art === 'HARDCOVER' ||
             art === 'PAPERBACK'

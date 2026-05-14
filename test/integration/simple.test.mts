@@ -20,10 +20,10 @@ import { describe, expect, test } from 'vitest';
 // -----------------------------------------------------------------------------
 describe('simple', () => {
     test('true === true', () => {
-        expect(true).toBe(true);
+        expect(true).toBe(true); // NOSONAR
     });
 
     test.todo('noch nicht fertig', () => {
-        expect(true).toBe(false);
+        expect(true).toBe(false); // NOSONAR
     });
 });
