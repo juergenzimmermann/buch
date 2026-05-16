@@ -24,7 +24,7 @@ import { JOSEError } from 'jose/errors';
 import { getLogger } from '../logger/logger.mts';
 import { keycloakConfig } from '../config/keycloak.mts';
 
-const logger = getLogger('roles-required', 'file');
+const logger = getLogger('security/roles-required');
 
 type Rolle = 'admin' | 'user';
 

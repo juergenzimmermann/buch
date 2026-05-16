@@ -21,7 +21,7 @@ import { keycloakConfig } from '../../config/keycloak.mts';
 
 const { issuer, jwksUri, clientId, audience } = keycloakConfig;
 const jwks = createRemoteJWKSet(new URL(jwksUri));
-const logger = getLogger('graphql/roles-required', 'file');
+const logger = getLogger('graphql/roles-required');
 
 // Token aus dem Request Header extrahieren
 const getToken = (headers: Headers) => {

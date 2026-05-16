@@ -17,7 +17,7 @@
 import {
     type BuchMitTitelDTO,
     type BuchMitTitelUndAbbildungen,
-    BuchService,
+    find,
 } from './buch-service.mts';
 import { Prisma, PrismaClient } from '../../generated/prisma/client.ts';
 import { beforeEach, describe, expect, test, vi } from 'vitest';
@@ -45,11 +45,8 @@ vi.mock(import('../../config/prisma-client.mts'), () => {
     };
 });
 
-describe('BuchService find', () => {
-    let service: BuchService;
-
+describe('buch-service: find', () => {
     beforeEach(() => {
-        service = new BuchService();
         findManyMock.mockReset();
         countMock.mockReset();
     });
@@ -93,7 +90,7 @@ describe('BuchService find', () => {
         countMock.mockResolvedValueOnce(1);
 
         // when
-        const result = await service.find(suchparameter, pageable);
+        const result = await find(suchparameter, pageable);
 
         // then
         const { content } = result;
@@ -110,7 +107,7 @@ describe('BuchService find', () => {
         findManyMock.mockResolvedValue([]);
 
         // when / then
-        await expect(service.find(suchparameter, pageable)).rejects.toThrow(
+        await expect(find(suchparameter, pageable)).rejects.toThrow(
             /^Keine Buecher gefunden/u,
         );
     });

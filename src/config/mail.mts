@@ -21,8 +21,6 @@
 import { type Options } from 'nodemailer/lib/smtp-transport/index.js';
 import { config } from './app.mts';
 import { getLogger } from '../logger/logger.mts';
-
-const logger = getLogger('config/mail', 'file');
 const { mail } = config;
 
 const activated = mail?.activated === undefined || mail?.activated === true;
@@ -79,4 +77,5 @@ export const mailConfig: MailConfig = {
 };
 
 Object.freeze(options);
+const logger = getLogger('config/mail');
 logger.debug('mailConfig = %o', mailConfig);

@@ -21,12 +21,9 @@
 
 import { createProblemDetails, unauthorized } from '../problem-details.mts';
 import { Hono } from 'hono';
-import { container } from '../container.mts';
 import { getLogger } from '../logger/logger.mts';
 import { paths } from '../config/paths.mts';
-
-const logger = getLogger('auth-router', 'file');
-const { keycloakService } = container;
+import { token } from './keycloak-service.mts';
 
 /** Entity-Klasse für Token-Daten. */
 export class TokenData {
@@ -43,12 +40,13 @@ export class TokenData {
  */
 export const router = new Hono();
 
+const logger = getLogger('auth-router/post', 'func');
 router.post(paths.token, async (c) => {
     const body: Record<string, string> = await c.req.parseBody();
     const { username, password } = body;
     logger.debug('post: username=%s', username);
 
-    const result = await keycloakService.token({
+    const result = await token({
         username,
         password,
     });

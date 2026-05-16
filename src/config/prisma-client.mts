@@ -26,7 +26,7 @@ import { styleText } from 'node:util';
  * @packageDocumentation
  */
 
-const logger = getLogger('prisma-client', 'file');
+const logger = getLogger('prisma-client');
 
 // PrismaClient passend zur Umgebungsvariable DATABASE_URL in ".env"
 // d.h. mit PostgreSQL-User "buch" und Schema "buch"

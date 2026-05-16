@@ -30,13 +30,13 @@ import {
     BuchNeuSchema,
     BuchUpdateGraphQLSchema,
 } from '../router/buch-validation.mts';
+import { create, deleteFn, update } from '../service/buch-write-service.mts';
 import { GraphQLError } from 'graphql';
 import { NotFoundError } from '../service/errors.mts';
-import { container } from '../../container.mts';
 import { getLogger } from '../../logger/logger.mts';
+import { token } from '../../security/keycloak-service.mts';
 
-const logger = getLogger('mutation-handler', 'file');
-const { buchWriteService, keycloakService } = container;
+const logger = getLogger('mutation-handler');
 
 // -----------------------------------------------------------------------------
 // N e u a n l e g e n
@@ -86,7 +86,7 @@ export const createHandler = async (
 
     const buchCreate = toCreate(input);
     logger.debug('createHandler: buchCreate=%o', buchCreate);
-    const id = await buchWriteService.create(buchCreate);
+    const id = await create(buchCreate);
 
     logger.debug('createHandler: id=%d', id);
     return { id: toID(id) };
@@ -143,7 +143,7 @@ export const updateHandler = async (
 
     let version: number | undefined;
     try {
-        version = await buchWriteService.update({
+        version = await update({
             id: toNumber(input.id),
             buch: buchUpdate,
             version: `"${input.version}"`,
@@ -168,7 +168,7 @@ export const updateHandler = async (
 // -----------------------------------------------------------------------------
 export const deleteHandler = async (id: ID) => {
     logger.debug('deleteHandler: id=%s', id);
-    const success = await buchWriteService.delete(toNumber(id));
+    const success = await deleteFn(toNumber(id));
     const payload: DeletePayload = { success };
     return payload;
 };
@@ -184,14 +184,14 @@ export const tokenHandler = async ({
     password: string;
 }) => {
     logger.debug('tokenHandler: username=%s', username);
-    const token = await keycloakService.token({ username, password });
-    if (token === undefined) {
+    const tokenResult = await token({ username, password });
+    if (tokenResult === undefined) {
         throw new GraphQLError('Fehler bei username und/oder Passwort', {
             extensions: {
                 code: 'BAD_USER_INPUT',
             },
         });
     }
-    logger.debug('tokenHandler: token=%o', token);
-    return token;
+    logger.debug('tokenHandler: tokenResult=%o', tokenResult);
+    return tokenResult;
 };

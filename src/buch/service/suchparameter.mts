@@ -14,7 +14,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 /**
- * Das Modul besteht aus Typdefinitionen für die Suche in `BuchService`.
+ * Das Modul besteht aus Typdefinitionen für die Suche in `buch-service.mts`.
  * @packageDocumentation
  */
 

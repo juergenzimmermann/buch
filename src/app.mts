@@ -55,7 +55,7 @@ import { trackMetrics } from './monitoring/prometheus-metrics.mts';
  */
 export const app = new Hono();
 
-const logger = getLogger('app', 'file');
+const logger = getLogger('app');
 
 // -----------------------------------------------------------------------------
 // M i d d l e w a r e

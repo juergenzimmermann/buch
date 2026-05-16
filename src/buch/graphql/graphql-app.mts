@@ -39,7 +39,7 @@ import { Hono } from 'hono';
 import { getLogger } from '../../logger/logger.mts';
 import { rolesRequired } from './roles-required.mts';
 
-const logger = getLogger('query-handler', 'file');
+const logger = getLogger('query-handler');
 type GraphqlContext = {
     request: Request;
 };

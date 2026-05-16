@@ -23,25 +23,25 @@ import {
 import {
     type BuchMitTitelDTO,
     type BuchMitTitelUndAbbildungenDTO,
+    find,
+    findById,
 } from '../service/buch-service.mts';
 import { GraphQLError } from 'graphql';
 import { NotFoundError } from '../service/errors.mts';
 import { type Slice } from '../service/slice.mts';
-import { container } from '../../container.mts';
 import { createPageable } from '../service/pageable.mts';
 import { getLogger } from '../../logger/logger.mts';
 
-const logger = getLogger('query-handler', 'file');
+const logger = getLogger('query-handler');
 
 export const buchHandler = async (id: ID) => {
     logger.debug('buchHandler: id=%s', id);
 
     let buch: Buch;
     try {
-        const buchDB: BuchMitTitelUndAbbildungenDTO =
-            await container.buchService.findById({
-                id: Number.parseInt(id, 10),
-            });
+        const buchDB: BuchMitTitelUndAbbildungenDTO = await findById({
+            id: Number.parseInt(id, 10),
+        });
         buch = toBuchType(buchDB);
     } catch (err) {
         if (err instanceof NotFoundError) {
@@ -79,10 +79,7 @@ export const buecherHandler = async (
 
     let buecherSlice: Readonly<Slice<Readonly<BuchMitTitelDTO>>>;
     try {
-        buecherSlice = await container.buchService.find(
-            suchparameter,
-            pageable,
-        );
+        buecherSlice = await find(suchparameter, pageable);
     } catch (err) {
         if (err instanceof NotFoundError) {
             logger.debug('Keine Buecher gefunden.');

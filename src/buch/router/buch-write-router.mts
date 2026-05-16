@@ -22,6 +22,10 @@ import {
     type BuchCreate,
     type BuchFileCreated,
     type BuchUpdate,
+    addFile,
+    create,
+    deleteFn,
+    update,
 } from '../service/buch-write-service.mts';
 import {
     BuchNeuSchema,
@@ -36,12 +40,9 @@ import {
 } from '../../problem-details.mts';
 import { File } from 'node:buffer';
 import { Hono } from 'hono';
-import { container } from '../../container.mts';
 import { createBaseUrl } from './create-base-url.mts';
 import { getLogger } from '../../logger/logger.mts';
 import { rolesRequired } from '../../security/roles-required.mts';
-
-const { buchWriteService } = container;
 
 /**
  * Router für die Verwaltung von Bücher.
@@ -49,7 +50,7 @@ const { buchWriteService } = container;
  */
 export const router = new Hono();
 
-const logger = getLogger('buch-write-router', 'file');
+const logger = getLogger('buch-write-router');
 
 // -----------------------------------------------------------------------------
 // N e u a n l e g e n
@@ -92,7 +93,7 @@ router.post('/', rolesRequired('admin', 'user'), async (c) => {
     logger.debug('post: buchDTO=%o', buchDTO);
 
     const buch = buchDtoToBuchCreateInput(buchDTO);
-    const id = await buchWriteService.create(buch);
+    const id = await create(buch);
 
     const location = `${createBaseUrl(c.req)}/${id}`;
     const { header, body } = c;
@@ -148,7 +149,7 @@ router.put('/:id', rolesRequired('admin', 'user'), async (c) => {
     logger.debug('put: buchDTO=%o', buchDTO);
 
     const buch = buchDtoToBuchUpdate(buchDTO);
-    const neueVersion = await buchWriteService.update({
+    const neueVersion = await update({
         id: idNumber,
         buch,
         version,
@@ -172,7 +173,7 @@ router.delete('/:id', rolesRequired('admin'), async (c) => {
         return body(null, 204);
     }
 
-    await buchWriteService.delete(idNumber);
+    await deleteFn(idNumber);
     return body(null, 204);
 });
 
@@ -212,8 +213,13 @@ router.post('/:id', rolesRequired('admin', 'user'), async (c) => {
     const { name, size, type } = file;
     logger.debug('upload: name=%s, size=%d, type=%s', name, size, type);
     const buffer = Buffer.from(await file.arrayBuffer());
-    const buchFile: BuchFileCreated | undefined =
-        await buchWriteService.addFile(idNumber, buffer, name, size, type);
+    const buchFile: BuchFileCreated | undefined = await addFile(
+        idNumber,
+        buffer,
+        name,
+        size,
+        type,
+    );
     logger.debug(
         'upload: id=%s, byteLength=%s, filename=%s, mimetype=%s',
         buchFile?.id,

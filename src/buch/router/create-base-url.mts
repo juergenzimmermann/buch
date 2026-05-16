@@ -18,8 +18,9 @@
  * @packageDocumentation
  */
 
-import { BuchService } from '../service/buch-service.mts';
 import { type HonoRequest } from 'hono';
+
+export const idPattern = /^[1-9]\d{0,10}$/u;
 
 export const createBaseUrl: (req: HonoRequest) => string = (
     req: HonoRequest,
@@ -32,7 +33,7 @@ export const createBaseUrl: (req: HonoRequest) => string = (
     const indexLastSlash = baseUrl.lastIndexOf('/');
     if (indexLastSlash > 0) {
         const idStr = baseUrl.slice(indexLastSlash + 1);
-        if (BuchService.ID_PATTERN.test(idStr)) {
+        if (idPattern.test(idStr)) {
             baseUrl = baseUrl.slice(0, indexLastSlash);
         }
     }

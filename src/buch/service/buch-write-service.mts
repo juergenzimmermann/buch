@@ -14,8 +14,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 /**
- * Das Modul besteht aus der Klasse {@linkcode BuchWriteService} für die
- * Schreiboperationen im Anwendungskern.
+ * Das Modul besteht aus Funktionen für die Schreiboperationen mit Büchern.
  * @packageDocumentation
  */
 
@@ -26,7 +25,7 @@ import {
     VersionInvalidError,
     VersionOutdatedError,
 } from './errors.mts';
-import { BuchService } from './buch-service.mts';
+import { findById } from './buch-service.mts';
 import { getLogger } from '../../logger/logger.mts';
 import { prismaClient } from '../../config/prisma-client.mts';
 import { sendmail } from '../../mail/sendmail.mts';
@@ -54,219 +53,203 @@ type BuchUpdated = Prisma.BuchGetPayload<{}>;
 type BuchFileCreate = Prisma.BuchFileUncheckedCreateInput;
 export type BuchFileCreated = Prisma.BuchFileGetPayload<{}>;
 
+const VERSION_PATTERN = /^"\d{1,3}"/u;
+
+const logger = getLogger('buch-write-service');
+
+// =============================================================================
+// C R E A T E
+// =============================================================================
+const validateCreate = async ({
+    isbn,
+}: Prisma.BuchCreateInput): Promise<undefined> => {
+    logger.debug('#validateCreate: isbn=%s', isbn);
+    if (isbn === undefined) {
+        logger.debug('#validateCreate: ok');
+        return;
+    }
+
+    const anzahl = await prismaClient.buch.count({ where: { isbn } });
+    if (anzahl > 0) {
+        logger.debug('#validateCreate: isbn existiert: %s', isbn);
+        throw new IsbnExistsError(isbn);
+    }
+    logger.debug('#validateCreate: ok');
+};
+
+const sendmailFn = async ({
+    id,
+    titel,
+}: {
+    id: number | 'N/A';
+    titel: string;
+}) => {
+    const subject = `Neues Buch ${id}`;
+    const body = `Das Buch mit dem Titel <strong>${titel}</strong> ist angelegt`;
+
+    await sendmail({ subject, body });
+};
+
 /**
- * Die Klasse `BuchWriteService` implementiert den Anwendungskern für das
- * Schreiben von Bücher und greift mit _Prisma_ auf die DB zu.
+ * Ein neues Buch soll angelegt werden.
+ * @param buch Das neu abzulegende Buch
+ * @returns Die ID des neu angelegten Buches
+ * @throws IsbnExists falls die ISBN-Nummer bereits existiert
  */
-export class BuchWriteService {
-    private static readonly VERSION_PATTERN = /^"\d{1,3}"/u;
+export const create = async (buch: BuchCreate) => {
+    logger.debug('create: buch=%o', buch);
+    await validateCreate(buch);
 
-    readonly #readService: BuchService;
-
-    readonly #logger = getLogger(BuchWriteService.name);
-
-    constructor(readService: BuchService) {
-        this.#readService = readService;
-    }
-
-    /**
-     * Ein neues Buch soll angelegt werden.
-     * @param buch Das neu abzulegende Buch
-     * @returns Die ID des neu angelegten Buches
-     * @throws IsbnExists falls die ISBN-Nummer bereits existiert
-     */
-    async create(buch: BuchCreate) {
-        this.#logger.debug('create: buch=%o', buch);
-        await this.#validateCreate(buch);
-
-        // Neuer Datensatz mit generierter ID
-        let buchDb: BuchCreated | undefined;
-        await prismaClient.$transaction(async (tx) => {
-            buchDb = await tx.buch.create({
-                data: buch,
-                include: { titel: true, abbildungen: true },
-            });
+    // Neuer Datensatz mit generierter ID
+    let buchDb: BuchCreated | undefined;
+    await prismaClient.$transaction(async (tx) => {
+        buchDb = await tx.buch.create({
+            data: buch,
+            include: { titel: true, abbildungen: true },
         });
-        await BuchWriteService.#sendmail({
-            id: buchDb?.id ?? 'N/A',
-            titel: buchDb?.titel?.titel ?? 'N/A',
-        });
+    });
+    await sendmailFn({
+        id: buchDb?.id ?? 'N/A',
+        titel: buchDb?.titel?.titel ?? 'N/A',
+    });
 
-        this.#logger.debug('create: buchDb.id=%s', buchDb?.id);
-        return buchDb?.id ?? Number.NaN;
-    }
+    logger.debug('create: buchDb.id=%s', buchDb?.id);
+    return buchDb?.id ?? Number.NaN;
+};
 
-    /**
-     * Zu einem vorhandenen Buch eine Binärdatei mit z.B. einem Bild abspeichern.
-     * @param buchId ID des vorhandenen Buches
-     * @param data Bytes der Datei als Buffer Node
-     * @param name Dateiname
-     * @param size Dateigröße in Bytes
-     * @param type MIME-Typ, z.B. image/png
-     * @returns Entity-Objekt für `BuchFile`
-     */
-    // oxlint-disable-next-line max-params
-    async addFile(
-        buchId: number,
-        data: Buffer,
-        name: string,
-        size: number,
-        type: string,
-    ): Promise<Readonly<BuchFile> | undefined> {
-        this.#logger.debug(
-            'addFile: buchId=%d, filename=%s, size=%d',
-            buchId,
-            name,
-            size,
-        );
+/**
+ * Zu einem vorhandenen Buch eine Binärdatei mit z.B. einem Bild abspeichern.
+ * @param buchId ID des vorhandenen Buches
+ * @param data Bytes der Datei als Buffer Node
+ * @param name Dateiname
+ * @param size Dateigröße in Bytes
+ * @param type MIME-Typ, z.B. image/png
+ * @returns Entity-Objekt für `BuchFile`
+ */
+// oxlint-disable-next-line max-params
+export const addFile = async (
+    buchId: number,
+    data: Buffer,
+    name: string,
+    size: number,
+    type: string,
+): Promise<Readonly<BuchFile> | undefined> => {
+    logger.debug(
+        'addFile: buchId=%d, filename=%s, size=%d',
+        buchId,
+        name,
+        size,
+    );
 
-        // TODO Dateigroesse pruefen
+    // TODO Dateigroesse pruefen
 
-        let buchFileCreated: BuchFileCreated | undefined;
-        await prismaClient.$transaction(async (tx) => {
-            // Buch ermitteln, falls vorhanden
-            const buch = await tx.buch.findUnique({
-                where: { id: buchId },
-            });
-            if (buch === null) {
-                this.#logger.debug('Es gibt kein Buch mit der ID %d', buchId);
-                throw new NotFoundError(
-                    `Es gibt kein Buch mit der ID ${buchId}.`,
-                );
-            }
-
-            // evtl. vorhandene Datei löschen
-            await tx.buchFile.deleteMany({ where: { buchId } });
-
-            const buchFile: BuchFileCreate = {
-                filename: name,
-                data: data as Uint8Array<ArrayBuffer>,
-                mimetype: type,
-                buchId,
-            };
-            buchFileCreated = await tx.buchFile.create({ data: buchFile });
-        });
-
-        this.#logger.debug(
-            'addFile: id=%s, byteLength=%s, filename=%s, mimetype=%s',
-            buchFileCreated?.id,
-            buchFileCreated?.data.byteLength,
-            buchFileCreated?.filename,
-            buchFileCreated?.mimetype,
-        );
-        return buchFileCreated;
-    }
-
-    /**
-     * Ein vorhandenes Buch soll aktualisiert werden. "Destructured" Argument
-     * mit id (ID des zu aktualisierenden Buchs), buch (zu aktualisierendes Buch)
-     * und version (Versionsnummer für optimistische Synchronisation).
-     * @returns Die neue Versionsnummer gemäß optimistischer Synchronisation
-     * @throws NotFoundException falls kein Buch zur ID vorhanden ist
-     * @throws VersionInvalidException falls die Versionsnummer ungültig ist
-     * @throws VersionOutdatedException falls die Versionsnummer veraltet ist
-     */
-    // https://2ality.com/2015/01/es6-destructuring.html#simulating-named-parameters-in-javascript
-    async update({ id, buch, version }: UpdateParams) {
-        this.#logger.debug(
-            'update: id=%s, buch=%o, version=%s',
-            id,
-            buch,
-            version,
-        );
-        if (id === undefined) {
-            this.#logger.debug('update: Keine gueltige ID');
-            throw new NotFoundError(`Es gibt kein Buch mit der ID ${id}.`);
-        }
-
-        await this.#validateUpdate(id, version);
-
-        buch.version = { increment: 1 };
-        let buchUpdated: BuchUpdated | undefined;
-        await prismaClient.$transaction(async (tx) => {
-            buchUpdated = await tx.buch.update({
-                data: buch,
-                where: { id },
-            });
-        });
-        this.#logger.debug(
-            'update: buchUpdated=%s',
-            JSON.stringify(buchUpdated),
-        );
-
-        return buchUpdated?.version ?? Number.NaN;
-    }
-
-    /**
-     * Ein Buch wird asynchron anhand seiner ID gelöscht.
-     *
-     * @param id ID des zu löschenden Buches
-     * @returns true, falls das Buch vorhanden war und gelöscht wurde. Sonst false.
-     */
-    async delete(id: number) {
-        this.#logger.debug('delete: id=%d', id);
-
-        const buch = await prismaClient.buch.findUnique({
-            where: { id },
+    let buchFileCreated: BuchFileCreated | undefined;
+    await prismaClient.$transaction(async (tx) => {
+        // Buch ermitteln, falls vorhanden
+        const buch = await tx.buch.findUnique({
+            where: { id: buchId },
         });
         if (buch === null) {
-            this.#logger.debug('delete: not found');
-            return false;
+            logger.debug('Es gibt kein Buch mit der ID %d', buchId);
+            throw new NotFoundError(`Es gibt kein Buch mit der ID ${buchId}.`);
         }
 
-        await prismaClient.$transaction(async (tx) => {
-            await tx.buch.delete({ where: { id } });
+        // evtl. vorhandene Datei löschen
+        await tx.buchFile.deleteMany({ where: { buchId } });
+
+        const buchFile: BuchFileCreate = {
+            filename: name,
+            data: data as Uint8Array<ArrayBuffer>,
+            mimetype: type,
+            buchId,
+        };
+        buchFileCreated = await tx.buchFile.create({ data: buchFile });
+    });
+
+    logger.debug(
+        'addFile: id=%s, byteLength=%s, filename=%s, mimetype=%s',
+        buchFileCreated?.id,
+        buchFileCreated?.data.byteLength,
+        buchFileCreated?.filename,
+        buchFileCreated?.mimetype,
+    );
+    return buchFileCreated;
+};
+
+// =============================================================================
+// U P D A T E
+// =============================================================================
+const validateUpdate = async (id: number, versionStr: string) => {
+    logger.debug('#validateUpdate: id=%d, versionStr=%s', id, versionStr);
+    if (!VERSION_PATTERN.test(versionStr)) {
+        throw new VersionInvalidError(versionStr);
+    }
+
+    const version = Number.parseInt(versionStr.slice(1, -1), 10);
+    const buchDb = await findById({ id });
+
+    if (version < buchDb.version) {
+        logger.debug('#validateUpdate: versionDb=%d', version);
+        throw new VersionOutdatedError(version);
+    }
+};
+
+/**
+ * Ein vorhandenes Buch soll aktualisiert werden. "Destructured" Argument
+ * mit id (ID des zu aktualisierenden Buchs), buch (zu aktualisierendes Buch)
+ * und version (Versionsnummer für optimistische Synchronisation).
+ * @returns Die neue Versionsnummer gemäß optimistischer Synchronisation
+ * @throws NotFoundException falls kein Buch zur ID vorhanden ist
+ * @throws VersionInvalidException falls die Versionsnummer ungültig ist
+ * @throws VersionOutdatedException falls die Versionsnummer veraltet ist
+ */
+// https://2ality.com/2015/01/es6-destructuring.html#simulating-named-parameters-in-javascript
+export const update = async ({ id, buch, version }: UpdateParams) => {
+    logger.debug('update: id=%s, buch=%o, version=%s', id, buch, version);
+    if (id === undefined) {
+        logger.debug('update: Keine gueltige ID');
+        throw new NotFoundError(`Es gibt kein Buch mit der ID ${id}.`);
+    }
+
+    await validateUpdate(id, version);
+
+    buch.version = { increment: 1 };
+    let buchUpdated: BuchUpdated | undefined;
+    await prismaClient.$transaction(async (tx) => {
+        buchUpdated = await tx.buch.update({
+            data: buch,
+            where: { id },
         });
+    });
+    logger.debug('update: buchUpdated=%s', JSON.stringify(buchUpdated));
 
-        this.#logger.debug('delete');
-        return true;
+    return buchUpdated?.version ?? Number.NaN;
+};
+
+// =============================================================================
+// D E L E T E
+// =============================================================================
+/**
+ * Ein Buch wird asynchron anhand seiner ID gelöscht.
+ *
+ * @param id ID des zu löschenden Buches
+ * @returns true, falls das Buch vorhanden war und gelöscht wurde. Sonst false.
+ */
+export const deleteFn = async (id: number) => {
+    logger.debug('delete: id=%d', id);
+
+    const buch = await prismaClient.buch.findUnique({
+        where: { id },
+    });
+    if (buch === null) {
+        logger.debug('delete: not found');
+        return false;
     }
 
-    async #validateCreate({
-        isbn,
-    }: Prisma.BuchCreateInput): Promise<undefined> {
-        this.#logger.debug('#validateCreate: isbn=%s', isbn);
-        if (isbn === undefined) {
-            this.#logger.debug('#validateCreate: ok');
-            return;
-        }
+    await prismaClient.$transaction(async (tx) => {
+        await tx.buch.delete({ where: { id } });
+    });
 
-        const anzahl = await prismaClient.buch.count({ where: { isbn } });
-        if (anzahl > 0) {
-            this.#logger.debug('#validateCreate: isbn existiert: %s', isbn);
-            throw new IsbnExistsError(isbn);
-        }
-        this.#logger.debug('#validateCreate: ok');
-    }
-
-    static async #sendmail({
-        id,
-        titel,
-    }: {
-        id: number | 'N/A';
-        titel: string;
-    }) {
-        const subject = `Neues Buch ${id}`;
-        const body = `Das Buch mit dem Titel <strong>${titel}</strong> ist angelegt`;
-        await sendmail({ subject, body });
-    }
-
-    async #validateUpdate(id: number, versionStr: string) {
-        this.#logger.debug(
-            '#validateUpdate: id=%d, versionStr=%s',
-            id,
-            versionStr,
-        );
-        if (!BuchWriteService.VERSION_PATTERN.test(versionStr)) {
-            throw new VersionInvalidError(versionStr);
-        }
-
-        const version = Number.parseInt(versionStr.slice(1, -1), 10);
-        const buchDb = await this.#readService.findById({ id });
-
-        if (version < buchDb.version) {
-            this.#logger.debug('#validateUpdate: versionDb=%d', version);
-            throw new VersionOutdatedError(version);
-        }
-    }
-}
+    logger.debug('delete');
+    return true;
+};

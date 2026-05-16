@@ -19,7 +19,7 @@
  */
 
 import { Hono } from 'hono';
-import { container } from '../../container.mts';
+import { populate } from './db-populate.mts';
 import { rolesRequired } from '../../security/roles-required.mts';
 
 /**
@@ -29,7 +29,7 @@ import { rolesRequired } from '../../security/roles-required.mts';
 export const router = new Hono();
 
 router.post('/db_populate', rolesRequired('admin'), async (c) => {
-    await container.dbPopulateService.populate();
+    await populate();
     const success = {
         db_populate: 'ok',
     };

@@ -18,13 +18,16 @@
  * @packageDocumentation
  */
 
+import {
+    find,
+    findById,
+    findFileByBuchId,
+    getCount,
+} from '../service/buch-service.mts';
 import { Hono } from 'hono';
-import { container } from '../../container.mts';
 import { createPage } from './page.mts';
 import { createPageable } from '../service/pageable.mts';
 import { getLogger } from '../../logger/logger.mts';
-
-const { buchService } = container;
 
 /**
  * Router für die Verwaltung von Bücher.
@@ -32,7 +35,7 @@ const { buchService } = container;
  */
 export const router = new Hono();
 
-const logger = getLogger('buch-router', 'file');
+const logger = getLogger('buch-router');
 
 // -----------------------------------------------------------------------------
 // S u c h e   m i t   P f a d - P a r a m e t e r
@@ -59,7 +62,7 @@ router.get('/:id', async (c) => {
         return c.notFound();
     }
 
-    const buch = await buchService.findById({ id: idNumber });
+    const buch = await findById({ id: idNumber });
 
     // ETags
     // https://hono.dev/docs/api/request#header
@@ -96,7 +99,7 @@ router.get('/', async (c) => {
     logger.debug('get: queryParams=%o', queryParams);
     const countOnly = queryParams['count-only'];
     if (countOnly !== undefined) {
-        const count = await buchService.count();
+        const count = await getCount();
         logger.debug('get: count=%d', count);
         return c.json({ count });
     }
@@ -112,7 +115,7 @@ router.get('/', async (c) => {
     );
 
     const pageable = createPageable({ number: page, size });
-    const buecherSlice = await buchService.find(queryParams, pageable); // NOSONAR
+    const buecherSlice = await find(queryParams, pageable); // NOSONAR
     const buchPage = createPage(buecherSlice, pageable);
     logger.debug('get: buchPage=%o', buchPage);
     return c.json(buchPage);
@@ -129,7 +132,7 @@ router.get('/file/:id', async (c) => {
         return c.notFound();
     }
 
-    const buchFile = await buchService.findFileByBuchId(idNumber);
+    const buchFile = await findFileByBuchId(idNumber);
     if (buchFile === undefined) {
         return c.notFound();
     }

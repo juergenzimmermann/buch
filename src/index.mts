@@ -17,8 +17,8 @@ import { connectDB, disconnectDB } from './config/prisma-client.mts';
 import Bun from 'bun';
 import { app } from './app.mts';
 import { banner } from './logger/banner.mts';
-import { container } from './container.mts';
 import { env } from './config/env.mts';
+import { populate } from './config/dev/db-populate.mts';
 import process from 'node:process';
 import { serverConfig } from './config/server.mts';
 
@@ -35,7 +35,7 @@ if (NODE_ENV === 'development' || NODE_ENV === 'test') {
 const { fetch } = app;
 const { port, portHttp, key, cert } = serverConfig;
 
-await container.dbPopulateService.populate();
+await populate();
 await connectDB();
 
 // fetch: Request-Handler fuer den Bun-Server mit Signatur gemaess Fetch-API von ES2015

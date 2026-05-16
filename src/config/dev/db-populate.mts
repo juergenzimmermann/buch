@@ -28,72 +28,68 @@ import process from 'node:process';
 import { readFile } from 'node:fs/promises';
 import { resourcesURL } from '../resources.mts';
 
+const activated = config.db?.populate === true;
+
+const dbURL = new URL('postgresql/', resourcesURL);
+
+// PrismaClient fuer DB "buch" (siehe Umgebungsvariable DATABASE_URL in ".env")
+// d.h. mit PostgreSQL-User "buch" und Schema "buch"
+// aber OHNE Logging der Queries
+const prisma: PrismaClient = new PrismaClient({
+    adapter,
+    errorFormat: 'pretty',
+});
+
+const adapterAdmin = new PrismaPg({
+    connectionString: process.env['DATABASE_URL_ADMIN'],
+});
+const prismaAdmin: PrismaClient = new PrismaClient({
+    adapter: adapterAdmin,
+    errorFormat: 'pretty',
+});
+
+const logger = getLogger('populate', 'func');
+
 /**
  * Die Test-DB wird im Development-Modus neu geladen, nachdem die Module
  * initialisiert sind, was durch `OnApplicationBootstrap` realisiert wird.
  */
-export class DbPopulateService {
-    readonly #dbPopulate = config.db?.populate === true;
+/**
+ * Initialisierung durch DI mit `DataSource` für SQL-Queries.
+ */
 
-    readonly #dbURL = new URL('postgresql/', resourcesURL);
-
-    readonly #prisma: PrismaClient;
-
-    readonly #prismaAdmin: PrismaClient;
-
-    readonly #logger = getLogger(DbPopulateService.name);
-
-    /**
-     * Initialisierung durch DI mit `DataSource` für SQL-Queries.
-     */
-    constructor() {
-        // PrismaClient fuer DB "buch" (siehe Umgebungsvariable DATABASE_URL in ".env")
-        // d.h. mit PostgreSQL-User "buch" und Schema "buch"
-        // aber OHNE Logging der Queries
-        this.#prisma = new PrismaClient({ adapter, errorFormat: 'pretty' });
-
-        const adapterAdmin = new PrismaPg({
-            connectionString: process.env['DATABASE_URL_ADMIN'],
-        });
-        this.#prismaAdmin = new PrismaClient({
-            adapter: adapterAdmin,
-            errorFormat: 'pretty',
-        });
+export const populate = async () => {
+    if (!activated) {
+        return;
     }
 
-    async populate() {
-        if (!this.#dbPopulate) {
-            return;
-        }
+    // Bei "TypedSQL" von Prisma ist nur 1 SQL-Anweisung pro Datei moeglich
+    // https://www.prisma.io/typedsql
+    const dropScript = new URL('drop-table.sql', dbURL);
+    logger.debug('dropScript = %s', dropScript);
+    // https://nodejs.org/api/fs.html#fspromisesreadfilepath-options
+    const dropStatements = await readFile(dropScript, 'utf8');
 
-        // Bei TypedSQL ist nur 1 SQL-Anweisung pro Datei moeglich
-        // https://www.prisma.io/typedsql
-        const dropScript = new URL('drop-table.sql', this.#dbURL);
-        this.#logger.debug('dropScript = %s', dropScript);
-        // https://nodejs.org/api/fs.html#fspromisesreadfilepath-options
-        const dropStatements = await readFile(dropScript, 'utf8');
+    const createScript = new URL('create-table.sql', dbURL);
+    logger.debug('createScript = %s', createScript);
+    const createStatements = await readFile(createScript, 'utf8');
 
-        const createScript = new URL('create-table.sql', this.#dbURL);
-        this.#logger.debug('createScript = %s', createScript);
-        const createStatements = await readFile(createScript, 'utf8');
+    const copyScript = new URL('copy-csv.sql', dbURL);
+    logger.debug('copyScript = %s', copyScript);
+    const copyStatements = await readFile(copyScript, 'utf8');
 
-        const copyScript = new URL('copy-csv.sql', this.#dbURL);
-        this.#logger.debug('copyScript = %s', copyScript);
-        const copyStatements = await readFile(copyScript, 'utf8');
+    await prisma.$connect();
+    await prisma.$transaction(async (tx) => {
+        await tx.$executeRawUnsafe(dropStatements);
+        await tx.$executeRawUnsafe(createStatements);
+    });
+    await prisma.$disconnect();
 
-        await this.#prisma.$connect();
-        await this.#prisma.$transaction(async (tx) => {
-            await tx.$executeRawUnsafe(dropStatements);
-            await tx.$executeRawUnsafe(createStatements);
-        });
-        await this.#prisma.$disconnect();
-
-        // COPY zum Laden von CSV-Dateien erfordert Administrationsrechte
-        // https://www.postgresql.org/docs/current/sql-copy.html
-        await this.#prismaAdmin.$connect();
-        await this.#prismaAdmin.$transaction(async (tx) => {
-            await tx.$executeRawUnsafe(copyStatements);
-        });
-        await this.#prismaAdmin.$disconnect();
-    }
-}
+    // COPY zum Laden von CSV-Dateien erfordert Administrationsrechte
+    // https://www.postgresql.org/docs/current/sql-copy.html
+    await prismaAdmin.$connect();
+    await prismaAdmin.$transaction(async (tx) => {
+        await tx.$executeRawUnsafe(copyStatements);
+    });
+    await prismaAdmin.$disconnect();
+};

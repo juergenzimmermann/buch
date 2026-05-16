@@ -25,9 +25,9 @@ import {
 } from '../constants.mts';
 import { beforeAll, describe, expect, test } from 'vitest';
 import { type BuchNeuType } from '../../../src/buch/router/buch-validation.mts';
-import { BuchService } from '../../../src/buch/service/buch-service.mts';
 import { ProblemDetails } from '../../../src/problem-details.mts';
 import { getToken } from '../token.mts';
+import { idPattern } from '../../../src/buch/router/create-base-url.mts';
 
 // -----------------------------------------------------------------------------
 // T e s t d a t e n
@@ -128,7 +128,7 @@ describe('POST /rest', () => {
         const idStr = location?.slice(indexLastSlash + 1);
 
         expect(idStr).toBeDefined();
-        expect(BuchService.ID_PATTERN.test(idStr ?? '')).toBe(true);
+        expect(idPattern.test(idStr ?? '')).toBe(true);
     });
 
     test('Neues Buch mit ungueltigen Daten', async () => {

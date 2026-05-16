@@ -22,8 +22,6 @@ import { config } from './app.mts';
 import { env } from './env.mts';
 import { getLogger } from '../logger/logger.mts';
 
-const logger = getLogger('config/keycloak', 'file');
-
 const { keycloak } = config;
 
 if (typeof keycloak === 'object') {
@@ -82,6 +80,8 @@ export const keycloakConfig = {
         CLIENT_SECRET ??
         'ERROR: Umgebungsvariable CLIENT_SECRET nicht gesetzt!',
 };
+
+const logger = getLogger('config/keycloak');
 
 if (NODE_ENV === 'development') {
     logger.debug('keycloakConfig = %o', keycloakConfig);

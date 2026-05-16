@@ -28,7 +28,7 @@ import { hostname } from 'node:os';
 import { readFile } from 'node:fs/promises';
 import { resourcesURL } from './resources.mts';
 
-const logger = getLogger('config/server', 'file');
+const logger = getLogger('config/server');
 
 const { NODE_ENV } = env;
 

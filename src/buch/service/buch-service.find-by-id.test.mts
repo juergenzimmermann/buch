@@ -17,7 +17,7 @@
 import {
     type BuchMitTitelUndAbbildungen,
     type BuchMitTitelUndAbbildungenDTO,
-    BuchService,
+    findById,
 } from './buch-service.mts';
 import { Prisma, PrismaClient } from '../../generated/prisma/client.ts';
 import { beforeEach, describe, expect, test, vi } from 'vitest';
@@ -41,11 +41,8 @@ vi.mock(import('../../config/prisma-client.mts'), () => {
     };
 });
 
-describe('BuchService findById', () => {
-    let service: BuchService;
-
+describe('buch-service: findById', () => {
     beforeEach(() => {
-        service = new BuchService();
         findUniqueMock.mockReset();
     });
 
@@ -84,7 +81,7 @@ describe('BuchService findById', () => {
         findUniqueMock.mockResolvedValueOnce(buchMock);
 
         // when
-        const buch = await service.findById({ id });
+        const buch = await findById({ id });
 
         // then
         expect(buch).toStrictEqual(buchMockDTO);
@@ -96,7 +93,7 @@ describe('BuchService findById', () => {
         findUniqueMock.mockResolvedValue(null);
 
         // when / then
-        await expect(service.findById({ id })).rejects.toThrow(
+        await expect(findById({ id })).rejects.toThrow(
             `Es gibt kein Buch mit der ID ${id}.`,
         );
     });

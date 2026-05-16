@@ -35,7 +35,7 @@ import type pino from 'pino';
 export const getLogger: (
     context: string,
     kind?: string,
-) => pino.Logger<string> = (context: string, kind = 'class') => {
+) => pino.Logger<string> = (context: string, kind = 'file') => {
     const bindings: Record<string, string> = {};
     // "indexed access" auf eine Property, deren Name als Wert im Argument "kind" uebergeben wird
     bindings[kind] = context;

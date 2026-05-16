@@ -1,4 +1,3 @@
-// oxlint-disable max-lines-per-function
 // oxlint-disable no-magic-numbers
 // Copyright (C) 2025 - present Juergen Zimmermann, Hochschule Karlsruhe
 //
@@ -15,10 +14,9 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-import { type BuchCreate, BuchWriteService } from './buch-write-service.mts';
+import { type BuchCreate, create } from './buch-write-service.mts';
 import { Prisma, PrismaClient } from '../../generated/prisma/client.ts';
 import { beforeEach, describe, expect, test, vi } from 'vitest';
-import { BuchService } from './buch-service.mts';
 import { Buchart } from '../../generated/prisma/enums.ts';
 
 // Hoisting: wird an den (Datei-) Anfang verschoben
@@ -53,13 +51,7 @@ vi.mock(import('../../mail/sendmail.mts'), () => {
 });
 
 describe('BuchWriteService create', () => {
-    let service: BuchWriteService;
-    let readService: BuchService;
-
     beforeEach(() => {
-        readService = new BuchService();
-        service = new BuchWriteService(readService);
-
         createMock.mockReset();
         countMock.mockReset();
         transactionMock.mockReset();
@@ -110,7 +102,7 @@ describe('BuchWriteService create', () => {
         sendmailMock.mockResolvedValue(null);
 
         // when
-        const id = await service.create(buch);
+        const id = await create(buch);
 
         // then
         expect(id).toBe(idMock);
