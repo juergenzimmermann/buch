@@ -111,7 +111,7 @@ Docker-Container gestartet
 
 ```shell
     # in der 1. Shell
-    docker compose up db
+    docker compose up
 ```
 
 Nachdem in der ersten Shell der Server erfolgreich gestartet und initialisiert
@@ -122,7 +122,7 @@ noch ohne TLS läuft.
 
 ```shell
     # in der 2. Shell
-    docker compose exec db bash -c 'cp /init/tls/* /var/lib/postgresql/18/data'
+    docker compose exec postgres bash -c 'cp /init/tls/* /var/lib/postgresql/18/data'
     docker compose down
 ```
 
@@ -143,7 +143,7 @@ Tabellen angelegt und mit Testdaten aus den CSV-Dateien aus dem Verzeichnis
 `/init/buch/csv` im Named Volume `pg_init` gefüllt.
 
 ```shell
-    docker compose exec db bash
+    docker compose exec postgres bash
         psql --dbname=postgres --username=postgres --file=/init/buch/sql/create-db.sql
         psql --dbname=buch --username=buch --file=/init/buch/sql/create-schema.sql
 
@@ -172,7 +172,7 @@ Zunächst muss natürlich der PostgreSQL-Server gestartet sein:
 Danach kann man in einer zweiten Shell `psql`, d.h. das CLI von PostgreSQL, aufrufen:
 
 ```shell
-    docker compose exec db bash -c 'psql --dbname=postgres --username=postgres'
+    docker compose exec postgres bash -c 'psql --dbname=postgres --username=postgres'
         -- absoluter Dateiname fuer i.a. postgresql.conf
         SHOW config_file;
 
