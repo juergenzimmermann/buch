@@ -20,6 +20,7 @@
 //      arktype
 //      joi von Hapi
 //      class-validator (ursprüngl. in Nest integriert)
+//      ata-validator (evtl. in Node und Bun integriert)
 
 import ISBN from 'isbn3';
 import { z } from 'zod';
