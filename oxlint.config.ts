@@ -197,6 +197,7 @@ export default defineConfig({
         'import/named': 'off',
         // https://typescript-eslint.io/troubleshooting/typed-linting/performance#eslint-plugin-import
         'import/namespace': 'off',
+        //'import/newline-after-import': ['error', { exactCount: true }],
         'import/no-absolute-path': 'error',
         'import/no-commonjs': 'error',
         'import/no-default-export': 'error',
