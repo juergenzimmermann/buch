@@ -22,7 +22,6 @@
 > Diese Datei ist in Markdown geschrieben und kann mit `<Strg><Shift>v` in
 > Visual Studio Code leicht gelesen werden. Näheres zu Markdown gibt es z.B. bei
 > [Markdown Guide](https://www.markdownguide.org/).
-> Wenn _Bun_ installiert ist, kann man die Datei auch mit `bun ReadMe.md` lesen.
 > Die Anleitung ist für _Windows 11_; für _andere Betriebssysteme_ oder
 > _Windows-Emulationen_ sind Anpassungen notwendig.
 
@@ -45,7 +44,7 @@
   - [Oxfmt](#oxfmt)
   - [SonarQube](#sonarqube)
 - [Sicherheitslücken](#sicherheitslücken)
-  - [bun audit](#bun-audit)
+  - [pnpm audit](#pnpm-audit)
   - [OWASP Dependency Check](#owasp-dependency-check)
   - [Docker Scout](#docker-scout)
 - [OpenAPI](#openapi)
@@ -80,9 +79,9 @@ zusätzlich die aktuelle Upload-Geschwindigkeit ermittelt werden.
 
 ## Lokaler Appserver mit dem Watch-Modus
 
-Durch `bun run dev` wird der Appserver im _Watch_-Modus für die
+Durch `pnpm run dev` wird der Appserver im _Watch_-Modus für die
 Entwicklung gestartet, d.h. bei Code-Änderungen wird der Server automatisch
-neu gestartet. `bun start` startet den Appserver ohne Watch-Modus.
+neu gestartet. `pnpm start` startet den Appserver ohne Watch-Modus.
 
 Beim Starten des Appservers wird außerdem mit _Prisma_ die DB-Verbindung
 aufgebaut. Der Benutzername und das Passwort sind in der Datei
@@ -103,29 +102,25 @@ Folgende Voraussetzungen müssen oder sollten erfüllt sein:
 Nun können die Tests in einer Shell aufgerufen werden:
 
 ```shell
-    bun run test
+    pnpm t
 ```
-
-**BEACHTE**: Wenn man `bun test` aufruft, werden die Tests mit dem Test Runner
-von _Bun_ statt mit _Vitest_ ausgeführt, was zwangsläufig zu Fehlern führt, weil
-in den Tests ein import von `vitest` und nicht von `bun:test` verwendet wird.
 
 Bei der Fehlersuche ist es ratsam, nur eine einzelnen Testdatei oder sogar
 geziehlt eine Test-Funktion aufzurufen, z.B.:
 
 ```shell
     # Filter für den Namen der Testdatei
-    bun vitest GET-id
+    pnpm test GET-id
 
     # Test-Funktion an einer bestimmten Zeile in der Testdatei
-    bun vitest test/integration/rest/GET-id.test.mts:45
+    pnpm test test/integration/rest/GET-id.test.mts:45
 ```
 
 Man kann auch nur die Unit-Tests, d.h. ohne gestartete Server, laufen lassen,
 um schnelles Feedback zu bekommen:
 
 ```shell
-    bun vitest --project unit
+    pnpm test --project unit
 ```
 
 ---
@@ -205,7 +200,7 @@ npm-Packages oder Debian-Packages.
 
 Mit _Docker Compose_ und der Konfigurationsdatei `compose.yml` im Verzeichnis
 `extras\compose\buch` lässt sich der Container mit dem "hardened" Basis-Image mit
-_Bun_ und _Debian Trixie (13) Slim_ folgendermaßen starten und später in einer
+_Node_ und _Debian Trixie (13) Slim_ folgendermaßen starten und später in einer
 weiteren PowerShell herunterfahren.
 
 ```shell
@@ -238,13 +233,13 @@ weiteren PowerShell herunterfahren.
 
 ## Statische Codeanalyse und Formatierer
 
-### ESLint
+### Oxlint
 
-_ESLint_ wird durch `eslint.config.mts` konfiguriert und durch folgendes Skript
+_Oxlint_ wird durch oxslint.config.ts` konfiguriert und durch folgendes Skript
 ausgeführt:
 
 ```shell
-    bun run eslint
+    pnpm run lint
 ```
 
 ### Oxfmt
@@ -253,7 +248,7 @@ _Oxfmt_ (statt _Prettier_) ist ein Formatierer, der durch `oxfmt.config.mts`
 konfiguriert und durch folgendes Skript ausgeführt wird:
 
 ```shell
-    bun run fmt
+    pnpm run fmt
 ```
 
 ### SonarQube
@@ -264,14 +259,14 @@ Siehe `extras\compose\sonarqube\ReadMe.md`.
 
 ## Sicherheitslücken
 
-### bun audit
+### pnpm audit
 
-Mit dem Unterkommando `audit` von _Bun_ kann man `npm_modules` auf Sicherheitslücken
+Mit dem Unterkommando `audit` von _pnpm_ kann man `npm_modules` auf Sicherheitslücken
 analysieren. Wenn man - sinnvollerweise - nur die `dependencies` aus `package.json`
 berücksichtigen möchte, ergänzt man die Option `-P` ("Production"):
 
 ```shell
-    bun audit --prod
+    pnpm audit --prod
 ```
 
 ### OWASP Dependency Check
@@ -286,7 +281,7 @@ man im Skript `scripts\dependency-check.mts` als Wert der Variablen `nvdApiKey` 
 
 ```shell
     cd scripts
-    bun dependency-check.mts
+    node dependency-check.mts
 ```
 
 ### Docker Scout

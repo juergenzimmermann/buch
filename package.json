@@ -96,10 +96,8 @@
     "vitest-mock-extended": "4.0.0"
   },
   "overrides": {
-    "@hono/node-server": "2.0.4",
     "effect": "3.21.2",
     "flatted": "3.4.2",
-    "hono": "4.12.23",
     "lodash": "4.17.23",
     "tar": "7.5.9"
   },
