@@ -1,4 +1,3 @@
-#!/usr/bin/env bun
 // oxlint-disable no-magic-numbers
 // Copyright (C) 2024 - present, Juergen Zimmermann, Hochschule Karlsruhe
 //
@@ -15,7 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-// Aufruf:   bun scripts/generate-load.mts
+// Aufruf:   node scripts/generate-load.mts
 
 import { env } from 'node:process';
 import { setTimeout as sleep } from 'node:timers/promises';

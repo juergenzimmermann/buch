@@ -49,7 +49,7 @@ services:
     #entrypoint: ["/bin/ash", "-c", "echo 'Container als ash gestartet.' && sleep infinity"]
 
     depends_on:
-      db:
+      postgres:
         condition: service_healthy
       mail:
         condition: service_healthy

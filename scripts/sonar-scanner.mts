@@ -1,4 +1,3 @@
-#!/usr/bin/env bun
 // Copyright (C) 2023 - present Juergen Zimmermann, Hochschule Karlsruhe
 //
 // This program is free software: you can redistribute it and/or modify
@@ -14,7 +13,7 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-// Aufruf:   bun .\scripts\sonar-scanner.mts
+// Aufruf:   node .\scripts\sonar-scanner.mts
 
 import { exec } from 'node:child_process';
 import { platform } from 'node:os';

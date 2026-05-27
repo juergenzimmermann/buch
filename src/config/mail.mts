@@ -21,6 +21,7 @@
 import { type Options } from 'nodemailer/lib/smtp-transport/index.js';
 import { config } from './app.mts';
 import { getLogger } from '../logger/logger.mts';
+
 const { mail } = config;
 
 const activated = mail?.activated === undefined || mail?.activated === true;

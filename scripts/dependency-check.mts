@@ -20,7 +20,7 @@
 //              cd ..
 //              Remove-Item package-lock.json
 //
-// ggf. z.B.    bun why hono
+// ggf. z.B.    pnpm why hono
 
 import { exec } from 'node:child_process';
 import { platform } from 'node:os';

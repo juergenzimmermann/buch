@@ -69,7 +69,7 @@ runtime:
       operator: isNotEmpty
     - expression: res.body.data.buch.rabatt
       operator: matches
-      value: ^\d(\.\d{1,2})?$
+      value: ^\d(\.\d{1,3})?$
 
 settings:
   encodeUrl: true

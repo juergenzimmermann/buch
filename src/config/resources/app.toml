@@ -14,7 +14,7 @@
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 # ==============================================================================
-# S e r v e r , z.B. Bun, Node oder Deno
+# S e r v e r , z.B. Node, Deno oder Bun
 # ==============================================================================
 [server]
 port = 3000

@@ -25,7 +25,7 @@
 
 # https://manpages.debian.org/bullseye/apt/apt-get.8.en.html
 
-ARG JENKINS_VERSION=2.565-jdk25
+ARG JENKINS_VERSION=2.566-jdk25
 
 FROM jenkins/jenkins:${JENKINS_VERSION}
 
@@ -45,14 +45,17 @@ apt-get install --no-install-recommends --yes --show-progress lsb-release=12.1-1
 # https://packages.debian.org/stable/python/python3
 # https://packages.debian.org/trixie/python3
 # https://packages.debian.org/trixie/python3-minimal
-# https://packages.debian.org/trixie/python3.12
+# https://packages.debian.org/trixie/python3.13
 # https://computingforgeeks.com/how-to-install-python-on-debian-linux
 # https://cloudcone.com/docs/article/how-to-install-python-3-10-on-debian-11
 # https://linuxhint.com/install-python-debian-10
 # https://computingforgeeks.com/how-to-install-python-on-debian-linux
 # apt show python3.13-minimal
 # apt list
-apt-get install --no-install-recommends --yes --show-progress gcc=4:14.2.0-1 g++=4:14.2.0-1 make=4.4.1-2 python3.13-minimal=3.13.5-2
+# https://packages.debian.org/stable/gcc
+# https://packages.debian.org/stable/g++
+# https://packages.debian.org/stable/make
+apt-get install --no-install-recommends --yes --show-progress gcc=4:14.2.0-1 g++=4:14.2.0-1 make=4.4.1-2 python3.13-minimal=3.13.5-2+deb13u2
 ln -s /usr/bin/python3.13 /usr/bin/python
 ln -s /usr/bin/python3.13 /usr/bin/python3
 

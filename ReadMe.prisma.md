@@ -22,7 +22,6 @@
 > Diese Datei ist in Markdown geschrieben und kann mit `<Strg><Shift>v` in
 > Visual Studio Code leicht gelesen werden. Näheres zu Markdown gibt es z.B. bei
 > [Markdown Guide](https://www.markdownguide.org/).
-> Wenn _Bun_ installiert ist, kann man die Datei auch mit `bun ReadMe.md` lesen.
 > Die Anleitung ist für _Windows 11_; für _andere Betriebssysteme_ oder
 > _Windows-Emulationen_ sind Anpassungen notwendig.
 
@@ -37,10 +36,10 @@
   - [Umgebungsvariable](#umgebungsvariable)
 - [Installation](#installation)
   - [Node und npm](#node-und-npm)
-  - [Bun installieren](#bun-installieren)
-  - [Bun überprüfen](#bun-überprüfen)
-  - [Bun ggf. deinstallieren](#bun-ggf-deinstallieren)
-  - [Software-Pakete in node_modules mit Bun installieren](#software-pakete-in-node_modules-mit-bun-installieren)
+  - [pnpm installieren](#pnpm-installieren)
+  - [pnpm überprüfen](#pnpm-überprüfen)
+  - [pnpm ggf. deinstallieren](#pnpm-ggf-deinstallieren)
+  - [Software-Pakete in node_modules mit pnpm installieren](#software-pakete-in-node_modules-mit-pnpm-installieren)
   - [Indirekt genutzte Packages](#indirekt-genutzte-packages)
   - [Meta-Informationen zu einem Package](#meta-informationen-zu-einem-package)
 - [Prisma-Schema für ein neues Projekt](#prisma-schema-für-ein-neues-projekt)
@@ -110,10 +109,10 @@ letztem Semester vorhanden sind. Außerdem sollte _Docker Desktop_ installiert s
 Für _Linux_ und _macOS_ muss folgende Software installiert sein (z.B. mit _apt_
 bei Linux oder _brew_ bei macOS):
 
-- Bun
+- Node
+- pnpm
 - Docker Desktop
 - Git
-- Node
 - GraphViz (wird für PlantUML benötigt)
 - VS Code (siehe ReadMe.vscode.md)
 
@@ -157,16 +156,17 @@ Bei _Systemvariable_ (**nicht** bei _Benutzervariable_) folgende
 Umgebungsvariable mit den jeweiligen Werten eintragen. Die Werte für `PATH`
 _vor_ Pfaden mit _Leerzeichen_ eintragen.
 
-| Name der Umgebungsvariable | Wert der Umgebungsvariable                                                                                                       |
-| -------------------------- | -------------------------------------------------------------------------------------------------------------------------------- |
-| `GIT_HOME`                 | `C:\Zimmermann\git`                                                                                                              |
-| `PATH`                     | `%USERPROFILE%\.bun\bin`;`C:\Zimmermann\node`;`%GIT_HOME%\cmd`;`%GIT_HOME%\bin`;`C:\Zimmermann\k6`;`C:\Zimmermann\Graphviz\bin`; |
+| Name der Umgebungsvariable | Wert der Umgebungsvariable |
+| -------------------------- | -------------------------- |
+| `GIT_HOME`                 | `C:\Zimmermann\git` |
+| `PNPM_HOME`                | `%LOCALAPPDATA%\pnpm` |
+| `PATH`                     | `C:\Zimmermann\node`;`%PNPM_HOME%\bin`,`%GIT_HOME%\cmd`;`%GIT_HOME%\bin`;`C:\Zimmermann\k6`;`C:\Zimmermann\Graphviz\bin`; |
 
 ## Installation
 
 ### Node und npm
 
-Wenn bereits _Node_ und _npm_ installiert sind, kann damit _Bun_ installiert werden:
+Ob _Node_ und _npm_ korrekt installiert sind, kann folgendermaßen überprüft werden:
 
 ```shell
     Get-Command node
@@ -175,7 +175,7 @@ Wenn bereits _Node_ und _npm_ installiert sind, kann damit _Bun_ installiert wer
     npm --version
 ```
 
-Bei Linux und macOS in einer Shell die nachfolgenden Kommandos eingeben:
+Bei Linux und macOS gibt man in einer Shell die nachfolgenden Kommandos ein:
 
 ```shell
     which node
@@ -184,66 +184,74 @@ Bei Linux und macOS in einer Shell die nachfolgenden Kommandos eingeben:
     npm --version
 ```
 
-### Bun installieren
+### pnpm installieren
 
-Bei Windows erfolgt die Installation im Pfad `${env:USERPROFILE}\.bun\bin`,
-welcher ggf. als `%USERPROFILE%\.bun\bin` in der Umgebungsvariablen `PATH`
-eingetragen werden muss (s.o.). Bei macOS und Linux ist es analog `$HOME/.bun/bin`.
-Außerdem wird bei Windows _Bun_ auch in _Installierte Apps_ eingetragen.
+Bei Windows erfolgt die Installation im Pfad `${$env:LOCALAPPDATA}\pnpm`.
 
 ```shell
     # Windows:
-    irm bun.sh/install.ps1 | iex
+    Invoke-WebRequest https://get.pnpm.io/install.ps1 -UseBasicParsing | Invoke-Expression
 
     # macOS / Linux:
-    curl -fsSL https://bun.sh/install | bash
+    curl -fsSL https://get.pnpm.io/install.sh | sh -
+    # oder falls curl nicht installiert ist:
+    wget -qO- https://get.pnpm.io/install.sh | sh -
 ```
 
-`irm` ist ein Alias für `Invoke-RestMethod`, was durch `Get-Alias irm` überprüft
-werden kann. Ebenso ist `iex` ein Alias für `Invoke-Expression`.
+Damit bei _Windows_ der _Defender_ künftige Installationen mit pnpm nicht signifikant
+verlangsamt, sollte das Verzeichnis `%LOCALAPPDATA%\pnpm` von der Echtzeitüberwachung
+ausgeschlossen werden, was als _Administrator_ durchgeführt werden muss.
 
-### Bun überprüfen
+```shell
+    # Windows PowerShell als Administrator starten
+    Add-MpPreference -ExclusionPath "<LOCALAPPDATA des Benutzers>\pnpm\store\v11"
+```
+
+Bei _macOS_ und _Linux_ wird pnpm im Verzeichnis `$HOME/.local/share/pnpm` installiert.
+Die Umgebungsvariable `PNPM_HOME` wird automatisch auf dieses Verzeichnis gesetzt
+und die Umgebungsvariable `PATH` wird entsprechend ergänzt.
+
+### pnpm überprüfen
 
 Zur Überprüfung kann man die nachfolgenden Kommandos eingeben:
 
 ```shell
     # Windows:
-    Get-Command bun
-    bun --version
+    Get-Command pnpm
+    pnpm --version
 
     # macOS / Linux:
-    which bun
-    bun --version
+    which pnpm
+    pnpm --version
 ```
 
-### Bun ggf. deinstallieren
+### pnpm ggf. deinstallieren
 
-Bun wird folgendermaßen deinstalliert:
+pnpm wird folgendermaßen deinstalliert:
 
 ```shell
     # Windows:
-    Remove-Item  -Recurse -Force "$env:USERPROFILE\.bun"
+    Remove-Item -Recurse -Force $env:PNPM_HOME
 
     # macOS / Linux:
-    rm -rf $HOME/.bun
+    rm -rf $PNPM_HOME
 ```
 
-Danach muss `%USERPROFILE%\.bun` bzw. `$HOME/.bun` aus der Umgebungsvariable `PATH`
-entfernt werden. Außerdem sollte bei Windows _Bun_ aus _Installierte Apps_
-entfernt werden.
+Danach muss `%PNPM_HOME%/bin` bzw. `$PNPM_HOME` aus der Umgebungsvariable `PATH`
+entfernt werden und die Umgebungsvariable `PNPM_HOME` kann gelöscht werden.
 
-### Software-Pakete in node_modules mit Bun installieren
+### Software-Pakete in node_modules mit pnpm installieren
 
-Die Softwarepakete für _Prisma_ werden mit _Bun_ folgendermaßen installiert:
+Die Softwarepakete für _Prisma_ werden mit _pnpm_ folgendermaßen installiert:
 
 ```shell
-    bun i
+    pnpm i
 ```
 
 ### Indirekt genutzte Packages
 
 ```shell
-    bun why body-parser
+    pnpm why body-parser
 ```
 
 ### Meta-Informationen zu einem Package
@@ -252,7 +260,7 @@ Mit dem nachfolgenden Kommando können Meta-Informationen zu einem Package, z.B.
 `prisma`, abgerufen werden (siehe `package.json`):
 
 ```shell
-    bun pm view prisma
+    pnpm view prisma
 ```
 
 ---
@@ -290,7 +298,7 @@ wird die Datei `schema.prisma` angelegt. Das Verzeichnis `prisma` darf dabei
 noch nicht existieren.
 
 ```shell
-    bun prisma init
+    pnpm prisma init
 ```
 
 Dabei werden folgende Dateien generiert:
@@ -331,7 +339,7 @@ Nun wird die Generierung durchgeführt, so dass die Datei `prisma\schema.prisma`
 um die Models für das spätere OR-Mapping ergänzt wird:
 
 ```shell
-    bun --env-file=.env prisma db pull
+    pnpm prisma db pull
 ```
 
 Warnungen, dass _Check-Constraints_ nicht unterstützt werden, können ignoriert
@@ -375,7 +383,7 @@ künftige OR-Mapping. Mit diesem Schema kann nun der Prisma-Client generiert
 werden, der später für das OR-Mapping in TypeScript verwendet wird:
 
 ```shell
-    bun --env-file=.env prisma generate
+    pnpm prisma generate
 ```
 
 ---
@@ -413,40 +421,25 @@ Die beiden Beispiel-Dateien `src\beispiele.mts` und `src\beispiele-write.mts`
 können mit _Node_ folgendermaßen aufgerufen werden:
 
 ```shell
-    bun --env-file=.env src/beispiele.mts
-    bun --env-file=.env src/beispiele-write.mts
+    node --env-file=.env src/beispiele.mts
+    node --env-file=.env src/beispiele-write.mts
 ```
-
-## Ausführbare Dateien ("Executables")
-
-_Bun_ kann auch ausführbare Dateien ("Executables") erstellen, die alle notwendigen
-Abhängigkeiten enthalten. Das ist für die Bereitstellung eines Servers oder für
-die Verteilung an andere Benutzer nützlich, da keine separate Installation von
-Bun oder den Abhängigkeiten erforderlich ist.
-
-```shell
-    bun run build
-    bun run build:write
-```
-
-Dabei wird das jeweilige Skript aus `package.json` ausgeführt, welches die
-ausführbare Datei im aktuellen Verzeichnis erstellt.
 
 ## Neuere Versionen und evtl. Sicherheitslücken
 
-Mit _Bun_ können neuere Versionen der Software-Pakete aus `package.json` ermittelt
+Mit _pnpm_ können neuere Versionen der Software-Pakete aus `package.json` ermittelt
 und auch auf Sicherheitslücken überprüft werden:
 
 ```shell
-    bun outdated
-    bun audit
-    bun audit --prod
+    pnpm outdated
+    pnpm audit
+    pnpm audit --prod
 ```
 
 ## Prisma Studio
 
 Während die Erweiterung _PostgreSQL_ für VS Code nur Daten anzeigen kann, kann
-_Prisma Studio_ auch Daten einfügen, ändern und löschen. Der Aufruf mit _Bun_
+_Prisma Studio_ auch Daten einfügen, ändern und löschen. Der Aufruf mit _pnpm_
 lautet folgendermaßen, wobei man an der Oberfläche von Prisma Studio noch das
 Schema `buch` auswählen muss, um die Tabellen anzuzeigen:
 
@@ -457,7 +450,7 @@ Schema `buch` auswählen muss, um die Tabellen anzuzeigen:
     # macOS / Linux:
     DATABASE_URL='postgresql://buch:p@localhost/buch'
 
-    bunx prisma studio
+    pnpx prisma studio
 ```
 
 Durch den Menüpunkt _Visualizer_ kann man sich die Beziehungen zwischen den Tabellen anzeigen lassen.

@@ -23,9 +23,8 @@
 import {
     type BuchNeuInput,
     type BuchUpdateInput,
-    ID,
+    type ID,
     type SuchParameterInput,
-    typeDefs,
 } from './types.mts';
 import { buchHandler, buecherHandler } from './query-handler.mts';
 import {
@@ -38,6 +37,7 @@ import { createSchema, createYoga } from 'graphql-yoga';
 import { Hono } from 'hono';
 import { getLogger } from '../../logger/logger.mts';
 import { rolesRequired } from './roles-required.mts';
+import { typeDefs } from './schema.mts';
 
 const logger = getLogger('query-handler');
 type GraphqlContext = {

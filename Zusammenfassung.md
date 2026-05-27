@@ -24,7 +24,7 @@ GPL v3
 ## Entwicklungsumgebung
 
 - Konfig-Dateien, Verzeichnisse
-- bun mit package.json einschl. dependencies, devDependencies und scripts
+- pnpm mit package.json einschl. dependencies, devDependencies und scripts
 - node_modules
 - ES2015+, TypeScript einschl. .d.ts sowie tsconfig.json
 - ESLint mit eslint.config.mts
@@ -36,7 +36,7 @@ GPL v3
 - Docker Compose
 - Projektdokumentation mit AsciiDoctor mit PlantUML
 
-## Bun und Hono
+## Appserver mit Hono, Zod, Prisma, PostgreSQL, Keycloak, Pino und GraphQL Yoga
 
 - REST durch Hono
 - Router und Handler
@@ -53,7 +53,7 @@ GPL v3
   - If-Match
   - ETag
 - Watch-Modus
-- Validierung durch zod
+- Validierung durch Zod
 - ORM durch Prisma (für PostgreSQL)
   - Schema
   - Code-Generierung

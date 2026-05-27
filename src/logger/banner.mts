@@ -19,7 +19,6 @@
  */
 
 import { release, type, userInfo } from 'node:os';
-import Bun from 'bun';
 import figlet from 'figlet';
 import { getLogger } from './logger.mts';
 import process from 'node:process';
@@ -41,8 +40,7 @@ export const banner = async () => {
     const isContainer = /[0-9a-f]{12}/u.exec(host) ?? false;
 
     // https://nodejs.org/api/process.html
-    logger.info('Bun: %s', Bun.version);
-    logger.info('Bun / Node: %s', process.version);
+    logger.info('Node: %s', process.version);
     logger.info('NODE_ENV: %s', nodeEnv ?? 'undefined');
     logger.info('Rechnername: %s', host);
     logger.info('Port: %d', port);

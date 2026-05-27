@@ -14,12 +14,13 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 import { connectDB, disconnectDB } from './config/prisma-client.mts';
-import Bun from 'bun';
 import { app } from './app.mts';
 import { banner } from './logger/banner.mts';
+import { createServer } from 'node:https';
 import { env } from './config/env.mts';
 import { populate } from './config/dev/db-populate.mts';
 import process from 'node:process';
+import { serve } from '@hono/node-server';
 import { serverConfig } from './config/server.mts';
 
 // Destructuring
@@ -29,7 +30,7 @@ if (NODE_ENV === 'development' || NODE_ENV === 'test') {
     process.env['NODE_TLS_REJECT_UNAUTHORIZED'] = '0';
 }
 
-// app.fetch ist ist eine Funktion passend zur Signatur von fetch von Bun (s.u.):
+// app.fetch ist ist eine Funktion passend zur Signatur von fetch von @hono/node-server (s.u.):
 // (request: Request) => Response | Promise<Response>
 // Innerhalb von Hono erfolgt dann das Dispatching zu einer Route fuer GET, POST, usw.
 const { fetch } = app;
@@ -38,23 +39,21 @@ const { port, portHttp, key, cert } = serverConfig;
 await populate();
 await connectDB();
 
-// fetch: Request-Handler fuer den Bun-Server mit Signatur gemaess Fetch-API von ES2015
+// fetch: Request-Handler fuer den Node-Server mit Signatur gemaess Fetch-API von ES2015
 // d.h. eine Funktion, die einen Request empfaengt und einen Response produziert:
 // async function handler(req: Request): Promise<Response> { ... }
 // Shorthand Property
-Bun.serve({ port: portHttp, fetch });
-Bun.serve({
-    port,
-    fetch,
-    tls: {
-        key,
-        cert,
-    },
+serve({ fetch, port: portHttp }, (info) => {
+    console.log(`🚀 Der Server ist gestartet:   http://localhost:${info.port}`);
+});
+serve({ fetch, port, createServer, serverOptions: { key, cert } }, (info) => {
+    console.log(
+        `🚀 Der Server ist gestartet:   https://localhost:${info.port}`,
+    );
 });
 
 await banner();
 
-// https://bun.com/docs/guides/process/os-signals
 // KEINE asynchrone Funktion
 process.on('SIGINT', () => {
     // IIFE  = Immediately Invoked Function Expression

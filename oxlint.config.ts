@@ -51,6 +51,8 @@ export default defineConfig({
         node: true,
     },
 
+    ignorePatterns: ['test/lasttest/script.ts'],
+
     // https://oxc.rs/docs/guide/usage/linter/config-file-reference.html#options
     options: {
         denyWarnings: true,

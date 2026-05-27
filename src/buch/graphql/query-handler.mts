@@ -16,7 +16,7 @@
 import {
     type Buch,
     type ID,
-    SuchParameterInput,
+    type SuchParameterInput,
     toBuchType,
     toSuchparameter,
 } from './types.mts';

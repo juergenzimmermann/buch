@@ -1,4 +1,4 @@
-# Empfohlene Vorgehensweise für das Lernen von Bun und Hono
+# Empfohlene Vorgehensweise für das Lernen von pnpm und Hono
 
 > Copyright (C) 2026 - present Juergen Zimmermann, Hochschule Karlsruhe
 >
@@ -24,9 +24,9 @@
 ## Elementare Infrastruktur und einfacher Server
 
 - VS Code mit Erweiterungen
-- Bun installieren
+- pnpm installieren
 - GET-Request durch Hono mit "Hello World" als JSON-Datensatz
-- package.json für Bun mit dependencies, devDependencies und Skript für Serverstart durch Bun
+- package.json für pnpm mit dependencies, devDependencies und Skript für Serverstart durch Node
 - GET-Request von Webbrowser aufrufen
 - Server mit TLS
 - config mit TOML für HTTP- und HTTPS-Port sowie TLS (später: Logging, DB-Zugriff, Mail, Keycloak)
@@ -36,8 +36,8 @@
 - ESLint
 - Prettier
 - SonarQube als Docker Container
-- bun outdated
-- bun audit
+- pnpm outdated
+- pnpm audit
 - OWASP Dependency Check
 
 ## Infrastruktur

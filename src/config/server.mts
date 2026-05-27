@@ -14,7 +14,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 /**
- * Das Modul enthält die Konfiguration für den _Bun_-basierten Server.
+ * Das Modul enthält die Konfiguration für den _Node_-basierten Server.
  * @packageDocumentation
  *
  * @author [Jürgen Zimmermann](mailto:Juergen.Zimmermann@h-ka.de)
