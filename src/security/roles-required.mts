@@ -118,5 +118,5 @@ export const rolesRequired =
         // Payload fuer evtl. spaetere Verarbeitung im Request puffern
         (req as any).tokenPayload = payload;
 
-        await next();
+        return await next();
     };

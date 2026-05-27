@@ -29,7 +29,7 @@ export const responseTime = createMiddleware(async (c: Context, next: Next) => {
     // https://nodejs.org/en/blog/release/v26.0.0#temporal-api
     // https://github.com/tc39/proposal-temporal
     const start = Temporal.Now.instant().epochMilliseconds;
-    await next();
+    await next(); // oxlint-disable-line node/callback-return
     const duration = Temporal.Now.instant().epochMilliseconds - start;
     logger.debug('Response time: %d ms, %d', duration, c.res.status);
 });

@@ -29,6 +29,6 @@ export const requestLogger = createMiddleware(
     async (c: Context, next: Next) => {
         const { method, url } = c.req;
         logger.debug('method=%s, url=%s', method, url);
-        await next();
+        return await next();
     },
 );

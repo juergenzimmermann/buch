@@ -48,7 +48,7 @@ export const trackMetrics = createMiddleware(async (c: Context, next: Next) => {
     const start = Date.now();
     const { path, method } = c.req;
 
-    await next();
+    await next(); // oxlint-disable-line node/callback-return
 
     const { res } = c;
     const { status } = res;
