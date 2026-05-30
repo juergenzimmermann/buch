@@ -4,14 +4,14 @@
   // https://github.com/tsconfig/bases/#node-24-tsconfigjson
   // https://stackoverflow.com/questions/63742790/unable-to-import-esm-ts-module-in-node/65163089#65163089
   // https://2ality.com/2025/01/tsconfig-json.html
-  "extends": ["@tsconfig/strictest/tsconfig", "@tsconfig/node24/tsconfig"],
+  "extends": ["@tsconfig/strictest/tsconfig", "@tsconfig/node26/tsconfig"],
   "include": ["src/**/*", "test/**/*", "scripts/*"],
   "compilerOptions": {
     // uebersetzter JS-Code im Hinblick auf Module. "nodenext" erfordert dasselbe fuer "moduleResolution"
     "module": "nodenext",
     "moduleResolution": "nodenext",
     // "moduleDetection": "force", // default ab TS 5.9
-    // https://www.typescriptlang.org/tsconfig/#target: node24
+    // https://www.typescriptlang.org/tsconfig/#target: node25
     "target": "esnext",
     "lib": ["esnext"],
 
@@ -27,7 +27,7 @@
     // "skipLibCheck": true, // default ab TS 5.9
     // "allowUnreachableCode": false, // strictest: return bei then-else und try-catch
     // "allowUnusedLabels": false, // strictest: Labels muessen auch benutzt werden
-    // "esModuleInterop": true, // strictest, node24: Kompatibilitaet zwischen CommonJS und ES Modulen
+    // "esModuleInterop": true, // strictest; Kompatibilitaet zwischen CommonJS und ES Modulen
     // "exactOptionalPropertyTypes": true, // strictest: bei optionalen Properties ggf. explizit undefined spezifizieren
     // "forceConsistentCasingInFileNames": true, // default: true
     "noErrorTruncation": true,
