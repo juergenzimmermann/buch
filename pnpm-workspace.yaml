@@ -1,7 +1,3 @@
-allowBuilds:
-  "@prisma/engines": set this to true or false
-  prisma: true
-
 # Copyright (C) 2025 - present Juergen Zimmermann, Hochschule Karlsruhe
 #
 # This program is free software: you can redistribute it and/or modify
@@ -42,3 +38,7 @@ saveExact: true
 
 # https://pnpm.io/settings#saveprefix
 savePrefix: ""
+
+allowBuilds:
+  '@prisma/engines': true
+  prisma: true
