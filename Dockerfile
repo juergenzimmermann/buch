@@ -1,7 +1,7 @@
 # syntax=docker.io/docker/dockerfile-upstream:1.24.0
 # check=error=true
 
-# Copyright (C) 2026 - present, Juergen Zimmermann, Hochschule Karlsruhe
+# Copyright (C) 2023 - present, Juergen Zimmermann, Hochschule Karlsruhe
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -30,46 +30,133 @@
 # https://docs.docker.com/engine/reference/builder/#syntax
 # https://github.com/moby/buildkit/blob/master/frontend/dockerfile/docs/reference.md
 # https://hub.docker.com/r/docker/dockerfile
+# https://docs.docker.com/build/building/multi-stage
+# https://github.com/textbook/starter-kit/blob/main/Dockerfile
+# https://snyk.io/blog/10-best-practices-to-containerize-nodejs-web-applications-with-docker
+# https://cheatsheetseries.owasp.org/cheatsheets/NodeJS_Docker_Cheat_Sheet.html
 
-ARG BUN_VERSION=1.3.14
+ARG NODE_VERSION_DHI=26.2.0 \
+    NODE_VERSION=26.2.0
 
-FROM oven/bun:${BUN_VERSION}-slim AS dist
+# ---------------------------------------------------------------------------------------
+# S t a g e   d i s t
+# ---------------------------------------------------------------------------------------
+FROM node:${NODE_VERSION}-trixie-slim AS dist
 
-WORKDIR /app
+RUN <<EOF
+# https://explainshell.com/explain?cmd=set+-eux
+set -eux
+# https://manpages.debian.org/trixie/apt/apt-get.8.en.html
+# Die "Package Index"-Dateien neu synchronisieren
+apt-get update --no-show-upgraded
+# Die neuesten Versionen der bereits installierten Packages installieren
+apt-get upgrade --yes --no-show-upgraded
+
+npm r -g pnpm
+npm i -g pnpm
+
+# Debian Trixie bietet nur Packages fuer Python 3.13
+# https://packages.debian.org/trixie/python3.13-minimal
+# https://packages.debian.org/trixie/python3.13-dev
+# https://packages.debian.org/trixie/build-essential
+apt-get install --no-install-recommends --yes python3.13-minimal=3.13.5-2 python3.13-dev=3.13.5-2 build-essential=12.12
+ln -s /usr/bin/python3.13 /usr/bin/python3
+ln -s /usr/bin/python3.13 /usr/bin/python
+
+EOF
+
+USER node
+
+WORKDIR /home/node
 
 # https://docs.docker.com/engine/reference/builder/#run---mounttypebind
 RUN --mount=type=bind,source=package.json,target=package.json \
-  --mount=type=bind,source=bun.lock,target=bun.lock \
-  --mount=type=cache,target=/root/.bun <<EOF
-  bun install --frozen-lockfile --production
+  --mount=type=bind,source=pnpm-lock.yaml,target=pnpm-lock.yaml \
+  --mount=type=bind,source=nest-cli.json,target=nest-cli.json \
+  --mount=type=bind,source=tsconfig.json,target=tsconfig.json \
+  --mount=type=bind,source=tsconfig.build.json,target=tsconfig.build.json \
+  --mount=type=bind,source=src,target=src \
+  --mount=type=cache,target=/root/.pnpm <<EOF
+set -eux
+
+pnpm i --prefer-frozen-lockfile
+pnpm run build
 EOF
 
-FROM dhi.io/bun:${BUN_VERSION}-debian13 AS final
+# ------------------------------------------------------------------------------
+# S t a g e   d e p e n d e n c i e s
+# ------------------------------------------------------------------------------
+FROM node:${NODE_VERSION}-trixie-slim AS dependencies
+
+RUN --mount=type=bind,source=package.json,target=package.json <<EOF
+# https://explainshell.com/explain?cmd=set+-eux
+set -eux
+
+# https://manpages.debian.org/trixie/apt/apt-get.8.en.html
+# Die "Package Index"-Dateien neu synchronisieren
+apt-get update
+
+# Die neuesten Versionen der bereits installierten Packages installieren
+apt-get upgrade --yes
+
+npm i -g pnpm
+
+# ggf. Python fuer pg
+# Debian Trixie bietet nur Packages fuer Python 3.13
+# https://packages.debian.org/trixie/python3.13-minimal
+# https://packages.debian.org/trixie/python3.13-dev
+# https://packages.debian.org/trixie/build-essential
+# "python3-dev" enthaelt "multiprocessing"
+# "build-essential" enthaelt "make"
+apt-get install --no-install-recommends --yes python3.13-minimal=3.13.5-2+deb13u2 python3.13-dev=3.13.5-2+deb13u2 build-essential=12.12
+ln -s /usr/bin/python3.13 /usr/bin/python3
+ln -s /usr/bin/python3.13 /usr/bin/python
+
+EOF
+
+USER node
+
+WORKDIR /home/node
+
+RUN --mount=type=bind,source=package.json,target=package.json \
+  --mount=type=bind,source=pnpm-lock.yaml,target=pnpm-lock.yaml \
+  --mount=type=bind,source=pnpm-workspace.yaml,target=pnpm-workspace.yaml \
+  --mount=type=cache,target=/root/.pnpm <<EOF
+set -eux
+
+pnpm i -P --frozen-lockfile
+EOF
+
+# ------------------------------------------------------------------------------
+# S t a g e   f i n a l
+# ------------------------------------------------------------------------------
+FROM dhi.io/node:${NODE_VERSION_DHI}-debian13 AS final
 
 WORKDIR /opt/app
 
-USER nonroot
+# ADD hat mehr Funktionalitaet als COPY, z.B. auch Download von externen Dateien
+COPY --chown=node:node package.json .env ./
+COPY --from=dependencies --chown=node:node /home/node/node_modules ./node_modules
+COPY --chown=node:node src ./src
 
-COPY --chown=nonroot:nonroot package.json ./
-COPY --from=dist --chown=nonroot:nonroot /app/node_modules ./node_modules
-COPY --chown=nonroot:nonroot src ./src
-
-# Anzeige bei "docker inspect ..."
-# https://specs.opencontainers.org/image-spec/annotations
-# https://spdx.org/licenses
-# MAINTAINER ist deprecated https://docs.docker.com/engine/reference/builder/#maintainer-deprecated
-LABEL org.opencontainers.image.title="buch" \
-  org.opencontainers.image.description="Appserver buch mit 'hardened' Basis-Image Bun und Debian 13" \
-  org.opencontainers.image.version="2026.4.1-trixie" \
-  org.opencontainers.image.licenses="GPL-3.0-or-later" \
-  org.opencontainers.image.authors="Juergen.Zimmermann@h-ka.de"
+USER node
 
 EXPOSE 3000
 EXPOSE 3030
 
-# Binding fuer alle Netzwerk-Interfaces
-ENV BUN_BIND_HOST=0.0.0.0
+HEALTHCHECK --interval=30s --timeout=3s --retries=1 \
+  CMD wget -qO- --no-check-certificate https://localhost:3000/health/readiness/ | grep ok || exit 1
 
-# Bei CMD statt ENTRYPOINT kann das Kommando bei "docker run ..." ueberschrieben werden
+# Anzeige bei "docker inspect ..."
+# https://specs.opencontainers.org/image-spec/annotations
+# https://spdx.org/licenses
+LABEL org.opencontainers.image.title="buch" \
+  org.opencontainers.image.description="Appserver buch mit 'hardened' Basis-Image Node und Debian 13" \
+  org.opencontainers.image.version="2026.4.1-hardened" \
+  org.opencontainers.image.licenses="GPL-3.0-or-later" \
+  org.opencontainers.image.authors="Juergen.Zimmermann@h-ka.de"
+
+  # Bei CMD statt ENTRYPOINT kann das Kommando bei "docker run ..." ueberschrieben werden
 # "Array Syntax" damit auch <Strg>C funktioniert
-ENTRYPOINT ["bun", "run", "src/index.mts"]
+
+ENTRYPOINT ["/usr/local/bin/node", "--env-file=.env", "src/index.mts"]

@@ -42,6 +42,7 @@ include:
 services:
   buch:
     image: juergenzimmermann/buch:2026.4.1-hardened
+    #image: juergenzimmermann/buch:2026.4.1-trixie
     #image: juergenzimmermann/buch:2026.4.1-alpine
     #entrypoint:["/bin/bash", "-c", "echo 'Container als bash gestartet.' && sleep infinity"]
     # (d)ash = (Debian) Almquist Shell

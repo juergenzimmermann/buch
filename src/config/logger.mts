@@ -31,13 +31,16 @@ const logFileDefault = resolve(logDirDefault, logFileNameDefault);
 
 const { log } = config;
 
-if (typeof log?.dir !== 'string') {
+const logDirConf = log?.dir;
+if (logDirConf !== undefined && typeof logDirConf !== 'string') {
     console.debug(`log.dir=${log.dir}`);
     throw new TypeError('Das konfigurierte Log-Verzeichnis ist kein String');
 }
 
 const logDir: string | null =
-    (log?.dir as string | undefined) === undefined ? null : log.dir.trimEnd();
+    (logDirConf as string | undefined) === undefined
+        ? null
+        : logDirConf.trimEnd();
 const logFile =
     logDir === null ? logFileDefault : resolve(logDir, logFileNameDefault);
 const pretty = log?.pretty === true;
