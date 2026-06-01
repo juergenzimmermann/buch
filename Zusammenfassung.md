@@ -27,8 +27,8 @@ GPL v3
 - pnpm mit package.json einschl. dependencies, devDependencies und scripts
 - node_modules
 - ES2015+, TypeScript einschl. .d.ts sowie tsconfig.json
-- ESLint mit eslint.config.mts
-- Prettier mit prettier.config.mts
+- oxlint mit oxlint.config.ts
+- oxfmt mit oxfmt.config.ts
 - Git
 - VS Code
 - SonarQube
@@ -102,14 +102,14 @@ GPL v3
 | Omit                                          |            | X          |
 | Pick                                          |            | X          |
 | Interface                                     |            | X          |
-| #                                             | 2020       |            |
-| private, protected                            |            | X          |
 | readonly                                      |            | X          |
-| for await                                     | 2018       |            |
 | Promise                                       | 2015       |            |
 | async und await                               | 2017       |            |
+| for await                                     | 2018       |            |
 | Top-Level await                               | 2020       |            |
 | IIFE                                          | 1          |            |
+| #                                             | 2020       |            |
+| private, protected                            |            | X          |
 
 ## Docker
 

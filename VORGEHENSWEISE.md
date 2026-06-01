@@ -19,7 +19,7 @@
 
 - Schrittweise vorgehen, um die Komplexität zu reduzieren
 - Iteratives Lernen: bei jedem Schritt die Funktionalität verstehen, bevor man weiter macht
-- Am Projektende ein Code-Review durch _Codex_ und/oder _Copilot_ durchführen lassen
+- Am Projektende ein Code-Review durch z.B._Codex_ und/oder _Copilot_ durchführen lassen
 
 ## Elementare Infrastruktur und einfacher Server
 
@@ -33,8 +33,8 @@
 
 ## Codeanalyse, Formatierung und Sicherheit
 
-- ESLint
-- Prettier
+- oxlint
+- oxfmt
 - SonarQube als Docker Container
 - pnpm outdated
 - pnpm audit
@@ -64,7 +64,7 @@
 - Bruno
 - DB neu laden mit CSV-Dateien
 - Unit-Tests
-- Integrationstests mit Vitest und fetch
+- Integrationstests mit Vitest und z.B.fetch oder Axios
 - CI mit z.B. GitHub Actions
 
 ## Docker
