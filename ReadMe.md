@@ -168,9 +168,9 @@ Mit dem Unterkommando `history` kann man ein Docker-Image und die einzelnen Laye
 inspizieren:
 
 ```shell
-    docker history juergenzimmermann/buch:2026.4.1-hardened
-    docker history juergenzimmermann/buch:2026.4.1-trixie
-    docker history juergenzimmermann/buch:2026.4.1-alpine
+    docker history juergenzimmermann/buch:2026.10.1-hardened
+    docker history juergenzimmermann/buch:2026.10.1-trixie
+    docker history juergenzimmermann/buch:2026.10.1-alpine
 ```
 
 #### docker inspect
@@ -179,9 +179,9 @@ Mit dem Unterkommando `inspect` kann man die Metadaten, z.B. Labels, zu einem
 Image inspizieren:
 
 ```shell
-    docker inspect juergenzimmermann/buch:2026.4.1-hardened
-    docker inspect juergenzimmermann/buch:2026.4.1-trixie
-    docker inspect juergenzimmermann/buch:2026.4.1-alpine
+    docker inspect juergenzimmermann/buch:2026.10.1-hardened
+    docker inspect juergenzimmermann/buch:2026.10.1-trixie
+    docker inspect juergenzimmermann/buch:2026.10.1-alpine
 ```
 
 #### docker sbom
@@ -191,9 +191,9 @@ inspizieren, welche Bestandteilen in einem Docker-Images enthalten sind, z.B.
 npm-Packages oder Debian-Packages.
 
 ```shell
-    docker sbom juergenzimmermann/buch:2026.4.1-hardened
-    docker sbom juergenzimmermann/buch:2026.4.1-trixie
-    docker sbom juergenzimmermann/buch:2026.4.1-alpine
+    docker sbom juergenzimmermann/buch:2026.10.1-hardened
+    docker sbom juergenzimmermann/buch:2026.10.1-trixie
+    docker sbom juergenzimmermann/buch:2026.10.1-alpine
 ```
 
 ### Docker Compose
@@ -291,9 +291,9 @@ groben Überblick verschaffen, wieviele Sicherheitslücken in den Bibliotheken i
 Image enthalten sind:
 
 ```shell
-    docker scout quickview juergenzimmermann/buch:2026.4.1-hardened
-    docker scout quickview juergenzimmermann/buch:2026.4.1-trixie
-    docker scout quickview juergenzimmermann/buch:2026.4.1-alpine
+    docker scout quickview juergenzimmermann/buch:2026.10.1-hardened
+    docker scout quickview juergenzimmermann/buch:2026.10.1-trixie
+    docker scout quickview juergenzimmermann/buch:2026.10.1-alpine
 ```
 
 Dabei bedeutet:
@@ -310,8 +310,8 @@ Die Details zu den CVE-Records im Image kann man durch das Unterkommando `cves`
 von _Scout_ auflisten:
 
 ```shell
-    docker scout cves juergenzimmermann/buch:2026.4.1-hardened
-    docker scout cves --format only-packages juergenzimmermann/buch:2026.4.1-hardened
+    docker scout cves juergenzimmermann/buch:2026.10.1-hardened
+    docker scout cves --format only-packages juergenzimmermann/buch:2026.10.1-hardened
 ```
 
 Statt der Kommandozeile kann man auch den Menüpunkt "Docker Scout" im

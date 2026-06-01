@@ -34,7 +34,7 @@ export const banner = async () => {
     const { host, nodeEnv, port, portHttp } = serverConfig;
 
     console.log();
-    const text = await figlet.text('buch 2026.4.1');
+    const text = await figlet.text('buch 2026.10.1');
     console.log(text);
 
     const isContainer = /[0-9a-f]{12}/u.exec(host) ?? false;
