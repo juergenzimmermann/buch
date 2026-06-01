@@ -40,5 +40,5 @@ saveExact: true
 savePrefix: ""
 
 allowBuilds:
-  '@prisma/engines': true
+  "@prisma/engines": true
   prisma: true
