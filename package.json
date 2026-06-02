@@ -106,11 +106,15 @@
     },
     "runtime": {
       "name": "node",
-      "version": "26.2.0",
-      "onFail": "error"
+      "version": "26.3.0",
+      "onFail": "warn"
     }
   },
   "engines": {
-    "node": "26.2.0"
+    "runtime": {
+      "name": "node",
+      "version": "26.3.0",
+      "onFail": "warn"
+    }
   }
 }
