@@ -38,7 +38,7 @@ request:
       value: http://localhost:8880
       disabled: true
     - name: baseUrl
-      value: http://localhost:3030
+      value: http://localhost:3000
       disabled: true
 bundled: false
 extensions:

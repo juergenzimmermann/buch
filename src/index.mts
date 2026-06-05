@@ -16,7 +16,7 @@
 import { connectDB, disconnectDB } from './config/prisma-client.mts';
 import { app } from './app.mts';
 import { banner } from './logger/banner.mts';
-import { createServer } from 'node:https';
+import { createSecureServer } from 'node:http2';
 import { env } from './config/env.mts';
 import { populate } from './config/dev/db-populate.mts';
 import process from 'node:process';
@@ -34,7 +34,7 @@ if (NODE_ENV === 'development' || NODE_ENV === 'test') {
 // (request: Request) => Response | Promise<Response>
 // Innerhalb von Hono erfolgt dann das Dispatching zu einer Route fuer GET, POST, usw.
 const { fetch } = app;
-const { port, portHttp, key, cert } = serverConfig;
+const { port, key, cert } = serverConfig;
 
 await populate();
 await connectDB();
@@ -42,15 +42,29 @@ await connectDB();
 // fetch: Request-Handler fuer den Node-Server mit Signatur gemaess Fetch-API von ES2015
 // d.h. eine Funktion, die einen Request empfaengt und einen Response produziert:
 // async function handler(req: Request): Promise<Response> { ... }
-// Shorthand Property
-serve({ fetch, port: portHttp }, (info) => {
-    console.log(`🚀 Der Server ist gestartet:   http://localhost:${info.port}`);
-});
-serve({ fetch, port, createServer, serverOptions: { key, cert } }, (info) => {
-    console.log(
-        `🚀 Der Server ist gestartet:   https://localhost:${info.port}`,
-    );
-});
+// https://hono.dev/docs/getting-started/nodejs#http2
+// curl -v -k --http2 --tlsv1.3 -H 'Accept: application/json' https://localhost:3000/rest/1
+// curl -v -k --http3 -H 'Accept: application/json' https://localhost:3000/rest/1
+// TODO node:quic https://www.jasnell.me/posts/quic-comes-to-node
+serve(
+    {
+        // Shorthand Property
+        fetch,
+        port,
+        createServer: createSecureServer,
+        serverOptions: {
+            key,
+            cert,
+            minVersion: 'TLSv1.3',
+            maxVersion: 'TLSv1.3',
+        },
+    },
+    (info) => {
+        console.log(
+            `🚀 Der Server ist mit HTTPS und Port ${info.port} gestartet`,
+        );
+    },
+);
 
 await banner();
 

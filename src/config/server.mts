@@ -43,8 +43,6 @@ if (
 // "Optional Chaining" und "Nullish Coalescing" ab ES2020
 const port = (server?.port as number | undefined) ?? 3000; // oxlint-disable-line no-magic-numbers
 logger.debug('port = %d', port);
-const portHttp = (server?.portHttp as number | undefined) ?? 3030; // oxlint-disable-line no-magic-numbers
-logger.debug('portHttp = %d', portHttp);
 
 // https://nodejs.org/api/fs.html
 const tlsURL = new URL('tls/', resourcesURL);
@@ -75,7 +73,6 @@ export type NodeEnv =
 type ServerConfig = {
     host: string;
     port: number;
-    portHttp: number;
     key: string;
     cert: string;
     nodeEnv: NodeEnv;
@@ -84,7 +81,6 @@ export const serverConfig: ServerConfig = {
     host: computername,
     // Shorthand Property ab ES 2015
     port,
-    portHttp,
     key,
     cert,
     nodeEnv: NODE_ENV as NodeEnv,
