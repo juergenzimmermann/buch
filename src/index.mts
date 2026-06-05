@@ -45,7 +45,7 @@ await connectDB();
 // https://hono.dev/docs/getting-started/nodejs#http2
 // curl -v -k --http2 --tlsv1.3 -H 'Accept: application/json' https://localhost:3000/rest/1
 // curl -v -k --http3 -H 'Accept: application/json' https://localhost:3000/rest/1
-// TODO node:quic https://www.jasnell.me/posts/quic-comes-to-node
+// TODO node:quic https://www.jasnell.me/posts/quic-comes-to-node https://github.com/nodejs/node/blob/main/doc/api/quic.md
 serve(
     {
         // Shorthand Property
