@@ -35,7 +35,7 @@
 # https://snyk.io/blog/10-best-practices-to-containerize-nodejs-web-applications-with-docker
 # https://cheatsheetseries.owasp.org/cheatsheets/NodeJS_Docker_Cheat_Sheet.html
 
-ARG NODE_VERSION_DHI=26.3.0 \
+ARG NODE_VERSION_DHI=26.3.0-0 \
     NODE_VERSION=26.3.0
 
 # ---------------------------------------------------------------------------------------
