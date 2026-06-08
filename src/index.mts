@@ -57,6 +57,8 @@ serve(
             cert,
             minVersion: 'TLSv1.3',
             maxVersion: 'TLSv1.3',
+            // Bruno kann nur HTTP 1.1: https://github.com/usebruno/bruno/issues/1728
+            allowHTTP1: true,
         },
     },
     (info) => {
