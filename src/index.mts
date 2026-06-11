@@ -34,7 +34,7 @@ if (NODE_ENV === 'development' || NODE_ENV === 'test') {
 // (request: Request) => Response | Promise<Response>
 // Innerhalb von Hono erfolgt dann das Dispatching zu einer Route fuer GET, POST, usw.
 const { fetch } = app;
-const { port, key, cert } = serverConfig;
+const { port, key, cert, allowHTTP1 } = serverConfig;
 
 await populate();
 await connectDB();
@@ -57,8 +57,7 @@ serve(
             cert,
             minVersion: 'TLSv1.3',
             maxVersion: 'TLSv1.3',
-            // Bruno kann nur HTTP 1.1: https://github.com/usebruno/bruno/issues/1728
-            allowHTTP1: true,
+            allowHTTP1,
         },
     },
     (info) => {

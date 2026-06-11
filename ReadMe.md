@@ -40,7 +40,7 @@
     - [docker sbom](#docker-sbom)
   - [Docker Compose](#docker-compose)
 - [Statische Codeanalyse und Formattierer](#statische-codeanalyse-und-formatierer)
-  - [ESLint](#eslint)
+  - [OxLint](#oxlint)
   - [Oxfmt](#oxfmt)
   - [SonarQube](#sonarqube)
 - [Sicherheitslücken](#sicherheitslücken)
