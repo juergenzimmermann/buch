@@ -35,7 +35,7 @@
 # https://cheatsheetseries.owasp.org/cheatsheets/NodeJS_Docker_Cheat_Sheet.html
 
 ARG NODE_VERSION=26.3.0 \
-    ALPINE_VERSION=3.23
+    ALPINE_VERSION=3.24
 
 # ------------------------------------------------------------------------------
 # S t a g e   d e p e n d e n c i e s
@@ -60,16 +60,16 @@ npm r -g pnpm
 npm i -g pnpm
 
 # ggf. Python fuer pg
-# https://dl-cdn.alpinelinux.org/alpine/v3.23/main/x86_64
-# https://dl-cdn.alpinelinux.org/alpine/v3.23/community/x86_64
-# https://pkgs.alpinelinux.org/package/v3.23/main/x86_64/python3
-# https://pkgs.alpinelinux.org/package/v3.23/community/x86_64/py3-pip
-# https://pkgs.alpinelinux.org/package/v3.23/main/x86_64/make
-# https://pkgs.alpinelinux.org/package/v3.23/main/x86_64/gcc
-# https://pkgs.alpinelinux.org/package/v3.23/main/x86_64/g++
-# https://pkgs.alpinelinux.org/package/v3.23/main/x86_64/build-base
+# https://dl-cdn.alpinelinux.org/alpine/v3.24/main/x86_64
+# https://dl-cdn.alpinelinux.org/alpine/v3.24/community/x86_64
+# https://pkgs.alpinelinux.org/package/v3.24/main/x86_64/python3
+# https://pkgs.alpinelinux.org/package/v3.24/community/x86_64/py3-pip
+# https://pkgs.alpinelinux.org/package/v3.24/main/x86_64/make
+# https://pkgs.alpinelinux.org/package/v3.24/main/x86_64/gcc
+# https://pkgs.alpinelinux.org/package/v3.24/main/x86_64/g++
+# https://pkgs.alpinelinux.org/package/v3.24/main/x86_64/build-base
 # apk info python3
-apk add --update --no-cache python3=3.12.13-r0 make=4.4.1-r3 gcc=15.2.0-r2 g++=15.2.0-r2 build-base=0.5-r3
+apk add --update --no-cache python3=3.14.5-r0 make=4.4.1-r4 gcc=15.2.0-r5 g++=15.2.0-r5 build-base=0.5-r4
 ln -sf python3 /usr/bin/python
 EOF
 
@@ -100,8 +100,8 @@ apk update
 # Die neuesten Versionen der bereits installierten Packages installieren
 apk upgrade
 
-# https://pkgs.alpinelinux.org/package/v3.23/main/x86_64/wget
-apk add --update --no-cache wget=1.25.0-r2
+# https://pkgs.alpinelinux.org/package/v3.24/main/x86_64/wget
+apk add --update --no-cache wget=1.25.0-r3
 apk cache clean
 rm -rf /tmp/*
 EOF
