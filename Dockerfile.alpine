@@ -56,9 +56,6 @@ apk update
 # Die neuesten Versionen der bereits installierten Packages installieren
 apk upgrade
 
-npm r -g pnpm
-npm i -g pnpm
-
 # ggf. Python fuer pg
 # https://dl-cdn.alpinelinux.org/alpine/v3.24/main/x86_64
 # https://dl-cdn.alpinelinux.org/alpine/v3.24/community/x86_64
@@ -71,6 +68,9 @@ npm i -g pnpm
 # apk info python3
 apk add --update --no-cache python3=3.14.5-r0 make=4.4.1-r4 gcc=15.2.0-r5 g++=15.2.0-r5 build-base=0.5-r4
 ln -sf python3 /usr/bin/python
+
+#wget -qO- https://get.pnpm.io/install.sh | ENV="/etc/profile" SHELL="$(which sh)" sh -
+npm i -g pnpm@11.6.0
 EOF
 
 USER node
@@ -83,6 +83,7 @@ RUN --mount=type=bind,source=package.json,target=package.json \
   --mount=type=cache,target=/root/.pnpm <<EOF
 set -eux
 
+PATH=/opt/pnpm/bin:$PATH
 pnpm i -P --frozen-lockfile
 EOF
 

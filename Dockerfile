@@ -52,8 +52,7 @@ apt-get update --no-show-upgraded
 # Die neuesten Versionen der bereits installierten Packages installieren
 apt-get upgrade --yes --no-show-upgraded
 
-npm r -g pnpm
-npm i -g pnpm
+npm i -g pnpm@11.6.0
 
 # Debian Trixie bietet nur Packages fuer Python 3.13
 # https://packages.debian.org/trixie/python3.13-minimal

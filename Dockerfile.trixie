@@ -64,8 +64,7 @@ RUN <<EOF
   ln -s /usr/bin/python3.13 /usr/bin/python3
   ln -s /usr/bin/python3.13 /usr/bin/python
 
-  npm r -g pnpm
-  npm i -g pnpm
+  npm i -g pnpm@11.6.0
 EOF
 
 USER node
