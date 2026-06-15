@@ -38,50 +38,6 @@
 ARG NODE_VERSION_DHI=26.3.0-0 \
     NODE_VERSION=26.3.0
 
-# ---------------------------------------------------------------------------------------
-# S t a g e   d i s t
-# ---------------------------------------------------------------------------------------
-FROM node:${NODE_VERSION}-trixie-slim AS dist
-
-RUN <<EOF
-# https://explainshell.com/explain?cmd=set+-eux
-set -eux
-# https://manpages.debian.org/trixie/apt/apt-get.8.en.html
-# Die "Package Index"-Dateien neu synchronisieren
-apt-get update --no-show-upgraded
-# Die neuesten Versionen der bereits installierten Packages installieren
-apt-get upgrade --yes --no-show-upgraded
-
-npm i -g pnpm@11.6.0
-
-# Debian Trixie bietet nur Packages fuer Python 3.13
-# https://packages.debian.org/trixie/python3.13-minimal
-# https://packages.debian.org/trixie/python3.13-dev
-# https://packages.debian.org/trixie/build-essential
-apt-get install --no-install-recommends --yes python3.13-minimal=3.13.5-2 python3.13-dev=3.13.5-2 build-essential=12.12
-ln -s /usr/bin/python3.13 /usr/bin/python3
-ln -s /usr/bin/python3.13 /usr/bin/python
-
-EOF
-
-USER node
-
-WORKDIR /home/node
-
-# https://docs.docker.com/engine/reference/builder/#run---mounttypebind
-RUN --mount=type=bind,source=package.json,target=package.json \
-  --mount=type=bind,source=pnpm-lock.yaml,target=pnpm-lock.yaml \
-  --mount=type=bind,source=nest-cli.json,target=nest-cli.json \
-  --mount=type=bind,source=tsconfig.json,target=tsconfig.json \
-  --mount=type=bind,source=tsconfig.build.json,target=tsconfig.build.json \
-  --mount=type=bind,source=src,target=src \
-  --mount=type=cache,target=/root/.pnpm <<EOF
-set -eux
-
-pnpm i --prefer-frozen-lockfile
-pnpm run build
-EOF
-
 # ------------------------------------------------------------------------------
 # S t a g e   d e p e n d e n c i e s
 # ------------------------------------------------------------------------------
@@ -98,7 +54,7 @@ apt-get update
 # Die neuesten Versionen der bereits installierten Packages installieren
 apt-get upgrade --yes
 
-npm i -g pnpm
+npm i -g pnpm@11.7.0
 
 # ggf. Python fuer pg
 # Debian Trixie bietet nur Packages fuer Python 3.13
