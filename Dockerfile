@@ -44,29 +44,30 @@ ARG NODE_VERSION_DHI=26.3.1-0 \
 FROM node:${NODE_VERSION}-trixie-slim AS dependencies
 
 RUN --mount=type=bind,source=package.json,target=package.json <<EOF
-# https://explainshell.com/explain?cmd=set+-eux
-set -eux
+  # https://explainshell.com/explain?cmd=set+-eux
+  set -eux
 
-# https://manpages.debian.org/trixie/apt/apt-get.8.en.html
-# Die "Package Index"-Dateien neu synchronisieren
-apt-get update
+  # https://manpages.debian.org/trixie/apt/apt-get.8.en.html
+  # Die "Package Index"-Dateien neu synchronisieren
+  apt-get update
 
-# Die neuesten Versionen der bereits installierten Packages installieren
-apt-get upgrade --yes
+  # Die neuesten Versionen der bereits installierten Packages installieren
+  apt-get upgrade --yes
 
-npm i -g pnpm@11.8.0
+  npm i -g pnpm@11.8.0
 
-# ggf. Python fuer pg
-# Debian Trixie bietet nur Packages fuer Python 3.13
-# https://packages.debian.org/trixie/python3.13-minimal
-# https://packages.debian.org/trixie/python3.13-dev
-# https://packages.debian.org/trixie/build-essential
-# "python3-dev" enthaelt "multiprocessing"
-# "build-essential" enthaelt "make"
-apt-get install --no-install-recommends --yes python3.13-minimal=3.13.5-2+deb13u2 python3.13-dev=3.13.5-2+deb13u2 build-essential=12.12
-ln -s /usr/bin/python3.13 /usr/bin/python3
-ln -s /usr/bin/python3.13 /usr/bin/python
-
+  # ggf. Python fuer pg
+  # Debian Trixie bietet nur Packages fuer Python 3.13
+  # https://packages.debian.org/trixie/python3.13-minimal
+  # https://packages.debian.org/trixie/python3.13-dev
+  # https://packages.debian.org/trixie/build-essential
+  # https://packages.debian.org/trixie/ca-certificates fuer Rust bzw. "pacquet" bei Linux
+  # "python3-dev" enthaelt "multiprocessing"
+  # "build-essential" enthaelt "make"
+  apt-get install --no-install-recommends --yes python3.13-minimal=3.13.5-2+deb13u2 python3.13-dev=3.13.5-2+deb13u2 build-essential=12.12 ca-certificates=20250419
+  ln -s /usr/bin/python3.13 /usr/bin/python3
+  ln -s /usr/bin/python3.13 /usr/bin/python
+  update-ca-certificates
 EOF
 
 USER node
