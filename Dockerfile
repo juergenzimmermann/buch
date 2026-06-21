@@ -54,7 +54,7 @@ apt-get update
 # Die neuesten Versionen der bereits installierten Packages installieren
 apt-get upgrade --yes
 
-npm i -g pnpm@11.7.0
+npm i -g pnpm@11.8.0
 
 # ggf. Python fuer pg
 # Debian Trixie bietet nur Packages fuer Python 3.13
