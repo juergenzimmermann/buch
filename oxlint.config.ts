@@ -218,9 +218,11 @@ export default defineConfig({
 
         'node/global-require': 'error',
         'node/handle-callback-err': 'error',
+        'node/no-mixed-requires': 'error',
         'node/no-new-require': 'error',
         'node/no-path-concat': 'error',
         'node/no-process-env': 'error',
+        'node/no-sync': 'error',
 
         // https://github.com/sindresorhus/eslint-plugin-unicorn/blob/main/configs/recommended.js
         'unicorn/catch-error-name': [
@@ -231,6 +233,7 @@ export default defineConfig({
         ],
         'unicorn/custom-error-definition': 'error',
         'unicorn/filename-case': 'off',
+        'unicorn/max-nested-calls': 'error',
         'unicorn/no-array-for-each': 'off',
         'unicorn/no-process-exit': 'off',
         'unicorn/prefer-array-flat-map': 'error',
@@ -366,6 +369,7 @@ export default defineConfig({
         'object-shorthand': 'error',
         'operator-assignment': 'error',
         'prefer-exponentiation-operator': 'error',
+        'prefer-number-coercion': 'error',
         'prefer-numeric-literals': 'error',
         'prefer-object-has-own': 'error',
         'prefer-object-spread': 'error',
