@@ -70,7 +70,7 @@ apk add --update --no-cache python3=3.14.5-r0 make=4.4.1-r4 gcc=15.2.0-r5 g++=15
 ln -sf python3 /usr/bin/python
 
 #wget -qO- https://get.pnpm.io/install.sh | ENV="/etc/profile" SHELL="$(which sh)" sh -
-npm i -g pnpm@11.8.0
+npm i -g pnpm@11.9.0
 EOF
 
 USER node
