@@ -27,7 +27,7 @@
 
 services:
   prometheus:
-    image: prom/prometheus:v3.12.0
+    image: prom/prometheus:v3.13.0-rc.1
     ports:
       - published: 9090
         target: 9090
@@ -70,7 +70,7 @@ services:
           memory: 512M
 
   grafana:
-    image: grafana/grafana:13.0.2
+    image: grafana/grafana:13.0.3
     ports:
       - published: 3333
         target: 3000
