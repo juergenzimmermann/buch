@@ -44,4 +44,4 @@ allowBuilds:
   prisma: true
 
 configDependencies:
-  "@pnpm/pacquet": 0.11.11
+  "@pnpm/pacquet": 0.11.12
