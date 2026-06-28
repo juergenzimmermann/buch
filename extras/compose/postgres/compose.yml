@@ -21,8 +21,9 @@
 
 services:
   postgres:
-    # https://github.com/docker-library/postgres/blob/master/18/trixie/Dockerfile
-    image: dhi.io/postgres:18.4-debian13
+    # https://github.com/docker-library/postgres/blob/master/19/trixie/Dockerfile
+    #image: dhi.io/postgres:18.4-debian13
+    image: postgres:19beta1-trixie
     ports:
       - published: 5432
         target: 5432
@@ -33,9 +34,18 @@ services:
     # ggf. "-c shared_buffers=64MB" statt 128 MB (default bei PostgreSQL 18)
     # ggf. "-c timezone='Europe/Berlin'" (default bei PostgreSQL 18)
     # ggf. "-c max_connections=10" statt 100
-    command: ["-c", "ssl=on"]
+    #command: ["--ssl=on"]
+    command:
+      [
+        "--ssl=on",
+        "--ssl-cert-file=/var/lib/postgresql/19/docker/server.crt",
+        "--ssl-key-file=/var/lib/postgresql/19/docker/server.key",
+      ]
     volumes:
-      - pg_data:/var/lib/postgresql/18/data
+      # Image:   dhi.io/postgres:VERSION
+      #- pg_data:/var/lib/postgresql/19/data
+      # Image:   postgres:VERSION
+      - pg_data:/var/lib/postgresql/19/docker
       - pg_tablespace:/tablespace
       - pg_init:/init:ro
       # UNIX-Socket .s.PGSQL.5432.lock

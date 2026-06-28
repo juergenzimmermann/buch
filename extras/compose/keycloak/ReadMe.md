@@ -44,7 +44,7 @@ gestartet:
     # macOS
     cd extras/compose/postgres
 
-    docker compose up db
+    docker compose up
 ```
 
 In einer 2-ten Shell wird auf den PostgreSQL-Container mit dem PostgreSQL-Server
@@ -56,7 +56,7 @@ zugegriffen:
     # macOS
     cd extras/compose/postgres
 
-    docker compose exec db bash
+    docker compose exec postgres bash
         psql --dbname=postgres --username=postgres
             CREATE USER keycloak PASSWORD 'p';
             CREATE DATABASE keycloak;
@@ -69,6 +69,8 @@ zugegriffen:
             \q
         exit
 ```
+
+Danach wird der Container `postgres` wieder heruntergefahren.
 
 ## Installation
 
@@ -119,7 +121,8 @@ Verzeichnis `/tmp/tls` nach `/opt/keycloak/tls` und deshalb in das Named Volume
 `kc_tls` kopiert. Danach wird der Linux-Owner und die -Gruppe jeweils auf `nonroot`
 gesetzt.
 
-Jetzt kann der Container für _Keycloak_ gestartet werden:
+Jetzt kann der Container für _Keycloak_ zusammen mit dem Container für `PostgreSQL`
+gestartet werden:
 
 ```shell
     docker compose up

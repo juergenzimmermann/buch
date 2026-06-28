@@ -71,12 +71,12 @@ Berechtigung zum Ändern vom Linux-Owner und von der Linux-Group (s.u.).
     # Windows
     cd extras\compose\postgres
     docker run -v pg_init:/init -v pg_tablespace:/tablespace -v ./init:/tmp/init:ro `
-      --rm -it -u 0 --entrypoint '' dhi.io/postgres:18.4-debian13 /bin/bash
+      --rm -it -u 0 --entrypoint '' dhi.io/postgres:19.0-debian13 /bin/bash
 
     # macOS
     cd extras/compose/postgres
     docker run -v pg_init:/init -v pg_tablespace:/tablespace -v ./init:/tmp/init:ro \
-    --rm -it -u 0 --entrypoint '' dhi.io/postgres:18.4-debian13 /bin/bash
+    --rm -it -u 0 --entrypoint '' dhi.io/postgres:19.0-debian13 /bin/bash
 ```
 
 Um die SQL-Skripte sowie Zertifikat und privater Schlüssel für TLS aus dem
@@ -102,9 +102,9 @@ der Owner und die Gruppe auf `postgres` gesetzt sowie die Zugriffsrechte auf Okt
 ## Installation ohne TLS
 
 Für _TLS_ erwartet _PostgreSQL_ standardmäßig die Dateien `server.crt` und
-`server.key` im Verzeichnis `/var/lib/postgresql/18/data`, was aber zu Beginn
+`server.key` im Verzeichnis `/var/lib/postgresql/19/data`, was aber zu Beginn
 der Installation leer sein muss. Deshalb wird der PostgreSQL-Server zunächst
-ohne TLS gestartet, damit `/var/lib/postgresql/18/data` initialisiert wird.
+ohne TLS gestartet, damit `/var/lib/postgresql/19/data` initialisiert wird.
 Dazu muss in `compose.yml` temporär die Zeile `command: ...` auskommentiert
 werden. Danach wird der PostgreSQL-Server mit dem _Hardened Image_ als
 Docker-Container gestartet
@@ -116,13 +116,13 @@ Docker-Container gestartet
 
 Nachdem in der ersten Shell der Server erfolgreich gestartet und initialisiert
 ist, werden `server.crt` und `server.key` aus dem Named Volume `pg_init`, d.h.
-aus dem Verzeichnis `/init/tls`, in das Verzeichnis `/var/lib/postgresql/18/data`
+aus dem Verzeichnis `/init/tls`, in das Verzeichnis `/var/lib/postgresql/19/data`
 kopiert. Danach wird der Server bzw. Container wieder heruntergefahren, da er
 noch ohne TLS läuft.
 
 ```shell
     # in der 2. Shell
-    docker compose exec postgres bash -c 'cp /init/tls/* /var/lib/postgresql/18/data'
+    docker compose exec postgres bash -c 'cp /init/tls/* /var/lib/postgresql/19/data'
     docker compose down
 ```
 
