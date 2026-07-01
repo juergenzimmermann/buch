@@ -28,7 +28,8 @@ export const typeDefs = /* GraphQL */ `
         create(input: BuchNeuInput!): CreatePayload!
         update(input: BuchUpdateInput!): UpdatePayload
         delete(id: ID!): DeletePayload
-        token(username: String!, password: String!): TokenPayload # Mutation, wenn z.B. der Login-Zeitpunkt gespeichert wird
+        # Mutation, wenn z.B. der Login-Zeitpunkt gespeichert wird
+        token(username: String!, password: String!): TokenPayload
     }
 
     "Datenschema zu einem Buch, das gelesen wird"
