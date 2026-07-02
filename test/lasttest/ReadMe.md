@@ -64,7 +64,7 @@ NOT_FOUND erwartet wird, zu `http_req_failed` zugeordnet werden.
     # macOS:
     cd test/lasttest
 
-    k6 run script.ts
+    k6 run --features native-histograms script.ts
 ```
 
 ## Visualisierung des Lasttests
