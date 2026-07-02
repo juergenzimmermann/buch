@@ -36,7 +36,8 @@ const computername = hostname();
 const { server } = config;
 if (
     typeof server === 'object' &&
-    (typeof server.port !== 'number' || typeof server.portHttp !== 'number')
+    ((server.port !== undefined && typeof server.port !== 'number') ||
+        (server.portHttp !== undefined && typeof server.portHttp !== 'number'))
 ) {
     throw new TypeError('Ein konfigurierter Port ist keine Zahl');
 }

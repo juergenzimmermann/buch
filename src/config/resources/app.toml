@@ -16,9 +16,9 @@
 # ==============================================================================
 # S e r v e r , z.B. Node, Deno oder Bun
 # ==============================================================================
-#[server]
+[server]
 #port = 3000
-# TODO Bruno kann nur HTTP 1.1: https://github.com/usebruno/bruno/issues/1728
+# TODO Bruno und Angular HttpClient kann nur HTTP 1.1: https://github.com/usebruno/bruno/issues/1728
 allowHTTP1 = true
 
 # ==============================================================================
