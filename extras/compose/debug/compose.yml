@@ -35,7 +35,7 @@
 
 services:
   netshoot:
-    image: nicolaka/netshoot:v0.15
+    image: nicolaka/netshoot:v0.16
     command:
       [
         "sh",
