@@ -21,7 +21,7 @@ pipeline {
     agent any
     tools {
         // Einstellungen > Tools > NodeJS Installationen
-        nodejs 'node-25.9.0'
+        nodejs 'node-26.5.0'
     }
 
     // globale Umgebungsvariable:
