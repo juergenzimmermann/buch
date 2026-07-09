@@ -83,10 +83,7 @@ export default defineConfig({
         'typescript/consistent-type-exports': 'error',
         'typescript/consistent-type-imports': 'error',
         'typescript/default-param-last': 'error',
-        'typescript/explicit-member-accessibility': [
-            'error',
-            { accessibility: 'no-public' },
-        ],
+        'typescript/explicit-member-accessibility': ['error', { accessibility: 'no-public' }],
         'typescript/no-base-to-string': [
             'error',
             {
@@ -232,9 +229,11 @@ export default defineConfig({
             },
         ],
         'unicorn/custom-error-definition': 'error',
+        'unicorn/explicit-timer-delay': 'error',
         'unicorn/filename-case': 'off',
         'unicorn/max-nested-calls': 'error',
         'unicorn/no-array-for-each': 'off',
+        'unicorn/no-confusing-array-with': 'error',
         'unicorn/no-process-exit': 'off',
         'unicorn/prefer-array-flat-map': 'error',
         'unicorn/prefer-string-replace-all': 'error',
@@ -244,11 +243,7 @@ export default defineConfig({
 
         // https://eslint.org/docs/rules
         // https://eslint.org/docs/rules/arrow-body-style
-        'arrow-body-style': [
-            'error',
-            'as-needed',
-            { requireReturnForObjectLiteral: true },
-        ],
+        'arrow-body-style': ['error', 'as-needed', { requireReturnForObjectLiteral: true }],
         'block-scoped-var': 'error',
         'capitalized-comments': 'off',
         // https://eslint.org/docs/rules/curly
@@ -314,10 +309,7 @@ export default defineConfig({
                 ignoreReadonlyClassProperties: true,
                 ignoreArrayIndexes: true,
                 enforceConst: true,
-                ignore: [
-                    0, 1, -1, 200, 201, 204, 304, 401, 403, 404, 406, 412, 422,
-                    428, 500,
-                ],
+                ignore: [0, 1, -1, 200, 201, 204, 304, 401, 403, 404, 406, 412, 422, 428, 500],
             },
         ],
         'no-multi-assign': 'error',
@@ -351,6 +343,7 @@ export default defineConfig({
         'no-underscore-dangle': 'error',
         'no-unmodified-loop-condition': 'error',
         'no-unneeded-ternary': 'error',
+        'no-unreachable-loop': 'error',
         'no-unused-vars': 'error',
         'no-use-before-define': [
             'error',
@@ -404,23 +397,14 @@ export default defineConfig({
 
     overrides: [
         {
-            files: [
-                'src/*/service/**/*.test.mts',
-                'test/integration/*/*.test.mts',
-            ],
+            files: ['src/*/service/**/*.test.mts', 'test/integration/*/*.test.mts'],
 
             plugins: ['vitest', 'import'],
             rules: {
-                'vitest/consistent-test-it': [
-                    'error',
-                    { withinDescribe: 'test' },
-                ],
+                'vitest/consistent-test-it': ['error', { withinDescribe: 'test' }],
                 'vitest/max-expects': 'off',
                 'vitest/no-conditional-in-test': 'off',
-                'vitest/no-hooks': [
-                    'error',
-                    { allow: ['beforeAll', 'beforeEach'] },
-                ],
+                'vitest/no-hooks': ['error', { allow: ['beforeAll', 'beforeEach'] }],
                 'vitest/no-importing-vitest-globals': 'off',
                 'vitest/prefer-called-times': 'off',
                 'vitest/prefer-expect-assertions': [
