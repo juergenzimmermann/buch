@@ -54,7 +54,7 @@ RUN --mount=type=bind,source=package.json,target=package.json <<EOF
   # Die neuesten Versionen der bereits installierten Packages installieren
   apt-get upgrade --yes
 
-  npm i -g pnpm@11.9.0
+  npm i -g pnpm@11.10.0
 
   # ggf. Python fuer pg
   # Debian Trixie bietet nur Packages fuer Python 3.13
