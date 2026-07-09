@@ -95,7 +95,7 @@ pipeline {
                     node --version
                     npm --version
                     npm r -g pnpm
-                    npm i -g pnpm
+                    npm i -g pnpm@11.10.0
                     npm root -g
                     ls -al ~/.cache/node
                     env | sort
@@ -116,7 +116,7 @@ pipeline {
                 echo "DATABASE_URL = ${env.DATABASE_URL}"
                 sh '''
                     cat package.json
-                    pnpm i --frozen-lockfile
+                    pnpm i -P --frozen-lockfile
                     pnpm prisma generate
                 '''
             }
