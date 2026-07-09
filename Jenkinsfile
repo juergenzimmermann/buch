@@ -67,7 +67,7 @@ pipeline {
         stage('Install') {
             // Stage-spezifische Umgebungsvariable
             environment {
-                DATABASE_URL = 'postgresql://buch:p@localhost/buch?schema=buch&connection_limit=10&sslnegotiation=direct?sslcert=../src/config/resources/postgresql/certificate.cer'
+                DATABASE_URL = 'postgresql://buch:p@localhost/buch?schema=buch&connection_limit=10&sslnegotiation=direct&sslcert=../src/config/resources/postgresql/certificate.cer'
             }
 
             steps {
@@ -101,8 +101,8 @@ pipeline {
                     env | sort
                     which pnpm
                     pnpm --version
-                    pnpm root -g
-                    pnpm store path
+                    #pnpm root -g
+                    #pnpm store path
                 '''
 
                 script {
