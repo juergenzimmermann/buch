@@ -46,4 +46,5 @@ export default defineConfig({
 
     // default:
     // sortPackageJson: true,
+    // printWidth: 100,
 });

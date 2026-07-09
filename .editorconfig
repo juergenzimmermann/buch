@@ -12,7 +12,11 @@ insert_final_newline = true
 max_line_length = 80
 trim_trailing_whitespace = true
 
-[*.{ts,mts,js,mjs,cjs,plantuml}]
+[*.{ts,mts,js,mjs,cjs}]
+indent_size = 4
+max_line_length = 100
+
+[*.plantuml]
 indent_size = 4
 
 [Dockerfile,Jenkinsfile]

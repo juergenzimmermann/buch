@@ -18,7 +18,7 @@
 
 services:
   sonarqube:
-    image: sonarqube:26.6.0.123539-community
+    image: sonarqube:26.7.0.124771-community
     ports:
       # Port fuer HTTP
       - published: 9000
