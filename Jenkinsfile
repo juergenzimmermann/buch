@@ -94,15 +94,15 @@ pipeline {
                     lsb_release -a
                     node --version
                     npm --version
-                    npm r -g bun
-                    npm i -g bun
+                    npm r -g pnpm
+                    npm i -g pnpm
                     npm root -g
                     ls -al ~/.cache/node
                     env | sort
-                    which bun
-                    bun --version
-                    bun pm cache
-                    bun pm bin
+                    which pnpm
+                    pnpm --version
+                    pnpm root -g
+                    pnpm store path
                 '''
 
                 script {
@@ -116,8 +116,8 @@ pipeline {
                 echo "DATABASE_URL = ${env.DATABASE_URL}"
                 sh '''
                     cat package.json
-                    bun i --frozen-lockfile
-                    bun prisma generate
+                    pnpm i --frozen-lockfile
+                    pnpm prisma generate
                 '''
             }
         }
@@ -125,8 +125,8 @@ pipeline {
         stage('Compile') {
             steps {
                 sh '''
-                    bun tsgo --version
-                    bun run tsgo
+                    pnpm tsc --version
+                    pnpm run tsc
                 '''
             }
         }
@@ -140,17 +140,17 @@ pipeline {
                     },
                     'Lint': {
                         sh '''
-                            bun lint --version
-                            bun run lint
+                            pnpm lint --version
+                            pnpm run lint
                         '''
                     },
                     'Security Audit': {
-                        sh 'bun audit --prod'
+                        sh 'pnpm audit --prod'
                     },
                     'AsciiDoctor': {
                         sh '''
-                            bun asciidoctor --version
-                            bun run asciidoctor
+                            pnpm asciidoctor --version
+                            pnpm run asciidoctor
                         '''
                     },
                 )
