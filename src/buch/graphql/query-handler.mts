@@ -70,9 +70,7 @@ export const buchHandler = async (id: ID) => {
     return buch;
 };
 
-export const buecherHandler = async (
-    input?: SuchParameterInput | undefined,
-) => {
+export const buecherHandler = async (input?: SuchParameterInput | undefined) => {
     logger.debug('buecherHandler: input=%o', input ?? 'undefined');
     const pageable = createPageable({});
     const suchparameter = toSuchparameter(input);

@@ -33,11 +33,7 @@ import {
     BuchUpdateSchema,
     type BuchUpdateType,
 } from './buch-validation.mts';
-import {
-    badRequest,
-    createProblemDetails,
-    preconditionRequired,
-} from '../../problem-details.mts';
+import { badRequest, createProblemDetails, preconditionRequired } from '../../problem-details.mts';
 import { File } from 'node:buffer';
 import { Hono } from 'hono';
 import { createBaseUrl } from './create-base-url.mts';
@@ -134,11 +130,7 @@ router.put('/:id', rolesRequired('admin', 'user'), async (c) => {
     logger.debug('put: version=%s', version);
     if (version === undefined) {
         logger.debug('put: version === undefined');
-        return createProblemDetails(
-            c,
-            preconditionRequired,
-            'Header "If-Match" fehlt',
-        );
+        return createProblemDetails(c, preconditionRequired, 'Header "If-Match" fehlt');
     }
 
     const requestBody = await c.req.json();
@@ -196,30 +188,16 @@ router.post('/:id', rolesRequired('admin', 'user'), async (c) => {
     const body = await c.req.parseBody();
     const { file } = body;
     if (file === undefined || (Array.isArray(file) && file.length !== 1)) {
-        return createProblemDetails(
-            c,
-            badRequest,
-            'Keine oder mehrere Dateien hochgeladen',
-        );
+        return createProblemDetails(c, badRequest, 'Keine oder mehrere Dateien hochgeladen');
     }
     if (!(file instanceof File)) {
-        return createProblemDetails(
-            c,
-            badRequest,
-            `Ungueltiger Typ beim Upload: ${typeof file}`,
-        );
+        return createProblemDetails(c, badRequest, `Ungueltiger Typ beim Upload: ${typeof file}`);
     }
 
     const { name, size, type } = file;
     logger.debug('upload: name=%s, size=%d, type=%s', name, size, type);
     const buffer = Buffer.from(await file.arrayBuffer());
-    const buchFile: BuchFileCreated | undefined = await addFile(
-        idNumber,
-        buffer,
-        name,
-        size,
-        type,
-    );
+    const buchFile: BuchFileCreated | undefined = await addFile(idNumber, buffer, name, size, type);
     logger.debug(
         'upload: id=%s, byteLength=%s, filename=%s, mimetype=%s',
         buchFile?.id,

@@ -38,11 +38,8 @@ if (logDirConf !== undefined && typeof logDirConf !== 'string') {
 }
 
 const logDir: string | null =
-    (logDirConf as string | undefined) === undefined
-        ? null
-        : logDirConf.trimEnd();
-const logFile =
-    logDir === null ? logFileDefault : resolve(logDir, logFileNameDefault);
+    (logDirConf as string | undefined) === undefined ? null : logDirConf.trimEnd();
+const logFile = logDir === null ? logFileDefault : resolve(logDir, logFileNameDefault);
 const pretty = log?.pretty === true;
 
 // https://getpino.io
@@ -61,9 +58,7 @@ if (env.LOG_LEVEL !== undefined) {
 export const logLevel = logLevelTmp;
 
 const message = styleText(['black', 'bgWhite'], 'logger config:');
-console.log(
-    `${message} logLevel=${logLevel}, logFile=${logFile}, pretty=${pretty}`,
-);
+console.log(`${message} logLevel=${logLevel}, logFile=${logFile}, pretty=${pretty}`);
 
 const fileOptions = {
     level: logLevel,
@@ -90,7 +85,4 @@ const options: pino.TransportMultiOptions | pino.TransportSingleOptions = pretty
 const transports = pino.transport(options);
 
 // https://github.com/pinojs/pino/issues/1160#issuecomment-944081187
-export const parentLogger: pino.Logger<string> = pino(
-    { level: logLevel },
-    transports,
-);
+export const parentLogger: pino.Logger<string> = pino({ level: logLevel }, transports);

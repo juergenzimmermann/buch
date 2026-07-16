@@ -55,10 +55,7 @@ export type BuchMitTitelUndAbbildungen = Prisma.BuchGetPayload<{
 }>;
 
 // "preis" und "rabatt" sind vom Prisma-internen Typ "Decimal"
-export type BuchMitTitelUndAbbildungenDTO = Omit<
-    BuchMitTitelUndAbbildungen,
-    'preis' | 'rabatt'
-> & {
+export type BuchMitTitelUndAbbildungenDTO = Omit<BuchMitTitelUndAbbildungen, 'preis' | 'rabatt'> & {
     preis: number;
     rabatt: number;
 };
@@ -103,14 +100,11 @@ export const findById = async ({
     // - keine Konfiguration fuer Eager- oder Lazy-Fetching
     // - keine Proxy-Objekte durch evtl. Lazy-Fetching
     // - keine DTO-Klassen mit weggelassenen nicht geladenen Properties
-    const include = mitAbbildungen
-        ? INCLUDE_TITEL_UND_ABBILDUNGEN
-        : INCLUDE_TITEL;
-    const buch: BuchMitTitelUndAbbildungen | null =
-        await prismaClient.buch.findUnique({
-            where: { id },
-            include,
-        });
+    const include = mitAbbildungen ? INCLUDE_TITEL_UND_ABBILDUNGEN : INCLUDE_TITEL;
+    const buch: BuchMitTitelUndAbbildungen | null = await prismaClient.buch.findUnique({
+        where: { id },
+        include,
+    });
     if (buch === null) {
         logger.debug('Es gibt kein Buch mit der ID %d', id);
         throw new NotFoundError(`Es gibt kein Buch mit der ID ${id}.`);
@@ -136,9 +130,7 @@ export const findById = async ({
  * @param buchId ID des zugehörigen Buchs.
  * @returns Binärdatei oder undefined als Promise.
  */
-export const findFileByBuchId = async (
-    buchId: number,
-): Promise<Readonly<BuchFile> | undefined> => {
+export const findFileByBuchId = async (buchId: number): Promise<Readonly<BuchFile> | undefined> => {
     logger.debug('findFileByBuchId: buchId=%d', buchId);
     const buchFile: BuchFile | null = await prismaClient.buchFile.findUnique({
         where: { buchId },
@@ -201,9 +193,7 @@ const createSlice = (
     return buchSlice;
 };
 
-export const findAll = async (
-    pageable: Pageable,
-): Promise<Readonly<Slice<BuchMitTitelDTO>>> => {
+export const findAll = async (pageable: Pageable): Promise<Readonly<Slice<BuchMitTitelDTO>>> => {
     const { number, size } = pageable;
     const buecher: BuchMitTitel[] = await prismaClient.buch.findMany({
         skip: number * size,
@@ -241,12 +231,7 @@ const checkKeys = (keys: string[]) => {
 const checkEnums = (suchparameter: Suchparameter) => {
     const { art } = suchparameter;
     logger.debug('#checkEnums: Suchparameter "art=%s"', art);
-    return (
-        art === undefined ||
-        art === 'EPUB' ||
-        art === 'HARDCOVER' ||
-        art === 'PAPERBACK'
-    );
+    return art === undefined || art === 'EPUB' || art === 'HARDCOVER' || art === 'PAPERBACK';
 };
 
 /**
@@ -260,11 +245,7 @@ export const find = async (
     suchparameter: Suchparameter | null,
     pageable: Pageable,
 ): Promise<Readonly<Slice<Readonly<BuchMitTitelDTO>>>> => {
-    logger.debug(
-        'find: suchparameter=%s, pageable=%o',
-        JSON.stringify(suchparameter),
-        pageable,
-    );
+    logger.debug('find: suchparameter=%s, pageable=%o', JSON.stringify(suchparameter), pageable);
 
     // Keine Suchparameter?
     if (suchparameter === null) {

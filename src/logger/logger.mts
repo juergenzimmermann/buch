@@ -32,10 +32,10 @@ import type pino from 'pino';
  *
  * @author [Jürgen Zimmermann](mailto:Juergen.Zimmermann@h-ka.de)
  */
-export const getLogger: (
+export const getLogger: (context: string, kind?: string) => pino.Logger<string> = (
     context: string,
-    kind?: string,
-) => pino.Logger<string> = (context: string, kind = 'file') => {
+    kind = 'file',
+) => {
     const bindings: Record<string, string> = {};
     // "indexed access" auf eine Property, deren Name als Wert im Argument "kind" uebergeben wird
     bindings[kind] = context;

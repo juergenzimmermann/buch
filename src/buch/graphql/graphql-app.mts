@@ -27,12 +27,7 @@ import {
     type SuchParameterInput,
 } from './types.mts';
 import { buchHandler, buecherHandler } from './query-handler.mts';
-import {
-    createHandler,
-    deleteHandler,
-    tokenHandler,
-    updateHandler,
-} from './mutation-handler.mts';
+import { createHandler, deleteHandler, tokenHandler, updateHandler } from './mutation-handler.mts';
 import { createSchema, createYoga } from 'graphql-yoga';
 import { Hono } from 'hono';
 import { getLogger } from '../../logger/logger.mts';
@@ -50,8 +45,7 @@ type GraphqlContext = {
 const resolvers = {
     Query: {
         buch: (_: unknown, { id }: { id: ID }) => buchHandler(id),
-        buecher: (_: unknown, { input }: { input?: SuchParameterInput }) =>
-            buecherHandler(input),
+        buecher: (_: unknown, { input }: { input?: SuchParameterInput }) => buecherHandler(input),
     },
     Mutation: {
         create: async (
@@ -70,18 +64,12 @@ const resolvers = {
             await rolesRequired(request, 'admin', 'user');
             return updateHandler(input);
         },
-        delete: async (
-            _: unknown,
-            { id }: { id: ID },
-            { request }: GraphqlContext,
-        ) => {
+        delete: async (_: unknown, { id }: { id: ID }, { request }: GraphqlContext) => {
             await rolesRequired(request, 'admin');
             return deleteHandler(id);
         },
-        token: (
-            _: unknown,
-            { username, password }: { username: string; password: string },
-        ) => tokenHandler({ username, password }),
+        token: (_: unknown, { username, password }: { username: string; password: string }) =>
+            tokenHandler({ username, password }),
     },
 };
 

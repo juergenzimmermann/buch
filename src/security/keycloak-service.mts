@@ -93,10 +93,7 @@ export const token = async ({ username, password }: TokenData) => {
 
     const { status } = response;
     if (status !== 200) {
-        logger.warn(
-            'Fehler beim Netzwerkzugriff auf Keycloak. Statuscode: %d',
-            status,
-        );
+        logger.warn('Fehler beim Netzwerkzugriff auf Keycloak. Statuscode: %d', status);
         return;
     }
 

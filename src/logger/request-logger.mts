@@ -25,10 +25,8 @@ const logger = getLogger('requestLogger', 'func');
  * @author [Jürgen Zimmermann](mailto:Juergen.Zimmermann@h-ka.de)
  */
 // https://hono.dev/docs/guides/middleware
-export const requestLogger = createMiddleware(
-    async (c: Context, next: Next) => {
-        const { method, url } = c.req;
-        logger.debug('method=%s, url=%s', method, url);
-        return await next();
-    },
-);
+export const requestLogger = createMiddleware(async (c: Context, next: Next) => {
+    const { method, url } = c.req;
+    logger.debug('method=%s, url=%s', method, url);
+    return await next();
+});

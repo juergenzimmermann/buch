@@ -26,10 +26,7 @@ import {
     toNumber,
     toUpdate,
 } from './types.mts';
-import {
-    BuchNeuSchema,
-    BuchUpdateGraphQLSchema,
-} from '../router/buch-validation.mts';
+import { BuchNeuSchema, BuchUpdateGraphQLSchema } from '../router/buch-validation.mts';
 import { create, deleteFn, update } from '../service/buch-write-service.mts';
 import { GraphQLError } from 'graphql';
 import { NotFoundError } from '../service/errors.mts';
@@ -76,9 +73,7 @@ const validateBuchNeu = (buch: BuchNeuInput) => {
     logger.debug('validateBuchNeu: ok');
 };
 
-export const createHandler = async (
-    input: BuchNeuInput,
-): Promise<CreatePayload> => {
+export const createHandler = async (input: BuchNeuInput): Promise<CreatePayload> => {
     logger.debug('createHandler: input=%o', input);
 
     // Validierung mit Zod
@@ -130,9 +125,7 @@ const validateBuchUpdate = (buch: BuchUpdateInput) => {
     logger.debug('validateBuchUpdate: ok');
 };
 
-export const updateHandler = async (
-    input: BuchUpdateInput,
-): Promise<UpdatePayload> => {
+export const updateHandler = async (input: BuchUpdateInput): Promise<UpdatePayload> => {
     logger.debug('updateHandler: input=%o', input);
 
     // Validierung mit Zod

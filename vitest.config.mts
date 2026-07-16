@@ -51,10 +51,7 @@ export default defineConfig({
             {
                 test: {
                     name: 'integration',
-                    include: [
-                        'test/integration/*.test.mts',
-                        'test/integration/*/*.test.mts',
-                    ],
+                    include: ['test/integration/*.test.mts', 'test/integration/*/*.test.mts'],
 
                     // https://vitest.dev/config/globalsetup.html
                     globalSetup: './test/integration/setup.global.mts',

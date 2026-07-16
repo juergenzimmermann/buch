@@ -95,9 +95,7 @@ export function setup() {
     if (res.status === 200) {
         console.log('DB neu geladen');
     } else {
-        throw new Error(
-            `setup fuer db_populate: status=${res.status}, body=${res.body}`,
-        );
+        throw new Error(`setup fuer db_populate: status=${res.status}, body=${res.body}`);
     }
 }
 
@@ -263,10 +261,7 @@ export function getByTitel() {
 // https://grafana.com/docs/k6/latest/using-k6/metrics/create-custom-metrics
 // https://grafana.com/docs/k6/latest/javascript-api/k6-metrics/counter
 export function getByTitelNichtVorhanden() {
-    const titel =
-        titelNichtVorhanden[
-            Math.floor(Math.random() * titelNichtVorhanden.length)
-        ];
+    const titel = titelNichtVorhanden[Math.floor(Math.random() * titelNichtVorhanden.length)];
     const response = http.get(`${restUrl}?titel=${titel}`);
 
     expect(response.status).toBe(404);
@@ -286,8 +281,7 @@ export function getByISBN() {
 
 // GET /rest?<schlagwort>=true
 export function getBySchlagwort() {
-    const schlagwort =
-        schlagwoerter[Math.floor(Math.random() * schlagwoerter.length)];
+    const schlagwort = schlagwoerter[Math.floor(Math.random() * schlagwoerter.length)];
     const response = http.get(`${restUrl}?${schlagwort}=true`);
 
     const { status, headers } = response;
@@ -298,8 +292,7 @@ export function getBySchlagwort() {
 
 // POST /rest
 export function postBuch() {
-    const schlagwort =
-        schlagwoerter[Math.floor(Math.random() * schlagwoerter.length)];
+    const schlagwort = schlagwoerter[Math.floor(Math.random() * schlagwoerter.length)];
     const buch = { ...neuesBuch };
     buch['isbn'] = generateISBN();
     buch['schlagwoerter'] = [schlagwort?.toUpperCase() ?? 'N/A'];

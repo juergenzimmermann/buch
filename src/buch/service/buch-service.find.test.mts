@@ -14,11 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-import {
-    type BuchMitTitelDTO,
-    type BuchMitTitelUndAbbildungen,
-    find,
-} from './buch-service.mts';
+import { type BuchMitTitelDTO, type BuchMitTitelUndAbbildungen, find } from './buch-service.mts';
 import { Prisma, PrismaClient } from '../../generated/prisma/client.ts';
 import { beforeEach, describe, expect, test, vi } from 'vitest';
 import { Buchart } from '../../generated/prisma/enums.ts';
@@ -107,8 +103,6 @@ describe('buch-service: find', () => {
         findManyMock.mockResolvedValue([]);
 
         // when / then
-        await expect(find(suchparameter, pageable)).rejects.toThrow(
-            /^Keine Buecher gefunden/u,
-        );
+        await expect(find(suchparameter, pageable)).rejects.toThrow(/^Keine Buecher gefunden/u);
     });
 });

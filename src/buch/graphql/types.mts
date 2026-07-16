@@ -13,10 +13,7 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-import {
-    type BuchCreate,
-    type BuchUpdate,
-} from '../service/buch-write-service.mts';
+import { type BuchCreate, type BuchUpdate } from '../service/buch-write-service.mts';
 import { type BuchMitTitelUndAbbildungenDTO } from '../service/buch-service.mts';
 import { type Suchparameter } from '../service/suchparameter.mts';
 
@@ -36,8 +33,7 @@ export const toID = (value: string | number): ID => {
     }
     return value.toString() as ID;
 };
-export const toInt = (num: number): Int =>
-    (Number.isInteger(num) ? num : Math.round(num)) as Int;
+export const toInt = (num: number): Int => (Number.isInteger(num) ? num : Math.round(num)) as Int;
 export const toNumber = (id: ID): number => Number.parseInt(id, 10);
 const toDateOrNull = (dateStr?: string | null): Date | null =>
     dateStr === undefined || dateStr === null ? null : new Date(dateStr);
@@ -202,18 +198,8 @@ export type BuchUpdateInput = Omit<BuchNeuInput, 'titel' | 'abbildungen'> & {
 };
 
 export const toUpdate = (buch: BuchUpdateInput): BuchUpdate => {
-    const {
-        version,
-        isbn,
-        rating,
-        art,
-        preis,
-        rabatt,
-        lieferbar,
-        datum,
-        homepage,
-        schlagwoerter,
-    } = buch;
+    const { version, isbn, rating, art, preis, rabatt, lieferbar, datum, homepage, schlagwoerter } =
+        buch;
     const buchUpdate: BuchUpdate = {
         version,
         isbn,

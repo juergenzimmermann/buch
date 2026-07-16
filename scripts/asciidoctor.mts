@@ -43,16 +43,7 @@ adoc.convertFile(join('extras', 'doc', 'projekthandbuch.adoc'), options);
 
 // oxlint-disable-next-line no-underscore-dangle
 const __dirname = url.fileURLToPath(new URL('.', import.meta.url));
-console.log(
-    `HTML-Datei ${join(
-        __dirname,
-        '..',
-        'extras',
-        'doc',
-        'html',
-        'projekthandbuch.html',
-    )}`,
-);
+console.log(`HTML-Datei ${join(__dirname, '..', 'extras', 'doc', 'html', 'projekthandbuch.html')}`);
 
 // https://asciidoctor.github.io/asciidoctor.js/master
 // const htmlString = asciidoctor.convert(

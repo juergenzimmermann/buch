@@ -117,21 +117,14 @@ app.onError((error, c) => {
     }
 
     if (error.name === 'ZodError') {
-        return createProblemDetails(
-            c,
-            unprocessableContent,
-            (error as ZodError).issues,
-        );
+        return createProblemDetails(c, unprocessableContent, (error as ZodError).issues);
     }
 
     if (error instanceof IsbnExistsError) {
         return createProblemDetails(c, unprocessableContent, error.message);
     }
 
-    if (
-        error instanceof VersionInvalidError ||
-        error instanceof VersionOutdatedError
-    ) {
+    if (error instanceof VersionInvalidError || error instanceof VersionOutdatedError) {
         return createProblemDetails(c, preconditionFailed, error.message);
     }
 

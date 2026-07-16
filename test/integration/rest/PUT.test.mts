@@ -142,15 +142,7 @@ describe('PUT /rest/:id', () => {
         headers.append(CONTENT_TYPE, APPLICATION_JSON);
         headers.append(IF_MATCH, '"0"');
         headers.append(AUTHORIZATION, `${BEARER} ${token}`);
-        const expectedPaths = [
-            'isbn',
-            'rating',
-            'art',
-            'preis',
-            'rabatt',
-            'datum',
-            'homepage',
-        ];
+        const expectedPaths = ['isbn', 'rating', 'art', 'preis', 'rabatt', 'datum', 'homepage'];
 
         // when
         const response = await fetch(url, {
@@ -190,8 +182,7 @@ describe('PUT /rest/:id', () => {
         // then
         expect(response.status).toBe(428);
 
-        const { detail, statusCode } =
-            (await response.json()) as ProblemDetails;
+        const { detail, statusCode } = (await response.json()) as ProblemDetails;
 
         expect(detail).toContain(IF_MATCH);
         expect(statusCode).toBe(428);
@@ -215,8 +206,7 @@ describe('PUT /rest/:id', () => {
         // then
         expect(response.status).toBe(412);
 
-        const { detail, statusCode } =
-            (await response.json()) as ProblemDetails;
+        const { detail, statusCode } = (await response.json()) as ProblemDetails;
 
         expect(detail).toMatch(/Versionsnummer/u);
         expect(statusCode).toBe(412);

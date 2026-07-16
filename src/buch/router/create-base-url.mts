@@ -22,9 +22,7 @@ import { type HonoRequest } from 'hono';
 
 export const idPattern = /^[1-9]\d{0,10}$/u;
 
-export const createBaseUrl: (req: HonoRequest) => string = (
-    req: HonoRequest,
-) => {
+export const createBaseUrl: (req: HonoRequest) => string = (req: HonoRequest) => {
     const { url } = req;
     // Query-String entfernen, falls vorhanden
     let baseUrl = url.includes('?') ? url.slice(0, url.lastIndexOf('?')) : url;

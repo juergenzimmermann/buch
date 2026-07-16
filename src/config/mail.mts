@@ -31,17 +31,14 @@ if (typeof mail === 'object') {
         throw new TypeError('Der konfigurierte Mailserver ist kein String');
     }
     if (Object.hasOwn(mail, 'port') && typeof mail.port !== 'number') {
-        throw new TypeError(
-            'Der konfigurierte Port für den Mailserver ist keine Zahl',
-        );
+        throw new TypeError('Der konfigurierte Port für den Mailserver ist keine Zahl');
     }
 }
 // "Optional Chaining" und "Nullish Coalescing"
 const host = (mail?.host as string | undefined) ?? 'mail';
 const port = (mail?.port as number | undefined) ?? 25; // oxlint-disable-line no-magic-numbers
 const useLogger = mail?.log === true;
-const from =
-    (mail?.from as string | undefined) ?? '"Joe Doe" <Joe.Doe@acme.com>';
+const from = (mail?.from as string | undefined) ?? '"Joe Doe" <Joe.Doe@acme.com>';
 const to = (mail?.to as string | undefined) ?? '"Foo Bar" <Foo.Bar@acme.com>';
 
 /**

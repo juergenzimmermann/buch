@@ -13,13 +13,7 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-import {
-    CONTENT_TYPE,
-    POST,
-    X_WWW_FORM_URL_ENCODED,
-    baseURL,
-    tokenPath,
-} from './constants.mts';
+import { CONTENT_TYPE, POST, X_WWW_FORM_URL_ENCODED, baseURL, tokenPath } from './constants.mts';
 
 export const getToken = async (username: string, password: string) => {
     const headers = new Headers();

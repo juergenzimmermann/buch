@@ -55,8 +55,5 @@ export const trackMetrics = createMiddleware(async (c: Context, next: Next) => {
     const duration = (Date.now() - start) / 1000;
 
     httpRequestsTotal.inc({ method, path, status_code: status });
-    httpRequestDurationSeconds.observe(
-        { method, path, status_code: status },
-        duration,
-    );
+    httpRequestDurationSeconds.observe({ method, path, status_code: status }, duration);
 });

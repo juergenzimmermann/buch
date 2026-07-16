@@ -20,16 +20,14 @@ import { beforeEach, describe, expect, test, vi } from 'vitest';
 import { Buchart } from '../../generated/prisma/enums.ts';
 
 // Hoisting: wird an den (Datei-) Anfang verschoben
-const { createMock, countMock, transactionMock, sendmailMock } = vi.hoisted(
-    () => {
-        return {
-            createMock: vi.fn<Prisma.BuchDelegate['create']>(),
-            countMock: vi.fn<Prisma.BuchDelegate['count']>(),
-            transactionMock: vi.fn(), // oxlint-disable-line vitest/require-mock-type-parameters
-            sendmailMock: vi.fn(), // oxlint-disable-line vitest/require-mock-type-parameters
-        };
-    },
-);
+const { createMock, countMock, transactionMock, sendmailMock } = vi.hoisted(() => {
+    return {
+        createMock: vi.fn<Prisma.BuchDelegate['create']>(),
+        countMock: vi.fn<Prisma.BuchDelegate['count']>(),
+        transactionMock: vi.fn(), // oxlint-disable-line vitest/require-mock-type-parameters
+        sendmailMock: vi.fn(), // oxlint-disable-line vitest/require-mock-type-parameters
+    };
+});
 
 // vi.mock() bewirkt Hoisting
 vi.mock(import('../../config/prisma-client.mts'), () => {
@@ -58,11 +56,7 @@ describe('BuchWriteService create', () => {
         sendmailMock.mockReset();
 
         transactionMock.mockImplementation(
-            async (
-                transactionBody: (
-                    tx: Prisma.TransactionClient,
-                ) => Promise<unknown>,
-            ) =>
+            async (transactionBody: (tx: Prisma.TransactionClient) => Promise<unknown>) =>
                 await transactionBody({
                     buch: {
                         create: createMock,

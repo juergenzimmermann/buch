@@ -68,37 +68,32 @@ describe('GET /rest', () => {
             });
     });
 
-    test.concurrent.each(titelArray)(
-        'Buecher mit Teil-Titel %s suchen',
-        async (titel) => {
-            // given
-            const params = new URLSearchParams({ titel });
-            const url = `${restURL}?${params}`;
-            const requestHeaders = new Headers();
-            requestHeaders.append('Accept', 'application/json');
+    test.concurrent.each(titelArray)('Buecher mit Teil-Titel %s suchen', async (titel) => {
+        // given
+        const params = new URLSearchParams({ titel });
+        const url = `${restURL}?${params}`;
+        const requestHeaders = new Headers();
+        requestHeaders.append('Accept', 'application/json');
 
-            // when
-            const response = await fetch(url, { headers: requestHeaders });
-            const { status, headers } = response;
+        // when
+        const response = await fetch(url, { headers: requestHeaders });
+        const { status, headers } = response;
 
-            // then
-            expect(status).toBe(200);
-            expect(headers.get(CONTENT_TYPE)).toMatch(/json/iu);
+        // then
+        expect(status).toBe(200);
+        expect(headers.get(CONTENT_TYPE)).toMatch(/json/iu);
 
-            const body = (await response.json()) as Page<BuchMitTitelType>;
+        const body = (await response.json()) as Page<BuchMitTitelType>;
 
-            expect(body).toBeDefined();
+        expect(body).toBeDefined();
 
-            // Jedes Buch hat einen Titel mit dem Teilstring
-            body.content
-                .map((buch) => buch.titel)
-                .forEach((tit) =>
-                    expect(tit?.titel?.toLowerCase()).toStrictEqual(
-                        expect.stringContaining(titel),
-                    ),
-                );
-        },
-    );
+        // Jedes Buch hat einen Titel mit dem Teilstring
+        body.content
+            .map((buch) => buch.titel)
+            .forEach((tit) =>
+                expect(tit?.titel?.toLowerCase()).toStrictEqual(expect.stringContaining(titel)),
+            );
+    });
 
     test.concurrent.each(titelNichtVorhanden)(
         'Buecher zu nicht vorhandenem Teil-Titel %s suchen',
@@ -147,90 +142,79 @@ describe('GET /rest', () => {
         expect(isbnFound).toBe(isbn);
     });
 
-    test.concurrent.each(ratingMin)(
-        'Buecher mit Mindest-"rating" %i suchen',
-        async (rating) => {
-            // given
-            const params = new URLSearchParams({ rating: rating.toString() });
-            const url = `${restURL}?${params}`;
-            const requestHeaders = new Headers();
-            requestHeaders.append('Accept', 'application/json');
+    test.concurrent.each(ratingMin)('Buecher mit Mindest-"rating" %i suchen', async (rating) => {
+        // given
+        const params = new URLSearchParams({ rating: rating.toString() });
+        const url = `${restURL}?${params}`;
+        const requestHeaders = new Headers();
+        requestHeaders.append('Accept', 'application/json');
 
-            // when
-            const response = await fetch(url, { headers: requestHeaders });
-            const { status, headers } = response;
+        // when
+        const response = await fetch(url, { headers: requestHeaders });
+        const { status, headers } = response;
 
-            // then
-            expect(status).toBe(200);
-            expect(headers.get(CONTENT_TYPE)).toMatch(/json/iu);
+        // then
+        expect(status).toBe(200);
+        expect(headers.get(CONTENT_TYPE)).toMatch(/json/iu);
 
-            const body = (await response.json()) as Page<BuchType>;
+        const body = (await response.json()) as Page<BuchType>;
 
-            // Jedes Buch hat eine Bewertung >= rating
-            body.content
-                .map((buch) => buch.rating)
-                .forEach((rat) => expect(rat).toBeGreaterThanOrEqual(rating));
-        },
-    );
+        // Jedes Buch hat eine Bewertung >= rating
+        body.content
+            .map((buch) => buch.rating)
+            .forEach((rat) => expect(rat).toBeGreaterThanOrEqual(rating));
+    });
 
-    test.concurrent.each(preisMax)(
-        'Buecher mit max. Preis %d suchen',
-        async (preis) => {
-            // given
-            const params = new URLSearchParams({ preis: preis.toString() });
-            const url = `${restURL}?${params}`;
-            const requestHeaders = new Headers();
-            requestHeaders.append('Accept', 'application/json');
+    test.concurrent.each(preisMax)('Buecher mit max. Preis %d suchen', async (preis) => {
+        // given
+        const params = new URLSearchParams({ preis: preis.toString() });
+        const url = `${restURL}?${params}`;
+        const requestHeaders = new Headers();
+        requestHeaders.append('Accept', 'application/json');
 
-            // when
-            const response = await fetch(url, { headers: requestHeaders });
-            const { status, headers } = response;
+        // when
+        const response = await fetch(url, { headers: requestHeaders });
+        const { status, headers } = response;
 
-            // then
-            expect(status).toBe(200);
-            expect(headers.get(CONTENT_TYPE)).toMatch(/json/iu);
+        // then
+        expect(status).toBe(200);
+        expect(headers.get(CONTENT_TYPE)).toMatch(/json/iu);
 
-            const body = (await response.json()) as Page<BuchType>;
+        const body = (await response.json()) as Page<BuchType>;
 
-            // Jedes Buch hat einen Preis <= preis
-            body.content
-                .map((buch) => buch?.preis ?? 0)
-                .forEach((pr) => expect(Number(pr)).toBeLessThanOrEqual(preis));
-        },
-    );
+        // Jedes Buch hat einen Preis <= preis
+        body.content
+            .map((buch) => buch?.preis ?? 0)
+            .forEach((pr) => expect(Number(pr)).toBeLessThanOrEqual(preis));
+    });
 
-    test.concurrent.each(schlagwoerter)(
-        'Mind. 1 Buch mit Schlagwort %s',
-        async (schlagwort) => {
-            // given
-            const params = new URLSearchParams({ [schlagwort]: 'true' });
-            const url = `${restURL}?${params}`;
-            const requestHeaders = new Headers();
-            requestHeaders.append('Accept', 'application/json');
+    test.concurrent.each(schlagwoerter)('Mind. 1 Buch mit Schlagwort %s', async (schlagwort) => {
+        // given
+        const params = new URLSearchParams({ [schlagwort]: 'true' });
+        const url = `${restURL}?${params}`;
+        const requestHeaders = new Headers();
+        requestHeaders.append('Accept', 'application/json');
 
-            // when
-            const response = await fetch(url, { headers: requestHeaders });
-            const { status, headers } = response;
+        // when
+        const response = await fetch(url, { headers: requestHeaders });
+        const { status, headers } = response;
 
-            // then
-            expect(status).toBe(200);
-            expect(headers.get(CONTENT_TYPE)).toMatch(/json/iu);
+        // then
+        expect(status).toBe(200);
+        expect(headers.get(CONTENT_TYPE)).toMatch(/json/iu);
 
-            const body = (await response.json()) as Page<BuchType>;
+        const body = (await response.json()) as Page<BuchType>;
 
-            // JSON-Array mit mind. 1 JSON-Objekt
-            expect(body).toBeDefined();
+        // JSON-Array mit mind. 1 JSON-Objekt
+        expect(body).toBeDefined();
 
-            // Jedes Buch hat im Array der Schlagwoerter z.B. "javascript"
-            body.content
-                .map((buch) => buch.schlagwoerter)
-                .forEach((sw) =>
-                    expect(sw).toStrictEqual(
-                        expect.arrayContaining([schlagwort.toUpperCase()]),
-                    ),
-                );
-        },
-    );
+        // Jedes Buch hat im Array der Schlagwoerter z.B. "javascript"
+        body.content
+            .map((buch) => buch.schlagwoerter)
+            .forEach((sw) =>
+                expect(sw).toStrictEqual(expect.arrayContaining([schlagwort.toUpperCase()])),
+            );
+    });
 
     test.concurrent.each(schlagwoerterNichtVorhanden)(
         'Keine Buecher zu einem nicht vorhandenen Schlagwort',

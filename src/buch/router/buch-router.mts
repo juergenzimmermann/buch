@@ -18,12 +18,7 @@
  * @packageDocumentation
  */
 
-import {
-    find,
-    findById,
-    findFileByBuchId,
-    getCount,
-} from '../service/buch-service.mts';
+import { find, findById, findFileByBuchId, getCount } from '../service/buch-service.mts';
 import { Hono } from 'hono';
 import { createPage } from './page.mts';
 import { createPageable } from '../service/pageable.mts';
@@ -109,12 +104,7 @@ router.get('/', async (c) => {
     const { page, size } = queryParams;
     delete queryParams['page'];
     delete queryParams['size'];
-    logger.debug(
-        'get: page=%s, size=%s,  queryParams=%o',
-        page,
-        size,
-        queryParams,
-    );
+    logger.debug('get: page=%s, size=%s,  queryParams=%o', page, size, queryParams);
 
     const pageable = createPageable({ number: page, size });
     const buecherSlice = await find(queryParams, pageable); // NOSONAR

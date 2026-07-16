@@ -61,9 +61,7 @@ serve(
         },
     },
     (info) => {
-        console.log(
-            `🚀 Der Server ist mit HTTPS und Port ${info.port} gestartet`,
-        );
+        console.log(`🚀 Der Server ist mit HTTPS und Port ${info.port} gestartet`);
     },
 );
 

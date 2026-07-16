@@ -14,11 +14,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 import { type Context, type HonoRequest, type Next } from 'hono';
-import {
-    ForbiddenError,
-    InternalServerError,
-    UnauthorizedError,
-} from './errors.mts';
+import { ForbiddenError, InternalServerError, UnauthorizedError } from './errors.mts';
 import { createRemoteJWKSet, jwtVerify } from 'jose';
 import { JOSEError } from 'jose/errors';
 import { getLogger } from '../logger/logger.mts';
@@ -108,9 +104,7 @@ export const rolesRequired =
         const rollenResult = getRollen(payload);
 
         // Ist eine der erforderlichen Rollen in der Payload vorhanden?
-        const rolleVorhanden = roles.some((role) =>
-            rollenResult.includes(role),
-        );
+        const rolleVorhanden = roles.some((role) => rollenResult.includes(role));
         if (!rolleVorhanden) {
             throw new ForbiddenError('Erforderliche Rolle nicht vorhanden');
         }

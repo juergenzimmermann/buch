@@ -88,25 +88,22 @@ describe('GET /rest/:id', () => {
         expect(status).toBe(404);
     });
 
-    test.concurrent.each(idsETag)(
-        `Buch zu ID %i mit ${IF_NONE_MATCH}`,
-        async (id) => {
-            // given
-            const url = `${restURL}/${id}`;
-            const headers = new Headers();
-            headers.append('Accept', 'application/json');
-            headers.append(IF_NONE_MATCH, '"0"');
+    test.concurrent.each(idsETag)(`Buch zu ID %i mit ${IF_NONE_MATCH}`, async (id) => {
+        // given
+        const url = `${restURL}/${id}`;
+        const headers = new Headers();
+        headers.append('Accept', 'application/json');
+        headers.append(IF_NONE_MATCH, '"0"');
 
-            // when
-            const response = await fetch(url, { headers });
-            const { status } = response;
+        // when
+        const response = await fetch(url, { headers });
+        const { status } = response;
 
-            // then
-            expect(status).toBe(304);
+        // then
+        expect(status).toBe(304);
 
-            const body = await response.text();
+        const body = await response.text();
 
-            expect(body).toBe('');
-        },
-    );
+        expect(body).toBe('');
+    });
 });

@@ -25,10 +25,7 @@ import {
 } from '../constants.mts';
 import { type GraphQLQuery } from './graphql.mts';
 
-export const getToken = async (
-    username: string,
-    password: string,
-): Promise<string> => {
+export const getToken = async (username: string, password: string): Promise<string> => {
     const headers = new Headers();
     headers.append(CONTENT_TYPE, APPLICATION_JSON);
     headers.append(ACCEPT, GRAPHQL_RESPONSE_JSON);

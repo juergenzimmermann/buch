@@ -51,11 +51,7 @@ router.post(paths.token, async (c) => {
         password,
     });
     if (result === undefined) {
-        return createProblemDetails(
-            c,
-            unauthorized,
-            'Fehler beim Authentifizieren',
-        );
+        return createProblemDetails(c, unauthorized, 'Fehler beim Authentifizieren');
     }
 
     return c.json(result);

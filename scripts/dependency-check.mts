@@ -40,13 +40,7 @@ if (betriebssystem === 'win32') {
 } else {
     rootDir = resolve('/');
 }
-const script = resolve(
-    rootDir,
-    'Zimmermann',
-    'dependency-check',
-    'bin',
-    baseScript,
-);
+const script = resolve(rootDir, 'Zimmermann', 'dependency-check', 'bin', baseScript);
 console.log(`script=${script}`);
 
 const dataPath = resolve(rootDir, 'Zimmermann', 'dependency-check-data');

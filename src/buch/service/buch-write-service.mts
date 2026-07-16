@@ -60,9 +60,7 @@ const logger = getLogger('buch-write-service');
 // =============================================================================
 // C R E A T E
 // =============================================================================
-const validateCreate = async ({
-    isbn,
-}: Prisma.BuchCreateInput): Promise<undefined> => {
+const validateCreate = async ({ isbn }: Prisma.BuchCreateInput): Promise<undefined> => {
     logger.debug('#validateCreate: isbn=%s', isbn);
     if (isbn === undefined) {
         logger.debug('#validateCreate: ok');
@@ -77,13 +75,7 @@ const validateCreate = async ({
     logger.debug('#validateCreate: ok');
 };
 
-const sendmailFn = async ({
-    id,
-    titel,
-}: {
-    id: number | 'N/A';
-    titel: string;
-}) => {
+const sendmailFn = async ({ id, titel }: { id: number | 'N/A'; titel: string }) => {
     const subject = `Neues Buch ${id}`;
     const body = `Das Buch mit dem Titel <strong>${titel}</strong> ist angelegt`;
 
@@ -134,12 +126,7 @@ export const addFile = async (
     size: number,
     type: string,
 ): Promise<Readonly<BuchFile> | undefined> => {
-    logger.debug(
-        'addFile: buchId=%d, filename=%s, size=%d',
-        buchId,
-        name,
-        size,
-    );
+    logger.debug('addFile: buchId=%d, filename=%s, size=%d', buchId, name, size);
 
     // TODO Dateigroesse pruefen
 

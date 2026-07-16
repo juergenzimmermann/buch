@@ -113,9 +113,7 @@ describe('GraphQL Mutations', () => {
         const { status } = response;
 
         expect(status).toBe(200);
-        expect(response.headers.get(CONTENT_TYPE)).toMatch(
-            /application\/graphql-response\+json/iu,
-        );
+        expect(response.headers.get(CONTENT_TYPE)).toMatch(/application\/graphql-response\+json/iu);
 
         const { data } = (await response.json()) as CreateSuccessType;
 
@@ -158,15 +156,7 @@ describe('GraphQL Mutations', () => {
                 }
             `,
         };
-        const expectedPaths = [
-            'isbn',
-            'rating',
-            'preis',
-            'rabatt',
-            'datum',
-            'homepage',
-            'titel',
-        ];
+        const expectedPaths = ['isbn', 'rating', 'preis', 'rabatt', 'datum', 'homepage', 'titel'];
         const headers = new Headers();
         headers.append(CONTENT_TYPE, APPLICATION_JSON);
         headers.append(ACCEPT, GRAPHQL_RESPONSE_JSON);
@@ -183,9 +173,7 @@ describe('GraphQL Mutations', () => {
         const { status } = response;
 
         expect(status).toBe(200);
-        expect(response.headers.get(CONTENT_TYPE)).toMatch(
-            /application\/graphql-response\+json/iu,
-        );
+        expect(response.headers.get(CONTENT_TYPE)).toMatch(/application\/graphql-response\+json/iu);
 
         const { data, errors } = (await response.json()) as CreateErrorsType;
 
@@ -249,9 +237,7 @@ describe('GraphQL Mutations', () => {
         const { status } = response;
 
         expect(status).toBe(200);
-        expect(response.headers.get(CONTENT_TYPE)).toMatch(
-            /application\/graphql-response\+json/iu,
-        );
+        expect(response.headers.get(CONTENT_TYPE)).toMatch(/application\/graphql-response\+json/iu);
 
         const { data, errors } = (await response.json()) as UpdateSuccessType;
 
@@ -290,14 +276,7 @@ describe('GraphQL Mutations', () => {
                 }
             `,
         };
-        const expectedPaths = [
-            'isbn',
-            'rating',
-            'preis',
-            'rabatt',
-            'datum',
-            'homepage',
-        ];
+        const expectedPaths = ['isbn', 'rating', 'preis', 'rabatt', 'datum', 'homepage'];
         const headers = new Headers();
         headers.append(CONTENT_TYPE, APPLICATION_JSON);
         headers.append(ACCEPT, GRAPHQL_RESPONSE_JSON);
@@ -314,9 +293,7 @@ describe('GraphQL Mutations', () => {
         const { status } = response;
 
         expect(status).toBe(200);
-        expect(response.headers.get(CONTENT_TYPE)).toMatch(
-            /application\/graphql-response\+json/iu,
-        );
+        expect(response.headers.get(CONTENT_TYPE)).toMatch(/application\/graphql-response\+json/iu);
 
         const { data, errors } = (await response.json()) as UpdateErrorsType;
 
@@ -378,9 +355,7 @@ describe('GraphQL Mutations', () => {
         const { status } = response;
 
         expect(status).toBe(200);
-        expect(response.headers.get(CONTENT_TYPE)).toMatch(
-            /application\/graphql-response\+json/iu,
-        );
+        expect(response.headers.get(CONTENT_TYPE)).toMatch(/application\/graphql-response\+json/iu);
 
         const { data, errors } = (await response.json()) as UpdateErrorsType;
 
@@ -393,9 +368,7 @@ describe('GraphQL Mutations', () => {
 
         const { message, path, extensions } = error!;
 
-        expect(message).toBe(
-            `Es gibt kein Buch mit der ID ${id.toLowerCase()}.`,
-        );
+        expect(message).toBe(`Es gibt kein Buch mit der ID ${id.toLowerCase()}.`);
         expect(path).toBeDefined();
         expect(path![0]).toBe('update');
         expect(extensions).toBeDefined();
@@ -430,9 +403,7 @@ describe('GraphQL Mutations', () => {
         const { status } = response;
 
         expect(status).toBe(200);
-        expect(response.headers.get(CONTENT_TYPE)).toMatch(
-            /application\/graphql-response\+json/iu,
-        );
+        expect(response.headers.get(CONTENT_TYPE)).toMatch(/application\/graphql-response\+json/iu);
 
         const { data, errors } = (await response.json()) as DeleteSuccessType;
 
@@ -469,9 +440,7 @@ describe('GraphQL Mutations', () => {
         const { status } = response;
 
         expect(status).toBe(200);
-        expect(response.headers.get(CONTENT_TYPE)).toMatch(
-            /application\/graphql-response\+json/iu,
-        );
+        expect(response.headers.get(CONTENT_TYPE)).toMatch(/application\/graphql-response\+json/iu);
 
         const { data, errors } = (await response.json()) as DeleteErrorsType;
 

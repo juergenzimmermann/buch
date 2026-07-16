@@ -57,12 +57,7 @@ const cert = await readFile(new URL('certificate.crt', tlsURL), {
     encoding: 'utf8',
 });
 
-export type NodeEnv =
-    | 'development'
-    | 'PRODUCTION'
-    | 'production'
-    | 'test'
-    | undefined;
+export type NodeEnv = 'development' | 'PRODUCTION' | 'production' | 'test' | undefined;
 /**
  * Die Konfiguration für den _Node_-basierten Server:
  * - Rechnername
