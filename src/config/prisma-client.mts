@@ -26,12 +26,15 @@ import { styleText } from 'node:util';
  * @packageDocumentation
  */
 
-const logger = getLogger('prisma-client');
+const dbUrl = process.env['DATABASE_URL'];
+
+const logger = getLogger('config/prisma-client');
+logger.debug('dbUrl = %s', dbUrl);
 
 // PrismaClient passend zur Umgebungsvariable DATABASE_URL in ".env"
 // d.h. mit PostgreSQL-User "buch" und Schema "buch"
 export const adapter = new PrismaPg({
-    connectionString: process.env['DATABASE_URL'],
+    connectionString: dbUrl,
 });
 
 let tmpClient: PrismaClient;

@@ -20,7 +20,6 @@ import { createSecureServer } from 'node:http2';
 import { env } from './config/env.mts';
 import { populate } from './config/dev/db-populate.mts';
 import process from 'node:process';
-import { serve } from '@hono/node-server';
 import { serverConfig } from './config/server.mts';
 
 // Destructuring
@@ -34,36 +33,54 @@ if (NODE_ENV === 'development' || NODE_ENV === 'test') {
 // (request: Request) => Response | Promise<Response>
 // Innerhalb von Hono erfolgt dann das Dispatching zu einer Route fuer GET, POST, usw.
 const { fetch } = app;
-const { port, key, cert, allowHTTP1 } = serverConfig;
+const { port, key, cert, allowHTTP1, runtime } = serverConfig;
 
 await populate();
 await connectDB();
 
-// fetch: Request-Handler fuer den Node-Server mit Signatur gemaess Fetch-API von ES2015
+// fetch: Request-Handler fuer den Node- oder Bun-Server mit Signatur gemaess Fetch-API von ES2015
 // d.h. eine Funktion, die einen Request empfaengt und einen Response produziert:
 // async function handler(req: Request): Promise<Response> { ... }
 // https://hono.dev/docs/getting-started/nodejs#http2
 // curl -v -k --http2 --tlsv1.3 -H 'Accept: application/json' https://localhost:3000/rest/1
 // curl -v -k --http3 -H 'Accept: application/json' https://localhost:3000/rest/1
+
 // TODO node:quic https://www.jasnell.me/posts/quic-comes-to-node https://github.com/nodejs/node/blob/main/doc/api/quic.md
-serve(
-    {
+
+if (runtime === 'Bun') {
+    const Bun = await import('bun');
+    Bun.serve({
         // Shorthand Property
         fetch,
         port,
-        createServer: createSecureServer,
-        serverOptions: {
+        tls: {
             key,
             cert,
-            minVersion: 'TLSv1.3',
-            maxVersion: 'TLSv1.3',
-            allowHTTP1,
         },
-    },
-    (info) => {
-        console.log(`🚀 Der Server ist mit HTTPS und Port ${info.port} gestartet`);
-    },
-);
+    });
+} else {
+    // Node als Default-Laufzeitumgebung
+    const nodeServer = await import('@hono/node-server');
+    nodeServer.serve(
+        {
+            // Shorthand Property
+            fetch,
+            port,
+            createServer: createSecureServer,
+            serverOptions: {
+                key,
+                cert,
+                minVersion: 'TLSv1.3',
+                maxVersion: 'TLSv1.3',
+                // Bruno und Angular HttpClient kann nur HTTP 1.1: https://github.com/usebruno/bruno/issues/1728
+                allowHTTP1,
+            },
+        },
+        (info) => {
+            console.log(`🚀 Der Server ist mit HTTPS und Port ${info.port} gestartet`);
+        },
+    );
+}
 
 await banner();
 

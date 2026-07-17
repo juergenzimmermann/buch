@@ -14,10 +14,11 @@
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 # ==============================================================================
-# S e r v e r , z.B. Node, Deno oder Bun
+# S e r v e r , z.B. Node, Bun oder Deno
 # ==============================================================================
 [server]
 #port = 3000
+runtime = "Bun"
 # TODO Bruno und Angular HttpClient kann nur HTTP 1.1: https://github.com/usebruno/bruno/issues/1728
 allowHTTP1 = true
 

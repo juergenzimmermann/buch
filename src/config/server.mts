@@ -30,8 +30,6 @@ import { resourcesURL } from './resources.mts';
 
 const logger = getLogger('config/server');
 
-const { NODE_ENV } = env;
-
 const computername = hostname();
 const { server } = config;
 if (
@@ -57,7 +55,12 @@ const cert = await readFile(new URL('certificate.crt', tlsURL), {
     encoding: 'utf8',
 });
 
+const { NODE_ENV } = env;
 export type NodeEnv = 'development' | 'PRODUCTION' | 'production' | 'test' | undefined;
+
+const runtime = (server?.runtime as 'Node' | 'Bun' | undefined) ?? 'Node';
+logger.debug('runtime = %s', runtime);
+
 /**
  * Die Konfiguration für den _Node_-basierten Server:
  * - Rechnername
@@ -75,6 +78,7 @@ type ServerConfig = {
     cert: string;
     allowHTTP1: boolean;
     nodeEnv: NodeEnv;
+    runtime: 'Node' | 'Bun';
 };
 export const serverConfig: ServerConfig = {
     host: computername,
@@ -84,4 +88,5 @@ export const serverConfig: ServerConfig = {
     cert,
     allowHTTP1,
     nodeEnv: NODE_ENV as NodeEnv,
+    runtime,
 } as const;

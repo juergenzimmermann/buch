@@ -63,6 +63,8 @@ export const populate = async () => {
         return;
     }
 
+    logger.warn('Die DB wird neu geladen');
+
     // Bei "TypedSQL" von Prisma ist nur 1 SQL-Anweisung pro Datei moeglich
     // https://www.prisma.io/typedsql
     const dropScript = new URL('drop-table.sql', dbURL);
@@ -78,12 +80,18 @@ export const populate = async () => {
     logger.debug('copyScript = %s', copyScript);
     const copyStatements = await readFile(copyScript, 'utf8');
 
-    await prisma.$connect();
-    await prisma.$transaction(async (tx) => {
-        await tx.$executeRawUnsafe(dropStatements);
-        await tx.$executeRawUnsafe(createStatements);
-    });
-    await prisma.$disconnect();
+    try {
+        await prisma.$connect();
+        await prisma.$transaction(async (tx) => {
+            await tx.$executeRawUnsafe(dropStatements);
+            await tx.$executeRawUnsafe(createStatements);
+        });
+        await prisma.$disconnect();
+    } catch {
+        logger.error('Fehler beim Neuladen der DB.');
+        logger.error('Beachte bei Bun: PostgreSQL ist nicht mit TLS nutzbar.');
+        process.exit();
+    }
 
     // COPY zum Laden von CSV-Dateien erfordert Administrationsrechte
     // https://www.postgresql.org/docs/current/sql-copy.html

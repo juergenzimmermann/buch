@@ -31,7 +31,7 @@ const logger = getLogger('banner', 'func');
  * @author [Jürgen Zimmermann](mailto:Juergen.Zimmermann@h-ka.de)
  */
 export const banner = async () => {
-    const { host, nodeEnv, port } = serverConfig;
+    const { host, nodeEnv, port, runtime } = serverConfig;
 
     console.log();
     const text = await figlet.text('buch 2026.10.1');
@@ -39,8 +39,13 @@ export const banner = async () => {
 
     const isContainer = /[0-9a-f]{12}/u.exec(host) ?? false;
 
-    // https://nodejs.org/api/process.html
-    logger.info('Node: %s', process.version);
+    if (runtime === 'Bun') {
+        const Bun = await import('bun');
+        logger.info('Bun: %s', Bun.version);
+    } else {
+        // https://nodejs.org/api/process.html
+        logger.info('Node: %s', process.version);
+    }
     logger.info('NODE_ENV: %s', nodeEnv ?? 'undefined');
     logger.info('Rechnername: %s', host);
     logger.info('Port: %d', port);

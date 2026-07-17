@@ -16,6 +16,7 @@
 import { type Context, type Next } from 'hono';
 import { createMiddleware } from 'hono/factory';
 import { getLogger } from './logger.mts';
+import { serverConfig } from '../config/server.mts';
 
 const logger = getLogger('responseTime', 'func');
 
@@ -27,7 +28,22 @@ const logger = getLogger('responseTime', 'func');
 // https://hono.dev/docs/guides/middleware
 export const responseTime = createMiddleware(async (c: Context, next: Next) => {
     // https://nodejs.org/en/blog/release/v26.0.0#temporal-api
+    // https://tc39.es/proposal-temporal
     // https://github.com/tc39/proposal-temporal
+    // https://developer.mozilla.org/de/docs/Web/JavaScript/Reference/Global_Objects/Temporal
+
+    if (serverConfig.runtime === 'Bun') {
+        // Bun: Polyfill fuer das "Temporal API"
+        // https://github.com/oven-sh/bun/issues/15853
+        const temporalPolyFill = await import('temporal-polyfill');
+        const start = temporalPolyFill.Temporal.Now.instant().epochMilliseconds;
+        await next(); // oxlint-disable-line node/callback-return
+        const duration = temporalPolyFill.Temporal.Now.instant().epochMilliseconds - start;
+        logger.debug('Response time: %d ms, %d', duration, c.res.status);
+        return;
+    }
+
+    // Node: ab 26 ist das "Temporal API" enthalten
     const start = Temporal.Now.instant().epochMilliseconds;
     await next(); // oxlint-disable-line node/callback-return
     const duration = Temporal.Now.instant().epochMilliseconds - start;
