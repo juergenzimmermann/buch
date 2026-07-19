@@ -71,7 +71,7 @@
     "zod": "4.4.3"
   },
   "devDependencies": {
-    "@asciidoctor/core": "3.0.4",
+    "@asciidoctor/core": "4.0.4",
     "@stylistic/eslint-plugin": "5.10.0",
     "@tsconfig/node26": "26.0.0",
     "@tsconfig/strictest": "2.0.8",
@@ -81,7 +81,7 @@
     "@types/pg": "8.20.0",
     "@vitest/coverage-v8": "4.1.10",
     "@vitest/ui": "4.1.10",
-    "asciidoctor-kroki": "0.18.1",
+    "asciidoctor-kroki": "1.0.1",
     "globals": "17.7.0",
     "leasot": "14.4.0",
     "oxfmt": "0.59.0",

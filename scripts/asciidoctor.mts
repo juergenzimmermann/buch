@@ -20,17 +20,15 @@
 // https://asciidoctor-docs.netlify.com
 // https://asciidoctor.org
 
-import asciidoctor from '@asciidoctor/core';
+import { Registry, convert, getVersion } from '@asciidoctor/core';
 import { join } from 'node:path';
 // https://github.com/eshepelyuk/asciidoctor-plantuml.js ist deprecated
-// @ts-expect-error keine .d.ts-Datei
 import kroki from 'asciidoctor-kroki';
 import url from 'node:url';
 
-const adoc = asciidoctor();
-console.log(`Asciidoctor.js ${adoc.getVersion()}`);
+console.log(`Asciidoctor.js ${getVersion()}`);
 
-kroki.register(adoc.Extensions);
+kroki.register(new Registry());
 
 const options = {
     safe: 'safe',
@@ -39,11 +37,10 @@ const options = {
     to_dir: 'html',
     mkdirs: true,
 };
-adoc.convertFile(join('extras', 'doc', 'projekthandbuch.adoc'), options);
+convert(join('extras', 'doc', 'projekthandbuch.adoc'), options);
 
-// oxlint-disable-next-line no-underscore-dangle
-const __dirname = url.fileURLToPath(new URL('.', import.meta.url));
-console.log(`HTML-Datei ${join(__dirname, '..', 'extras', 'doc', 'html', 'projekthandbuch.html')}`);
+const basedir = url.fileURLToPath(new URL('.', import.meta.url));
+console.log(`HTML-Datei ${join(basedir, '..', 'extras', 'doc', 'html', 'projekthandbuch.html')}`);
 
 // https://asciidoctor.github.io/asciidoctor.js/master
 // const htmlString = asciidoctor.convert(
