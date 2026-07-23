@@ -25,7 +25,7 @@
 
 # https://manpages.debian.org/bullseye/apt/apt-get.8.en.html
 
-ARG JENKINS_VERSION=2.573-jdk25
+ARG JENKINS_VERSION=2.574-jdk25
 
 FROM jenkins/jenkins:${JENKINS_VERSION}
 
@@ -55,7 +55,8 @@ apt-get install --no-install-recommends --yes --show-progress lsb-release=12.1-1
 # https://packages.debian.org/stable/gcc
 # https://packages.debian.org/stable/g++
 # https://packages.debian.org/stable/make
-apt-get install --no-install-recommends --yes --show-progress gcc=4:14.2.0-1 g++=4:14.2.0-1 make=4.4.1-2 python3.13-minimal=3.13.5-2+deb13u2
+# https://packages.debian.org/stable/python3.13-minimal
+apt-get install --no-install-recommends --yes --show-progress gcc=4:14.2.0-1 g++=4:14.2.0-1 make=4.4.1-2 libpython3.13-minimal=3.13.5-2+deb13u3 python3.13-minimal=3.13.5-2+deb13u3
 ln -s /usr/bin/python3.13 /usr/bin/python
 ln -s /usr/bin/python3.13 /usr/bin/python3
 
