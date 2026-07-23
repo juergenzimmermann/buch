@@ -68,9 +68,9 @@ zugegriffen:
             ALTER ROLE keycloak SET search_path = 'keycloak';
             \q
         exit
-```
 
-Danach wird der Container `postgres` wieder heruntergefahren.
+    docker compose down
+```
 
 ## Installation
 
@@ -143,9 +143,9 @@ Das Mapping von Port `8443` auf `8843` und von `8080` auf `8880` ist in
 
 ```text
     Einloggen
-      Username    tmp
-      Password    p
-          siehe extras\compose\keycloak\compose.yml
+        Username    tmp
+        Password    p
+            siehe extras\compose\keycloak\compose.yml
 
     Menüpunkt "Users"
         Button <Add user> anklicken
