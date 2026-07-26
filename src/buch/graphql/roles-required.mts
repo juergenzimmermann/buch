@@ -21,6 +21,8 @@ import { keycloakConfig } from '../../config/keycloak.mts';
 
 const { issuer, jwksUri, clientId, audience } = keycloakConfig;
 const jwks = createRemoteJWKSet(new URL(jwksUri));
+const algorithms = ['RS256'];
+
 const logger = getLogger('graphql/roles-required');
 
 // Token aus dem Request Header extrahieren
@@ -47,6 +49,7 @@ const verifyToken = async (token: string) => {
             // siehe Properties innerhalb der Payload des Tokens
             issuer,
             audience,
+            algorithms,
         });
     } catch (err) {
         logger.debug('verifyToken: verifyResult err=%o', err as any);
