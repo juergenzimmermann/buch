@@ -58,9 +58,9 @@
     "figlet": "1.11.1",
     "graphql": "17.0.2",
     "graphql-yoga": "5.21.2",
-    "hono": "4.12.31",
+    "hono": "4.12.32",
     "isbn3": "2.0.9",
-    "jose": "6.2.3",
+    "jose": "6.2.4",
     "nodemailer": "9.0.3",
     "pg": "8.22.0",
     "pino": "10.3.1",
@@ -71,7 +71,7 @@
     "zod": "4.4.3"
   },
   "devDependencies": {
-    "@asciidoctor/core": "4.0.4",
+    "@asciidoctor/core": "4.0.5",
     "@stylistic/eslint-plugin": "5.10.0",
     "@tsconfig/node26": "26.0.0",
     "@tsconfig/strictest": "2.0.8",
@@ -84,9 +84,9 @@
     "asciidoctor-kroki": "1.0.1",
     "globals": "17.7.0",
     "leasot": "14.4.0",
-    "oxfmt": "0.59.0",
-    "oxlint": "1.74.0",
-    "oxlint-tsgolint": "0.25.0",
+    "oxfmt": "0.60.0",
+    "oxlint": "1.75.0",
+    "oxlint-tsgolint": "7.0.2001",
     "prisma": "7.9.0",
     "typescript": "7.0.2",
     "vite": "8.1.5",
@@ -104,7 +104,7 @@
   "devEngines": {
     "packageManager": {
       "name": "pnpm",
-      "version": "11.15.1",
+      "version": "11.17.0",
       "onFail": "warn"
     },
     "runtime": [
@@ -123,6 +123,6 @@
   "engines": {
     "bun": "1.3.14",
     "node": "26.5.0",
-    "pnpm": "11.15.1"
+    "pnpm": "11.17.0"
   }
 }
