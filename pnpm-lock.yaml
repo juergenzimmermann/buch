@@ -308,8 +308,8 @@ importers:
         specifier: 17.4.2
         version: 17.4.2
       figlet:
-        specifier: 1.11.3
-        version: 1.11.3
+        specifier: 1.11.4-beta.0
+        version: 1.11.4-beta.0
       graphql:
         specifier: 17.0.2
         version: 17.0.2
@@ -1796,8 +1796,8 @@ packages:
   fflate@0.8.3:
     resolution: {integrity: sha512-tbZNuJrLwGUp3zshBtdy4W+ORxZuIh8a5ilyIEQDC5rY1f3U20JMry0Ll3WBzU58EZKsEuJFXhb5gwv8CsPvgA==}
 
-  figlet@1.11.3:
-    resolution: {integrity: sha512-7+OS4S6VjQXI2XRvfZlOdHhItd25lI0NgrR1j5UHfuyZfmMh44v65tMQUlb2bSriYGPCHAtGhuY5u23vqelvmg==}
+  figlet@1.11.4-beta.0:
+    resolution: {integrity: sha512-397oXdBmW9htDjWz2XeRwyFD3vzRHZNDEE7eCYQFPUpcHscm6DPXybL6T/rW0wYbXzTiC7iWSjMYhmPYjeh+CA==}
     engines: {node: '>= 17.0.0'}
     hasBin: true
 
@@ -3921,7 +3921,7 @@ snapshots:
 
   fflate@0.8.3: {}
 
-  figlet@1.11.3:
+  figlet@1.11.4-beta.0:
     dependencies:
       commander: 14.0.3
 

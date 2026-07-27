@@ -21,16 +21,10 @@
 import { release, type, userInfo } from 'node:os';
 import figlet from 'figlet';
 import { getLogger } from './logger.mts';
-import path from 'node:path';
 import process from 'node:process';
 import { serverConfig } from '../config/server.mts';
 
 const logger = getLogger('banner', 'func');
-
-// TODO https://github.com/patorjk/figlet.js/issues/172
-figlet.defaults({
-    fontPath: path.join(process.cwd(), 'node_modules', 'figlet', 'fonts'),
-});
 
 /**
  * Ein Banner für den Server-Start.
