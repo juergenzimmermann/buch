@@ -83,6 +83,7 @@ export default defineConfig({
         'typescript/consistent-type-exports': 'error',
         'typescript/consistent-type-imports': 'error',
         'typescript/default-param-last': 'error',
+        'typescript/dot-notation': 'error',
         'typescript/explicit-member-accessibility': ['error', { accessibility: 'no-public' }],
         'typescript/no-base-to-string': [
             'error',
@@ -112,8 +113,10 @@ export default defineConfig({
         ],
         'typescript/no-loop-func': 'error',
         'typescript/no-shadow': 'error',
+        'typescript/no-unnecessary-condition': 'error',
         'typescript/no-unnecessary-qualifier': 'error',
         'typescript/no-unnecessary-type-conversion': 'error',
+        'typescript/no-unnecessary-type-parameters': 'error',
         'typescript/no-unsafe-member-access': 'off',
         'typescript/no-unused-vars': [
             'off',
@@ -134,7 +137,10 @@ export default defineConfig({
         'typescript/prefer-enum-initializers': 'error',
         'typescript/prefer-find': 'error',
         'typescript/prefer-includes': 'error',
+        'typescript/prefer-nullish-coalescing': 'error',
+        'typescript/prefer-optional-chain': 'error',
         'typescript/prefer-readonly': 'error',
+        'typescript/prefer-readonly-parameter-types': 'error',
         'typescript/prefer-regexp-exec': 'error',
         'typescript/require-await': 'error',
         'typescript/restrict-template-expressions': [
@@ -146,6 +152,7 @@ export default defineConfig({
             },
         ],
         'typescript/strict-boolean-expressions': 'error',
+        'typescript/strict-void-return': 'error',
         'typescript/switch-exhaustiveness-check': [
             'error',
             {
@@ -220,6 +227,7 @@ export default defineConfig({
         'node/no-path-concat': 'error',
         'node/no-process-env': 'error',
         'node/no-sync': 'error',
+        'node/no-top-level-await': 'off',
 
         // https://github.com/sindresorhus/eslint-plugin-unicorn/blob/main/configs/recommended.js
         'unicorn/catch-error-name': [

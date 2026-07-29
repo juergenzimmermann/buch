@@ -1,4 +1,3 @@
-// oxlint-disable max-lines
 // Copyright (C) 2016 - present Juergen Zimmermann, Hochschule Karlsruhe
 //
 // This program is free software: you can redistribute it and/or modify
