@@ -220,6 +220,7 @@ export default defineConfig({
         'import/no-relative-parent-imports': 'off',
         'import/prefer-default-export': 'off',
 
+        'node/exports-style': 'error',
         'node/global-require': 'error',
         'node/handle-callback-err': 'error',
         'node/no-mixed-requires': 'error',
