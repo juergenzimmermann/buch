@@ -1,15 +1,14 @@
 /// https://www.prisma.io/docs/orm/reference/prisma-schema-reference
 /// https://www.prisma.io/docs/orm/reference/prisma-schema-reference#generator
 generator client {
-  /// Default ab Prisma 6.18
   /// https://www.prisma.io/docs/orm/prisma-schema/overview/generators#output-splitting-and-importing-types
   /// https://www.prisma.io/blog/why-prisma-orm-generates-code-into-node-modules-and-why-it-ll-change
   /// https://www.prisma.io/blog/rust-free-prisma-orm-is-ready-for-production
   /// https://github.com/prisma/prisma/releases/tag/6.6.0
   /// https://github.com/prisma/prisma/releases/tag/6.16.0
   /// ESM-first
-  provider            = "prisma-client"
-  output              = "../src/generated/prisma"
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
   /// https://www.prisma.io/docs/orm/reference/preview-features/client-preview-features#currently-active-preview-features
   /// https://github.com/prisma/prisma/releases/tag/5.7.0
   previewFeatures     = ["nativeDistinct", "relationJoins"]

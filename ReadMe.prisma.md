@@ -29,13 +29,14 @@
 
 - [Vorbereitung der Installation](#vorbereitung-der-installation)
 - [Voraussetzungen](#voraussetzungen)
-  - [Powershell bei Windows](#powershell-bei-windows)
-  - [Basis-Software](#basis-software)
+  - [Skripte für Powershell bei Windows](#skripte-für-powershell-bei-windows)
+  - [Docker Desktop](#docker-desktop)
+  - [3rd-party-Software für macOS und Linux](#3rd-party-software-für-macos-und-linux)
   - [Docker-Image für PostgreSQL](#docker-image-für-postgresql)
   - [Datenbank mit PostgreSQL](#datenbank-mit-postgresql)
-  - [Umgebungsvariable](#umgebungsvariable)
+  - [Umgebungsvariable für Windows](#umgebungsvariable-für-windows)
 - [Installation](#installation)
-  - [Node und npm](#node-und-npm)
+  - [Node und npm überprüfen](#node-und-npm-überprüfen)
   - [pnpm installieren](#pnpm-installieren)
   - [pnpm überprüfen](#pnpm-überprüfen)
   - [pnpm ggf. deinstallieren](#pnpm-ggf-deinstallieren)
@@ -49,7 +50,6 @@
 - [Code-Generierung für den DB-Client](#code-generierung-für-den-db-client)
 - [Einfaches Beispiel in TypeScript](#einfaches-beispiel-in-typescript)
 - [Aufruf der Beispiele](#aufruf-der-beispiele)
-- [Ausführbare Dateien ("Executables")](#ausführbare-dateien-executables)
 - [Neuere Versionen und evtl. Sicherheitslücken](#neuere-versionen-und-evtl-sicherheitslücken)
 - [Prisma Studio](#prisma-studio)
 
@@ -60,14 +60,14 @@
   man **keine** Leerzeichen in Pfaden. Ebenso würde ich das Beispiel nicht auf
   dem _Desktop_ auspacken bzw. installieren.
 
-- Bei [GitHub](https://github.com) oder [GitLab](https://gitlab.com)
+- Bei z.B. [GitHub](https://github.com) oder [GitLab](https://gitlab.com)
   registrieren, falls man dort noch nicht registriert ist.
 
 ---
 
 ## Voraussetzungen
 
-### Powershell bei Windows
+### Skripte für Powershell bei Windows
 
 Überprüfung, ob sich Powershell-Skripte starten lassen:
 
@@ -87,14 +87,10 @@ keine Ausführung blockiert wird und dabei keine Warnings ausgegeben werden.
 Das hängt von der eigenen Windows-Installation ab. Details siehe
 https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.security/set-executionpolicy?view=powershell-7.2
 
-### Basis-Software
+### Docker Desktop
 
-Für _Windows_ gibt es in _ILIAS_ die ZIP-Datei `Zimmermann.zip`. Bevor man diese
-ZIP-Datei unter `C:\Zimmermann` entpackt, sollten die Verzeichnisse
-`C:\Zimmermann\Git` und `C:\Zimmermann\node` gelöscht werden, falls sie noch vom
-letztem Semester vorhanden sind. Außerdem sollte _Docker Desktop_ installiert sein
-(https://docs.docker.com/desktop/release-notes) und kann bei Windows folgendermaßen
-überprüft werden:
+Außerdem sollte _Docker Desktop_ installiert sein
+(https://docs.docker.com/desktop/release-notes) und kann folgendermaßen überprüft werden:
 
 ```shell
     # Windows:
@@ -106,14 +102,22 @@ letztem Semester vorhanden sind. Außerdem sollte _Docker Desktop_ installiert s
     docker info
 ```
 
-Für _Linux_ und _macOS_ muss folgende Software installiert sein (z.B. mit _apt_
-bei Linux oder _brew_ bei macOS):
+### Git, Node und Bruno für Windows
 
-- Node
-- pnpm
-- Docker Desktop
+Für _Windows_ gibt es in _ILIAS_ die ZIP-Datei `Zimmermann.zip`. Bevor man diese
+ZIP-Datei unter `C:\Zimmermann` entpackt, sollten die Verzeichnisse
+`C:\Zimmermann\Git` und `C:\Zimmermann\node` gelöscht werden, falls sie noch vom
+letztem Semester vorhanden sind.
+
+### 3rd-party-Software für macOS und Linux
+
+Für _Linux_ und _macOS_ muss folgende Software installiert sein (z.B. mit _brew_ bei macOS oder
+apt_ bei Linux):
+
+- Bruno
 - Git
 - GraphViz (wird für PlantUML benötigt)
+- Node
 - VS Code (siehe ReadMe.vscode.md)
 
 ### Docker-Image für PostgreSQL
@@ -143,7 +147,7 @@ Für csv, sql und tls gibt es in ILIAS die ZIP-Datei `postgres.macos-linux.zip.z
 Die anderen Verzeichnisse (data, run und tablespace) müssen lediglich als zunächst
 leere Verzeichnisse existieren.
 
-### Umgebungsvariable
+### Umgebungsvariable für Windows
 
 Vorab werden die notwendigen Umgebungsvariable gesetzt, damit nicht bei jeder
 nachfolgenden Installation immer wieder einzelne Umgebungsvariable gesetzt werden
@@ -164,7 +168,7 @@ _vor_ Pfaden mit _Leerzeichen_ eintragen.
 
 ## Installation
 
-### Node und npm
+### Node und npm überprüfen
 
 Ob _Node_ und _npm_ korrekt installiert sind, kann folgendermaßen überprüft werden:
 
@@ -277,10 +281,10 @@ gesetzt sein:
 
 ```shell
     # Windows:
-    $env:DATABASE_URL='postgresql://buch:p@localhost/buch?schema=buch&connection_limit=10&sslnegotiation=direct?sslcert=src/config/resources/postgresql/server.crt'
+    $env:DATABASE_URL='postgresql://buch:p@localhost/buch?schema=buch&connection_limit=10&sslnegotiation=direct&sslcert=src/config/resources/postgresql/server.crt'
 
     # macOS:
-    DATABASE_URL='postgresql://buch:p@localhost/buch?schema=buch&connection_limit=10&sslnegotiation=direct?sslcert=src/config/resources/postgresql/server.crt'
+    DATABASE_URL='postgresql://buch:p@localhost/buch?schema=buch&connection_limit=10&sslnegotiation=direct&sslcert=src/config/resources/postgresql/server.crt'
 ```
 
 Dadurch ist folgendes konfiguriert:
@@ -301,12 +305,16 @@ noch nicht existieren.
     pnpm prisma init
 ```
 
-Dabei werden folgende Dateien generiert:
+Dabei werden folgende Dateien und Verzeichnissegeneriert:
 
 - `prisma.config.ts` siehe https://github.com/prisma/prisma/releases/tag/6.18.0
 - `prisma\schema.prisma`
 - `.env`
 - `.gitignore`
+- `.claude\skills\`
+- `.agents\skills\`
+- `.windsurf\skills\`
+- `skills-lock.json`
 
 Falls `.env` bereits existiert, wird ggf. `DATABASE_URL` als Umgebungsvariable
 eingetragen. Der Wert von `DATABASE_URL` muss auf jeden Fall mit dem Wert
@@ -421,6 +429,11 @@ Die beiden Beispiel-Dateien `src\beispiele.mts` und `src\beispiele-write.mts`
 können mit _Node_ folgendermaßen aufgerufen werden:
 
 ```shell
+    # Windows:
+    $env:NODE_TLS_REJECT_UNAUTHORIZED=0
+    # macOS / Linux:
+    export NODE_TLS_REJECT_UNAUTHORIZED=0
+
     node --env-file=.env src/beispiele.mts
     node --env-file=.env src/beispiele-write.mts
 ```
