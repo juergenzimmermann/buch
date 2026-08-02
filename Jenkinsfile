@@ -94,9 +94,10 @@ pipeline {
                     lsb_release -a
                     node --version
                     npm --version
-                    rm -rf /var/jenkins_home/tools/jenkins.plugins.nodejs.tools.NodeJSInstallation/node-26.5.1/lib/node_modules/pnpm
                     npm r -g pnpm
                     npm i -g pnpm@11.18.0
+                    npm r -g bun
+                    npm i -g bun
                     npm root -g
                     ls -al ~/.cache/node
                     env | sort
@@ -104,6 +105,8 @@ pipeline {
                     pnpm --version
                     #pnpm root -g
                     #pnpm store path
+                    which bun
+                    bun --version
                 '''
 
                 script {
