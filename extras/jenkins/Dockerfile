@@ -17,7 +17,7 @@
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 # Aufruf:   docker build --tag juergenzimmermann/jenkins:2026.10.1 .
-#           Get-Content Dockerfile | docker run --rm --interactive hadolint/hadolint:2.14.0-debian
+#           Get-Content Dockerfile | docker run --rm --interactive hadolint/hadolint:v2.15.0-debian
 #           docker compose exec jenkins bash
 #               cat /etc/os-release
 #                   ID=debian
@@ -29,7 +29,11 @@ ARG JENKINS_VERSION=2.575-jdk25
 
 FROM jenkins/jenkins:${JENKINS_VERSION}
 
-USER root
+ARG UID_JENKINS=1000
+ARG GID_JENKINS=1000
+
+# User "root" hat die UID 0
+USER 0
 
 RUN <<EOF
 set -ex
@@ -66,4 +70,5 @@ apt-get clean
 rm -rf /var/lib/apt/lists/*
 EOF
 
-USER jenkins
+# hadolint ignore=DL3066
+USER ${UID_JENKINS}:${GID_JENKINS}
