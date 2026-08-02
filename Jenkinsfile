@@ -95,7 +95,7 @@ pipeline {
                     node --version
                     npm --version
                     npm r -g pnpm
-                    npm i -g pnpm@11.10.0
+                    npm i -g pnpm@11.18.0
                     npm root -g
                     ls -al ~/.cache/node
                     env | sort
