@@ -87,9 +87,10 @@ export const populate = async () => {
             await tx.$executeRawUnsafe(createStatements);
         });
         await prisma.$disconnect();
-    } catch {
+    } catch (err) {
         logger.error('Fehler beim Neuladen der DB.');
         logger.error('Beachte bei Bun: PostgreSQL ist nicht mit TLS nutzbar.');
+        logger.error('%o', err as any);
         process.exit();
     }
 

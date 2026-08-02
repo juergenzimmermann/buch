@@ -43,6 +43,9 @@ ARG NODE_VERSION_DHI=26.5.1-0 \
 # ------------------------------------------------------------------------------
 FROM node:${NODE_VERSION}-trixie-slim AS dependencies
 
+ARG UID_NODE=1000
+ARG GID_NODE=1000
+
 RUN --mount=type=bind,source=package.json,target=package.json <<EOF
   # https://explainshell.com/explain?cmd=set+-eux
   set -eux
@@ -64,13 +67,14 @@ RUN --mount=type=bind,source=package.json,target=package.json <<EOF
   # https://packages.debian.org/trixie/ca-certificates fuer Rust bzw. "pacquet" bei Linux
   # "python3-dev" enthaelt "multiprocessing"
   # "build-essential" enthaelt "make"
-  apt-get install --no-install-recommends --yes python3.13-minimal=3.13.5-2+deb13u2 python3.13-dev=3.13.5-2+deb13u2 build-essential=12.12 ca-certificates=20250419
+  apt-get install --no-install-recommends --yes python3.13-minimal=3.13.5-2+deb13u4 python3.13-dev=3.13.5-2+deb13u4 build-essential=12.12 ca-certificates=20250419
   ln -s /usr/bin/python3.13 /usr/bin/python3
   ln -s /usr/bin/python3.13 /usr/bin/python
   update-ca-certificates
 EOF
 
-USER node
+# hadolint ignore=DL3066
+USER ${UID_NODE}:${UID_NODE}
 
 WORKDIR /home/node
 
@@ -88,20 +92,28 @@ EOF
 # ------------------------------------------------------------------------------
 FROM dhi.io/node:${NODE_VERSION_DHI}-debian13 AS final
 
+# docker image inspect dhi.io/node:${NODE_VERSION_DHI}-debian13 --format '{{.Config.User}}'
+# $cid = docker create dhi.io/node:${NODE_VERSION_DHI}-debian13
+# docker export $cid | tar -xOf - etc/group
+# docker rm $cid
+ARG UID_NODE=1000
+ARG GID_NODE=1000
+
 WORKDIR /opt/app
 
 # ADD hat mehr Funktionalitaet als COPY, z.B. auch Download von externen Dateien
-COPY --chown=node:node package.json .env ./
-COPY --from=dependencies --chown=node:node /home/node/node_modules ./node_modules
-COPY --chown=node:node src ./src
+COPY --chown=${UID_NODE}:${UID_NODE} package.json .env ./
+COPY --from=dependencies --chown=${UID_NODE}:${UID_NODE} /home/node/node_modules ./node_modules
+COPY --chown=${UID_NODE}:${UID_NODE} src ./src
 
-USER node
+# hadolint ignore=DL3066
+USER ${UID_NODE}:${UID_NODE}
 
 EXPOSE 3000
 EXPOSE 3030
 
 HEALTHCHECK --interval=30s --timeout=3s --retries=1 \
-  CMD wget -qO- --no-check-certificate https://localhost:3000/health/readiness/ | grep ok || exit 1
+  CMD ["sh", "-c", "wget -qO- --no-check-certificate https://localhost:3000/health/readiness/ | grep ok || exit 1"]
 
 # Anzeige bei "docker inspect ..."
 # https://specs.opencontainers.org/image-spec/annotations
@@ -115,4 +127,4 @@ LABEL org.opencontainers.image.title="buch" \
   # Bei CMD statt ENTRYPOINT kann das Kommando bei "docker run ..." ueberschrieben werden
 # "Array Syntax" damit auch <Strg>C funktioniert
 
-ENTRYPOINT ["/usr/local/bin/node", "--env-file=.env", "src/index.mts"]
+ENTRYPOINT ["node", "--env-file=.env", "src/index.mts"]

@@ -32,7 +32,7 @@ export const responseTime = createMiddleware(async (c: Context, next: Next) => {
     // https://github.com/tc39/proposal-temporal
     // https://developer.mozilla.org/de/docs/Web/JavaScript/Reference/Global_Objects/Temporal
 
-    if (serverConfig.runtime === 'Bun') {
+    if (!serverConfig.hasTemporal || serverConfig.runtime === 'Bun') {
         // Bun: Polyfill fuer das "Temporal API"
         // https://github.com/oven-sh/bun/issues/15853
         const temporalPolyFill = await import('temporal-polyfill');

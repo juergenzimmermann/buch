@@ -45,6 +45,8 @@ logger.debug('port = %d', port);
 const allowHTTP1 = (server?.allowHTTP1 as boolean | undefined) ?? false;
 logger.debug('allowHTTP1 = %s', allowHTTP1);
 
+const hasTemporal = (server?.hasTemporal as boolean | undefined) ?? false;
+
 // https://nodejs.org/api/fs.html
 const tlsURL = new URL('tls/', resourcesURL);
 logger.debug('tlsURL = %s', tlsURL);
@@ -77,6 +79,7 @@ type ServerConfig = {
     key: string;
     cert: string;
     allowHTTP1: boolean;
+    hasTemporal: boolean;
     nodeEnv: NodeEnv;
     runtime: 'Node' | 'Bun';
 };
@@ -87,6 +90,7 @@ export const serverConfig: ServerConfig = {
     key,
     cert,
     allowHTTP1,
+    hasTemporal,
     nodeEnv: NODE_ENV as NodeEnv,
     runtime,
 } as const;

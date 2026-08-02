@@ -73,7 +73,10 @@ ln -sf python3 /usr/bin/python
 npm i -g pnpm@11.18.0
 EOF
 
-USER node
+ARG UID_NODE=1000
+ARG GID_NODE=1000
+# hadolint ignore=DL3066
+USER ${UID_NODE}:${UID_NODE}
 
 WORKDIR /home/node
 
@@ -92,6 +95,9 @@ EOF
 # ------------------------------------------------------------------------------
 FROM node:${NODE_VERSION}-alpine${ALPINE_VERSION} AS final
 
+ARG UID_NODE=1000
+ARG GID_NODE=1000
+
 RUN <<EOF
 set -eux
 
@@ -109,18 +115,19 @@ EOF
 
 WORKDIR /opt/app
 
-USER node
-
 # ADD hat mehr Funktionalitaet als COPY, z.B. auch Download von externen Dateien
-COPY --chown=node:node package.json .env ./
-COPY --from=dependencies --chown=node:node /home/node/node_modules ./node_modules
-COPY --chown=node:node src ./src
+COPY --chown=${UID_NODE}:${UID_NODE} package.json .env ./
+COPY --from=dependencies --chown=${UID_NODE}:${UID_NODE} /home/node/node_modules ./node_modules
+COPY --chown=${UID_NODE}:${UID_NODE} src ./src
+
+# hadolint ignore=DL3066
+USER ${UID_NODE}:${UID_NODE}
 
 EXPOSE 3000
 EXPOSE 3030
 
 HEALTHCHECK --interval=30s --timeout=3s --retries=1 \
-  CMD wget -qO- --no-check-certificate https://localhost:3000/health/readiness/ | grep ok || exit 1
+  CMD ["sh", "-c", "wget -qO- --no-check-certificate https://localhost:3000/health/readiness/ | grep ok || exit 1"]
 
 # Anzeige bei "docker inspect ..."
 # https://specs.opencontainers.org/image-spec/annotations

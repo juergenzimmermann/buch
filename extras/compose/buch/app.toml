@@ -18,6 +18,8 @@
 # ==============================================================================
 [server]
 #port = 3000
+# Hardened Image fuer Node enthaelt noch nicht "Temporal"
+hasTemporal = false
 # TODO Bruno und Angular HttpClient kann nur HTTP 1.1: https://github.com/usebruno/bruno/issues/1728
 allowHTTP1 = true
 
