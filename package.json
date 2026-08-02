@@ -88,6 +88,7 @@
     "oxlint": "1.76.0",
     "oxlint-tsgolint": "7.0.2001",
     "prisma": "7.9.1",
+    "typedoc": "0.28.20",
     "typescript": "7.0.2",
     "vite": "8.2.0",
     "vitest": "4.1.10",
