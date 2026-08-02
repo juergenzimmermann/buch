@@ -55,6 +55,7 @@ pipeline {
                     rm -rf test
                     rm -rf node_modules
                     rm -rf dist
+                    rm -rf extras/doc/api
                     rm -rf extras/doc/html
                 '''
 
