@@ -94,17 +94,19 @@ pipeline {
                     lsb_release -a
                     node --version
                     npm --version
-                    npm r -g pnpm
-                    npm i -g pnpm@11.18.0
-                    npm r -g bun
-                    npm i -g bun
                     npm root -g
                     ls -al ~/.cache/node
+
+                    npm r -g pnpm
+                    npm i -g pnpm@11.18.0
                     env | sort
                     which pnpm
                     pnpm --version
                     #pnpm root -g
                     #pnpm store path
+
+                    npm r -g bun
+                    npm i -g bun --allow-scripts=bun
                     which bun
                     bun --version
                 '''
