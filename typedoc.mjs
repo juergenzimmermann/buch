@@ -2,15 +2,16 @@
 /* global module */
 /** @type {import('typedoc').TypeDocOptions} */
 const config = {
-    out: '.extras/doc/api',
-    entryPoints: ['src'],
-    entryPointStrategy: 'expand',
-    excludePrivate: true,
-    favicon: 'favicon.ico',
-    validation: {
-        invalidLink: true,
-    },
-    // https://shiki.matsu.io/languages
+  out: '.extras/doc/api',
+  entryPoints: ['src'],
+  entryPointStrategy: 'expand',
+  excludePrivate: true,
+  favicon: 'favicon.ico',
+  validation: {
+    invalidLink: true,
+  },
+  // https://shiki.matsu.io/languages
 };
 
+// oxlint-disable-next-line import/no-default-export
 export default config;
