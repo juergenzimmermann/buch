@@ -20,8 +20,8 @@
 #               ggf. --progress=plain
 #               ggf. --no-cache
 #
-#           Windows:   Get-Content Dockerfile.alpine | docker run --rm --interactive hadolint/hadolint:v2.15.0-debian
-#           macOS:     cat Dockerfile.alpine | docker run --rm --interactive hadolint/hadolint:v2.15.0-debian
+#           Windows:   Get-Content Dockerfile.alpine | docker run --rm --interactive hadolint/hadolint:v2.15.1-debian
+#           macOS:     cat Dockerfile.alpine | docker run --rm --interactive hadolint/hadolint:v2.15.1-debian
 #
 #           docker debug juergenzimmermann/buch:2026.10.1-alpine
 #           docker network ls
@@ -41,6 +41,9 @@ ARG NODE_VERSION=26.5.1 \
 # S t a g e   d e p e n d e n c i e s
 # ------------------------------------------------------------------------------
 FROM node:${NODE_VERSION}-alpine${ALPINE_VERSION} AS dependencies
+
+ARG NODE_UID=1000
+ARG NODE_GID=1000
 
 ENV PYTHONUNBUFFERED=1
 
@@ -73,10 +76,7 @@ ln -sf python3 /usr/bin/python
 npm i -g pnpm@11.18.0
 EOF
 
-ARG UID_NODE=1000
-ARG GID_NODE=1000
-# hadolint ignore=DL3066
-USER ${UID_NODE}:${UID_NODE}
+USER ${NODE_UID}:${NODE_GID}
 
 WORKDIR /home/node
 
@@ -95,8 +95,8 @@ EOF
 # ------------------------------------------------------------------------------
 FROM node:${NODE_VERSION}-alpine${ALPINE_VERSION} AS final
 
-ARG UID_NODE=1000
-ARG GID_NODE=1000
+ARG NODE_UID=1000
+ARG NODE_GID=1000
 
 RUN <<EOF
 set -eux
@@ -116,12 +116,11 @@ EOF
 WORKDIR /opt/app
 
 # ADD hat mehr Funktionalitaet als COPY, z.B. auch Download von externen Dateien
-COPY --chown=${UID_NODE}:${UID_NODE} package.json .env ./
-COPY --from=dependencies --chown=${UID_NODE}:${UID_NODE} /home/node/node_modules ./node_modules
-COPY --chown=${UID_NODE}:${UID_NODE} src ./src
+COPY --chown=${NODE_UID}:${NODE_GID} package.json .env ./
+COPY --from=dependencies --chown=${NODE_UID}:${NODE_GID} /home/node/node_modules ./node_modules
+COPY --chown=${NODE_UID}:${NODE_GID} src ./src
 
-# hadolint ignore=DL3066
-USER ${UID_NODE}:${UID_NODE}
+USER ${NODE_UID}:${NODE_GID}
 
 EXPOSE 3000
 EXPOSE 3030

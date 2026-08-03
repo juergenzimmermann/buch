@@ -20,8 +20,8 @@
 #               ggf. --progress=plain
 #               ggf. --no-cache
 #
-#           Windows:   Get-Content Dockerfile | docker run --rm --interactive hadolint/hadolint:v2.15.0-debian
-#           macOS:     cat Dockerfile | docker run --rm --interactive hadolint/hadolint:v2.15.0-debian
+#           Windows:   Get-Content Dockerfile | docker run --rm --interactive hadolint/hadolint:v2.15.1-debian
+#           macOS:     cat Dockerfile | docker run --rm --interactive hadolint/hadolint:v2.15.1-debian
 #
 #           docker debug juergenzimmermann/buch:2026.10.1-hardened
 #           docker network ls
@@ -43,8 +43,8 @@ ARG NODE_VERSION_DHI=26.5.1-0 \
 # ------------------------------------------------------------------------------
 FROM node:${NODE_VERSION}-trixie-slim AS dependencies
 
-ARG UID_NODE=1000
-ARG GID_NODE=1000
+ARG NODE_UID=1000
+ARG NODE_GID=1000
 
 RUN --mount=type=bind,source=package.json,target=package.json <<EOF
   # https://explainshell.com/explain?cmd=set+-eux
@@ -73,8 +73,7 @@ RUN --mount=type=bind,source=package.json,target=package.json <<EOF
   update-ca-certificates
 EOF
 
-# hadolint ignore=DL3066
-USER ${UID_NODE}:${UID_NODE}
+USER ${NODE_UID}:${NODE_GID}
 
 WORKDIR /home/node
 
@@ -96,18 +95,17 @@ FROM dhi.io/node:${NODE_VERSION_DHI}-debian13 AS final
 # $cid = docker create dhi.io/node:${NODE_VERSION_DHI}-debian13
 # docker export $cid | tar -xOf - etc/group
 # docker rm $cid
-ARG UID_NODE=1000
-ARG GID_NODE=1000
+ARG NODE_UID=1000
+ARG NODE_GID=1000
 
 WORKDIR /opt/app
 
 # ADD hat mehr Funktionalitaet als COPY, z.B. auch Download von externen Dateien
-COPY --chown=${UID_NODE}:${UID_NODE} package.json .env ./
-COPY --from=dependencies --chown=${UID_NODE}:${UID_NODE} /home/node/node_modules ./node_modules
-COPY --chown=${UID_NODE}:${UID_NODE} src ./src
+COPY --chown=${NODE_UID}:${NODE_GID} package.json .env ./
+COPY --from=dependencies --chown=${NODE_UID}:${NODE_GID} /home/node/node_modules ./node_modules
+COPY --chown=${NODE_UID}:${NODE_GID} src ./src
 
-# hadolint ignore=DL3066
-USER ${UID_NODE}:${UID_NODE}
+USER ${NODE_UID}:${NODE_GID}
 
 EXPOSE 3000
 EXPOSE 3030

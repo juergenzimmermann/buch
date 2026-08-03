@@ -153,15 +153,15 @@ erstellt wurde, kann man mit _Hadolint_ überprüfen.
 
 ```shell
     # Hardened Image mit Debian 13 (Trixie) slim
-    Get-Content Dockerfile | docker run --rm --interactive hadolint/hadolint:v2.15.0-debian
+    Get-Content Dockerfile | docker run --rm --interactive hadolint/hadolint:v2.15.1-debian
     docker build bake
 
     # Debian Trixie slim
-    Get-Content Dockerfile.trixie | docker run --rm --interactive hadolint/hadolint:v2.15.0-debian
+    Get-Content Dockerfile.trixie | docker run --rm --interactive hadolint/hadolint:v2.15.1-debian
     docker build bake trixie
 
     # Alpine
-    Get-Content Dockerfile.alpine | docker run --rm --interactive hadolint/hadolint:v2.15.0-debian
+    Get-Content Dockerfile.alpine | docker run --rm --interactive hadolint/hadolint:v2.15.1-debian
     docker build bake alpine
 ```
 
