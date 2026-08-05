@@ -36,7 +36,7 @@
 # https://cheatsheetseries.owasp.org/cheatsheets/NodeJS_Docker_Cheat_Sheet.html
 
 ARG NODE_VERSION_DHI=26.6.0-0 \
-    NODE_VERSION=26.5.1
+    NODE_VERSION=26.6.0
 
 # ------------------------------------------------------------------------------
 # S t a g e   d e p e n d e n c i e s

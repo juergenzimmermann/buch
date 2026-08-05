@@ -14,10 +14,9 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-// Aufruf:      npm i --package-lock-only --legacy-peer-deps
-//              cd scripts
-//              node dependency-check.mts
-//              cd ..
+// Aufruf:      npm i --force
+//              node scripts\dependency-check.mts
+//              Remove-Item -Recurse -Force node_modules
 //              Remove-Item package-lock.json
 //
 // ggf. z.B.    pnpm why hono
@@ -44,10 +43,11 @@ const script = resolve(rootDir, 'Zimmermann', 'dependency-check', 'bin', baseScr
 console.log(`script=${script}`);
 
 const dataPath = resolve(rootDir, 'Zimmermann', 'dependency-check-data');
+const suppressionPath = resolve('scripts', 'dependency-check-suppression.xml');
 const reportPath = '.';
 
 const options = `--nvdApiKey ${nvdApiKey} --project ${project} `.concat(
-    `--scan .. --suppression dependency-check-suppression.xml `,
+    `--scan . --suppression ${suppressionPath} `,
     `--out ${reportPath} --data ${dataPath} `,
     // https://jeremylong.github.io/DependencyCheck/dependency-check-cli/arguments.html
     // dependency-check.bat --advancedHelp
