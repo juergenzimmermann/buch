@@ -69,7 +69,7 @@ RUN <<EOF
   ln -s /usr/bin/python3.13 /usr/bin/python
   update-ca-certificates
 
-  npm i -g pnpm@11.18.0
+  npm i -g pnpm@11.20.0
 EOF
 
 USER ${NODE_UID}:${NODE_GID}
