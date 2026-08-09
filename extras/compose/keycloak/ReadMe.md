@@ -99,12 +99,12 @@ sowie die Berechtigung zum Ändern vom Linux-Owner und von der Linux-Group (s.u.
     # Windows
     cd extras\compose\keycloak
     docker run -v kc_tls:/opt/keycloak/tls -v ./tls:/tmp/tls:ro `
-      --rm -it -u 0:0 --entrypoint '' dhi.io/keycloak:26.7.0-debian13 bash
+      --rm -it -u 0:0 --entrypoint '' dhi.io/keycloak:26.7.1-debian13 bash
 
     # macOS/Linux
     cd extras/compose/keycloak
     docker run -v kc_tls:/opt/keycloak/tls -v ./tls:/tmp/tls:ro \
-      --rm -it -u 0:0 --entrypoint '' dhi.io/keycloak:26.7.0-debian13 bash
+      --rm -it -u 0:0 --entrypoint '' dhi.io/keycloak:26.7.1-debian13 bash
 
         cp /tmp/tls/certificate.crt /opt/keycloak/tls/kc_cert
         cp /tmp/tls/key.pem /opt/keycloak/tls/kc_key
