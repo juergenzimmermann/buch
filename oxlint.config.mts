@@ -369,6 +369,7 @@ export default defineConfig({
         'no-void': 'error',
         'no-warning-comments': 'off',
         'object-shorthand': 'error',
+        'one-var': ['error', 'never'],
         'operator-assignment': 'error',
         'prefer-exponentiation-operator': 'error',
         'prefer-number-coercion': 'error',
