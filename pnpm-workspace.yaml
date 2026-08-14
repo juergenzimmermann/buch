@@ -15,33 +15,36 @@
 
 # https://pnpm.io/settings
 
-# pnpm add @pnpm/pacquet --config
-# configDependencies:
-#   "@pnpm/pacquet": 0.2.12
-
-# Keine Dependencies von Git-Repositories git+ssh://... und von direkten URLs zu TARs https://.../package.tgz
-# https://pnpm.io/settings#blockexoticsubdeps
-# Problem: body-parser
-#blockExoticSubdeps : true
-
 # https://pnpm.io/settings#minimumreleaseage
 # default: 1 Tag = 24 * 60 Minuten
 #minimumReleaseAge: 1440
 # 1 Woche
 #minimumReleaseAge: 10080
 
-# https://pnpm.io/settings#packagemanagerstrictversion
-packageManagerStrictVersion: true
+# https://pnpm.io/settings/cli#pmonfail
+pmOnFail: error
 
 # https://pnpm.io/cli/add#--save-exact--e
 saveExact: true
 
-# https://pnpm.io/settings#saveprefix
+# https://pnpm.io/settings/other#saveprefix
 savePrefix: ""
 
+# https://pnpm.io/settings/build#allowbuilds
 allowBuilds:
   "@prisma/engines": true
   prisma: true
 
+# Keine Dependencies von Git-Repositories git+ssh://... und von direkten URLs zu TARs https://.../package.tgz
+# https://pnpm.io/settings/dependency-resolution#blockexoticsubdeps
+# Problem: body-parser
+blockExoticSubdeps: true
+
+# Kein Unterverzeichnis node_modules/.pnpm, sondern Sym-Links nach $env:LOCALAPPDATA\\pnpm\store\v11
+# https://pnpm.io/settings/node-modules#enableglobalvirtualstore
+#enableGlobalVirtualStore = true
+
+# Pacquet (implementiert in Rust) fuer Download und Package Management
+# pnpm add @pnpm/pacquet --config
 configDependencies:
   "@pnpm/pacquet": 0.11.12
