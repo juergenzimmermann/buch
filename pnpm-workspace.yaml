@@ -15,7 +15,7 @@
 
 # https://pnpm.io/settings
 
-# https://pnpm.io/settings#minimumreleaseage
+# https://pnpm.io/settings/dependency-resolution#minimumreleaseage
 # default: 1 Tag = 24 * 60 Minuten
 #minimumReleaseAge: 1440
 # 1 Woche
@@ -37,7 +37,6 @@ allowBuilds:
 
 # Keine Dependencies von Git-Repositories git+ssh://... und von direkten URLs zu TARs https://.../package.tgz
 # https://pnpm.io/settings/dependency-resolution#blockexoticsubdeps
-# Problem: body-parser
 blockExoticSubdeps: true
 
 # Kein Unterverzeichnis node_modules/.pnpm, sondern Sym-Links nach $env:LOCALAPPDATA\\pnpm\store\v11
