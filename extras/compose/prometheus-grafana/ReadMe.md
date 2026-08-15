@@ -35,9 +35,9 @@ Mit _Docker Compose_ werden die diversen Backend-Server gestartet:
 - Keycloak als Authorization-Server
 - Prometheus für Monitoring und Grafana für Visualisierung
 
-Danach startet man den eigenen Appserver mit `bun run dev` oder `bun start`.
+Danach startet man den eigenen Appserver mit `pnpm run dev` oder `pnpm start`.
 Jetzt muss Last generiert werden bzw. Requests müssen erzeugt werden, z.B. durch
-Aufruf des Skripts `bun scripts/generate-load.mts`.
+Aufruf des Skripts `node scripts/generate-load.mts`.
 
 ## Metriken
 
@@ -84,7 +84,7 @@ _Fastify_.
 ### Initiale Konfiguration des Grafana-Dashboards
 
 Der Graphana-Server ist als Docker-Container in `compose.yml` mit Port `3333`
-umkonfiguriert, weil der voreingstellte Port `3000` bereits durch Bun belegt ist.
+umkonfiguriert, weil der voreingstellte Port `3000` bereits durch _Node_ belegt ist.
 Wenn man in einem Webbrowser `http://localhost:3333` aufruft, muss man sich nicht
 einloggen, weil in `compose.yml` die Umgebungsvariable `GF_AUTH_ANONYMOUS_ENABLED`
 auf `true` gesetzt ist und `GF_AUTH_ANONYMOUS_ORG_ROLE` auf `Admin`.
@@ -98,8 +98,7 @@ und als leere Datei anzulegen.
 
 Zuerst klickt man auf die Kachel _Create your first dashboard_ und anschließend
 auf den Button _Import dashboard_. Im Eingabefeld für _Grafana.com dashboard URL or ID_
-gibt man z.B. die ID `11159` ein (siehe https://grafana.com/grafana/dashboards/11159-nodejs-application-dashboard),
-auch wenn es ein altes Dashboard für _Node_ statt _Bun_ ist.
+gibt man z.B. die ID `11159` ein (siehe https://grafana.com/grafana/dashboards/11159-nodejs-application-dashboard), das übrigens auch mit _Bun_ nutzbar ist.
 
 Danach klickt man auf den Button _Load_. Im Dropdown-Menü _DS Prometheus_ wählt man
 die Option _prometheus default_ aus, was in der Datei `datasource.yml` im Verzeichnis

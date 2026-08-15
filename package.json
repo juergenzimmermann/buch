@@ -33,7 +33,7 @@
   "author": "Juergen Zimmermann <Juergen.Zimmermann@h-ka.de> (https://www.h-ka.de)",
   "type": "module",
   "scripts": {
-    "start": "node --env-file=.env src/index.mts",
+    "start": "node --env-file=.env dist/src/index.mjs",
     "test": "vitest",
     "asciidoctor": "node scripts/asciidoctor.mts",
     "dev": "node --env-file=.env --watch dist/src/index.mjs",
