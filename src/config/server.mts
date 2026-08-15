@@ -60,7 +60,10 @@ const cert = await readFile(new URL('certificate.crt', tlsURL), {
 const { NODE_ENV } = env;
 export type NodeEnv = 'development' | 'PRODUCTION' | 'production' | 'test' | undefined;
 
-const runtime = (server?.runtime as 'Node' | 'Bun' | undefined) ?? 'Node';
+let runtime = server?.runtime as 'Node' | 'Bun' | undefined;
+if (runtime === undefined) {
+    runtime = env.RUNTIME ?? 'Node';
+}
 logger.debug('runtime = %s', runtime);
 
 /**

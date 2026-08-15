@@ -21,15 +21,17 @@
 import process from 'node:process';
 import { styleText } from 'node:util';
 
-const { NODE_ENV, CLIENT_SECRET, LOG_LEVEL } = process.env;
+const { NODE_ENV, CLIENT_SECRET, LOG_LEVEL, RUNTIME } = process.env;
 
 // "as const" fuer readonly
 // https://www.typescriptlang.org/docs/handbook/release-notes/typescript-3-4.html#const-assertions
 
+type RuntimeType = 'Node' | 'Bun' | undefined;
 export type EnvType = {
     NODE_ENV: string | undefined;
     CLIENT_SECRET: string | undefined;
     LOG_LEVEL: string | undefined;
+    RUNTIME: RuntimeType;
 };
 
 /**
@@ -44,6 +46,7 @@ export const env: EnvType = {
     NODE_ENV,
     CLIENT_SECRET,
     LOG_LEVEL,
+    RUNTIME: RUNTIME as RuntimeType,
 } as const;
 
 const message = styleText(['black', 'bgWhite'], 'NODE_ENV:');

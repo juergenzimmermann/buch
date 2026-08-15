@@ -90,9 +90,9 @@ aufgebaut. Der Benutzername und das Passwort sind in der Datei
 DB `buch` neu geladen wird.
 
 Wenn der Appserver mit _Bun_ statt _Node_ gestartet werden soll, ruft man
-`bun run dev:bun` auf und muss zuvor in `src\config\resources\app.toml` die
-Property `server.runtime` auf `Bun` setzen bzw. auskommentieren. Außerdem muss
-man in `.env` die Properties für die DB-URLs ohne TLS definieren.
+`bun run dev:bun` auf und muss zuvor in `.env` die Umgebungsvariable `RUNTIME`
+auf `Bun` setzen bzw. auskommentieren und die Umgebungsvariablen für die DB-URLs
+ohne TLS definieren.
 
 ---
 
