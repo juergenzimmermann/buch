@@ -356,6 +356,9 @@ importers:
       '@stylistic/eslint-plugin':
         specifier: 5.10.0
         version: 5.10.0(eslint@10.8.0(jiti@2.7.0)(supports-color@7.2.0))
+      '@tsconfig/node-ts':
+        specifier: 23.6.4
+        version: 23.6.4
       '@tsconfig/node26':
         specifier: 26.0.0
         version: 26.0.0
@@ -1153,6 +1156,9 @@ packages:
     engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
     peerDependencies:
       eslint: ^9.0.0 || ^10.0.0
+
+  '@tsconfig/node-ts@23.6.4':
+    resolution: {integrity: sha512-37BMJvNQZ+vTgd1xG2TGBkJ6ENeT4eO4Wh2CHrnn0IwH7ybLFCzh4Uc//kc7UIvqiRac4uGdIc1meKOjMSlKzw==}
 
   '@tsconfig/node26@26.0.0':
     resolution: {integrity: sha512-AlW882moMu/JzvTVjdGqJEsrqD5nSWHiFD7Aeuw6Rb58S4Aig+09mDUFFlXJx/y6/y77NwGYLlqhWxvolcC0sw==}
@@ -3328,6 +3334,8 @@ snapshots:
       espree: 10.4.0
       estraverse: 5.3.0
       picomatch: 4.0.5
+
+  '@tsconfig/node-ts@23.6.4': {}
 
   '@tsconfig/node26@26.0.0': {}
 

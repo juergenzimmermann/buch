@@ -25,7 +25,7 @@ import {
     graphqlURL,
 } from '../constants.mts';
 import { beforeAll, describe, expect, test } from 'vitest';
-import { ErrorsType } from './query.test.mts';
+import { type ErrorsType } from './query.test.mts';
 import { type GraphQLQuery } from './graphql.mts';
 import { getToken } from './token.mts';
 

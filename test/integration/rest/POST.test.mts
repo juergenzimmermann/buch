@@ -25,7 +25,7 @@ import {
 } from '../constants.mts';
 import { beforeAll, describe, expect, test } from 'vitest';
 import { type BuchNeuType } from '../../../src/buch/router/buch-validation.mts';
-import { ProblemDetails } from '../../../src/problem-details.mts';
+import { type ProblemDetails } from '../../../src/problem-details.mts';
 import { getToken } from '../token.mts';
 import { idPattern } from '../../../src/buch/router/create-base-url.mts';
 

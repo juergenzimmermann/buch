@@ -16,7 +16,7 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-import { BuchNeuType } from '../../src/buch/router/buch-validation.mts';
+import { type BuchNeuType } from '../../src/buch/router/buch-validation.mts';
 import { type Options } from 'k6/options';
 // @ts-expect-error https://github.com/grafana/k6-jslib-testing
 import { expect } from 'https://jslib.k6.io/k6-testing/0.6.1/index.js';

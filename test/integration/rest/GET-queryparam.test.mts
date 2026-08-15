@@ -16,8 +16,8 @@
 
 import { CONTENT_TYPE, restURL } from '../constants.mts';
 import { describe, expect, test } from 'vitest';
-import { Buch } from '../../../src/generated/prisma/client.ts';
-import { BuchMitTitel } from '../../../src/buch/service/buch-service.mts';
+import { type Buch } from '../../../src/generated/prisma/client.ts';
+import { type BuchMitTitel } from '../../../src/buch/service/buch-service.mts';
 import { type Page } from '../../../src/buch/router/page.mts';
 
 type BuchType = Omit<Buch, 'preis' | 'rabatt'> & {
