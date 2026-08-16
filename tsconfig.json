@@ -18,6 +18,7 @@
     // https://www.typescriptlang.org/tsconfig/#target: node25
     "target": "esnext",
     "lib": ["esnext"],
+    "types": ["pg", "nodemailer", "bun", "k6"], // https://www.typescriptlang.org/tsconfig/#types
 
     // "allowImportingTsExtensions": true // implizit bei rewriteRelativeImportExtensions: Import mit .ts statt .js
     // "allowUnreachableCode": false, // strictest: return bei then-else und try-catch
@@ -41,7 +42,7 @@
     "outDir": "./dist",
     "removeComments": true,
     "rootDir": ".", // z.B. oxlint.config.mts
-    // "skipLibCheck": true, // default ab TS 5.9
+    // "skipLibCheck": true, // default ab TS 5.9, node26
     "sourceMap": true // *.map fuer Debugger
     // "strict": true, // strictest: alle "strict"-Optionen aktivieren
     // "useUnknownInCatchVariables": true // strict (s.o.): unknown als default-Typ bei catch-Klauseln
