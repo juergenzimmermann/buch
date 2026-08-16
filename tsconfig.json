@@ -40,7 +40,7 @@
     // "noUnusedParameters": true, // strictest: keine nicht-benutzen Parameter
     "outDir": "./dist",
     "removeComments": true,
-    // "rootDir": ".", // default ab TypeScript 6
+    "rootDir": ".", // z.B. oxlint.config.mts
     // "skipLibCheck": true, // default ab TS 5.9
     "sourceMap": true // *.map fuer Debugger
     // "strict": true, // strictest: alle "strict"-Optionen aktivieren

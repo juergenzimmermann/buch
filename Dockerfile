@@ -36,54 +36,94 @@
 # https://cheatsheetseries.owasp.org/cheatsheets/NodeJS_Docker_Cheat_Sheet.html
 
 ARG NODE_VERSION_DHI=26.6.0-0 \
-    NODE_VERSION=26.6.0
+    NODE_VERSION=26.7.0
+# ---------------------------------------------------------------------------------------
+# S t a g e   d i s t
+# ---------------------------------------------------------------------------------------
+FROM node:${NODE_VERSION}-trixie-slim AS dist
 
-# ------------------------------------------------------------------------------
-# S t a g e   d e p e n d e n c i e s
-# ------------------------------------------------------------------------------
-FROM node:${NODE_VERSION}-trixie-slim AS dependencies
+ARG NODE_UID=1000 \
+    NODE_GID=1000
 
-ARG NODE_UID=1000
-ARG NODE_GID=1000
-
-RUN --mount=type=bind,source=package.json,target=package.json <<EOF
+RUN <<EOF
   # https://explainshell.com/explain?cmd=set+-eux
   set -eux
 
   # https://manpages.debian.org/trixie/apt/apt-get.8.en.html
   # Die "Package Index"-Dateien neu synchronisieren
-  apt-get update
-
+  apt-get update --no-show-upgraded
   # Die neuesten Versionen der bereits installierten Packages installieren
-  apt-get upgrade --yes
+  apt-get upgrade --yes --no-show-upgraded
 
-  npm i -g pnpm@11.20.0
+  npm r -g pnpm
+  npm i -g pnpm@11.22.0
 
-  # ggf. Python fuer pg
-  # Debian Trixie bietet nur Packages fuer Python 3.13
+  # Python evtl. fuer pg notwendig
+  # "python3-dev" enthaelt "multiprocessing"
+  # "build-essential" enthaelt "make"
   # https://packages.debian.org/trixie/python3.13-minimal
   # https://packages.debian.org/trixie/python3.13-dev
   # https://packages.debian.org/trixie/build-essential
-  # https://packages.debian.org/trixie/ca-certificates fuer Rust bzw. "pacquet" bei Linux
-  # "python3-dev" enthaelt "multiprocessing"
-  # "build-essential" enthaelt "make"
   apt-get install --no-install-recommends --yes python3.13-minimal=3.13.5-2+deb13u4 python3.13-dev=3.13.5-2+deb13u4 build-essential=12.12 ca-certificates=20250419
   ln -s /usr/bin/python3.13 /usr/bin/python3
   ln -s /usr/bin/python3.13 /usr/bin/python
   update-ca-certificates
+
 EOF
 
 USER ${NODE_UID}:${NODE_GID}
 
 WORKDIR /home/node
 
+# Sonst "lock"-Konflikte mit Stage "dependencies" (s.u.)
+COPY --chown=${NODE_UID}:${NODE_GID} pnpm-lock.yaml pnpm-workspace.yaml ./
+# fuer script "posttsc" in package.json
+COPY --chown=${NODE_UID}:${NODE_GID} scripts/copy-resources.mts ./scripts/
+
+# https://docs.docker.com/engine/reference/builder/#run---mounttypebind
+RUN --mount=type=bind,source=package.json,target=package.json \
+  --mount=type=bind,source=tsconfig.json,target=tsconfig.json \
+  --mount=type=bind,source=src,target=src \
+  --mount=type=cache,target=/root/.pnpm <<EOF
+
+  set -eux
+  pnpm i
+  pnpm run tsc
+EOF
+
+# ------------------------------------------------------------------------------
+# S t a g e   d e p e n d e n c i e s
+# ------------------------------------------------------------------------------
+FROM node:${NODE_VERSION}-trixie-slim AS dependencies
+
+ARG NODE_UID=1000 \
+    NODE_GID=1000
+
+RUN <<EOF
+  set -eux
+  apt-get update
+  apt-get upgrade --yes
+
+  apt-get install --no-install-recommends --yes python3.13-minimal=3.13.5-2+deb13u4 python3.13-dev=3.13.5-2+deb13u4 build-essential=12.12 ca-certificates=20250419
+  ln -s /usr/bin/python3.13 /usr/bin/python3
+  ln -s /usr/bin/python3.13 /usr/bin/python
+  update-ca-certificates
+
+  npm i -g pnpm@11.22.0
+EOF
+
+USER ${NODE_UID}:${NODE_GID}
+
+WORKDIR /home/node
+
+# https://docs.docker.com/engine/reference/builder/#run---mounttypebind
 RUN --mount=type=bind,source=package.json,target=package.json \
   --mount=type=bind,source=pnpm-lock.yaml,target=pnpm-lock.yaml \
   --mount=type=bind,source=pnpm-workspace.yaml,target=pnpm-workspace.yaml \
   --mount=type=cache,target=/root/.pnpm <<EOF
-set -eux
 
-pnpm i -P --frozen-lockfile
+  set -eux
+  pnpm i --prod --frozen-lockfile
 EOF
 
 # ------------------------------------------------------------------------------
@@ -95,15 +135,15 @@ FROM dhi.io/node:${NODE_VERSION_DHI}-debian13 AS final
 # $cid = docker create dhi.io/node:${NODE_VERSION_DHI}-debian13
 # docker export $cid | tar -xOf - etc/group
 # docker rm $cid
-ARG NODE_UID=1000
-ARG NODE_GID=1000
+ARG NODE_UID=1000 \
+    NODE_GID=1000
 
 WORKDIR /opt/app
 
 # ADD hat mehr Funktionalitaet als COPY, z.B. auch Download von externen Dateien
 COPY --chown=${NODE_UID}:${NODE_GID} package.json .env ./
+COPY --from=dist --chown=${NODE_UID}:${NODE_GID} /home/node/dist/src ./dist/src
 COPY --from=dependencies --chown=${NODE_UID}:${NODE_GID} /home/node/node_modules ./node_modules
-COPY --chown=${NODE_UID}:${NODE_GID} src ./src
 
 USER ${NODE_UID}:${NODE_GID}
 
@@ -125,4 +165,4 @@ LABEL org.opencontainers.image.title="buch" \
   # Bei CMD statt ENTRYPOINT kann das Kommando bei "docker run ..." ueberschrieben werden
 # "Array Syntax" damit auch <Strg>C funktioniert
 
-ENTRYPOINT ["node", "--env-file=.env", "src/index.mts"]
+ENTRYPOINT ["node", "--env-file=.env", "dist/src/index.mjs"]

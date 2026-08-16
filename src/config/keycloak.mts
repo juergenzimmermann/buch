@@ -29,7 +29,6 @@ if (typeof keycloak === 'object') {
         (keycloak.schema !== undefined && typeof keycloak.schema !== 'string') ||
         (keycloak.port !== undefined && typeof keycloak.port !== 'number')
     ) {
-        console.error('!!!keycloak=%j', keycloak);
         throw new TypeError('Die Konfiguration für Keycloak (Schema und Port) ist falsch');
     }
     if (keycloak.realm !== undefined && typeof keycloak.realm !== 'string') {

@@ -33,33 +33,30 @@
 
 ARG NODE_VERSION=26.7.0
 
-# ------------------------------------------------------------------------------
-# S t a g e   d e p e n d e n c i e s
-# ------------------------------------------------------------------------------
-FROM node:${NODE_VERSION}-trixie-slim AS dependencies
+# ---------------------------------------------------------------------------------------
+# S t a g e   d i s t
+# ---------------------------------------------------------------------------------------
+FROM node:${NODE_VERSION}-trixie-slim AS dist
 
-ARG NODE_UID=1000
-ARG NODE_GID=1000
+ARG NODE_UID=1000 \
+    NODE_GID=1000
 
-# ggf. Python fuer pg
-# https://packages.debian.org/trixie/python3.12-minimal
-# "python3-dev" enthaelt "multiprocessing"
-# "build-essential" enthaelt "make"
-
-# https://docs.docker.com/engine/reference/builder/#run---mounttypebind
 RUN <<EOF
   # https://explainshell.com/explain?cmd=set+-eux
   set -eux
 
+  # https://manpages.debian.org/trixie/apt/apt-get.8.en.html
   # Die "Package Index"-Dateien neu synchronisieren
-  apt-get update
+  apt-get update --no-show-upgraded
   # Die neuesten Versionen der bereits installierten Packages installieren
-  apt-get upgrade --yes
+  apt-get upgrade --yes --no-show-upgraded
+
+  npm r -g pnpm
+  npm i -g pnpm@11.22.0
 
   # Python evtl. fuer pg notwendig
   # "python3-dev" enthaelt "multiprocessing"
   # "build-essential" enthaelt "make"
-  # Debian Trixie bietet nur Packages fuer Python 3.13
   # https://packages.debian.org/trixie/python3.13-minimal
   # https://packages.debian.org/trixie/python3.13-dev
   # https://packages.debian.org/trixie/build-essential
@@ -69,7 +66,47 @@ RUN <<EOF
   ln -s /usr/bin/python3.13 /usr/bin/python
   update-ca-certificates
 
-  npm i -g pnpm@11.20.0
+EOF
+
+USER ${NODE_UID}:${NODE_GID}
+
+WORKDIR /home/node
+
+# Sonst "lock"-Konflikte mit Stage "dependencies" (s.u.)
+COPY --chown=${NODE_UID}:${NODE_GID} pnpm-lock.yaml pnpm-workspace.yaml ./
+# fuer script "posttsc" in package.json
+COPY --chown=${NODE_UID}:${NODE_GID} scripts/copy-resources.mts ./scripts/
+
+# https://docs.docker.com/engine/reference/builder/#run---mounttypebind
+RUN --mount=type=bind,source=package.json,target=package.json \
+  --mount=type=bind,source=tsconfig.json,target=tsconfig.json \
+  --mount=type=bind,source=src,target=src \
+  --mount=type=cache,target=/root/.pnpm <<EOF
+
+  set -eux
+  pnpm i
+  pnpm run tsc
+EOF
+
+# ------------------------------------------------------------------------------
+# S t a g e   d e p e n d e n c i e s
+# ------------------------------------------------------------------------------
+FROM node:${NODE_VERSION}-trixie-slim AS dependencies
+
+ARG NODE_UID=1000 \
+    NODE_GID=1000
+
+RUN <<EOF
+  set -eux
+  apt-get update
+  apt-get upgrade --yes
+
+  apt-get install --no-install-recommends --yes python3.13-minimal=3.13.5-2+deb13u4 python3.13-dev=3.13.5-2+deb13u4 build-essential=12.12 ca-certificates=20250419
+  ln -s /usr/bin/python3.13 /usr/bin/python3
+  ln -s /usr/bin/python3.13 /usr/bin/python
+  update-ca-certificates
+
+  npm i -g pnpm@11.22.0
 EOF
 
 USER ${NODE_UID}:${NODE_GID}
@@ -81,9 +118,9 @@ RUN --mount=type=bind,source=package.json,target=package.json \
   --mount=type=bind,source=pnpm-lock.yaml,target=pnpm-lock.yaml \
   --mount=type=bind,source=pnpm-workspace.yaml,target=pnpm-workspace.yaml \
   --mount=type=cache,target=/root/.pnpm <<EOF
-  set -eux
 
-  pnpm i -P --frozen-lockfile
+  set -eux
+  pnpm i --prod --frozen-lockfile
 EOF
 
 # ------------------------------------------------------------------------------
@@ -91,32 +128,27 @@ EOF
 # ------------------------------------------------------------------------------
 FROM node:${NODE_VERSION}-trixie-slim AS final
 
-ARG NODE_UID=1000
-ARG NODE_GID=1000
+ARG NODE_UID=1000 \
+    NODE_GID=1000
 
 RUN <<EOF
-# https://explainshell.com/explain?cmd=set+-eux
-set -eux
+  set -eux
 
-# https://manpages.debian.org/trixie/apt/apt-get.8.en.html
-# Die "Package Index"-Dateien neu synchronisieren
-apt-get update --no-show-upgraded
+  apt-get update --no-show-upgraded
+  apt-get upgrade --yes --no-show-upgraded
 
-# Die neuesten Versionen der bereits installierten Packages installieren
-apt-get upgrade --yes --no-show-upgraded
-
-apt-get autoremove --yes
-apt-get clean --yes
-rm -rf /var/lib/apt/lists/*
-rm -rf /tmp/*
+  apt-get autoremove --yes
+  apt-get clean --yes
+  rm -rf /var/lib/apt/lists/*
+  rm -rf /tmp/*
 EOF
 
 WORKDIR /opt/app
 
 # ADD hat mehr Funktionalitaet als COPY, z.B. auch Download von externen Dateien
 COPY --chown=${NODE_UID}:${NODE_GID} package.json .env ./
+COPY --from=dist --chown=${NODE_UID}:${NODE_GID} /home/node/dist/src ./dist/src
 COPY --from=dependencies --chown=${NODE_UID}:${NODE_GID} /home/node/node_modules ./node_modules
-COPY --chown=${NODE_UID}:${NODE_GID} src ./src
 
 USER ${NODE_UID}:${NODE_GID}
 
@@ -130,11 +162,11 @@ HEALTHCHECK --interval=30s --timeout=3s --retries=1 \
 # https://specs.opencontainers.org/image-spec/annotations
 # https://spdx.org/licenses
 LABEL org.opencontainers.image.title="buch" \
-  org.opencontainers.image.description="Appserver buch mit Basis-Image slim (Debian Trixie)" \
+  org.opencontainers.image.description="Appserver buch mit Basis-Image (Debian) trixie-slim" \
   org.opencontainers.image.version="2026.10.1-trixie" \
   org.opencontainers.image.licenses="GPL-3.0-or-later" \
   org.opencontainers.image.authors="Juergen.Zimmermann@h-ka.de"
 
 # Bei CMD statt ENTRYPOINT kann das Kommando bei "docker run ..." ueberschrieben werden
 # "Array Syntax" damit auch <Strg>C funktioniert
-ENTRYPOINT ["node", "--env-file=.env", "src/index.mts"]
+ENTRYPOINT ["node", "--env-file=.env", "dist/src/index.mjs"]

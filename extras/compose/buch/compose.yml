@@ -62,15 +62,15 @@ services:
     volumes:
       - type: bind
         source: app.toml
-        target: /opt/app/src/config/resources/app.toml
+        target: /opt/app/dist/src/config/resources/app.toml
         read_only: true
       - type: bind
         source: ../../../log
         target: /tmp/log
         read_only: true
       - type: bind
-        source: ../../../src/config/resources/tls/key.pem
-        target: /opt/app/src/config/resources/tls/key.pem
+        source: ../../../dist/src/config/resources/tls/key.pem
+        target: /opt/app/dist/src/config/resources/tls/key.pem
         read_only: true
     networks: [acme-network]
     env_file: .env

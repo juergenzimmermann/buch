@@ -27,3 +27,5 @@ export type AppConfig = Record<'server' | 'db' | 'keycloak' | 'log' | 'health' |
 const appUrl = new URL('app.toml', resourcesURL);
 const appText = await readFile(appUrl, { encoding: 'utf8' });
 export const config = parse(appText) as AppConfig;
+
+console.log(`config aus app.toml: ${JSON.stringify(config)}`);
