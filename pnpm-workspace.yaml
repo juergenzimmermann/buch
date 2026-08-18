@@ -42,8 +42,3 @@ blockExoticSubdeps: true
 # Kein Unterverzeichnis node_modules/.pnpm, sondern Sym-Links nach $env:LOCALAPPDATA\\pnpm\store\v11
 # https://pnpm.io/settings/node-modules#enableglobalvirtualstore
 #enableGlobalVirtualStore = true
-
-# Pacquet (implementiert in Rust) fuer Download und Package Management
-# pnpm add @pnpm/pacquet --config
-configDependencies:
-  "@pnpm/pacquet": 0.11.12

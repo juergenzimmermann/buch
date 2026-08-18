@@ -436,6 +436,10 @@ können mit _Node_ folgendermaßen aufgerufen werden:
 
     node --env-file=.env src/beispiele.mts
     node --env-file=.env src/beispiele-write.mts
+
+    pnpm run tsc
+    node --env-file=.env dist/src/beispiele.mjs
+    node --env-file=.env dist/src/beispiele-write.mjs
 ```
 
 ## Neuere Versionen und evtl. Sicherheitslücken
