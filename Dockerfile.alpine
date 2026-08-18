@@ -58,7 +58,7 @@ RUN <<EOF
   apk upgrade
 
   npm r -g pnpm
-  npm i -g pnpm@12.0.0-rc.6
+  npm i -g pnpm@12.0.0-rc.7
 
   # Python evtl. fuer pg
   # https://dl-cdn.alpinelinux.org/alpine/v3.23/main/x86_64
@@ -113,7 +113,7 @@ RUN <<EOF
   apk add --update --no-cache python3=3.14.7-r1 make=4.4.1-r4 gcc=15.2.0-r5 g++=15.2.0-r5 build-base=0.5-r4
   ln -sf python3 /usr/bin/python
 
-  npm i -g pnpm@12.0.0-rc.6
+  npm i -g pnpm@12.0.0-rc.7
 EOF
 
 USER ${NODE_UID}:${NODE_GID}
