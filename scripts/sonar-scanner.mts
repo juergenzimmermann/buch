@@ -36,7 +36,7 @@ console.log(`script=${script}`);
 console.log('');
 
 // https://nodejs.org/api/child_process.html#spawning-bat-and-cmd-files-on-windows
-// oxlint-disable-next-line promise/prefer-await-to-callbacks
+// oxlint-disable-next-line promise/prefer-await-to-callbacks no-unused-vars
 exec(script, (err, stdout, _) => {
     if (err) {
         console.error(err);
