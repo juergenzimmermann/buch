@@ -190,7 +190,7 @@ Bei Linux und macOS gibt man in einer Shell die nachfolgenden Kommandos ein:
 
 ### pnpm installieren
 
-Bei Windows erfolgt die Installation im Pfad `${$env:LOCALAPPDATA}\pnpm`.
+Bei Windows erfolgt die Installation im Pfad `$$env:LOCALAPPDATA\pnpm`.
 
 ```shell
     # Windows:

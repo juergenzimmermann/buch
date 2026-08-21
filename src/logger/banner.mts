@@ -42,10 +42,10 @@ export const banner = async () => {
     if (runtime === 'Bun') {
         const Bun = await import('bun');
         logger.info('Bun: %s', Bun.version);
-    } else {
-        // https://nodejs.org/api/process.html
-        logger.info('Node: %s', process.version);
     }
+
+    // https://nodejs.org/api/process.html
+    logger.info('Node: %s', process.version);
     logger.info('NODE_ENV: %s', nodeEnv ?? 'undefined');
     logger.info('Rechnername: %s', host);
     logger.info('Port: %d', port);
