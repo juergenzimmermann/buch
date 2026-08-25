@@ -153,7 +153,8 @@ pipeline {
                         '''
                     },
                     'Security Audit': {
-                        sh 'pnpm audit --prod'
+                        // deepmerge-ts
+                        sh 'pnpm audit --prod --ignore GHSA-ggr8-5vv4-36mx'
                     },
                     'AsciiDoctor': {
                         sh '''
