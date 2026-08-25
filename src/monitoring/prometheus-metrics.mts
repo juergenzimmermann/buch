@@ -17,7 +17,7 @@
 // https://medium.com/@tiffanyadisuryo/setting-up-a-prometheus-and-grafana-monitoring-system-for-my-bun-js-backend-243c4c3cd29d
 
 import { type Context, type Next } from 'hono';
-import { Counter, Histogram, collectDefaultMetrics } from 'prom-client';
+import { Counter, Histogram, collectDefaultMetrics } from '@prometheus-io/client';
 import { createMiddleware } from 'hono/factory';
 
 // Metriken für Prometheus mit Default-Daten konfigurieren

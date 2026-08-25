@@ -14,7 +14,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 import { Hono } from 'hono';
-import { register } from 'prom-client';
+import { register } from '@prometheus-io/client';
 
 /**
  * Router für die Metriken für Prometheus.
