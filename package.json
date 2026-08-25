@@ -103,7 +103,7 @@
   },
   "overrides": {
     "@prisma/config": {
-      "deepmerge-ts": "^8.0.1"
+      "deepmerge-ts": "^8.0.2"
     },
     "leasot": {
       "lodash": "4.18.1"
