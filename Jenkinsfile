@@ -99,7 +99,7 @@ pipeline {
                     ls -al ~/.cache/node
 
                     npm r -g pnpm
-                    npm i -g pnpm@12.0.0-rc.11
+                    npm i -g pnpm@12.0.0
                     env | sort
                     which pnpm
                     pnpm --version

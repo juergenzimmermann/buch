@@ -57,15 +57,15 @@
   },
   "dependencies": {
     "@hono/node-server": "2.1.1",
-    "@prisma/adapter-pg": "7.9.1",
-    "@prisma/client": "7.9.1",
-    "@prisma/sqlcommenter-query-insights": "7.9.1",
+    "@prisma/adapter-pg": "7.10.0",
+    "@prisma/client": "7.10.0",
+    "@prisma/sqlcommenter-query-insights": "7.10.0",
     "@prometheus-io/client": "0.16.0",
     "dotenv": "17.4.2",
     "figlet": "1.11.4",
     "graphql": "17.0.2",
     "graphql-yoga": "5.22.0",
-    "hono": "4.13.4",
+    "hono": "4.13.5",
     "isbn3": "2.0.10",
     "jose": "6.2.10",
     "nodemailer": "9.0.5",
@@ -78,12 +78,14 @@
   },
   "devDependencies": {
     "@asciidoctor/core": "4.0.11",
+    "@prisma/prisma7": "7.10.0",
     "@stylistic/eslint-plugin": "5.10.0",
     "@tsconfig/node-ts": "23.6.4",
     "@tsconfig/node26": "26.0.1",
     "@tsconfig/strictest": "2.0.8",
     "@types/bun": "1.4.0",
     "@types/k6": "2.2.0",
+    "@types/node": "26.3.0",
     "@types/nodemailer": "8.0.1",
     "@types/pg": "8.23.1",
     "@vitest/coverage-v8": "5.0.0-rc.2",
@@ -94,7 +96,6 @@
     "oxfmt": "0.65.0",
     "oxlint": "1.80.0",
     "oxlint-tsgolint": "7.0.2001",
-    "prisma": "7.9.1",
     "typedoc": "0.28.20",
     "typescript": "7.0.2",
     "vite": "8.2.2",
@@ -112,13 +113,13 @@
   "devEngines": {
     "packageManager": {
       "name": "pnpm",
-      "version": "12.0.0-rc.11",
+      "version": "12.0.0",
       "onFail": "warn"
     },
     "runtime": [
       {
         "name": "node",
-        "version": "26.7.0",
+        "version": "26.8.1",
         "onFail": "warn"
       },
       {
@@ -130,7 +131,7 @@
   },
   "engines": {
     "bun": "1.4.0",
-    "node": "26.7.0",
-    "pnpm": "12.0.0-rc.11"
+    "node": "26.8.1",
+    "pnpm": "12.0.0"
   }
 }

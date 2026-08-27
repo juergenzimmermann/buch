@@ -203,7 +203,7 @@ Bei Windows erfolgt die Installation im Pfad `$$env:LOCALAPPDATA\pnpm`.
 ```
 
 Damit bei _Windows_ der _Defender_ künftige Installationen mit pnpm nicht signifikant
-verlangsamt, sollte das Verzeichnis `%LOCALAPPDATA%\pnpm` von der Echtzeitüberwachung
+verlangsamt, sollte das Verzeichnis `$env:$LOCALAPPDATA\pnpm` von der Echtzeitüberwachung
 ausgeschlossen werden, was als _Administrator_ durchgeführt werden muss.
 
 ```shell
@@ -302,17 +302,22 @@ wird die Datei `schema.prisma` angelegt. Das Verzeichnis `prisma` darf dabei
 noch nicht existieren.
 
 ```shell
-    pnpm prisma init
+    pnpm prisma7 init `
+      --datasource-provider postgresql `
+      --preview-feature nativeDistinct `
+      --preview-feature relationJoins `
+      --output '../src/generated/prisma' `
+      --url 'postgresql://buch:p@localhost/buch?schema=buch&connection_limit=10&sslnegotiation=direct&sslcert=src/config/resources/postgresql/server.crt'
 ```
 
-Dabei werden folgende Dateien und Verzeichnissegeneriert:
+Dabei werden folgende Dateien und Verzeichnisse generiert:
 
-- `prisma.config.ts` siehe https://github.com/prisma/prisma/releases/tag/6.18.0
+- `prisma7.config.ts` siehe https://github.com/prisma/prisma/releases/tag/6.18.0
 - `prisma\schema.prisma`
 - `.env`
 - `.gitignore`
-- `.claude\skills\`
 - `.agents\skills\`
+- `.claude\skills\`
 - `.windsurf\skills\`
 - `skills-lock.json`
 
@@ -334,9 +339,11 @@ können:
 
 ### Models aus einer bestehenden DB generieren
 
-Als nächstes müssen Prisma-Models aus der bestehenden DB generiert werden,
-um später das OR-Mapping zu ermöglichen. Dazu muss der DB-Server mit einer
-existierenden DB gestartet sein:
+Als nächstes müssen Prisma-Models aus einer **bestehenden** DB generiert werden,
+um später das OR-Mapping zu ermöglichen; diese Vorgehensweise bezeichnet man
+als _adopt an existing database workflow_.
+
+Der DB-Server mit einer existierenden DB wird gestartet:
 
 ```powerhell
     cd extras\compose\postgres
@@ -347,7 +354,7 @@ Nun wird die Generierung durchgeführt, so dass die Datei `prisma\schema.prisma`
 um die Models für das spätere OR-Mapping ergänzt wird:
 
 ```shell
-    pnpm prisma db pull
+    pnpm prisma7 db pull
 ```
 
 Warnungen, dass _Check-Constraints_ nicht unterstützt werden, können ignoriert
@@ -391,7 +398,7 @@ künftige OR-Mapping. Mit diesem Schema kann nun der Prisma-Client generiert
 werden, der später für das OR-Mapping in TypeScript verwendet wird:
 
 ```shell
-    pnpm prisma generate
+    pnpm prisma7 generate
 ```
 
 ---

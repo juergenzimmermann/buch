@@ -15,10 +15,10 @@
     "module": "nodenext",
     "moduleResolution": "nodenext",
     // "moduleDetection": "force", // default ab TS 5.9
-    // https://www.typescriptlang.org/tsconfig/#target: node25
+    // https://www.typescriptlang.org/tsconfig/#target
     "target": "esnext",
     "lib": ["esnext"],
-    "types": ["pg", "nodemailer", "bun", "k6"], // https://www.typescriptlang.org/tsconfig/#types
+    "types": ["pg", "nodemailer", "bun", "k6", "node"], // https://www.typescriptlang.org/tsconfig/#types
 
     // "allowImportingTsExtensions": true // implizit bei rewriteRelativeImportExtensions: Import mit .ts statt .js
     // "allowUnreachableCode": false, // strictest: return bei then-else und try-catch

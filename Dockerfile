@@ -35,7 +35,7 @@
 # https://snyk.io/blog/10-best-practices-to-containerize-nodejs-web-applications-with-docker
 # https://cheatsheetseries.owasp.org/cheatsheets/NodeJS_Docker_Cheat_Sheet.html
 
-ARG NODE_VERSION_DHI=26.6.0-0 \
+ARG NODE_VERSION_DHI=26.7.0-0 \
     NODE_VERSION=26.7.0
 # ---------------------------------------------------------------------------------------
 # S t a g e   d i s t
@@ -56,7 +56,7 @@ RUN <<EOF
   apt-get upgrade --yes --no-show-upgraded
 
   npm r -g pnpm
-  npm i -g pnpm@12.0.0-rc.11
+  npm i -g pnpm@12.0.0
 
   # Python evtl. fuer pg notwendig
   # "python3-dev" enthaelt "multiprocessing"
@@ -109,7 +109,7 @@ RUN <<EOF
   ln -s /usr/bin/python3.13 /usr/bin/python
   update-ca-certificates
 
-  npm i -g pnpm@12.0.0-rc.11
+  npm i -g pnpm@12.0.0
 EOF
 
 USER ${NODE_UID}:${NODE_GID}
