@@ -37,7 +37,7 @@ pipeline {
     stages {
         // Stage = Logisch-zusammengehoerige Aufgaben der Pipeline:
         // zur spaeteren Visualisierung
-        stage('Init') {
+        stage('Clean') {
             // Step = einzelne Aufgabe
             steps {
                 script {
@@ -65,7 +65,7 @@ pipeline {
             }
         }
 
-        stage('Install') {
+        stage('Install Deps') {
             // Stage-spezifische Umgebungsvariable
             environment {
                 DATABASE_URL = 'postgresql://buch:p@localhost/buch?schema=buch&connection_limit=10&sslnegotiation=direct&sslcert=../src/config/resources/postgresql/certificate.cer'
@@ -152,7 +152,7 @@ pipeline {
                             pnpm run lint
                         '''
                     },
-                    'Security Audit': {
+                    'Audit': {
                         // deepmerge-ts
                         sh 'pnpm audit --prod --ignore GHSA-ggr8-5vv4-36mx'
                     },
