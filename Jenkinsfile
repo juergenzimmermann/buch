@@ -21,12 +21,12 @@ pipeline {
     agent any
     tools {
         // Einstellungen > Tools > NodeJS Installationen
-        nodejs 'node-26.7.0'
+        nodejs 'node-26.8.1'
     }
 
     // globale Umgebungsvariable:
     //environment {
-    //    DATABASE_URL = 'postgresql://buch:p@localhost/buch?schema=buch&connection_limit=10&sslnegotiation=direct?sslcert=../src/config/resources/postgresql/certificate.cer'
+    //    DATABASE_URL = 'postgresql://buch:p@localhost/buch?schema=buch&connection_limit=10&sslnegotiation=direct&sslcert=../src/config/resources/postgresql/certificate.cer'
     //}
 
     options {
