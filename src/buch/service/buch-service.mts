@@ -195,6 +195,7 @@ const createSlice = (
 export const findAll = async (pageable: Pageable): Promise<Readonly<Slice<BuchMitTitelDTO>>> => {
     const { number, size } = pageable;
     const buecher: BuchMitTitel[] = await prismaClient.buch.findMany({
+        // TODO limit und offset ab Prisma 8: https://github.com/prisma/orm/releases/tag/v8.0.0-rc.7
         skip: number * size,
         take: size,
         include: INCLUDE_TITEL,
@@ -267,6 +268,7 @@ export const find = async (
     const { number, size } = pageable;
     const buecher: BuchMitTitel[] = await prismaClient.buch.findMany({
         where,
+        // TODO limit und offset ab Prisma 8: https://github.com/prisma/orm/releases/tag/v8.0.0-rc.7
         skip: number * size,
         take: size,
         include: INCLUDE_TITEL,
