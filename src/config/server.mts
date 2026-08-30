@@ -61,9 +61,7 @@ const { NODE_ENV } = env;
 export type NodeEnv = 'development' | 'PRODUCTION' | 'production' | 'test' | undefined;
 
 let runtime = server?.runtime as 'Node' | 'Bun' | undefined;
-if (runtime === undefined) {
-    runtime = env.RUNTIME ?? 'Node';
-}
+runtime ??= env.RUNTIME ?? 'Node';
 logger.debug('runtime = %s', runtime);
 
 /**
