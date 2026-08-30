@@ -27,7 +27,7 @@ import { z } from 'zod';
 
 export const MAX_RATING = 5;
 
-const BuchComplete = z.strictObject({
+const BuchSchema = z.strictObject({
     // bei GraphQL ist der Typ ID i.a. ein String
     id: z.union([z.number().int().gt(0), z.string().regex(/^[1-9]\d*$/u)]),
     version: z.int().gte(0),
@@ -57,22 +57,36 @@ const BuchComplete = z.strictObject({
         )
         .optional(),
 });
-export const BuchNeuSchema = BuchComplete.omit({
-    id: true,
-    version: true,
-}).readonly();
 
-export const BuchUpdateSchema = BuchComplete.omit({
-    id: true,
-    version: true,
-    titel: true,
-    abbildungen: true,
-}).readonly();
+// https://zod.dev/compile seit Zod 4.5
+export const BuchNeuSchema = z
+    .compile(
+        BuchSchema.omit({
+            id: true,
+            version: true,
+        }),
+    )
+    .readonly();
 
-export const BuchUpdateGraphQLSchema = BuchComplete.omit({
-    titel: true,
-    abbildungen: true,
-}).readonly();
+export const BuchUpdateSchema = z
+    .compile(
+        BuchSchema.omit({
+            id: true,
+            version: true,
+            titel: true,
+            abbildungen: true,
+        }),
+    )
+    .readonly();
+
+export const BuchUpdateGraphQLSchema = z
+    .compile(
+        BuchSchema.omit({
+            titel: true,
+            abbildungen: true,
+        }),
+    )
+    .readonly();
 
 export type BuchNeuType = z.infer<typeof BuchNeuSchema>;
 export type BuchUpdateType = z.infer<typeof BuchUpdateSchema>;
