@@ -38,12 +38,12 @@ export type PageableProps = {
     /**
      * Seitennummer mit Zählung ab 0.
      */
-    readonly number?: string | undefined;
+    readonly number?: string | number | undefined;
 
     /**
      * Maximale Anzahl Datensätze auf einer Seite
      */
-    readonly size?: string | undefined;
+    readonly size?: string | number | undefined;
 };
 
 /**

@@ -1,7 +1,7 @@
 info:
-  name: Suche mit Suchparameter
+  name: Suche mit QUERY-Methode
   type: folder
-  seq: 2
+  seq: 3
 
 request:
   auth: inherit

@@ -1,0 +1,31 @@
+info:
+  name: Nicht-vorhandene Property
+  type: http
+  seq: 19
+
+http:
+  method: QUERY
+  url: "{{restUrl}}"
+  headers:
+    - name: Accept
+      value: application/json
+  body:
+    type: json
+    data: |-
+      {
+        "FALSCH": true
+      }
+  auth: inherit
+
+runtime:
+  assertions:
+    - expression: res.status
+      operator: eq
+      value: "404"
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+  forwardAuthorizationHeader: true

@@ -43,7 +43,7 @@ export type ProblemDetails = {
 export const createProblemDetails = (
     ctx: Context,
     statusCode: ClientErrorStatusCode,
-    detail: unknown,
+    detail?: unknown,
 ): Response => {
     let problemDetails: ProblemDetails;
 

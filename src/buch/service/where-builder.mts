@@ -29,22 +29,22 @@ const buildSchlagwoerter = ({
     java,
     python,
 }: {
-    javascript: string | undefined;
-    typescript: string | undefined;
-    java: string | undefined;
-    python: string | undefined;
+    javascript: string | boolean | undefined;
+    typescript: string | boolean | undefined;
+    java: string | boolean | undefined;
+    python: string | boolean | undefined;
 }): ReadonlyArray<string> => {
     const schlagwoerter: string[] = [];
-    if (javascript?.toLowerCase() === 'true') {
+    if (typeof javascript === 'boolean' || javascript?.toLowerCase() === 'true') {
         schlagwoerter.push('JAVASCRIPT');
     }
-    if (typescript?.toLowerCase() === 'true') {
+    if (typeof typescript === 'boolean' || typescript?.toLowerCase() === 'true') {
         schlagwoerter.push('TYPESCRIPT');
     }
-    if (java?.toLowerCase() === 'true') {
+    if (typeof java === 'boolean' || java?.toLowerCase() === 'true') {
         schlagwoerter.push('JAVA');
     }
-    if (python?.toLowerCase() === 'true') {
+    if (typeof python === 'boolean' || python?.toLowerCase() === 'true') {
         schlagwoerter.push('PYTHON');
     }
     return schlagwoerter;
@@ -58,7 +58,7 @@ export type BuildIdParams = {
     readonly mitAbbildungen?: boolean;
 };
 
-const logger = getLogger('buildWher', 'func');
+const logger = getLogger('buildWhere', 'func');
 
 /**
  * WHERE-Klausel für die flexible Suche nach Büchern bauen.
@@ -125,12 +125,16 @@ export const buildWhere = ({
                 // enum
                 where.art = { equals: value as Buchart };
                 break;
-            case 'lieferbar':
-                // boolean
-                where.lieferbar = {
-                    equals: (value as string).toLowerCase() === 'true',
-                };
+            case 'lieferbar': {
+                let lieferbar = true;
+                if (typeof value === 'string') {
+                    lieferbar = value.toLowerCase() === 'true';
+                } else if (typeof value === 'boolean') {
+                    lieferbar = value;
+                }
+                where.lieferbar = { equals: lieferbar };
                 break;
+            }
             case 'datum':
                 where.datum = { gte: new Date(value as string) };
                 break;

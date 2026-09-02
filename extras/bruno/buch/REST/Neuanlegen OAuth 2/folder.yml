@@ -1,7 +1,7 @@
 info:
   name: Neuanlegen OAuth 2
   type: folder
-  seq: 4
+  seq: 5
 
 request:
   auth:
@@ -19,6 +19,7 @@ request:
       id: credentials
       placement:
         header: Bearer
+      source: access_token
     settings:
       autoFetchToken: true
       autoRefreshToken: false

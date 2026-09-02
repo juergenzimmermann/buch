@@ -22,19 +22,21 @@ import {
     VersionOutdatedError,
 } from './buch/service/errors.mts';
 import {
+    badRequest,
     createProblemDetails,
     forbidden,
     preconditionFailed,
     unauthorized,
     unprocessableContent,
 } from './problem-details.mts';
+import { BadRequestError } from './buch/router/errors.mts';
 import { type ZodError } from 'zod';
 import { router as authRouter } from './security/auth-router.mts';
 import { router as buchWriteRouter } from './buch/router/buch-write-router.mts';
 import { compress } from 'hono/compress';
 import { cors } from 'hono/cors';
-import { corsOptions } from './config/cors.mts';
-import { createMiddleware } from 'hono/factory'; // oxlint-disable-line import/max-dependencies
+import { corsOptions } from './config/cors.mts'; // oxlint-disable-line import/max-dependencies
+import { createMiddleware } from 'hono/factory';
 import { router as devRouter } from './config/dev/dev-router.mts';
 import { env } from './config/env.mts';
 import { getLogger } from './logger/logger.mts';
@@ -114,6 +116,10 @@ app.onError((error, c) => {
     if (error instanceof NotFoundError) {
         // https://hono.dev/docs/api/context#notfound
         return c.notFound();
+    }
+
+    if (error instanceof BadRequestError) {
+        return createProblemDetails(c, badRequest);
     }
 
     if (error.name === 'ZodError') {

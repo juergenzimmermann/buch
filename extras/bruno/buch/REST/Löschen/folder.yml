@@ -1,7 +1,7 @@
 info:
   name: Löschen
   type: folder
-  seq: 9
+  seq: 10
 
 request:
   auth:
@@ -19,6 +19,7 @@ request:
       id: credentials
       placement:
         header: Bearer
+      source: access_token
     settings:
       autoFetchToken: true
       autoRefreshToken: false

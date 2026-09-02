@@ -1,7 +1,7 @@
 info:
   name: File Upload/Download
   type: folder
-  seq: 10
+  seq: 11
 
 request:
   auth: inherit

@@ -1,7 +1,7 @@
 info:
   name: Ändern
   type: folder
-  seq: 8
+  seq: 9
 
 request:
   auth:
@@ -19,6 +19,7 @@ request:
       id: credentials
       placement:
         header: Bearer
+      source: access_token
     settings:
       autoFetchToken: true
       autoRefreshToken: false

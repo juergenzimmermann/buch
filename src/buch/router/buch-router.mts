@@ -19,6 +19,7 @@
  */
 
 import { find, findById, findFileByBuchId, getCount } from '../service/buch-service.mts';
+import { BadRequestError } from './errors.mts';
 import { Hono } from 'hono';
 import { createPage } from './page.mts';
 import { createPageable } from '../service/pageable.mts';
@@ -107,6 +108,33 @@ router.get('/', async (c) => {
 
     const pageable = createPageable({ number: page, size });
     const buecherSlice = await find(queryParams, pageable); // NOSONAR
+    const buchPage = createPage(buecherSlice, pageable);
+    logger.debug('get: buchPage=%o', buchPage);
+    return c.json(buchPage);
+});
+
+// -----------------------------------------------------------------------------
+// S u c h e   m i t   Q U E R Y  -  M e t h o d e
+// -----------------------------------------------------------------------------
+router.query('/', async (c) => {
+    const { req } = c;
+    let requestBody: any;
+    try {
+        requestBody = await req.json();
+    } catch (err) {
+        if (err instanceof SyntaxError) {
+            throw new BadRequestError();
+        }
+    }
+    console.warn('333');
+
+    const { page, size } = requestBody;
+    delete requestBody['page'];
+    delete requestBody['size'];
+    logger.debug('query: page=%s, size=%s,  requestBody=%o', page, size, requestBody);
+
+    const pageable = createPageable({ number: page, size });
+    const buecherSlice = await find(requestBody, pageable); // NOSONAR
     const buchPage = createPage(buecherSlice, pageable);
     logger.debug('get: buchPage=%o', buchPage);
     return c.json(buchPage);
