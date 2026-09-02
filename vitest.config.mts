@@ -71,6 +71,27 @@ export default defineConfig({
 
         // https://vitest.dev/config/bail.html
         bail: 1,
+
+        // https://vitest.dev/guide/coverage.html
+        coverage: {
+            // https://vitest.dev/guide/coverage.html#istanbul-provider
+            // vitest run --coverage
+            provider: 'istanbul',
+            include: ['src/**/*.mts'],
+            exclude: [
+                'src/buch/router/*.mts',
+                'src/buch/graphql/*.mts',
+                'src/admin/*.mts',
+                'src/config/{keycloak,cors}.mts',
+                'src/config/dev/*.mts',
+                'src/logger/{banner,request-logger,response-time}.mts',
+                'src/monitoring/*.mts',
+                'src/security/*.mts',
+                'src/generated/**/*.mts',
+            ],
+            reporter: ['html'],
+        },
+
         // https://vitest.dev/config/slowtestthreshold.html
         // slowTestThreshold: 300,
     },
