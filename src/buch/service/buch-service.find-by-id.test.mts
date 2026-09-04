@@ -19,9 +19,8 @@ import {
     type BuchMitTitelUndAbbildungenDTO,
     findById,
 } from './buch-service.mts';
-import { Prisma, PrismaClient } from '../../generated/prisma/client.ts';
+import { Buchart, Prisma, PrismaClient } from '../../generated/prisma/client.ts';
 import { beforeEach, describe, expect, test, vi } from 'vitest';
-import { Buchart } from '../../generated/prisma/enums.ts';
 
 // Hoisting: wird an den (Datei-) Anfang verschoben
 const { findUniqueMock } = vi.hoisted(() => {

@@ -194,13 +194,13 @@ const createSlice = (
 
 export const findAll = async (pageable: Pageable): Promise<Readonly<Slice<BuchMitTitelDTO>>> => {
     const { number, size } = pageable;
-    const buecher: BuchMitTitel[] = await prismaClient.buch.findMany({
+    const buecher: BuchMitTitel[] | null = await prismaClient.buch.findMany({
         // TODO limit und offset ab Prisma 8: https://github.com/prisma/orm/releases/tag/v8.0.0-rc.7
         skip: number * size,
         take: size,
         include: INCLUDE_TITEL,
     });
-    if (buecher.length === 0) {
+    if (buecher === null || buecher.length === 0) {
         logger.debug('#findAll: Keine Buecher gefunden');
         throw new NotFoundError(`Ungueltige Seite "${number}"`);
     }
@@ -262,10 +262,16 @@ export const find = async (
         throw new NotFoundError('Ungueltige Suchparameter');
     }
 
+    const where = buildWhere(suchparameter);
+    if (Object.keys(where).length === 0) {
+        logger.debug('Ungueltige Suchparameter');
+        throw new NotFoundError('Ungueltige Suchparameter');
+    }
+
+    const { number, size } = pageable;
+
     // Das Resultat ist eine leere Liste, falls nichts gefunden
     // Lesen: Keine Transaktion erforderlich
-    const where = buildWhere(suchparameter);
-    const { number, size } = pageable;
     const buecher: BuchMitTitel[] = await prismaClient.buch.findMany({
         where,
         // TODO limit und offset ab Prisma 8: https://github.com/prisma/orm/releases/tag/v8.0.0-rc.7

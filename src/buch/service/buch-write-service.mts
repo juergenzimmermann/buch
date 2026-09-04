@@ -60,19 +60,15 @@ const logger = getLogger('buch-write-service');
 // =============================================================================
 // C R E A T E
 // =============================================================================
-const validateCreate = async ({ isbn }: Prisma.BuchCreateInput): Promise<undefined> => {
-    logger.debug('#validateCreate: isbn=%s', isbn);
-    if (isbn === undefined) {
-        logger.debug('#validateCreate: ok');
-        return;
-    }
+const checkUniqueISBN = async ({ isbn }: Prisma.BuchCreateInput): Promise<undefined> => {
+    logger.debug('checkUniqueISBN: isbn=%s', isbn);
 
     const anzahl = await prismaClient.buch.count({ where: { isbn } });
     if (anzahl > 0) {
-        logger.debug('#validateCreate: isbn existiert: %s', isbn);
+        logger.debug('checkUniqueISBN: isbn existiert: %s', isbn);
         throw new IsbnExistsError(isbn);
     }
-    logger.debug('#validateCreate: ok');
+    logger.debug('checkUniqueISBN: ok');
 };
 
 const sendmailFn = async ({ id, titel }: { id: number | 'N/A'; titel: string }) => {
@@ -90,7 +86,7 @@ const sendmailFn = async ({ id, titel }: { id: number | 'N/A'; titel: string }) 
  */
 export const create = async (buch: BuchCreate) => {
     logger.debug('create: buch=%o', buch);
-    await validateCreate(buch);
+    await checkUniqueISBN(buch);
 
     // Neuer Datensatz mit generierter ID
     let buchDb: BuchCreated | undefined;
@@ -166,8 +162,8 @@ export const addFile = async (
 // =============================================================================
 // U P D A T E
 // =============================================================================
-const validateUpdate = async (id: number, versionStr: string) => {
-    logger.debug('#validateUpdate: id=%d, versionStr=%s', id, versionStr);
+const checkLatestVersion = async (id: number, versionStr: string) => {
+    logger.debug('checkLatestVersion: id=%d, versionStr=%s', id, versionStr);
     if (!VERSION_PATTERN.test(versionStr)) {
         throw new VersionInvalidError(versionStr);
     }
@@ -176,9 +172,11 @@ const validateUpdate = async (id: number, versionStr: string) => {
     const buchDb = await findById({ id });
 
     if (version < buchDb.version) {
-        logger.debug('#validateUpdate: versionDb=%d', version);
+        logger.debug('checkLatestVersion: versionDb=%d', version);
         throw new VersionOutdatedError(version);
     }
+
+    logger.debug('checkLatestVersion: ok');
 };
 
 /**
@@ -198,7 +196,7 @@ export const update = async ({ id, buch, version }: UpdateParams) => {
         throw new NotFoundError(`Es gibt kein Buch mit der ID ${id}.`);
     }
 
-    await validateUpdate(id, version);
+    await checkLatestVersion(id, version);
 
     buch.version = { increment: 1 };
     let buchUpdated: BuchUpdated | undefined;

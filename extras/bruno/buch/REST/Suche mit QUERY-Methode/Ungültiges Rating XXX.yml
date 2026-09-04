@@ -1,22 +1,27 @@
 info:
-  name: Anzahl
+  name: Ungültiges Rating XXX
   type: http
-  seq: 24
+  seq: 20
 
 http:
-  method: GET
-  url: "{{restUrl}}?count-only=true"
-  params:
-    - name: count-only
-      value: "true"
-      type: query
+  method: QUERY
+  url: "{{restUrl}}"
+  headers:
+    - name: Accept
+      value: application/json
+  body:
+    type: json
+    data: |-
+      {
+        "rating": "XXX"
+      }
   auth: inherit
 
 runtime:
   assertions:
     - expression: res.status
       operator: eq
-      value: "200"
+      value: "404"
 
 settings:
   encodeUrl: true

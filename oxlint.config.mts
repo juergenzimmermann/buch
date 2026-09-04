@@ -424,6 +424,7 @@ export default defineConfig({
                     },
                 ],
                 'vitest/prefer-lowercase-title': 'off',
+                'vitest/prefer-to-be-falsy': 'off',
                 'vitest/prefer-to-be-truthy': 'off',
                 'vitest/require-test-timeout': 'off',
                 'vitest/warn-todo': 'off',

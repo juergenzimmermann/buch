@@ -82,7 +82,7 @@ export default defineConfig({
                 'src/buch/router/*.mts',
                 'src/buch/graphql/*.mts',
                 'src/admin/*.mts',
-                'src/config/{keycloak,cors}.mts',
+                'src/config/{prisma-client,keycloak,cors}.mts',
                 'src/config/dev/*.mts',
                 'src/logger/{banner,request-logger,response-time}.mts',
                 'src/monitoring/*.mts',

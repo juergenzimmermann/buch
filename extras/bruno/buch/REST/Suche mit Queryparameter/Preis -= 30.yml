@@ -1,7 +1,7 @@
 info:
   name: Preis <= 30
   type: http
-  seq: 19
+  seq: 20
 
 http:
   method: GET
@@ -45,3 +45,4 @@ settings:
   timeout: 0
   followRedirects: true
   maxRedirects: 5
+  forwardAuthorizationHeader: true
