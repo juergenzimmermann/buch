@@ -79,6 +79,7 @@ export default defineConfig({
             provider: 'istanbul',
             include: ['src/**/*.mts'],
             exclude: [
+                'src/*.mts',
                 'src/buch/router/*.mts',
                 'src/buch/graphql/*.mts',
                 'src/admin/*.mts',
