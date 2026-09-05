@@ -20,7 +20,7 @@ import {
     findById,
 } from './buch-service.mts';
 import { Buchart, Prisma, PrismaClient } from '../../generated/prisma/client.ts';
-import { beforeEach, describe, expect, test, vi } from 'vitest';
+import { describe, expect, test, vi } from 'vitest';
 
 // Hoisting: wird an den (Datei-) Anfang verschoben
 const { findUniqueMock } = vi.hoisted(() => {
@@ -41,10 +41,6 @@ vi.mock(import('../../config/prisma-client.mts'), () => {
 });
 
 describe('buch-service: findById', () => {
-    beforeEach(() => {
-        findUniqueMock.mockReset();
-    });
-
     test('id vorhanden', async () => {
         // given
         const id = 1;

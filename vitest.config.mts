@@ -72,6 +72,9 @@ export default defineConfig({
         // https://vitest.dev/config/bail.html
         bail: 1,
 
+        // https://vitest.dev/config/pool.html
+        pool: 'threads',
+
         // https://vitest.dev/guide/coverage.html
         coverage: {
             // https://vitest.dev/guide/coverage.html#istanbul-provider

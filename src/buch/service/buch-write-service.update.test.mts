@@ -55,10 +55,6 @@ const buch: BuchUpdate = {
 // oxlint-disable-next-line max-lines-per-function
 describe('buch-write-service: update', () => {
     beforeEach(() => {
-        updateMock.mockReset();
-        transactionMock.mockReset();
-        findUniqueMock.mockReset();
-
         transactionMock.mockImplementation(
             async (transactionBody: (tx: Prisma.TransactionClient) => Promise<unknown>) =>
                 await transactionBody({

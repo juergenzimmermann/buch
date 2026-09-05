@@ -68,10 +68,6 @@ const buch: Readonly<BuchMitTitelUndAbbildungen> = {
 
 describe('buch-write-service: update', () => {
     beforeEach(() => {
-        deleteMock.mockReset();
-        transactionMock.mockReset();
-        findUniqueMock.mockReset();
-
         transactionMock.mockImplementation(
             async (transactionBody: (tx: Prisma.TransactionClient) => Promise<unknown>) =>
                 await transactionBody({

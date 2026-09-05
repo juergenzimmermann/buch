@@ -21,7 +21,7 @@ import {
     findAll,
 } from './buch-service.mts';
 import { Buchart, Prisma, PrismaClient } from '../../generated/prisma/client.ts';
-import { beforeEach, describe, expect, test, vi } from 'vitest';
+import { describe, expect, test, vi } from 'vitest';
 import { type Pageable } from './pageable.mts';
 import { type Slice } from './slice.mts';
 import { type Suchparameter } from './suchparameter.mts';
@@ -86,11 +86,6 @@ const buchMockDTO: BuchMitTitelDTO = {
 };
 
 describe('buch-service: find', () => {
-    beforeEach(() => {
-        findManyMock.mockReset();
-        countMock.mockReset();
-    });
-
     test.each(paramsAlle)('alle', async (param) => {
         // given
         const pageable: Pageable = { number: 1, size: 5 };
