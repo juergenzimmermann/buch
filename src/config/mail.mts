@@ -18,7 +18,7 @@
  * @packageDocumentation
  */
 
-import { type Options } from 'nodemailer/lib/smtp-transport/index.js';
+import { type SMTPTransportOptions } from 'nodemailer';
 import { config } from './app.mts';
 import { getLogger } from '../logger/logger.mts';
 
@@ -45,7 +45,7 @@ const to = (mail?.to as string | undefined) ?? '"Foo Bar" <Foo.Bar@acme.com>';
  * Konfiguration für den Mail-Client mit _nodemailer_.
  * @author [Jürgen Zimmermann](mailto:Juergen.Zimmermann@h-ka.de)
  */
-export const options: Options = {
+export const options: SMTPTransportOptions = {
     host,
     port,
     secure: false,
@@ -57,13 +57,12 @@ export const options: Options = {
     //     pass: 'mypassword'
     // }
 
-    priority: 'normal',
     logger: useLogger,
 } as const;
 
 type MailConfig = {
     activated: boolean;
-    options: Options;
+    options: SMTPTransportOptions;
     from: string;
     to: string;
 };
