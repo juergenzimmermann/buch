@@ -56,7 +56,7 @@ RUN <<EOF
   apt-get upgrade --yes --no-show-upgraded
 
   npm r -g pnpm
-  npm i -g pnpm@12.1.0
+  npm i -g pnpm@12.4.0
 
   # Python evtl. fuer pg notwendig
   # "python3-dev" enthaelt "multiprocessing"
@@ -109,7 +109,7 @@ RUN <<EOF
   ln -s /usr/bin/python3.13 /usr/bin/python
   update-ca-certificates
 
-  npm i -g pnpm@12.1.0
+  npm i -g pnpm@12.4.0
 EOF
 
 USER ${NODE_UID}:${NODE_GID}
