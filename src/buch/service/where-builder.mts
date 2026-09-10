@@ -23,16 +23,17 @@ import { type BuchWhereInput } from '../../generated/prisma/models/Buch.ts';
 import { type Suchparameter } from './suchparameter.mts';
 import { getLogger } from '../../logger/logger.mts';
 
+type Schlagwort = string | boolean | undefined;
 const buildSchlagwoerter = ({
     javascript,
     typescript,
     java,
     python,
 }: {
-    javascript: string | boolean | undefined;
-    typescript: string | boolean | undefined;
-    java: string | boolean | undefined;
-    python: string | boolean | undefined;
+    javascript: Schlagwort;
+    typescript: Schlagwort;
+    java: Schlagwort;
+    python: Schlagwort;
 }): ReadonlyArray<string> => {
     const schlagwoerter: string[] = [];
     if (typeof javascript === 'boolean' || javascript?.toLowerCase() === 'true') {
