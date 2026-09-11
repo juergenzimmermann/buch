@@ -31,7 +31,7 @@
 # https://github.com/moby/buildkit/blob/master/frontend/dockerfile/docs/reference.md
 # https://hub.docker.com/r/docker/dockerfile
 
-ARG NODE_VERSION=26.8.1
+ARG NODE_VERSION=26.8.2
 
 # ---------------------------------------------------------------------------------------
 # S t a g e   d i s t
@@ -52,7 +52,7 @@ RUN <<EOF
   apt-get upgrade --yes --no-show-upgraded
 
   npm r -g pnpm
-  npm i -g pnpm@12.4.0
+  npm i -g pnpm@12.4.1
 
   # Python evtl. fuer pg notwendig
   # "python3-dev" enthaelt "multiprocessing"
@@ -106,7 +106,7 @@ RUN <<EOF
   ln -s /usr/bin/python3.13 /usr/bin/python
   update-ca-certificates
 
-  npm i -g pnpm@12.4.0
+  npm i -g pnpm@12.4.1
 EOF
 
 USER ${NODE_UID}:${NODE_GID}
