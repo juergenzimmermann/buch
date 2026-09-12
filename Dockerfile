@@ -64,7 +64,7 @@ RUN <<EOF
   # https://packages.debian.org/trixie/python3.13-minimal
   # https://packages.debian.org/trixie/python3.13-dev
   # https://packages.debian.org/trixie/build-essential
-  apt-get install --no-install-recommends --yes python3.13-minimal=3.13.5-2+deb13u4 python3.13-dev=3.13.5-2+deb13u4 build-essential=12.12 ca-certificates=20250419
+  apt-get install --no-install-recommends --yes python3.13-minimal=3.13.5-2+deb13u5 python3.13-dev=3.13.5-2+deb13u5 build-essential=12.12 ca-certificates=20250419
   ln -s /usr/bin/python3.13 /usr/bin/python3
   ln -s /usr/bin/python3.13 /usr/bin/python
   update-ca-certificates
@@ -104,7 +104,7 @@ RUN <<EOF
   apt-get update
   apt-get upgrade --yes
 
-  apt-get install --no-install-recommends --yes python3.13-minimal=3.13.5-2+deb13u4 python3.13-dev=3.13.5-2+deb13u4 build-essential=12.12 ca-certificates=20250419
+  apt-get install --no-install-recommends --yes python3.13-minimal=3.13.5-2+deb13u5 python3.13-dev=3.13.5-2+deb13u5 build-essential=12.12 ca-certificates=20250419
   ln -s /usr/bin/python3.13 /usr/bin/python3
   ln -s /usr/bin/python3.13 /usr/bin/python
   update-ca-certificates
