@@ -153,7 +153,6 @@ COPY --from=dependencies --chown=${NODE_UID}:${NODE_GID} /home/node/node_modules
 USER ${NODE_UID}:${NODE_GID}
 
 EXPOSE 3000
-EXPOSE 3030
 
 HEALTHCHECK --interval=30s --timeout=3s --retries=1 \
   CMD ["sh", "-c", "wget -qO- --no-check-certificate https://localhost:3000/health/readiness/ | grep ok || exit 1"]
