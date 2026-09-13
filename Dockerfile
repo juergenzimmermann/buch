@@ -118,12 +118,11 @@ WORKDIR /home/node
 
 # https://docs.docker.com/engine/reference/builder/#run---mounttypebind
 RUN --mount=type=bind,source=package.json,target=package.json \
-  --mount=type=bind,source=pnpm-lock.yaml,target=pnpm-lock.yaml \
   --mount=type=bind,source=pnpm-workspace.yaml,target=pnpm-workspace.yaml \
   --mount=type=cache,target=/root/.pnpm <<EOF
 
   set -eux
-  pnpm i --prod --frozen-lockfile
+  pnpm i --prod
 EOF
 
 # ------------------------------------------------------------------------------
