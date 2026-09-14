@@ -60,7 +60,7 @@ apt-get install --no-install-recommends --yes --show-progress lsb-release=12.1-1
 # https://packages.debian.org/stable/g++
 # https://packages.debian.org/stable/make
 # https://packages.debian.org/stable/python3.13-minimal
-apt-get install --no-install-recommends --yes --show-progress gcc=4:14.2.0-1 g++=4:14.2.0-1 make=4.4.1-2 libpython3.13-minimal=3.13.5-2+deb13u3 python3.13-minimal=3.13.5-2+deb13u3
+apt-get install --no-install-recommends --yes --show-progress gcc=4:14.2.0-1 g++=4:14.2.0-1 make=4.4.1-2 libpython3.13-minimal=3.13.5-2+deb13u5 python3.13-minimal=3.13.5-2+deb13u5
 ln -s /usr/bin/python3.13 /usr/bin/python
 ln -s /usr/bin/python3.13 /usr/bin/python3
 
