@@ -35,9 +35,6 @@
 - [Docker-Image und Docker Compose](#docker-image-und-docker-compose)
   - [Minimales Basis-Image](#minimales-basis-image)
   - [Image erstellen](#image-erstellen)
-  - [Image inspizieren](#image-inspizieren)
-    - [docker inspect](#docker-inspect)
-    - [docker sbom](#docker-sbom)
   - [Docker Compose](#docker-compose)
 - [Statische Codeanalyse und Formattierer](#statische-codeanalyse-und-formatierer)
   - [OxLint](#oxlint)
@@ -142,6 +139,7 @@ Für ein minimales Basis-Image gibt es z.B. folgende Alternativen:
   - C-Bibliothek _musl_ statt von GNU
   - _ash_ als Shell
   - _apk_ ("Alpine Package Keeper") als Package-Manager
+- _Bun_ statt _Node_ als Laufzeit-Umgebung
 
 ### Image erstellen
 
@@ -163,42 +161,10 @@ erstellt wurde, kann man mit _Hadolint_ überprüfen.
     # Alpine
     Get-Content Dockerfile.alpine | docker run --rm --interactive hadolint/hadolint:v2.15.1-debian
     docker build bake alpine
-```
 
-### Image inspizieren
-
-#### docker history
-
-Mit dem Unterkommando `history` kann man ein Docker-Image und die einzelnen Layer
-inspizieren:
-
-```shell
-    docker history juergenzimmermann/buch:2026.10.1-hardened
-    docker history juergenzimmermann/buch:2026.10.1-trixie
-    docker history juergenzimmermann/buch:2026.10.1-alpine
-```
-
-#### docker inspect
-
-Mit dem Unterkommando `inspect` kann man die Metadaten, z.B. Labels, zu einem
-Image inspizieren:
-
-```shell
-    docker inspect juergenzimmermann/buch:2026.10.1-hardened
-    docker inspect juergenzimmermann/buch:2026.10.1-trixie
-    docker inspect juergenzimmermann/buch:2026.10.1-alpine
-```
-
-#### docker sbom
-
-Mit dem Unterkommando `sbom` (Software Bill of Materials) von `docker` kann man
-inspizieren, welche Bestandteilen in einem Docker-Images enthalten sind, z.B.
-npm-Packages oder Debian-Packages.
-
-```shell
-    docker sbom juergenzimmermann/buch:2026.10.1-hardened
-    docker sbom juergenzimmermann/buch:2026.10.1-trixie
-    docker sbom juergenzimmermann/buch:2026.10.1-alpine
+    # Bun
+    Get-Content Dockerfile.bun | docker run --rm --interactive hadolint/hadolint:v2.15.1-debian
+    docker build bake bun
 ```
 
 ### Docker Compose
@@ -207,6 +173,15 @@ Mit _Docker Compose_ und der Konfigurationsdatei `compose.yml` im Verzeichnis
 `extras\compose\buch` lässt sich der Container mit dem "hardened" Basis-Image mit
 _Node_ und _Debian Trixie (13) Slim_ folgendermaßen starten und später in einer
 weiteren PowerShell herunterfahren.
+
+Beachte:
+
+- Das _Hardened_ Image für Node enthält nicht _Temporal_, was in `extras\compose\buch\app.toml`
+  entsprechend konfiguriert sein muss.
+- Wenn das Image auf Basis von _Bun_ verwendet wird, sind folgende Anpassungen notwendig:
+  - `extras\compose\buch\.env`: `DATABASE_URL` und `DATABASE_URL_ADMIN` ohne TLS setzen
+  - `extras\compose\buch\app.toml`: die Property `runtime` auf `Bun` setzen
+  - `extras\compose\buch\compose.yml`: das Image auf Basis von _Bun_ verwenden.
 
 ```shell
     cd extras\compose\buch

@@ -41,20 +41,24 @@ WORKDIR /app
 RUN --mount=type=bind,source=package.json,target=package.json \
   --mount=type=cache,target=/root/.bun <<EOF
   bun install --production
+
+  mkdir log
+  touch log/server.log
 EOF
 
 FROM dhi.io/bun:${BUN_VERSION}-debian13 AS final
-
-WORKDIR /opt/app
 
 ARG BUN_UID=65523 \
     BUN_GID=65523
 
 USER ${BUN_UID}:${BUN_GID}
 
+WORKDIR /opt/app
+
 COPY --chown=${BUN_UID}:${BUN_GID} package.json ./
 COPY --from=dist --chown=${BUN_UID}:${BUN_GID} /app/node_modules ./node_modules
 COPY --chown=${BUN_UID}:${BUN_GID} src ./src
+COPY --chown=${BUN_UID}:${BUN_GID} log ./log
 
 # Anzeige bei "docker inspect ..."
 # https://specs.opencontainers.org/image-spec/annotations

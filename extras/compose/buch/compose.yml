@@ -45,7 +45,7 @@ services:
     #image: juergenzimmermann/buch:2026.10.1-trixie
     #image: juergenzimmermann/buch:2026.10.1-alpine
     #image: juergenzimmermann/buch:2026.10.1-bun
-    #entrypoint:["/bin/bash", "-c", "echo 'Container als bash gestartet.' && sleep infinity"]
+    #entrypoint: ["/bin/bash", "-c", "echo 'Container als bash gestartet.' && sleep infinity"]
     # (d)ash = (Debian) Almquist Shell
     #entrypoint: ["/bin/ash", "-c", "echo 'Container als ash gestartet.' && sleep infinity"]
 
