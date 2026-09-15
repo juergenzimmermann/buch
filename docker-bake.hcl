@@ -13,7 +13,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-# Aufruf:   docker buildx bake [trixie|alpine]
+# Aufruf:   docker buildx bake [trixie|alpine|bun]
 
 # Dateiformate: HCL ( = HashiCorp Configuration Language), YAML (wie in Docker Compose) oder JSON
 # HCL ist maechtiger und flexibler als YAML oder JSON.
@@ -23,7 +23,7 @@
 
 group "default" {
   targets = ["hardened"]
-  # targets = ["hardened", "trixie", "alpine"]
+  # targets = ["hardened", "trixie", "alpine", "bun"]
 }
 target "hardened" {
   tags = ["docker.io/juergenzimmermann/buch:2026.10.1-hardened"]
@@ -39,4 +39,9 @@ target "trixie" {
 target "alpine" {
   tags = ["docker.io/juergenzimmermann/buch:2026.10.1-alpine"]
   dockerfile = "Dockerfile.alpine"
+}
+
+target "bun" {
+  tags = ["docker.io/juergenzimmermann/buch:2026.10.1-bun"]
+  dockerfile = "Dockerfile.bun"
 }
