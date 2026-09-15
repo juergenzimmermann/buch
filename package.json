@@ -45,6 +45,7 @@
     "clean:dist": "node --eval=\"import fs from 'node:fs/promises'; await fs.rm('dist', { recursive: true, force: true });\"",
     "clean:log": "node --eval=\"import fs from 'node:fs/promises'; import { join } from 'node:path'; await fs.rm(join('log', 'server.log'), { force: true });\"",
     "copy-resources": "node scripts/copy-resources.mts",
+    "generate-load": "node scripts/generate-load.mts",
     "hello": "node --watch src/index-hello.mts",
     "hello:bun": "bun --watch src/index-hello.mts",
     "k6": "k6 run test\\lasttest\\script.ts",
