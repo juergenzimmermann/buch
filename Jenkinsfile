@@ -94,12 +94,13 @@ pipeline {
                     cat /etc/debian_version
                     lsb_release -a
                     node --version
+                    npm i -g npm
                     npm --version
                     npm root -g
                     ls -al ~/.cache/node
 
                     npm r -g pnpm
-                    npm i -g pnpm@12.4.2
+                    npm i -g --allow-scripts=pnpm pnpm@12.4.2
                     env | sort
                     which pnpm
                     pnpm --version
@@ -107,7 +108,7 @@ pipeline {
                     #pnpm store path
 
                     npm r -g bun
-                    npm i -g bun --allow-scripts=bun
+                    npm i -g --allow-scripts=bun bun
                     which bun
                     bun --version
                 '''
