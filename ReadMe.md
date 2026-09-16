@@ -44,7 +44,6 @@
   - [pnpm audit](#pnpm-audit)
   - [OWASP Dependency Check](#owasp-dependency-check)
   - [Docker Scout](#docker-scout)
-- [OpenAPI](#openapi)
 - [AsciiDoctor und PlantUML](#asciidoctor-und-plantuml)
 - [Empfohlene Code-Konventionen](#empfohlene-code-konventionen)
 - [Port bereits belegt?](#port-bereits-belegt)
@@ -174,14 +173,10 @@ Mit _Docker Compose_ und der Konfigurationsdatei `compose.yml` im Verzeichnis
 _Node_ und _Debian Trixie (13) Slim_ folgendermaßen starten und später in einer
 weiteren PowerShell herunterfahren.
 
-Beachte:
+Wenn das Image auf Basis von _Bun_ verwendet wird, sind folgende Anpassungen notwendig:
 
-- Das _Hardened_ Image für Node enthält nicht _Temporal_, was in `extras\compose\buch\app.toml`
-  entsprechend konfiguriert sein muss.
-- Wenn das Image auf Basis von _Bun_ verwendet wird, sind folgende Anpassungen notwendig:
-  - `extras\compose\buch\.env`: `DATABASE_URL` und `DATABASE_URL_ADMIN` ohne TLS setzen
-  - `extras\compose\buch\app.toml`: die Property `runtime` auf `Bun` setzen
-  - `extras\compose\buch\compose.yml`: das Image auf Basis von _Bun_ verwenden.
+- `extras\compose\buch\.env`: `DATABASE_URL` und `DATABASE_URL_ADMIN` ohne TLS setzen
+- `extras\compose\buch\compose.yml`: das Image auf Basis von _Bun_ verwenden.
 
 ```shell
     cd extras\compose\buch
@@ -296,15 +291,6 @@ von _Scout_ auflisten:
 
 Statt der Kommandozeile kann man auch den Menüpunkt "Docker Scout" im
 _Docker Dashboard_ verwenden.
-
----
-
-## OpenAPI
-
-Durch die Decorators `@Api...()` kann man _OpenAPI_ bzw. _Swagger_ in den
-Controller-Klassen und -Methoden konfigurieren und dann in einem Webbrowser mit
-`https://localhost:3000/swagger` aufrufen. Die _Swagger JSON Datei_ kann man mit
-`https://localhost:3000/swagger-json` abrufen.
 
 ---
 

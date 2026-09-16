@@ -25,6 +25,7 @@ import { config } from './app.mts';
 import { env } from './env.mts';
 import { getLogger } from '../logger/logger.mts';
 import { hostname } from 'node:os';
+import process from 'node:process';
 import { readFile } from 'node:fs/promises';
 import { resourcesURL } from './resources.mts';
 
@@ -45,7 +46,16 @@ logger.debug('port = %d', port);
 const allowHTTP1 = (server?.allowHTTP1 as boolean | undefined) ?? false;
 logger.debug('allowHTTP1 = %s', allowHTTP1);
 
-const hasTemporal = (server?.hasTemporal as boolean | undefined) ?? false;
+// "Temporal API" vorhanden: Node ab 26, Bun ab 1.4
+let hasTemporal = true;
+try {
+    Temporal; // oxlint-disable-line no-unused-expressions
+    logger.info('Temporal API vorhanden.');
+} catch {
+    // Hardened Image fuer Node 26 enthaelt nicht "Temporal API"
+    hasTemporal = false;
+    logger.warn('Temporal API nicht vorhanden.');
+}
 
 // https://nodejs.org/api/fs.html
 const tlsURL = new URL('tls/', resourcesURL);
@@ -60,8 +70,7 @@ const cert = await readFile(new URL('certificate.crt', tlsURL), {
 const { NODE_ENV } = env;
 export type NodeEnv = 'development' | 'PRODUCTION' | 'production' | 'test' | undefined;
 
-let runtime = server?.runtime as 'Node' | 'Bun' | undefined;
-runtime ??= env.RUNTIME ?? 'Node';
+const runtime = process.versions?.bun ? 'Bun' : 'Node';
 logger.debug('runtime = %s', runtime);
 
 /**
