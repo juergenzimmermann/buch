@@ -47,6 +47,7 @@ import { rolesRequired } from '../../security/roles-required.mts';
 export const router = new Hono();
 
 const logger = getLogger('buch-write-router');
+const MAX_FILE_SIZE_BYTES = 10_485_760;
 
 // -----------------------------------------------------------------------------
 // N e u a n l e g e n
@@ -196,6 +197,9 @@ router.post('/:id', rolesRequired('admin', 'user'), async (c) => {
 
     const { name, size, type } = file;
     logger.debug('upload: name=%s, size=%d, type=%s', name, size, type);
+    if (size > MAX_FILE_SIZE_BYTES) {
+        return createProblemDetails(c, badRequest, `Datei mit ${size} Bytes`);
+    }
     const buffer = Buffer.from(await file.arrayBuffer());
     const buchFile: BuchFileCreated | undefined = await addFile(idNumber, buffer, name, size, type);
     logger.debug(

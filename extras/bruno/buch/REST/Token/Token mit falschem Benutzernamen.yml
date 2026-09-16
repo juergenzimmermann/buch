@@ -4,19 +4,19 @@ info:
   seq: 3
 
 http:
-  method: POST
+  method: QUERY
   url: "{{tokenUrl}}"
   headers:
     - name: ""
       value: ""
       disabled: true
   body:
-    type: form-urlencoded
-    data:
-      - name: username
-        value: FALSCH
-      - name: password
-        value: p
+    type: json
+    data: |-
+      {
+        "username": "FALSCH",
+        "password": "p"
+      }
   auth: inherit
 
 runtime:
@@ -30,3 +30,4 @@ settings:
   timeout: 0
   followRedirects: true
   maxRedirects: 5
+  forwardAuthorizationHeader: true

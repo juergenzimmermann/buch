@@ -4,15 +4,15 @@ info:
   seq: 2
 
 http:
-  method: POST
+  method: QUERY
   url: "{{tokenUrl}}"
   body:
-    type: form-urlencoded
-    data:
-      - name: username
-        value: user
-      - name: password
-        value: p
+    type: json
+    data: |-
+      {
+        "username": "user",
+        "password": "p"
+      }
 
 runtime:
   assertions:
@@ -40,3 +40,4 @@ settings:
   timeout: 0
   followRedirects: true
   maxRedirects: 5
+  forwardAuthorizationHeader: true

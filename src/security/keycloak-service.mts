@@ -33,7 +33,7 @@ headers.append(CONTENT_TYPE, X_WWW_FORM_URLENCODED);
 const logger = getLogger('keycloak-service');
 
 // Logging der Rollen: wird auf Client-Seite benoetigt
-// { ..., "azp": "nest-client", "exp": ..., "resource_access": { "nest-client": { "roles": ["admin"] } ...}
+// { ..., "azp": "javascript-client", "exp": ..., "resource_access": { "javascript-client": { "roles": ["admin"] } ...}
 // azp = authorized party
 const logPayload = (responseBody: unknown) => {
     if (
@@ -44,7 +44,7 @@ const logPayload = (responseBody: unknown) => {
     ) {
         return;
     }
-    // https://www.keycloak.org/docs-api/latest/rest-api/index.html#ClientInitialAccessCreatePresentation
+
     const { access_token } = responseBody as { access_token: string };
     // Payload ist der mittlere Teil zwischen 2 Punkten und mit Base64 codiert
     const [, payloadStr] = access_token.split('.');
@@ -59,10 +59,10 @@ const logPayload = (responseBody: unknown) => {
 
     const payload = JSON.parse(payloadDecoded);
     const { azp, exp, resource_access } = payload;
-    logger.debug('#logPayload: exp=%s', exp);
+    logger.debug('logPayload: exp=%s', exp);
     const { roles } = resource_access[azp];
 
-    logger.debug('#logPayload: roles=%o', roles);
+    logger.debug('logPayload: roles=%o', roles);
 };
 
 export const token = async ({ username, password }: TokenData) => {
@@ -71,10 +71,16 @@ export const token = async ({ username, password }: TokenData) => {
         return;
     }
 
-    // https://www.keycloak.org/docs-api/23.0.4/rest-api/index.html
+    // https://www.keycloak.org/docs-api/latest/rest-api
     // https://stackoverflow.com/questions/62683482/keycloak-rest-api-call-to-get-access-token-of-a-user-through-admin-username-and
     // https://stackoverflow.com/questions/65714161/keycloak-generate-access-token-for-a-user-with-keycloak-admin
-    const body = `username=${username}&password=${password}&grant_type=password&client_id=${clientId}&client_secret=${secret}`;
+    const body = new URLSearchParams({
+        username,
+        password,
+        grant_type: 'password',
+        client_id: clientId,
+        client_secret: secret,
+    });
 
     logger.debug('token: path=%s', accessTokenUrl);
     logger.debug('token: headers=%o', headers);

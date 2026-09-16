@@ -73,7 +73,19 @@ const checkUniqueISBN = async ({ isbn }: Prisma.BuchCreateInput): Promise<undefi
 
 const sendmailFn = async ({ id, titel }: { id: number | 'N/A'; titel: string }) => {
     const subject = `Neues Buch ${id}`;
-    const body = `Das Buch mit dem Titel <strong>${titel}</strong> ist angelegt`;
+    // Sonderzeichen fuer HTML maskieren
+    const titelEscaped = titel.replace(
+        /[&<>"']/gu,
+        (character) =>
+            ({
+                '&': '&amp;',
+                '<': '&lt;',
+                '>': '&gt;',
+                '"': '&quot;',
+                "'": '&#39;',
+            })[character] as string,
+    );
+    const body = `Das Buch mit dem Titel <strong>${titelEscaped}</strong> ist angelegt`;
 
     await sendmail({ subject, body });
 };

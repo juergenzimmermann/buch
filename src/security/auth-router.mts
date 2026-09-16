@@ -40,11 +40,20 @@ export class TokenData {
  */
 export const router = new Hono();
 
-const logger = getLogger('auth-router/post', 'func');
-router.post(paths.token, async (c) => {
-    const body: Record<string, string> = await c.req.parseBody();
-    const { username, password } = body;
-    logger.debug('post: username=%s', username);
+const logger = getLogger('auth-router/query', 'func');
+router.query(paths.token, async (c) => {
+    const { req } = c;
+    let requestBody: any;
+    try {
+        requestBody = await req.json();
+    } catch {
+        return createProblemDetails(c, unauthorized, 'Fehler beim Authentifizieren');
+    }
+    if (requestBody === null || typeof requestBody !== 'object') {
+        return createProblemDetails(c, unauthorized, 'Fehler beim Authentifizieren');
+    }
+    const { username, password } = requestBody;
+    logger.debug('query: username=%s', username);
 
     const result = await token({
         username,

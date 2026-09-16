@@ -13,27 +13,32 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-import { CONTENT_TYPE, POST, X_WWW_FORM_URL_ENCODED, baseURL, tokenPath } from './constants.mts';
+import { APPLICATION_JSON, CONTENT_TYPE, QUERY, baseURL, tokenPath } from './constants.mts';
 
 export const getToken = async (username: string, password: string) => {
     const headers = new Headers();
-    headers.append(CONTENT_TYPE, X_WWW_FORM_URL_ENCODED);
+    headers.append(CONTENT_TYPE, APPLICATION_JSON);
+    const body = {
+        username,
+        password,
+    };
+
     const response = await fetch(`${baseURL}${tokenPath}`, {
-        method: POST,
-        body: `username=${username}&password=${password}`,
+        method: QUERY,
+        body: JSON.stringify(body),
         headers,
     });
 
-    const body = (await response.json()) as { access_token: string };
+    const responseBody = (await response.json()) as { access_token: string };
     if (
         response.status !== 200 ||
-        body.access_token === undefined ||
-        typeof body.access_token !== 'string'
+        responseBody.access_token === undefined ||
+        typeof responseBody.access_token !== 'string'
     ) {
         console.error(`!!!username=${username}, password=${password}`);
         console.error(`!!!status=${response.status}`);
-        console.error('!!!body=%j', body);
+        console.error('!!!body=%j', responseBody);
         throw new Error('Statuscode ist nicht 200 oder kein String als Token');
     }
-    return body.access_token;
+    return responseBody.access_token;
 };

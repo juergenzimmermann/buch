@@ -192,7 +192,8 @@ export type CreatePayload = {
 // -----------------------------------------------------------------------------
 // A e n d e r n
 // -----------------------------------------------------------------------------
-export type BuchUpdateInput = Omit<BuchNeuInput, 'titel' | 'abbildungen'> & {
+// Partial<>, damit alle Properties optional sind
+export type BuchUpdateInput = Partial<Omit<BuchNeuInput, 'titel' | 'abbildungen'>> & {
     id: ID;
     version: Int;
 };
@@ -200,18 +201,34 @@ export type BuchUpdateInput = Omit<BuchNeuInput, 'titel' | 'abbildungen'> & {
 export const toUpdate = (buch: BuchUpdateInput): BuchUpdate => {
     const { version, isbn, rating, art, preis, rabatt, lieferbar, datum, homepage, schlagwoerter } =
         buch;
-    const buchUpdate: BuchUpdate = {
-        version,
-        isbn,
-        rating,
-        art: art ?? null,
-        preis,
-        rabatt,
-        lieferbar,
-        datum: toDateOrNull(datum),
-        homepage: homepage ?? null,
-        schlagwoerter: schlagwoerter ?? [],
-    };
+    const buchUpdate: BuchUpdate = { version };
+    if (isbn !== undefined) {
+        buchUpdate.isbn = isbn;
+    }
+    if (rating !== undefined) {
+        buchUpdate.rating = rating;
+    }
+    if (art !== undefined) {
+        buchUpdate.art = art;
+    }
+    if (preis !== undefined) {
+        buchUpdate.preis = preis;
+    }
+    if (rabatt !== undefined) {
+        buchUpdate.rabatt = rabatt;
+    }
+    if (lieferbar !== undefined) {
+        buchUpdate.lieferbar = lieferbar;
+    }
+    if (datum !== undefined) {
+        buchUpdate.datum = toDateOrNull(datum);
+    }
+    if (homepage !== undefined) {
+        buchUpdate.homepage = homepage;
+    }
+    if (schlagwoerter !== undefined) {
+        buchUpdate.schlagwoerter = schlagwoerter;
+    }
     return buchUpdate;
 };
 

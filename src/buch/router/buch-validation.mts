@@ -81,10 +81,9 @@ export const BuchUpdateSchema = z
 
 export const BuchUpdateGraphQLSchema = z
     .compile(
-        BuchSchema.omit({
-            titel: true,
-            abbildungen: true,
-        }),
+        BuchSchema.omit({ titel: true, abbildungen: true })
+            .partial()
+            .required({ id: true, version: true }),
     )
     .readonly();
 

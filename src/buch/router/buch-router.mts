@@ -121,12 +121,12 @@ router.query('/', async (c) => {
     let requestBody: any;
     try {
         requestBody = await req.json();
-    } catch (err) {
-        if (err instanceof SyntaxError) {
-            throw new BadRequestError();
-        }
+    } catch {
+        throw new BadRequestError();
     }
-    console.warn('333');
+    if (requestBody === null || typeof requestBody !== 'object') {
+        throw new BadRequestError();
+    }
 
     const { page, size } = requestBody;
     delete requestBody['page'];
