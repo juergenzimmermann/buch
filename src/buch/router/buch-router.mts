@@ -116,6 +116,7 @@ router.get('/', async (c) => {
 // -----------------------------------------------------------------------------
 // S u c h e   m i t   Q U E R Y  -  M e t h o d e
 // -----------------------------------------------------------------------------
+// https://www.rfc-editor.org/rfc/rfc10008.html
 router.query('/', async (c) => {
     const { req } = c;
     let requestBody: any;
