@@ -89,7 +89,7 @@
     "@types/bun": "1.4.2",
     "@types/k6": "2.2.1",
     "@types/node": "26.6.0",
-    "@types/nodemailer": "8.0.1",
+    "@types/nodemailer": "8.0.2",
     "@types/pg": "8.23.1",
     "@vitest/coverage-istanbul": "5.0.1",
     "@vitest/ui": "5.0.1",
@@ -121,7 +121,7 @@
     "runtime": [
       {
         "name": "node",
-        "version": "26.8.2",
+        "version": "26.9.0",
         "onFail": "warn"
       },
       {
@@ -133,7 +133,7 @@
   },
   "engines": {
     "bun": "1.4.2",
-    "node": "26.8.2",
+    "node": "26.9.0",
     "pnpm": "12.4.2"
   }
 }
