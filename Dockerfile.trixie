@@ -31,7 +31,7 @@
 # https://github.com/moby/buildkit/blob/master/frontend/dockerfile/docs/reference.md
 # https://hub.docker.com/r/docker/dockerfile
 
-ARG NODE_VERSION=26.8.2
+ARG NODE_VERSION=26.9.0
 
 # ---------------------------------------------------------------------------------------
 # S t a g e   d i s t
