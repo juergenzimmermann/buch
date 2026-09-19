@@ -64,10 +64,10 @@
     "@prisma/client": "7.10.0",
     "@prisma/sqlcommenter-query-insights": "7.10.0",
     "@prometheus-io/client": "0.16.1",
-    "dotenv": "17.4.2",
+    "dotenv": "18.0.0",
     "figlet": "1.11.4",
     "graphql": "17.0.2",
-    "graphql-yoga": "5.23.0",
+    "graphql-yoga": "5.24.1",
     "hono": "4.13.8",
     "isbn3": "2.0.11",
     "jose": "6.2.12",
@@ -88,7 +88,7 @@
     "@tsconfig/strictest": "2.0.8",
     "@types/bun": "1.4.2",
     "@types/k6": "2.2.1",
-    "@types/node": "26.6.0",
+    "@types/node": "26.6.1",
     "@types/nodemailer": "8.0.2",
     "@types/pg": "8.23.1",
     "@vitest/coverage-istanbul": "5.0.1",
@@ -98,7 +98,7 @@
     "leasot": "14.4.0",
     "oxfmt": "0.68.0",
     "oxlint": "1.83.0",
-    "oxlint-tsgolint": "7.0.2001",
+    "oxlint-tsgolint": "7.0.2002",
     "typedoc": "0.28.20",
     "typescript": "7.0.2",
     "vite": "8.3.0",
@@ -115,7 +115,7 @@
   "devEngines": {
     "packageManager": {
       "name": "pnpm",
-      "version": "12.4.2",
+      "version": "12.5.1",
       "onFail": "warn"
     },
     "runtime": [
@@ -134,6 +134,6 @@
   "engines": {
     "bun": "1.4.2",
     "node": "26.9.0",
-    "pnpm": "12.4.2"
+    "pnpm": "12.5.1"
   }
 }
