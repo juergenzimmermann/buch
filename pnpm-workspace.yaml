@@ -35,6 +35,9 @@ allowBuilds:
   "@prisma/engines": true
   prisma: true
 
+# https://pnpm.io/settings/other#dedupedirectdeps
+dedupeDirectDeps: true
+
 # Keine Dependencies von Git-Repositories git+ssh://... und von direkten URLs zu TARs https://.../package.tgz
 # https://pnpm.io/settings/dependency-resolution#blockexoticsubdeps
 blockExoticSubdeps: true
