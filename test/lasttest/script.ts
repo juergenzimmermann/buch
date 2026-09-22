@@ -72,14 +72,12 @@ const key = open(`${tlsDir}/key.pem`);
 
 // https://grafana.com/docs/k6/latest/using-k6/test-lifecycle
 export function setup() {
-    const tokenHeaders: Record<string, string> = {
-        'Content-Type': 'application/x-www-form-urlencoded',
+    const body = {
+        username: 'admin',
+        password: 'p',
     };
+    const tokenResponse = http.request<'text'>('QUERY', tokenUrl, JSON.stringify(body));
 
-    const body = 'username=admin&password=p';
-    const tokenResponse = http.post<'text'>(tokenUrl, body, {
-        headers: tokenHeaders,
-    });
     let token: string;
     if (tokenResponse.status === 200) {
         token = JSON.parse(tokenResponse.body).access_token;
@@ -297,13 +295,11 @@ export function postBuch() {
     buch['isbn'] = generateISBN();
     buch['schlagwoerter'] = [schlagwort?.toUpperCase() ?? 'N/A'];
 
-    const tokenHeaders: Record<string, string> = {
-        'Content-Type': 'application/x-www-form-urlencoded',
+    const body = {
+        username: 'admin',
+        password: 'p',
     };
-    const body = 'username=admin&password=p';
-    const tokenResponse = http.post<'text'>(tokenUrl, body, {
-        headers: tokenHeaders,
-    });
+    const tokenResponse = http.request<'text'>('QUERY', tokenUrl, JSON.stringify(body));
     expect(tokenResponse.status).toBe(200);
     const token = JSON.parse(tokenResponse.body).access_token;
 
