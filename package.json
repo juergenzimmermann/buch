@@ -80,7 +80,7 @@
     "zod": "4.6.5"
   },
   "devDependencies": {
-    "@asciidoctor/core": "4.0.11",
+    "@asciidoctor/core": "4.1.0",
     "@prisma/prisma7": "7.10.0",
     "@stylistic/eslint-plugin": "5.10.0",
     "@tsconfig/node-ts": "23.6.4",

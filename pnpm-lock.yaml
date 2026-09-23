@@ -225,8 +225,8 @@ importers:
         version: 4.6.5
     devDependencies:
       '@asciidoctor/core':
-        specifier: 4.0.11
-        version: 4.0.11
+        specifier: 4.1.0
+        version: 4.1.0
       '@prisma/prisma7':
         specifier: 7.10.0
         version: 7.10.0(@types/react@19.3.0)(magicast@0.5.5)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)(typescript@7.0.2)
@@ -265,7 +265,7 @@ importers:
         version: 5.0.1(vitest@5.0.1)
       asciidoctor-kroki:
         specifier: 1.0.1
-        version: 1.0.1(@asciidoctor/core@4.0.11)
+        version: 1.0.1(@asciidoctor/core@4.1.0)
       globals:
         specifier: 17.12.0
         version: 17.12.0
@@ -296,9 +296,14 @@ importers:
 
 packages:
 
-  '@asciidoctor/core@4.0.11':
-    resolution: {integrity: sha512-5uWPTLTiPJVQp9q4MllSROM2avdECzoT7oeVw/onT9H2PIdCCtQwKrSTvztwxMbSu/8cqHqZox/2qTBrQN454g==}
+  '@asciidoctor/core@4.1.0':
+    resolution: {integrity: sha512-3PpZu3m0V2lT2jljqsH0LJukaMdm8cpv0tuTMijiiwTBSUrVlEd8NBwzH5iyGlS3yPI6i3ZaaNL6enXelOVpRg==}
     engines: {node: '>=20'}
+    peerDependencies:
+      highlight.js: ^11.0.0
+    peerDependenciesMeta:
+      highlight.js:
+        optional: true
 
   '@babel/code-frame@8.0.6':
     resolution: {integrity: sha512-uMHhvmDmwFiLuiozaoRYTZHqMFuu3fem/X9JY78lohAuLoh8LSGGC8JqUzo2cVuBsBxkjMZNk56CE7ock8Xxkw==}
@@ -2752,7 +2757,7 @@ packages:
 
 snapshots:
 
-  '@asciidoctor/core@4.0.11': {}
+  '@asciidoctor/core@4.1.0': {}
 
   '@babel/code-frame@8.0.6':
     dependencies:
@@ -3794,9 +3799,9 @@ snapshots:
 
   argparse@2.0.1: {}
 
-  asciidoctor-kroki@1.0.1(@asciidoctor/core@4.0.11):
+  asciidoctor-kroki@1.0.1(@asciidoctor/core@4.1.0):
     dependencies:
-      '@asciidoctor/core': 4.0.11
+      '@asciidoctor/core': 4.1.0
       json5: 2.2.3
       pako: 2.2.0
 
