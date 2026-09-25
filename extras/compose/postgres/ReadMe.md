@@ -105,9 +105,10 @@ Für _TLS_ erwartet _PostgreSQL_ standardmäßig die Dateien `server.crt` und
 `server.key` im Verzeichnis `/var/lib/postgresql/19/data`, was aber zu Beginn
 der Installation leer sein muss. Deshalb wird der PostgreSQL-Server zunächst
 ohne TLS gestartet, damit `/var/lib/postgresql/19/data` initialisiert wird.
-Dazu muss in `compose.yml` temporär die Zeile `command: ...` auskommentiert
-werden. Danach wird der PostgreSQL-Server mit dem _Hardened Image_ als
-Docker-Container gestartet
+
+Dazu muss in `compose.yml` temporär der Schlüssel `command: ...` mit den
+nachfolgenden Zeilen für den zugehörigen Wert auskommentiert werden. Danach
+wird der PostgreSQL-Server als _Docker-Container_ gestartet.
 
 ```shell
     # in der 1. Shell
