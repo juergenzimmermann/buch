@@ -98,7 +98,7 @@
     "leasot": "14.4.0",
     "oxfmt": "0.70.0",
     "oxlint": "1.85.0",
-    "oxlint-tsgolint": "7.0.2002",
+    "oxlint-tsgolint": "7.0.2003",
     "typedoc": "0.28.20",
     "typescript": "7.0.2",
     "vite": "8.3.1",
@@ -115,7 +115,7 @@
   "devEngines": {
     "packageManager": {
       "name": "pnpm",
-      "version": "12.6.0",
+      "version": "12.7.0",
       "onFail": "warn"
     },
     "runtime": [
@@ -134,6 +134,6 @@
   "engines": {
     "bun": "1.4.2",
     "node": "26.10.0",
-    "pnpm": "12.6.0"
+    "pnpm": "12.7.0"
   }
 }
