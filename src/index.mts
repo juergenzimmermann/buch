@@ -18,6 +18,7 @@ import { app } from './app.mts';
 import { banner } from './logger/banner.mts';
 import { createSecureServer } from 'node:http2';
 import { env } from './config/env.mts';
+import { getLogger } from './logger/logger.mts';
 import { populate } from './config/dev/db-populate.mts';
 import process from 'node:process';
 import { serverConfig } from './config/server.mts';
@@ -28,6 +29,8 @@ if (NODE_ENV === 'development' || NODE_ENV === 'test') {
     // selbst-signiertes Zertifikat: Umgebungsvariable NODE_TLS_REJECT_UNAUTHORIZED setzen
     process.env['NODE_TLS_REJECT_UNAUTHORIZED'] = '0';
 }
+
+const logger = getLogger('app');
 
 // app.fetch ist ist eine Funktion passend zur Signatur von fetch von @hono/node-server (s.u.):
 // (request: Request) => Response | Promise<Response>
@@ -77,7 +80,7 @@ if (runtime === 'Bun') {
             },
         },
         (info) => {
-            console.log(`🚀 Der Server ist mit HTTPS und Port ${info.port} gestartet`);
+            logger.info(`Der Server ist mit HTTPS und Port ${info.port} gestartet`);
         },
     );
 }
@@ -89,8 +92,13 @@ process.on('SIGINT', () => {
     // IIFE  = Immediately Invoked Function Expression
     // IIAFE = Immediately Invoked Asynchronous Function Expression
     (async () => {
-        await disconnectDB();
+        try {
+            await disconnectDB();
+        } catch {
+            console.log('Fehler beim Trennen der DB-Verbindung.');
+        }
     })();
 
+    // Pino loggt asynchron
     console.log('Der Server wird heruntergefahren.');
 });

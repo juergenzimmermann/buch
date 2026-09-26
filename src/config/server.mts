@@ -49,7 +49,8 @@ logger.debug('allowHTTP1 = %s', allowHTTP1);
 // "Temporal API" vorhanden: Node ab 26, Bun ab 1.4
 let hasTemporal = true;
 try {
-    Temporal; // oxlint-disable-line no-unused-expressions
+    // oxlint-disable-next-line no-unused-expressions
+    Temporal; // NOSONAR
     logger.info('Temporal API vorhanden.');
 } catch {
     // Hardened Image fuer Node 26 enthaelt nicht "Temporal API"
