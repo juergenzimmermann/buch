@@ -41,6 +41,7 @@ export class TokenData {
 export const router = new Hono();
 
 const logger = getLogger('auth-router/query', 'func');
+
 router.query(paths.token, async (c) => {
     const { req } = c;
     let requestBody: any;
