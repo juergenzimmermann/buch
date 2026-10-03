@@ -16,7 +16,7 @@
 import { type PrettyOptions } from 'pino-pretty';
 import { config } from './app.mts';
 import { env } from './env.mts';
-import pino from 'pino';
+import { pino } from 'pino';
 import { resolve } from 'node:path';
 import { styleText } from 'node:util';
 
