@@ -1,4 +1,4 @@
-# syntax=docker.io/docker/dockerfile-upstream:1.27.1
+# syntax=docker.io/docker/dockerfile-upstream:1.28.0
 # check=error=true
 
 # Copyright (C) 2026 - present, Juergen Zimmermann, Hochschule Karlsruhe
@@ -51,14 +51,14 @@ FROM dhi.io/bun:${BUN_VERSION}-debian13 AS final
 ARG BUN_UID=65523 \
     BUN_GID=65523
 
-USER ${BUN_UID}:${BUN_GID}
-
 WORKDIR /opt/app
 
-COPY --chown=${BUN_UID}:${BUN_GID} package.json ./
-COPY --from=dist --chown=${BUN_UID}:${BUN_GID} /app/node_modules ./node_modules
-COPY --chown=${BUN_UID}:${BUN_GID} src ./src
-COPY --chown=${BUN_UID}:${BUN_GID} log ./log
+USER ${BUN_UID}:${BUN_GID}
+
+COPY --chown=${BUN_UID}: package.json ./
+COPY --from=dist --chown=${BUN_UID}: /app/node_modules ./node_modules
+COPY --chown=${BUN_UID}: src ./src
+COPY --chown=${BUN_UID}: log ./log
 
 # Anzeige bei "docker inspect ..."
 # https://specs.opencontainers.org/image-spec/annotations

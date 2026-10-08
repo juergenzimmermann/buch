@@ -1,4 +1,4 @@
-# syntax=docker.io/docker/dockerfile-upstream:1.27.1
+# syntax=docker.io/docker/dockerfile-upstream:1.28.0
 # check=error=true
 
 # Copyright (C) 2023 - present, Juergen Zimmermann, Hochschule Karlsruhe
@@ -76,9 +76,9 @@ USER ${NODE_UID}:${NODE_GID}
 WORKDIR /home/node
 
 # Sonst "lock"-Konflikte mit Stage "dependencies" (s.u.)
-COPY --chown=${NODE_UID}:${NODE_GID} pnpm-lock.yaml pnpm-workspace.yaml ./
+COPY --chown=${NODE_UID}: pnpm-lock.yaml pnpm-workspace.yaml ./
 # fuer script "posttsc" in package.json
-COPY --chown=${NODE_UID}:${NODE_GID} scripts/copy-resources.mts ./scripts/
+COPY --chown=${NODE_UID}: scripts/copy-resources.mts ./scripts/
 
 # https://docs.docker.com/engine/reference/builder/#run---mounttypebind
 RUN --mount=type=bind,source=package.json,target=package.json \
@@ -139,12 +139,12 @@ ARG NODE_UID=1000 \
 
 WORKDIR /opt/app
 
-# ADD hat mehr Funktionalitaet als COPY, z.B. auch Download von externen Dateien
-COPY --chown=${NODE_UID}:${NODE_GID} package.json .env ./
-COPY --from=dist --chown=${NODE_UID}:${NODE_GID} /home/node/dist/src ./dist/src
-COPY --from=dependencies --chown=${NODE_UID}:${NODE_GID} /home/node/node_modules ./node_modules
-
 USER ${NODE_UID}:${NODE_GID}
+
+# ADD hat mehr Funktionalitaet als COPY, z.B. auch Download von externen Dateien
+COPY --chown=${NODE_UID}: package.json .env ./
+COPY --from=dist --chown=${NODE_UID}: /home/node/dist/src ./dist/src
+COPY --from=dependencies --chown=${NODE_UID}: /home/node/node_modules ./node_modules
 
 EXPOSE 3000
 
