@@ -68,9 +68,9 @@ RUN <<EOF
 
 EOF
 
-USER ${NODE_UID}:${NODE_GID}
-
 WORKDIR /home/node
+
+USER ${NODE_UID}:${NODE_GID}
 
 # Sonst "lock"-Konflikte mit Stage "dependencies" (s.u.)
 COPY --chown=${NODE_UID}: pnpm-lock.yaml pnpm-workspace.yaml ./

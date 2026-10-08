@@ -112,9 +112,9 @@ RUN <<EOF
   npm i -g pnpm@12.8.1
 EOF
 
-USER ${NODE_UID}:${NODE_GID}
-
 WORKDIR /home/node
+
+USER ${NODE_UID}:${NODE_GID}
 
 # https://docs.docker.com/engine/reference/builder/#run---mounttypebind
 RUN --mount=type=bind,source=package.json,target=package.json \
