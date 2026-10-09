@@ -1,0 +1,29 @@
+info:
+  name: Neues Buch kein JSON
+  type: http
+  seq: 5
+
+http:
+  method: POST
+  url: "{{restUrl}}"
+  headers:
+    - name: Content-Type
+      value: application/json
+      disabled: true
+  body:
+    type: text
+    data: FALSCHES JSON
+  auth: inherit
+
+runtime:
+  assertions:
+    - expression: res.status
+      operator: eq
+      value: "400"
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+  forwardAuthorizationHeader: true

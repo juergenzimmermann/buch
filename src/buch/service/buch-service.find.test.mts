@@ -46,7 +46,7 @@ vi.mock(import('../../config/prisma-client.mts'), () => {
     };
 });
 
-const paramsAlle = [undefined, null, {}];
+const paramsAlle = [undefined, {}];
 
 const titel = 'Titel';
 const isbn = '978-0-007-00644-1';
@@ -98,8 +98,6 @@ describe('buch-service: find', () => {
         let result: Readonly<Slice<BuchMitTitelDTO>>;
         if (param === undefined) {
             result = await findAll(pageable);
-        } else if (param === null) {
-            result = await find(null, pageable);
         } else {
             result = await find({}, pageable);
         }
@@ -121,7 +119,7 @@ describe('buch-service: find', () => {
         countMock.mockResolvedValueOnce(1);
 
         // when
-        const result = await find(suchparameter, pageable);
+        const result = await find(suchparameter as Record<string, string>, pageable);
 
         // then
         const { content } = result;
@@ -137,7 +135,9 @@ describe('buch-service: find', () => {
         findManyMock.mockResolvedValue([]);
 
         // when / then
-        await expect(find(suchparameter, pageable)).rejects.toThrow(/^Keine Buecher gefunden/u);
+        await expect(find(suchparameter as Record<string, string>, pageable)).rejects.toThrow(
+            /^Keine Buecher gefunden/u,
+        );
     });
 
     test('isbn vorhanden', async () => {
@@ -150,7 +150,7 @@ describe('buch-service: find', () => {
         countMock.mockResolvedValueOnce(1);
 
         // when
-        const result = await find(suchparameter, pageable);
+        const result = await find(suchparameter as Record<string, string>, pageable);
 
         // then
         const { content } = result;
@@ -169,7 +169,7 @@ describe('buch-service: find', () => {
         countMock.mockResolvedValueOnce(1);
 
         // when
-        const result = await find(suchparameter, pageable);
+        const result = await find(suchparameter as Record<string, string>, pageable);
 
         // then
         const { content } = result;
@@ -188,7 +188,7 @@ describe('buch-service: find', () => {
         countMock.mockResolvedValueOnce(1);
 
         // when
-        const result = await find(suchparameter, pageable);
+        const result = await find(suchparameter as Record<string, string>, pageable);
 
         // then
         const { content } = result;
@@ -203,7 +203,9 @@ describe('buch-service: find', () => {
         const pageable: Pageable = { number: 1, size: 5 };
 
         // when / then
-        await expect(find(suchparameter, pageable)).rejects.toThrow(/^Ungueltige Suchparameter/u);
+        await expect(find(suchparameter as Record<string, string>, pageable)).rejects.toThrow(
+            /^Ungueltige Suchparameter/u,
+        );
     });
 
     test('preis max', async () => {
@@ -216,7 +218,7 @@ describe('buch-service: find', () => {
         countMock.mockResolvedValueOnce(1);
 
         // when
-        const result = await find(suchparameter, pageable);
+        const result = await find(suchparameter as Record<string, string>, pageable);
 
         // then
         const { content } = result;
@@ -235,7 +237,7 @@ describe('buch-service: find', () => {
         countMock.mockResolvedValueOnce(1);
 
         // when
-        const result = await find(suchparameter, pageable);
+        const result = await find(suchparameter as Record<string, string>, pageable);
 
         // then
         const { content } = result;
@@ -254,7 +256,7 @@ describe('buch-service: find', () => {
         countMock.mockResolvedValueOnce(1);
 
         // when
-        const result = await find(suchparameter, pageable);
+        const result = await find(suchparameter as Record<string, string>, pageable);
 
         // then
         const { content } = result;
@@ -273,7 +275,7 @@ describe('buch-service: find', () => {
         countMock.mockResolvedValueOnce(1);
 
         // when
-        const result = await find(suchparameter, pageable);
+        const result = await find(suchparameter as Record<string, string>, pageable);
 
         // then
         const { content } = result;

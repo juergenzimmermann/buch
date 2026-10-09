@@ -47,5 +47,6 @@ blockExoticSubdeps: true
 #enableGlobalVirtualStore = true
 
 auditConfig:
-  ignoreGhsas:
-    - GHSA-ggr8-5vv4-36mx
+  ignoreGhsas: ["GHSA-ggr8-5vv4-36mx"]
+
+minimumReleaseAgeExclude: ["hono@5.0.0-rc.0"]

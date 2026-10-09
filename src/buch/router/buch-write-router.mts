@@ -83,7 +83,12 @@ const buchDtoToBuchCreateInput = (buchDTO: BuchNeuType): BuchCreate => {
 };
 
 router.post('/', rolesRequired('admin', 'user'), async (c) => {
-    const requestBody = await c.req.json();
+    let requestBody: unknown;
+    try {
+        requestBody = await c.req.json();
+    } catch {
+        return createProblemDetails(c, badRequest, 'Ungueltiges JSON');
+    }
 
     // Validierung mit Zod: ZodError wird geworfen, falls Validierung nicht erfolgreich
     const buchDTO: BuchNeuType = BuchNeuSchema.parse(requestBody);
@@ -134,10 +139,13 @@ router.put('/:id', rolesRequired('admin', 'user'), async (c) => {
         return createProblemDetails(c, preconditionRequired, 'Header "If-Match" fehlt');
     }
 
-    const requestBody = await c.req.json();
-    logger.debug('put: requestBody=%o', requestBody);
-
     // Validierung mit Zod
+    let requestBody: unknown;
+    try {
+        requestBody = await c.req.json();
+    } catch {
+        return createProblemDetails(c, badRequest, 'Ungueltiges JSON');
+    }
     const buchDTO: BuchUpdateType = BuchUpdateSchema.parse(requestBody);
     logger.debug('put: buchDTO=%o', buchDTO);
 

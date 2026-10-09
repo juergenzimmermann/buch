@@ -23,9 +23,9 @@ import {
     POST,
     restURL,
 } from '../constants.mts';
+import { type ProblemDetails, badRequest } from '../../../src/problem-details.mts';
 import { beforeAll, describe, expect, test } from 'vitest';
 import { type BuchNeuType } from '../../../src/buch/router/buch-validation.mts';
-import { type ProblemDetails } from '../../../src/problem-details.mts';
 import { getToken } from '../token.mts';
 import { idPattern } from '../../../src/buch/router/create-base-url.mts';
 
@@ -224,4 +224,26 @@ describe('POST /rest', () => {
 
     // eslint-disable-next-line @typescript-eslint/no-empty-function
     test.concurrent.todo('Abgelaufener Token', () => {});
+
+    test('Neues Buch mit ungueltigem JSON', async () => {
+        // given
+        const headers = new Headers();
+        headers.append(CONTENT_TYPE, APPLICATION_JSON);
+        headers.append(AUTHORIZATION, `${BEARER} ${token}`);
+
+        // when
+        const response = await fetch(restURL, {
+            method: POST,
+            body: 'KEIN JSON',
+            headers,
+        });
+
+        // then
+        expect(response.status).toBe(badRequest);
+        expect(response.headers.get('Content-Type')).toBe('application/problem+json');
+
+        const body = (await response.json()) as ProblemDetails;
+        expect(body.statusCode).toBe(badRequest);
+        expect(body.detail).toBe('Ungueltiges JSON');
+    });
 });

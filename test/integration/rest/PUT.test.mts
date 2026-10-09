@@ -23,9 +23,9 @@ import {
     PUT,
     restURL,
 } from '../constants.mts';
+import { type ProblemDetails, badRequest } from '../../../src/problem-details.mts';
 import { beforeAll, describe, expect, test } from 'vitest';
 import { type BuchUpdateType } from '../../../src/buch/router/buch-validation.mts';
-import { type ProblemDetails } from '../../../src/problem-details.mts';
 import { getToken } from '../token.mts';
 
 // -----------------------------------------------------------------------------
@@ -247,5 +247,29 @@ describe('PUT /rest/:id', () => {
 
         // then
         expect(status).toBe(401);
+    });
+
+    test('Neues Buch mit ungueltigem JSON', async () => {
+        // given
+        const url = `${restURL}/${idVorhanden}`;
+        const headers = new Headers();
+        headers.append(CONTENT_TYPE, APPLICATION_JSON);
+        headers.append(IF_MATCH, '"0"');
+        headers.append(AUTHORIZATION, `${BEARER} ${token}`);
+
+        // when
+        const response = await fetch(url, {
+            method: PUT,
+            body: 'KEIN JSON',
+            headers,
+        });
+
+        // then
+        expect(response.status).toBe(badRequest);
+        expect(response.headers.get('Content-Type')).toBe('application/problem+json');
+
+        const body = (await response.json()) as ProblemDetails;
+        expect(body.statusCode).toBe(badRequest);
+        expect(body.detail).toBe('Ungueltiges JSON');
     });
 });

@@ -242,15 +242,12 @@ const checkEnums = (suchparameter: Suchparameter) => {
  * @throws NotFoundError falls keine Bücher gefunden wurden.
  */
 export const find = async (
-    suchparameter: Suchparameter | null,
+    suchparameter: Record<string, string | undefined>,
     pageable: Pageable,
 ): Promise<Readonly<Slice<Readonly<BuchMitTitelDTO>>>> => {
     logger.debug('find: suchparameter=%s, pageable=%o', JSON.stringify(suchparameter), pageable);
 
     // Keine Suchparameter?
-    if (suchparameter === null) {
-        return await findAll(pageable);
-    }
     const keys = Object.keys(suchparameter);
     if (keys.length === 0) {
         return await findAll(pageable);
@@ -262,7 +259,7 @@ export const find = async (
         throw new NotFoundError('Ungueltige Suchparameter');
     }
 
-    const where = buildWhere(suchparameter);
+    const where = buildWhere(suchparameter as Suchparameter);
     if (Object.keys(where).length === 0) {
         logger.debug('Ungueltige Suchparameter');
         throw new NotFoundError('Ungueltige Suchparameter');

@@ -15,7 +15,6 @@
 
 import { type BuchCreate, type BuchUpdate } from '../service/buch-write-service.mts';
 import { type BuchMitTitelUndAbbildungenDTO } from '../service/buch-service.mts';
-import { type Suchparameter } from '../service/suchparameter.mts';
 
 // -----------------------------------------------------------------------------
 // I D   u n d   I n t   f u e r   G r a p h Q L
@@ -97,7 +96,7 @@ export type SuchParameterInput = {
 
 export const toSuchparameter = (param?: SuchParameterInput) => {
     if (param === undefined) {
-        return null;
+        return {};
     }
 
     const { titel, isbn, rating, art, lieferbar } = param;
@@ -119,7 +118,7 @@ export const toSuchparameter = (param?: SuchParameterInput) => {
         // String bei Query-Parameter bei REST
         suchparameter['lieferbar'] = lieferbar.toString();
     }
-    return suchparameter as Suchparameter;
+    return suchparameter as Record<string, string>;
 };
 
 // -----------------------------------------------------------------------------
