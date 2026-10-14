@@ -25,16 +25,17 @@ import { getLogger } from '../logger/logger.mts';
 const { keycloak } = config;
 
 if (typeof keycloak === 'object') {
+    const { schema, port, realm, clientId } = keycloak;
     if (
-        (keycloak.schema !== undefined && typeof keycloak.schema !== 'string') ||
-        (keycloak.port !== undefined && typeof keycloak.port !== 'number')
+        (schema !== undefined && typeof schema !== 'string') ||
+        (port !== undefined && typeof port !== 'number')
     ) {
         throw new TypeError('Die Konfiguration für Keycloak (Schema und Port) ist falsch');
     }
-    if (keycloak.realm !== undefined && typeof keycloak.realm !== 'string') {
+    if (realm !== undefined && typeof realm !== 'string') {
         throw new TypeError('Der konfigurierte Realm-Name für Keycloak ist kein String');
     }
-    if (keycloak.clientId !== undefined && typeof keycloak.clientId !== 'string') {
+    if (clientId !== undefined && typeof clientId !== 'string') {
         throw new TypeError('Der konfigurierte Client-ID für Keycloak ist kein String');
     }
 }

@@ -15,8 +15,8 @@
 
 import { type Context, type HonoRequest, type Next } from 'hono';
 import { ForbiddenError, InternalServerError, UnauthorizedError } from './errors.mts';
+import { JOSEError, JWTClaimValidationFailed } from 'jose/errors';
 import { createRemoteJWKSet, jwtVerify } from 'jose';
-import { JOSEError } from 'jose/errors';
 import { getLogger } from '../logger/logger.mts';
 import { keycloakConfig } from '../config/keycloak.mts';
 
@@ -52,8 +52,13 @@ const verifyToken = async (token: string) => {
         });
     } catch (err) {
         logger.debug('verifyToken: verifyResult err=%o', err as object);
+        if (err instanceof JWTClaimValidationFailed) {
+            logger.debug('Claim: %o', err.claim);
+            logger.debug('Reason: %o', err.reason);
+            throw new UnauthorizedError('Fehler bei Validierung von Claim');
+        }
         if (err instanceof JOSEError) {
-            // abgeleitet: JWTClaimValidationFailed, JWTExpired, ...
+            // abgeleitet: JWTClaimValidationFailed (s.o.), JWTExpired, ...
             throw new UnauthorizedError('Token nicht (mehr) gueltig');
         }
         throw new InternalServerError();

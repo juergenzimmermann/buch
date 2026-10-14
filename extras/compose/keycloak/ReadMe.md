@@ -99,12 +99,12 @@ sowie die Berechtigung zum Ändern vom Linux-Owner und von der Linux-Group (s.u.
     # Windows
     cd extras\compose\keycloak
     docker run -v kc_tls:/opt/keycloak/tls -v ./tls:/tmp/tls:ro `
-      --rm -it -u 0:0 --entrypoint '' dhi.io/keycloak:26.7.4-debian13 bash
+      --rm -it -u 0:0 --entrypoint '' dhi.io/keycloak:26.8.1-debian13 bash
 
     # macOS/Linux
     cd extras/compose/keycloak
     docker run -v kc_tls:/opt/keycloak/tls -v ./tls:/tmp/tls:ro \
-      --rm -it -u 0:0 --entrypoint '' dhi.io/keycloak:26.7.4-debian13 bash
+      --rm -it -u 0:0 --entrypoint '' dhi.io/keycloak:26.8.1-debian13 bash
 
         cp /tmp/tls/certificate.crt /opt/keycloak/tls/kc_cert
         cp /tmp/tls/key.pem /opt/keycloak/tls/kc_key
@@ -204,6 +204,10 @@ Das Mapping von Port `8443` auf `8843` und von `8080` auf `8880` ist in
                 <Create Role> anklicken
                 Role name       user
                 <Save> anklicken
+            Tab "Client Scopes"
+                "javascript-client-dedicated" anklicken
+                    Tab "Scope"
+                        "Full Scope Allowed" auf "On" setzen
 
     # https://www.keycloak.org/docs/latest/server_admin/index.html#assigning-permissions-using-roles-and-groups
     Menüpunkt "Users"
