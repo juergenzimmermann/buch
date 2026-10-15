@@ -21,7 +21,7 @@ pipeline {
     agent any
     tools {
         // Einstellungen > Tools > NodeJS Installationen
-        nodejs 'node-26.10.0'
+        nodejs 'node-26.12.0'
     }
 
     // globale Umgebungsvariable:
@@ -100,7 +100,7 @@ pipeline {
                     ls -al ~/.cache/node
 
                     npm r -g pnpm
-                    npm i -g --allow-scripts=pnpm pnpm@12.8.1
+                    npm i -g --allow-scripts=pnpm pnpm@12.13.0
                     env | sort
                     which pnpm
                     pnpm --version
@@ -108,7 +108,7 @@ pipeline {
                     #pnpm store path
 
                     npm r -g bun
-                    npm i -g --allow-scripts=bun bun@1.4.2
+                    npm i -g --allow-scripts=bun bun@1.4.3
                     which bun
                     bun --version
                 '''
