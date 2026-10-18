@@ -107,7 +107,7 @@ der Installation leer sein muss. Deshalb wird der PostgreSQL-Server zunächst
 ohne TLS gestartet, damit `/var/lib/postgresql/19/data` initialisiert wird.
 
 Dazu muss in `compose.yml` temporär der Schlüssel `command: ...` mit den
-nachfolgenden Zeilen für den zugehörigen Wert auskommentiert werden. Danach
+nachfolgenden Zeilen für die Listenelemente auskommentiert werden. Danach
 wird der PostgreSQL-Server als _Docker-Container_ gestartet.
 
 ```shell

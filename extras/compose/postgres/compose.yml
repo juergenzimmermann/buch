@@ -22,7 +22,7 @@
 services:
   postgres:
     # https://github.com/docker-library/postgres/blob/master/19/trixie/Dockerfile
-    image: postgres:19beta4-trixie
+    image: postgres:19rc1-trixie
     ports:
       - published: 5432
         target: 5432
@@ -35,11 +35,9 @@ services:
     # ggf. "-c max_connections=10" statt 100
     #command: ["--ssl=on"]
     command:
-      [
-        "--ssl=on",
-        "--ssl-cert-file=/var/lib/postgresql/19/docker/server.crt",
-        "--ssl-key-file=/var/lib/postgresql/19/docker/server.key",
-      ]
+      - "--ssl=on"
+      - "--ssl-cert-file=/var/lib/postgresql/19/docker/server.crt"
+      - "--ssl-key-file=/var/lib/postgresql/19/docker/server.key"
     volumes:
       # Image:   dhi.io/postgres:VERSION
       #- pg_data:/var/lib/postgresql/19/data
