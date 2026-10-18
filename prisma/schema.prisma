@@ -8,10 +8,10 @@ generator client {
   /// https://github.com/prisma/prisma/releases/tag/6.16.0
   /// ESM-first
   provider        = "prisma-client"
-  output          = "../src/generated/prisma"
   /// https://www.prisma.io/docs/orm/v7/reference/preview-features/client-preview-features#currently-active-preview-features
   /// https://github.com/prisma/prisma/releases/tag/5.7.0
   previewFeatures = ["nativeDistinct", "relationJoins"]
+  output          = "../src/generated/prisma"
 }
 
 /// https://www.prisma.io/docs/orm/v7/reference/prisma-schema-reference#datasource

@@ -325,18 +325,6 @@ Falls `.env` bereits existiert, wird ggf. `DATABASE_URL` als Umgebungsvariable
 eingetragen. Der Wert von `DATABASE_URL` muss auf jeden Fall mit dem Wert
 übereinstimmen, den man zuvor in der Shell gesetzt hatte (s.o.).
 
-In `prisma\schema.prisma` ergänzt man den Abschnitt `generator client` um
-folgende Einträge, damit später die neuesten Features von Prisma genutzt werden
-können:
-
-```prisma
-    generator client {
-        ...
-        previewFeatures = ["nativeDistinct", "relationJoins"]
-        engineType      = "client"
-    }
-```
-
 ### Models aus einer bestehenden DB generieren
 
 Als nächstes müssen Prisma-Models aus einer **bestehenden** DB generiert werden,
