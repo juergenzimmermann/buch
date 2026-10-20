@@ -25,14 +25,7 @@ export default defineConfig({
     plugins: ['import', 'node', 'promise'],
 
     // https://oxc.rs/docs/guide/usage/linter/js-plugins
-    jsPlugins: [
-        '@stylistic/eslint-plugin',
-
-        // 'eslint-plugin-regexp',
-        // 'eslint-plugin-sonarjs',
-        // 'eslint-plugin-no-secrets',
-        // 'eslint-plugin-security',
-    ],
+    jsPlugins: ['@stylistic/eslint-plugin'],
 
     // https://oxc.rs/docs/guide/usage/linter/cli#allowing-denying-multiple-lints
     // https://oxc.rs/docs/guide/usage/linter/config-file-reference.html#categories
