@@ -52,6 +52,15 @@ if (!hasTemporal) {
     logger.warn('Temporal API nicht vorhanden.');
 }
 
+try {
+    // https://github.com/nodejs/node/blob/main/doc/api/quic.md
+    // https://www.jasnell.me/posts/quic-part-4
+    await import('node:quic');
+    logger.info('QUIC ist vorhanden.');
+} catch {
+    logger.info('QUIC ist nicht vorhanden.');
+}
+
 // https://nodejs.org/api/fs.html
 const tlsURL = new URL('tls/', resourcesURL);
 logger.debug('tlsURL = %s', tlsURL);
