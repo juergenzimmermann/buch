@@ -53,6 +53,8 @@ export const banner = async () => {
     logger.info('Username: %s', userInfo().username);
     logger.info('Docker Container: %s', isContainer);
     if (isContainer) {
-        logger.debug('!!! Container: Bruno nicht nutzbar mit Tokens !!!');
+        logger.debug(
+            '!!! Container: Bruno nicht nutzbar mit Tokens, da iss=https://localhost:8843/realms/javascript !!!',
+        );
     }
 };

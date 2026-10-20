@@ -23,7 +23,8 @@ export const getToken = async (username: string, password: string) => {
         password,
     };
 
-    const response = await fetch(`${baseURL}${tokenPath}`, {
+    const tokenURL = `${baseURL}${tokenPath}`;
+    const response = await fetch(tokenURL, {
         method: QUERY,
         body: JSON.stringify(body),
         headers,
@@ -35,6 +36,7 @@ export const getToken = async (username: string, password: string) => {
         responseBody.access_token === undefined ||
         typeof responseBody.access_token !== 'string'
     ) {
+        console.error(`!!!tokenURL=${tokenURL}`);
         console.error(`!!!username=${username}, password=${password}`);
         console.error(`!!!status=${response.status}`);
         console.error('!!!body=%j', responseBody);

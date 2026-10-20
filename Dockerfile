@@ -161,6 +161,6 @@ LABEL org.opencontainers.image.title="buch" \
   org.opencontainers.image.authors="Juergen.Zimmermann@h-ka.de"
 
   # Bei CMD statt ENTRYPOINT kann das Kommando bei "docker run ..." ueberschrieben werden
-# "Array Syntax" damit auch <Strg>C funktioniert
+  # "Array Syntax" damit auch <Strg>C funktioniert
 
 ENTRYPOINT ["node", "--env-file=.env", "dist/src/index.mjs"]

@@ -83,8 +83,8 @@ export const token = async ({ username, password }: TokenData) => {
     });
 
     logger.debug('token: path=%s', accessTokenUrl);
-    logger.debug('token: headers=%o', headers);
     logger.debug('token: body=%s', body);
+    logger.debug('token: headers=%o', headers);
     let response: Response;
     try {
         response = await fetch(accessTokenUrl, {
@@ -99,6 +99,8 @@ export const token = async ({ username, password }: TokenData) => {
 
     const { status } = response;
     if (status !== 200) {
+        logger.warn('Fehler beim Netzwerkzugriff auf Keycloak. Statuscode: %d', status);
+        logger.warn('Fehler beim Netzwerkzugriff auf Keycloak. Statuscode: %d', status);
         logger.warn('Fehler beim Netzwerkzugriff auf Keycloak. Statuscode: %d', status);
         return;
     }

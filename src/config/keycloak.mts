@@ -55,7 +55,12 @@ const audience = ['account'];
 // fuer KeycloakService
 const accessTokenUrl = `${oidcUrl}/token`;
 
-const { CLIENT_SECRET, NODE_ENV } = env;
+let { CLIENT_SECRET } = env;
+// Workaround fuer Docker-Image beim Einlesen von .env
+if (CLIENT_SECRET === undefined) {
+    throw new Error('Umgebungsvariable CLIENT_SECRET nicht gesetzt!');
+}
+CLIENT_SECRET = CLIENT_SECRET.replace(/^CLIENT_SECRET=/u, '');
 
 export const keycloakConfig = {
     realm,
@@ -65,11 +70,12 @@ export const keycloakConfig = {
     audience,
     // fuer KeycloakService
     accessTokenUrl,
-    secret: CLIENT_SECRET ?? 'ERROR: Umgebungsvariable CLIENT_SECRET nicht gesetzt!',
+    secret: CLIENT_SECRET,
 };
 
 const logger = getLogger('config/keycloak');
 
+const { NODE_ENV } = env;
 if (NODE_ENV === 'development') {
     logger.debug('keycloakConfig = %o', keycloakConfig);
 } else {

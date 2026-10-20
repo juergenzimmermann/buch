@@ -14,19 +14,19 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 import { type Context, type Next } from 'hono';
-import { createMiddleware } from 'hono/factory';
+import { defineMiddleware } from 'hono/factory';
 import { getLogger } from './logger.mts';
 import { serverConfig } from '../config/server.mts';
 
 const logger = getLogger('responseTime', 'func');
 
 /**
- * Middleware für Hono, um vor dem Abschicken eines Response dessen Verarbeitungszeit
+ * Middleware für Hono, um vor dem Abschicken eines Response dessen Antwortzeit
  * und den Statuscode zu protokollieren.
  * @author [Jürgen Zimmermann](mailto:Juergen.Zimmermann@h-ka.de)
  */
 // https://hono.dev/docs/guides/middleware
-export const responseTime = createMiddleware(async (c: Context, next: Next) => {
+export const responseTime = defineMiddleware(async (c: Context, next: Next) => {
     // https://nodejs.org/en/blog/release/v26.0.0#temporal-api
     // https://tc39.es/proposal-temporal
     // https://github.com/tc39/proposal-temporal
@@ -40,6 +40,7 @@ export const responseTime = createMiddleware(async (c: Context, next: Next) => {
         return;
     }
 
+    // TODO https://github.com/docker-hardened-images/catalog/issues/542
     const temporalPolyFill = await import('temporal-polyfill');
     const start = temporalPolyFill.Temporal.Now.instant().epochMilliseconds;
     await next(); // oxlint-disable-line node/callback-return
