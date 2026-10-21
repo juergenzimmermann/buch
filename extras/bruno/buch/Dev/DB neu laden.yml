@@ -4,7 +4,7 @@ info:
   seq: 1
 
 http:
-  method: POST
+  method: QUERY
   url: "{{baseUrl}}/dev/db_populate"
   auth:
     type: oauth2
@@ -21,6 +21,7 @@ http:
       id: credentials
       placement:
         header: Bearer
+      source: access_token
     settings:
       autoFetchToken: true
       autoRefreshToken: false
@@ -42,3 +43,4 @@ settings:
   timeout: 0
   followRedirects: true
   maxRedirects: 5
+  forwardAuthorizationHeader: true

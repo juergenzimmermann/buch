@@ -20,7 +20,7 @@ import axios, { AxiosHeaders, type AxiosResponse } from 'axios';
 import { getToken } from './rest/token.mjs';
 
 // "Accept: APPLICATION_JSON" ist default https://axios.rest/pages/advanced/request-config.html#headers
-export const client = axios.create({
+const client = axios.create({
     baseURL: `${baseURL}/dev/db_populate`,
     httpVersion: 2,
     validateStatus: () => true,
@@ -30,7 +30,7 @@ const dbPopulate = async (token: string) => {
     const headers = new AxiosHeaders();
     headers.setAuthorization(`${BEARER} ${token}`);
 
-    const { data }: AxiosResponse<{ db_populate: string }> = await client.post('', undefined, {
+    const { data }: AxiosResponse<{ db_populate: string }> = await client.query('', undefined, {
         headers,
     });
 

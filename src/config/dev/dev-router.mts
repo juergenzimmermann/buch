@@ -28,7 +28,7 @@ import { rolesRequired } from '../../security/roles-required.mts';
  */
 export const router = new Hono();
 
-router.post('/db_populate', rolesRequired('admin'), async (c) => {
+router.query('/db_populate', rolesRequired('admin'), async (c) => {
     await populate();
     const success = {
         db_populate: 'ok',

@@ -17,8 +17,9 @@ import axios, { type AxiosResponse } from 'axios';
 import { baseURL, tokenPath } from '../constants.mts';
 
 const tokenURL = `${baseURL}${tokenPath}`;
+
 // "Accept: APPLICATION_JSON" ist default https://axios.rest/pages/advanced/request-config.html#headers
-export const client = axios.create({
+const client = axios.create({
     baseURL: tokenURL,
     httpVersion: 2,
     validateStatus: () => true,
