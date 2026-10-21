@@ -14,19 +14,12 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-import {
-    ACCEPT,
-    APPLICATION_JSON,
-    AUTHORIZATION,
-    BEARER,
-    CONTENT_TYPE,
-    GRAPHQL_RESPONSE_JSON,
-    POST,
-    graphqlURL,
-} from '../constants.mts';
+import { AxiosHeaders, type AxiosResponse, HttpStatusCode } from 'axios';
+import { BEARER, CONTENT_TYPE } from '../constants.mts';
 import { beforeAll, describe, expect, test } from 'vitest';
 import { type ErrorsType } from './query.test.mts';
 import { type GraphQLQuery } from './graphql.mts';
+import { client } from './client.mts';
 import { getToken } from './token.mts';
 
 // -----------------------------------------------------------------------------
@@ -97,29 +90,25 @@ describe('GraphQL Mutations', () => {
                 }
             `,
         };
-        const headers = new Headers();
-        headers.append(CONTENT_TYPE, APPLICATION_JSON);
-        headers.append(ACCEPT, GRAPHQL_RESPONSE_JSON);
-        headers.append(AUTHORIZATION, `${BEARER} ${token}`);
+        const headers = new AxiosHeaders();
+        headers.setAuthorization(`${BEARER} ${token}`);
 
         // when
-        const response = await fetch(graphqlURL, {
-            method: POST,
-            body: JSON.stringify(mutation),
+        const response: AxiosResponse<CreateSuccessType> = await client.post('', mutation, {
             headers,
         });
 
         // then
-        const { status } = response;
+        const { data, status } = response;
 
-        expect(status).toBe(200);
-        expect(response.headers.get(CONTENT_TYPE)).toMatch(/application\/graphql-response\+json/iu);
+        expect(status).toBe(HttpStatusCode.Ok);
+        expect(response.headers[CONTENT_TYPE]).toMatch(/application\/graphql-response\+json/iu);
 
-        const { data } = (await response.json()) as CreateSuccessType;
+        const graphQlData = data.data;
 
-        expect(data).toBeDefined();
+        expect(graphQlData).toBeDefined();
 
-        const { create } = data;
+        const { create } = graphQlData;
 
         // Der Wert der Mutation ist die generierte ID
         expect(create).toBeDefined();
@@ -157,27 +146,23 @@ describe('GraphQL Mutations', () => {
             `,
         };
         const expectedPaths = ['isbn', 'rating', 'preis', 'rabatt', 'datum', 'homepage', 'titel'];
-        const headers = new Headers();
-        headers.append(CONTENT_TYPE, APPLICATION_JSON);
-        headers.append(ACCEPT, GRAPHQL_RESPONSE_JSON);
-        headers.append(AUTHORIZATION, `${BEARER} ${token}`);
+        const headers = new AxiosHeaders();
+        headers.setAuthorization(`${BEARER} ${token}`);
 
         // when
-        const response = await fetch(graphqlURL, {
-            method: POST,
-            body: JSON.stringify(mutation),
+        const response: AxiosResponse<CreateErrorsType> = await client.post('', mutation, {
             headers,
         });
 
         // then
-        const { status } = response;
+        const { data, status } = response;
 
-        expect(status).toBe(200);
-        expect(response.headers.get(CONTENT_TYPE)).toMatch(/application\/graphql-response\+json/iu);
+        expect(status).toBe(HttpStatusCode.Ok);
+        expect(response.headers[CONTENT_TYPE]).toMatch(/application\/graphql-response\+json/iu);
+        expect(data.data).toBeNull();
 
-        const { data, errors } = (await response.json()) as CreateErrorsType;
+        const { errors } = data;
 
-        expect(data).toBeNull();
         expect(errors).toHaveLength(1);
 
         const [error] = errors;
@@ -221,29 +206,25 @@ describe('GraphQL Mutations', () => {
                 }
             `,
         };
-        const headers = new Headers();
-        headers.append(CONTENT_TYPE, APPLICATION_JSON);
-        headers.append(ACCEPT, GRAPHQL_RESPONSE_JSON);
-        headers.append(AUTHORIZATION, `${BEARER} ${token}`);
+        const headers = new AxiosHeaders();
+        headers.setAuthorization(`${BEARER} ${token}`);
 
         // when
-        const response = await fetch(graphqlURL, {
-            method: POST,
-            body: JSON.stringify(mutation),
+        const response: AxiosResponse<UpdateSuccessType> = await client.post('', mutation, {
             headers,
         });
 
         // then
-        const { status } = response;
+        const { data, status } = response;
 
-        expect(status).toBe(200);
-        expect(response.headers.get(CONTENT_TYPE)).toMatch(/application\/graphql-response\+json/iu);
+        expect(status).toBe(HttpStatusCode.Ok);
+        expect(response.headers[CONTENT_TYPE]).toMatch(/application\/graphql-response\+json/iu);
 
-        const { data, errors } = (await response.json()) as UpdateSuccessType;
+        const { errors } = data;
 
         expect(errors).toBeUndefined();
 
-        const { update } = data;
+        const { update } = data.data;
 
         // Der Wert der Mutation ist die neue Versionsnummer
         expect(update.version).toBe(1);
@@ -277,27 +258,23 @@ describe('GraphQL Mutations', () => {
             `,
         };
         const expectedPaths = ['isbn', 'rating', 'preis', 'rabatt', 'datum', 'homepage'];
-        const headers = new Headers();
-        headers.append(CONTENT_TYPE, APPLICATION_JSON);
-        headers.append(ACCEPT, GRAPHQL_RESPONSE_JSON);
-        headers.append(AUTHORIZATION, `${BEARER} ${token}`);
+        const headers = new AxiosHeaders();
+        headers.setAuthorization(`${BEARER} ${token}`);
 
         // when
-        const response = await fetch(graphqlURL, {
-            method: POST,
-            body: JSON.stringify(mutation),
+        const response: AxiosResponse<UpdateErrorsType> = await client.post('', mutation, {
             headers,
         });
 
         // then
-        const { status } = response;
+        const { data, status } = response;
 
-        expect(status).toBe(200);
-        expect(response.headers.get(CONTENT_TYPE)).toMatch(/application\/graphql-response\+json/iu);
+        expect(status).toBe(HttpStatusCode.Ok);
+        expect(response.headers[CONTENT_TYPE]).toMatch(/application\/graphql-response\+json/iu);
+        expect(data.data.update).toBeNull();
 
-        const { data, errors } = (await response.json()) as UpdateErrorsType;
+        const { errors } = data;
 
-        expect(data.update).toBeNull();
         expect(errors).toHaveLength(1);
 
         const [error] = errors!;
@@ -339,27 +316,23 @@ describe('GraphQL Mutations', () => {
                 }
             `,
         };
-        const headers = new Headers();
-        headers.append(CONTENT_TYPE, APPLICATION_JSON);
-        headers.append(ACCEPT, GRAPHQL_RESPONSE_JSON);
-        headers.append(AUTHORIZATION, `${BEARER} ${token}`);
+        const headers = new AxiosHeaders();
+        headers.setAuthorization(`${BEARER} ${token}`);
 
         // when
-        const response = await fetch(graphqlURL, {
-            method: POST,
-            body: JSON.stringify(mutation),
+        const response: AxiosResponse<UpdateErrorsType> = await client.post('', mutation, {
             headers,
         });
 
         // then
-        const { status } = response;
+        const { data, status } = response;
 
-        expect(status).toBe(200);
-        expect(response.headers.get(CONTENT_TYPE)).toMatch(/application\/graphql-response\+json/iu);
+        expect(status).toBe(HttpStatusCode.Ok);
+        expect(response.headers[CONTENT_TYPE]).toMatch(/application\/graphql-response\+json/iu);
+        expect(data.data.update).toBeNull();
 
-        const { data, errors } = (await response.json()) as UpdateErrorsType;
+        const { errors } = data;
 
-        expect(data.update).toBeNull();
         expect(errors).toHaveLength(1);
 
         const [error] = errors!;
@@ -387,29 +360,25 @@ describe('GraphQL Mutations', () => {
                 }
             `,
         };
-        const headers = new Headers();
-        headers.append(CONTENT_TYPE, APPLICATION_JSON);
-        headers.append(ACCEPT, GRAPHQL_RESPONSE_JSON);
-        headers.append(AUTHORIZATION, `${BEARER} ${token}`);
+        const headers = new AxiosHeaders();
+        headers.setAuthorization(`${BEARER} ${token}`);
 
         // when
-        const response = await fetch(graphqlURL, {
-            method: POST,
-            body: JSON.stringify(mutation),
+        const response: AxiosResponse<DeleteSuccessType> = await client.post('', mutation, {
             headers,
         });
 
         // then
-        const { status } = response;
+        const { data, status } = response;
 
-        expect(status).toBe(200);
-        expect(response.headers.get(CONTENT_TYPE)).toMatch(/application\/graphql-response\+json/iu);
+        expect(status).toBe(HttpStatusCode.Ok);
+        expect(response.headers[CONTENT_TYPE]).toMatch(/application\/graphql-response\+json/iu);
 
-        const { data, errors } = (await response.json()) as DeleteSuccessType;
+        const { errors } = data;
 
         expect(errors).toBeUndefined();
         // Der Wert der Mutation ist true (falls geloescht wurde) oder false
-        expect(data.delete.success).toBe(true);
+        expect(data.data.delete.success).toBe(true);
     });
 
     // -------------------------------------------------------------------------
@@ -424,27 +393,22 @@ describe('GraphQL Mutations', () => {
                 }
             `,
         };
-        const headers = new Headers();
-        headers.append(CONTENT_TYPE, APPLICATION_JSON);
-        headers.append(ACCEPT, GRAPHQL_RESPONSE_JSON);
-        headers.append(AUTHORIZATION, `${BEARER} ${tokenUser}`);
+        const headers = new AxiosHeaders();
+        headers.setAuthorization(`${BEARER} ${tokenUser}`);
 
         // when
-        const response = await fetch(graphqlURL, {
-            method: POST,
-            body: JSON.stringify(mutation),
+        const response: AxiosResponse<DeleteErrorsType> = await client.post('', mutation, {
             headers,
         });
 
         // then
-        const { status } = response;
+        const { data, status } = response;
 
-        expect(status).toBe(200);
-        expect(response.headers.get(CONTENT_TYPE)).toMatch(/application\/graphql-response\+json/iu);
+        expect(status).toBe(HttpStatusCode.Ok);
+        expect(response.headers[CONTENT_TYPE]).toMatch(/application\/graphql-response\+json/iu);
+        expect(data.data.delete).toBeNull();
 
-        const { data, errors } = (await response.json()) as DeleteErrorsType;
-
-        expect(data.delete).toBeNull();
+        const { errors } = data;
 
         const [error] = errors!;
 

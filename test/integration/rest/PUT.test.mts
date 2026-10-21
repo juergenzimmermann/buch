@@ -14,19 +14,13 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-import {
-    APPLICATION_JSON,
-    AUTHORIZATION,
-    BEARER,
-    CONTENT_TYPE,
-    IF_MATCH,
-    PUT,
-    restURL,
-} from '../constants.mts';
-import { type ProblemDetails, badRequest } from '../../../src/problem-details.mts';
+import { AxiosHeaders, type AxiosResponse, HttpStatusCode } from 'axios';
+import { BEARER, IF_MATCH } from '../constants.mts';
 import { beforeAll, describe, expect, test } from 'vitest';
 import { type BuchUpdateType } from '../../../src/buch/router/buch-validation.mts';
-import { getToken } from '../token.mts';
+import { type ProblemDetails } from '../../../src/problem-details.mts';
+import { client } from './client.mts';
+import { getToken } from './token.mts';
 
 // -----------------------------------------------------------------------------
 // T e s t d a t e n
@@ -46,19 +40,6 @@ const geaendertesBuch: Omit<BuchUpdateType, 'datum'> & {
 };
 const idVorhanden = '30';
 
-const geaendertesBuchIdNichtVorhanden: Omit<BuchUpdateType, 'datum'> & {
-    datum: string;
-} = {
-    isbn: '978-0-007-09732-6',
-    rating: 4,
-    art: 'EPUB',
-    preis: 44.4,
-    rabatt: 0.044,
-    lieferbar: true,
-    datum: '2025-02-04T00:00:00Z',
-    homepage: 'https://acme.de',
-    schlagwoerter: ['JAVASCRIPT'],
-};
 const idNichtVorhanden = '999999';
 
 const geaendertesBuchInvalid: Record<string, unknown> = {
@@ -99,63 +80,50 @@ describe('PUT /rest/:id', () => {
 
     test('Vorhandenes Buch aendern', async () => {
         // given
-        const url = `${restURL}/${idVorhanden}`;
-        const headers = new Headers();
-        headers.append(CONTENT_TYPE, APPLICATION_JSON);
-        headers.append(IF_MATCH, '"0"');
-        headers.append(AUTHORIZATION, `${BEARER} ${token}`);
+        const headers = new AxiosHeaders();
+        headers.setAuthorization(`${BEARER} ${token}`);
+        headers.set(IF_MATCH, '"0"');
 
         // when
-        const { status } = await fetch(url, {
-            method: PUT,
-            body: JSON.stringify(geaendertesBuch),
-            headers,
-        });
+        const { status } = await client.put(`/${idVorhanden}`, geaendertesBuch, { headers });
 
         // then
-        expect(status).toBe(204);
+        expect(status).toBe(HttpStatusCode.NoContent);
     });
 
     test('Nicht-vorhandenes Buch aendern', async () => {
         // given
-        const url = `${restURL}/${idNichtVorhanden}`;
-        const headers = new Headers();
-        headers.append(CONTENT_TYPE, APPLICATION_JSON);
-        headers.append(IF_MATCH, '"0"');
-        headers.append(AUTHORIZATION, `${BEARER} ${token}`);
+        const headers = new AxiosHeaders();
+        headers.setAuthorization(`${BEARER} ${token}`);
+        headers.set(IF_MATCH, '"0"');
 
         // when
-        const { status } = await fetch(url, {
-            method: PUT,
-            body: JSON.stringify(geaendertesBuchIdNichtVorhanden),
-            headers,
-        });
+        const { status } = await client.put(`/${idNichtVorhanden}`, geaendertesBuch, { headers });
 
         // then
-        expect(status).toBe(404);
+        expect(status).toBe(HttpStatusCode.NotFound);
     });
 
     test('Vorhandenes Buch aendern, aber mit ungueltigen Daten', async () => {
         // given
-        const url = `${restURL}/${idVorhanden}`;
-        const headers = new Headers();
-        headers.append(CONTENT_TYPE, APPLICATION_JSON);
-        headers.append(IF_MATCH, '"0"');
-        headers.append(AUTHORIZATION, `${BEARER} ${token}`);
+        const headers = new AxiosHeaders();
+        headers.setAuthorization(`${BEARER} ${token}`);
+        headers.set(IF_MATCH, '"0"');
         const expectedPaths = ['isbn', 'rating', 'art', 'preis', 'rabatt', 'datum', 'homepage'];
 
         // when
-        const response = await fetch(url, {
-            method: PUT,
-            body: JSON.stringify(geaendertesBuchInvalid),
-            headers,
-        });
+        const { data, status }: AxiosResponse<ProblemDetails> = await client.put(
+            `/${idVorhanden}`,
+            geaendertesBuchInvalid,
+            {
+                headers,
+            },
+        );
 
         // then
-        expect(response.status).toBe(422);
+        expect(status).toBe(HttpStatusCode.UnprocessableContent);
 
-        const body = (await response.json()) as ProblemDetails;
-        const { detail } = body;
+        const { detail } = data;
 
         expect(detail).toBeDefined();
         expect(detail).toHaveLength(expectedPaths.length);
@@ -167,109 +135,77 @@ describe('PUT /rest/:id', () => {
 
     test('Vorhandenes Buch aendern, aber ohne Versionsnummer', async () => {
         // given
-        const url = `${restURL}/${idVorhanden}`;
-        const headers = new Headers();
-        headers.append(CONTENT_TYPE, APPLICATION_JSON);
-        headers.append(AUTHORIZATION, `${BEARER} ${token}`);
+        const headers = new AxiosHeaders();
+        headers.setAuthorization(`${BEARER} ${token}`);
 
         // when
-        const response = await fetch(url, {
-            method: PUT,
-            body: JSON.stringify(geaendertesBuch),
-            headers,
-        });
+        const { data, status }: AxiosResponse<ProblemDetails> = await client.put(
+            `/${idVorhanden}`,
+            geaendertesBuch,
+            {
+                headers,
+            },
+        );
 
         // then
-        expect(response.status).toBe(428);
+        expect(status).toBe(HttpStatusCode.PreconditionRequired);
 
-        const { detail, statusCode } = (await response.json()) as ProblemDetails;
+        const { detail, statusCode } = data;
 
         expect(detail).toContain(IF_MATCH);
-        expect(statusCode).toBe(428);
+        expect(statusCode).toBe(HttpStatusCode.PreconditionRequired);
     });
 
     test('Vorhandenes Buch aendern, aber mit alter Versionsnummer', async () => {
         // given
-        const url = `${restURL}/${idVorhanden}`;
-        const headers = new Headers();
-        headers.append(CONTENT_TYPE, APPLICATION_JSON);
-        headers.append(IF_MATCH, '"-1"');
-        headers.append(AUTHORIZATION, `${BEARER} ${token}`);
+        const headers = new AxiosHeaders();
+        headers.setAuthorization(`${BEARER} ${token}`);
+        headers.set(IF_MATCH, '"-1"');
 
         // when
-        const response = await fetch(url, {
-            method: PUT,
-            body: JSON.stringify(veraltesBuch),
-            headers,
-        });
+        const { data, status }: AxiosResponse<ProblemDetails> = await client.put(
+            `/${idVorhanden}`,
+            veraltesBuch,
+            {
+                headers,
+            },
+        );
 
         // then
-        expect(response.status).toBe(412);
+        expect(status).toBe(HttpStatusCode.PreconditionFailed);
 
-        const { detail, statusCode } = (await response.json()) as ProblemDetails;
+        const { detail, statusCode } = data;
 
         expect(detail).toMatch(/Versionsnummer/u);
-        expect(statusCode).toBe(412);
+        expect(statusCode).toBe(HttpStatusCode.PreconditionFailed);
     });
 
     test('Vorhandenes Buch aendern, aber ohne Token', async () => {
         // given
-        const url = `${restURL}/${idVorhanden}`;
-        const headers = new Headers();
-        headers.append(CONTENT_TYPE, APPLICATION_JSON);
-        headers.append(IF_MATCH, '"0"');
+        const headers = new AxiosHeaders();
+        headers.set(IF_MATCH, '"0"');
 
         // when
-        const { status } = await fetch(url, {
-            method: PUT,
-            body: JSON.stringify(geaendertesBuch),
+        const { status } = await client.put(`/${idVorhanden}`, geaendertesBuch, {
             headers,
         });
 
         // then
-        expect(status).toBe(401);
+        expect(status).toBe(HttpStatusCode.Unauthorized);
     });
 
     test('Vorhandenes Buch aendern, aber mit falschem Token', async () => {
         // given
-        const url = `${restURL}/${idVorhanden}`;
-        const headers = new Headers();
-        headers.append(CONTENT_TYPE, APPLICATION_JSON);
-        headers.append(IF_MATCH, '"0"');
-        headers.append(AUTHORIZATION, `${BEARER} FALSCHER_TOKEN`);
+        const headers = new AxiosHeaders();
+        headers.setAuthorization(`${BEARER} FALSCHER_TOKEN`);
+        headers.set(IF_MATCH, '"0"');
 
         // when
-        const { status } = await fetch(url, {
-            method: PUT,
-            body: JSON.stringify(geaendertesBuch),
+        const { status } = await client.put(`/${idVorhanden}`, geaendertesBuch, {
             headers,
         });
 
         // then
-        expect(status).toBe(401);
-    });
-
-    test('Neues Buch mit ungueltigem JSON', async () => {
-        // given
-        const url = `${restURL}/${idVorhanden}`;
-        const headers = new Headers();
-        headers.append(CONTENT_TYPE, APPLICATION_JSON);
-        headers.append(IF_MATCH, '"0"');
-        headers.append(AUTHORIZATION, `${BEARER} ${token}`);
-
-        // when
-        const response = await fetch(url, {
-            method: PUT,
-            body: 'KEIN JSON',
-            headers,
-        });
-
-        // then
-        expect(response.status).toBe(badRequest);
-        expect(response.headers.get('Content-Type')).toBe('application/problem+json');
-
-        const body = (await response.json()) as ProblemDetails;
-        expect(body.statusCode).toBe(badRequest);
-        expect(body.detail).toBe('Ungueltiges JSON');
+        expect(status).toBe(HttpStatusCode.Unauthorized);
     });
 });

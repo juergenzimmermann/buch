@@ -14,17 +14,12 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-import {
-    ACCEPT,
-    APPLICATION_JSON,
-    CONTENT_TYPE,
-    GRAPHQL_RESPONSE_JSON,
-    POST,
-    graphqlURL,
-} from '../constants.mts';
+import { type AxiosResponse, HttpStatusCode } from 'axios';
 import { Buchart, type Prisma } from '../../../src/generated/prisma/client.ts';
-import { beforeAll, describe, expect, test } from 'vitest';
+import { describe, expect, test } from 'vitest';
+import { CONTENT_TYPE } from '../constants.mts';
 import { type GraphQLQuery } from './graphql.mts';
+import { client } from './client.mts';
 
 export type BuchDTO = Omit<
     Prisma.BuchGetPayload<{
@@ -62,14 +57,6 @@ const ratingNichtVorhanden = 99;
 // -----------------------------------------------------------------------------
 // Test-Suite
 describe('GraphQL Queries', () => {
-    let headers: Headers;
-
-    beforeAll(() => {
-        headers = new Headers();
-        headers.append(CONTENT_TYPE, APPLICATION_JSON);
-        headers.append(ACCEPT, GRAPHQL_RESPONSE_JSON);
-    });
-
     test.concurrent.each(ids)('Buch zu ID %i', async (id) => {
         // given
         const query: GraphQLQuery = {
@@ -95,24 +82,23 @@ describe('GraphQL Queries', () => {
         };
 
         // when
-        const response = await fetch(graphqlURL, {
-            method: POST,
-            body: JSON.stringify(query),
-            headers,
-        });
+        const response: AxiosResponse<BuchSuccessType> = await client.post('', query);
 
         // then
-        const { status } = response;
+        const { data, status } = response;
 
-        expect(status).toBe(200);
-        expect(response.headers.get(CONTENT_TYPE)).toMatch(/application\/graphql-response\+json/iu);
+        expect(status).toBe(HttpStatusCode.Ok);
+        expect(response.headers[CONTENT_TYPE]).toMatch(/application\/graphql-response\+json/iu);
 
-        const { data, errors } = (await response.json()) as BuchSuccessType;
+        const { errors } = data;
 
         expect(errors).toBeUndefined();
-        expect(data).toBeDefined();
 
-        const { buch } = data;
+        const graphQLData = data.data;
+
+        expect(graphQLData).toBeDefined();
+
+        const { buch } = graphQLData;
 
         expect(buch.titel?.titel).toMatch(/^\w/u);
         expect(buch.version).toBeGreaterThan(-1);
@@ -135,21 +121,17 @@ describe('GraphQL Queries', () => {
         };
 
         // when
-        const response = await fetch(graphqlURL, {
-            method: POST,
-            body: JSON.stringify(query),
-            headers,
-        });
+        const response: AxiosResponse<BuchErrorsType> = await client.post('', query);
 
         // then
-        const { status } = response;
+        const { data, status } = response;
 
-        expect(status).toBe(200);
-        expect(response.headers.get(CONTENT_TYPE)).toMatch(/application\/graphql-response\+json/iu);
+        expect(status).toBe(HttpStatusCode.Ok);
+        expect(response.headers[CONTENT_TYPE]).toMatch(/application\/graphql-response\+json/iu);
+        expect(data.data).toBeNull();
 
-        const { data, errors } = (await response.json()) as BuchErrorsType;
+        const { errors } = data;
 
-        expect(data).toBeNull();
         expect(errors).toHaveLength(1);
 
         const [error] = errors;
@@ -179,24 +161,23 @@ describe('GraphQL Queries', () => {
         };
 
         // when
-        const response = await fetch(graphqlURL, {
-            method: POST,
-            body: JSON.stringify(query),
-            headers,
-        });
+        const response: AxiosResponse<BuecherSuccessType> = await client.post('', query);
 
         // then
-        const { status } = response;
+        const { data, status } = response;
 
-        expect(status).toBe(200);
-        expect(response.headers.get(CONTENT_TYPE)).toMatch(/application\/graphql-response\+json/iu);
+        expect(status).toBe(HttpStatusCode.Ok);
+        expect(response.headers[CONTENT_TYPE]).toMatch(/application\/graphql-response\+json/iu);
 
-        const { data, errors } = (await response.json()) as BuecherSuccessType;
+        const { errors } = data;
 
         expect(errors).toBeUndefined();
-        expect(data).toBeDefined();
 
-        const { buecher } = data;
+        const graphQlData = data.data;
+
+        expect(graphQlData).toBeDefined();
+
+        const { buecher } = graphQlData;
 
         expect(buecher).not.toHaveLength(0);
 
@@ -227,23 +208,17 @@ describe('GraphQL Queries', () => {
             };
 
             // when
-            const response = await fetch(graphqlURL, {
-                method: POST,
-                body: JSON.stringify(query),
-                headers,
-            });
+            const response: AxiosResponse<BuecherErrorsType> = await client.post('', query);
 
             // then
-            const { status } = response;
+            const { data, status } = response;
 
-            expect(status).toBe(200);
-            expect(response.headers.get(CONTENT_TYPE)).toMatch(
-                /application\/graphql-response\+json/iu,
-            );
+            expect(status).toBe(HttpStatusCode.Ok);
+            expect(response.headers[CONTENT_TYPE]).toMatch(/application\/graphql-response\+json/iu);
+            expect(data.data).toBeNull();
 
-            const { data, errors } = (await response.json()) as BuecherErrorsType;
+            const { errors } = data;
 
-            expect(data).toBeNull();
             expect(errors).toHaveLength(1);
 
             const [error] = errors;
@@ -275,24 +250,23 @@ describe('GraphQL Queries', () => {
         };
 
         // when
-        const response = await fetch(graphqlURL, {
-            method: POST,
-            body: JSON.stringify(query),
-            headers,
-        });
+        const response: AxiosResponse<BuecherSuccessType> = await client.post('', query);
 
         // then
-        const { status } = response;
+        const { data, status } = response;
 
-        expect(status).toBe(200);
-        expect(response.headers.get(CONTENT_TYPE)).toMatch(/application\/graphql-response\+json/iu);
+        expect(status).toBe(HttpStatusCode.Ok);
+        expect(response.headers[CONTENT_TYPE]).toMatch(/application\/graphql-response\+json/iu);
 
-        const { data, errors } = (await response.json()) as BuecherSuccessType;
+        const { errors } = data;
 
         expect(errors).toBeUndefined();
-        expect(data).toBeDefined();
 
-        const { buecher } = data;
+        const graphQlData = data.data;
+
+        expect(graphQlData).toBeDefined();
+
+        const { buecher } = graphQlData;
 
         expect(buecher).not.toHaveLength(0);
         expect(buecher).toHaveLength(1);
@@ -324,24 +298,23 @@ describe('GraphQL Queries', () => {
         };
 
         // when
-        const response = await fetch(graphqlURL, {
-            method: POST,
-            body: JSON.stringify(query),
-            headers,
-        });
+        const response: AxiosResponse<BuecherSuccessType> = await client.post('', query);
 
         // then
-        const { status } = response;
+        const { data, status } = response;
 
-        expect(status).toBe(200);
-        expect(response.headers.get(CONTENT_TYPE)).toMatch(/application\/graphql-response\+json/iu);
+        expect(status).toBe(HttpStatusCode.Ok);
+        expect(response.headers[CONTENT_TYPE]).toMatch(/application\/graphql-response\+json/iu);
 
-        const { data, errors } = (await response.json()) as BuecherSuccessType;
+        const { errors } = data;
 
         expect(errors).toBeUndefined();
-        expect(data).toBeDefined();
 
-        const { buecher } = data;
+        const graphQlData = data.data;
+
+        expect(graphQlData).toBeDefined();
+
+        const { buecher } = graphQlData;
 
         expect(buecher).not.toHaveLength(0);
 
@@ -370,21 +343,17 @@ describe('GraphQL Queries', () => {
         };
 
         // when
-        const response = await fetch(graphqlURL, {
-            method: POST,
-            body: JSON.stringify(query),
-            headers,
-        });
+        const response: AxiosResponse<BuecherErrorsType> = await client.post('', query);
 
         // then
-        const { status } = response;
+        const { data, status } = response;
 
-        expect(status).toBe(200);
-        expect(response.headers.get(CONTENT_TYPE)).toMatch(/application\/graphql-response\+json/iu);
+        expect(status).toBe(HttpStatusCode.Ok);
+        expect(response.headers[CONTENT_TYPE]).toMatch(/application\/graphql-response\+json/iu);
+        expect(data.data).toBeNull();
 
-        const { data, errors } = (await response.json()) as BuecherErrorsType;
+        const { errors } = data;
 
-        expect(data).toBeNull();
         expect(errors).toHaveLength(1);
 
         const [error] = errors;
@@ -416,24 +385,23 @@ describe('GraphQL Queries', () => {
         };
 
         // when
-        const response = await fetch(graphqlURL, {
-            method: POST,
-            body: JSON.stringify(query),
-            headers,
-        });
+        const response: AxiosResponse<BuecherSuccessType> = await client.post('', query);
 
         // then
-        const { status } = response;
+        const { data, status } = response;
 
-        expect(status).toBe(200);
-        expect(response.headers.get(CONTENT_TYPE)).toMatch(/application\/graphql-response\+json/iu);
+        expect(status).toBe(HttpStatusCode.Ok);
+        expect(response.headers[CONTENT_TYPE]).toMatch(/application\/graphql-response\+json/iu);
 
-        const { data, errors } = (await response.json()) as BuecherSuccessType;
+        const { errors } = data;
 
         expect(errors).toBeUndefined();
-        expect(data).toBeDefined();
 
-        const { buecher }: { buecher: BuchDTO[] } = data;
+        const graphQlData = data.data;
+
+        expect(graphQlData).toBeDefined();
+
+        const { buecher } = graphQlData;
 
         expect(buecher).not.toHaveLength(0);
 
@@ -463,21 +431,17 @@ describe('GraphQL Queries', () => {
         };
 
         // when
-        const response = await fetch(graphqlURL, {
-            method: POST,
-            body: JSON.stringify(query),
-            headers,
-        });
+        const response: AxiosResponse<BuecherErrorsType> = await client.post('', query);
 
         // then
-        const { status } = response;
+        const { data, status } = response;
 
-        expect(status).toBe(400);
-        expect(response.headers.get(CONTENT_TYPE)).toMatch(/application\/graphql-response\+json/iu);
+        expect(status).toBe(HttpStatusCode.BadRequest);
+        expect(response.headers[CONTENT_TYPE]).toMatch(/application\/graphql-response\+json/iu);
+        expect(data.data).toBeUndefined();
 
-        const { data, errors } = (await response.json()) as BuecherErrorsType;
+        const { errors } = data;
 
-        expect(data).toBeUndefined();
         expect(errors).toHaveLength(1);
 
         const [error] = errors;
@@ -505,24 +469,23 @@ describe('GraphQL Queries', () => {
         };
 
         // when
-        const response = await fetch(graphqlURL, {
-            method: POST,
-            body: JSON.stringify(query),
-            headers,
-        });
+        const response: AxiosResponse<BuecherSuccessType> = await client.post('', query);
 
         // then
-        const { status } = response;
+        const { data, status } = response;
 
-        expect(status).toBe(200);
-        expect(response.headers.get(CONTENT_TYPE)).toMatch(/application\/graphql-response\+json/iu);
+        expect(status).toBe(HttpStatusCode.Ok);
+        expect(response.headers[CONTENT_TYPE]).toMatch(/application\/graphql-response\+json/iu);
 
-        const { data, errors } = (await response.json()) as BuecherSuccessType;
+        const { errors } = data;
 
         expect(errors).toBeUndefined();
-        expect(data).toBeDefined();
 
-        const { buecher }: { buecher: BuchDTO[] } = data;
+        const graphQlData = data.data;
+
+        expect(graphQlData).toBeDefined();
+
+        const { buecher } = graphQlData;
 
         expect(buecher).not.toHaveLength(0);
 

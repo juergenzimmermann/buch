@@ -14,11 +14,13 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 
+import { type AxiosResponse, HttpStatusCode } from 'axios';
 import { CONTENT_TYPE, restURL } from '../constants.mts';
 import { describe, expect, test } from 'vitest';
 import { type Buch } from '../../../src/generated/prisma/client.ts';
 import { type BuchMitTitel } from '../../../src/buch/service/buch-service.mts';
 import { type Page } from '../../../src/buch/router/page.mts';
+import { client } from './client.mts';
 
 type BuchType = Omit<Buch, 'preis' | 'rabatt'> & {
     preis: string;
@@ -48,20 +50,14 @@ const schlagwoerterNichtVorhanden = ['csharp', 'cobol'];
 describe('GET /rest', () => {
     test.concurrent('Alle Buecher', async () => {
         // given
-        const requestHeaders = new Headers();
-        requestHeaders.append('Accept', 'application/json');
-
         // when
-        const response = await fetch(restURL, { headers: requestHeaders });
-        const { status, headers } = response;
+        const { data, headers, status }: AxiosResponse<Page<BuchType>> = await client.get('');
 
         // then
-        expect(status).toBe(200);
-        expect(headers.get(CONTENT_TYPE)).toMatch(/json/iu);
+        expect(status).toBe(HttpStatusCode.Ok);
+        expect(headers[CONTENT_TYPE]).toMatch(/json/iu);
 
-        const body = (await response.json()) as Page<BuchType>;
-
-        body.content
+        data.content
             .map((buch) => buch.id)
             .forEach((id) => {
                 expect(id).toBeDefined();
@@ -72,23 +68,19 @@ describe('GET /rest', () => {
         // given
         const params = new URLSearchParams({ titel });
         const url = `${restURL}?${params}`;
-        const requestHeaders = new Headers();
-        requestHeaders.append('Accept', 'application/json');
 
         // when
-        const response = await fetch(url, { headers: requestHeaders });
-        const { status, headers } = response;
+        const { data, headers, status }: AxiosResponse<Page<BuchMitTitelType>> =
+            await client.get(url);
 
         // then
-        expect(status).toBe(200);
-        expect(headers.get(CONTENT_TYPE)).toMatch(/json/iu);
+        expect(status).toBe(HttpStatusCode.Ok);
+        expect(headers[CONTENT_TYPE]).toMatch(/json/iu);
 
-        const body = (await response.json()) as Page<BuchMitTitelType>;
-
-        expect(body).toBeDefined();
+        expect(data).toBeDefined();
 
         // Jedes Buch hat einen Titel mit dem Teilstring
-        body.content
+        data.content
             .map((buch) => buch.titel)
             .forEach((tit) =>
                 expect(tit?.titel?.toLowerCase()).toStrictEqual(expect.stringContaining(titel)),
@@ -101,14 +93,12 @@ describe('GET /rest', () => {
             // given
             const params = new URLSearchParams({ titel });
             const url = `${restURL}?${params}`;
-            const requestHeaders = new Headers();
-            requestHeaders.append('Accept', 'application/json');
 
             // when
-            const { status } = await fetch(url, { headers: requestHeaders });
+            const { status } = await client.get(url);
 
             // then
-            expect(status).toBe(404);
+            expect(status).toBe(HttpStatusCode.NotFound);
         },
     );
 
@@ -116,23 +106,18 @@ describe('GET /rest', () => {
         // given
         const params = new URLSearchParams({ isbn });
         const url = `${restURL}?${params}`;
-        const requestHeaders = new Headers();
-        requestHeaders.append('Accept', 'application/json');
 
         // when
-        const response = await fetch(url, { headers: requestHeaders });
-        const { status, headers } = response;
+        const { data, headers, status }: AxiosResponse<Page<BuchType>> = await client.get(url);
 
         // then
-        expect(status).toBe(200);
-        expect(headers.get(CONTENT_TYPE)).toMatch(/json/iu);
+        expect(status).toBe(HttpStatusCode.Ok);
+        expect(headers[CONTENT_TYPE]).toMatch(/json/iu);
 
-        const body = (await response.json()) as Page<BuchType>;
-
-        expect(body).toBeDefined();
+        expect(data).toBeDefined();
 
         // 1 Buch mit der ISBN
-        const buecher = body.content;
+        const buecher = data.content;
 
         expect(buecher).toHaveLength(1);
 
@@ -146,21 +131,16 @@ describe('GET /rest', () => {
         // given
         const params = new URLSearchParams({ rating: rating.toString() });
         const url = `${restURL}?${params}`;
-        const requestHeaders = new Headers();
-        requestHeaders.append('Accept', 'application/json');
 
         // when
-        const response = await fetch(url, { headers: requestHeaders });
-        const { status, headers } = response;
+        const { data, headers, status }: AxiosResponse<Page<BuchType>> = await client.get(url);
 
         // then
-        expect(status).toBe(200);
-        expect(headers.get(CONTENT_TYPE)).toMatch(/json/iu);
-
-        const body = (await response.json()) as Page<BuchType>;
+        expect(status).toBe(HttpStatusCode.Ok);
+        expect(headers[CONTENT_TYPE]).toMatch(/json/iu);
 
         // Jedes Buch hat eine Bewertung >= rating
-        body.content
+        data.content
             .map((buch) => buch.rating)
             .forEach((rat) => expect(rat).toBeGreaterThanOrEqual(rating));
     });
@@ -169,21 +149,16 @@ describe('GET /rest', () => {
         // given
         const params = new URLSearchParams({ preis: preis.toString() });
         const url = `${restURL}?${params}`;
-        const requestHeaders = new Headers();
-        requestHeaders.append('Accept', 'application/json');
 
         // when
-        const response = await fetch(url, { headers: requestHeaders });
-        const { status, headers } = response;
+        const { data, status, headers }: AxiosResponse<Page<BuchType>> = await client.get(url);
 
         // then
-        expect(status).toBe(200);
-        expect(headers.get(CONTENT_TYPE)).toMatch(/json/iu);
-
-        const body = (await response.json()) as Page<BuchType>;
+        expect(status).toBe(HttpStatusCode.Ok);
+        expect(headers[CONTENT_TYPE]).toMatch(/json/iu);
 
         // Jedes Buch hat einen Preis <= preis
-        body.content
+        data.content
             .map((buch) => buch?.preis ?? 0)
             .forEach((pr) => expect(Number(pr)).toBeLessThanOrEqual(preis));
     });
@@ -192,24 +167,19 @@ describe('GET /rest', () => {
         // given
         const params = new URLSearchParams({ [schlagwort]: 'true' });
         const url = `${restURL}?${params}`;
-        const requestHeaders = new Headers();
-        requestHeaders.append('Accept', 'application/json');
 
         // when
-        const response = await fetch(url, { headers: requestHeaders });
-        const { status, headers } = response;
+        const { data, status, headers }: AxiosResponse<Page<BuchType>> = await client.get(url);
 
         // then
-        expect(status).toBe(200);
-        expect(headers.get(CONTENT_TYPE)).toMatch(/json/iu);
-
-        const body = (await response.json()) as Page<BuchType>;
+        expect(status).toBe(HttpStatusCode.Ok);
+        expect(headers[CONTENT_TYPE]).toMatch(/json/iu);
 
         // JSON-Array mit mind. 1 JSON-Objekt
-        expect(body).toBeDefined();
+        expect(data).toBeDefined();
 
         // Jedes Buch hat im Array der Schlagwoerter z.B. "javascript"
-        body.content
+        data.content
             .map((buch) => buch.schlagwoerter)
             .forEach((sw) =>
                 expect(sw).toStrictEqual(expect.arrayContaining([schlagwort.toUpperCase()])),
@@ -221,14 +191,12 @@ describe('GET /rest', () => {
         async (schlagwort) => {
             const params = new URLSearchParams({ [schlagwort]: 'true' });
             const url = `${restURL}?${params}`;
-            const requestHeaders = new Headers();
-            requestHeaders.append('Accept', 'application/json');
 
             // when
-            const { status } = await fetch(url, { headers: requestHeaders });
+            const { status } = await client.get(url);
 
             // then
-            expect(status).toBe(404);
+            expect(status).toBe(HttpStatusCode.NotFound);
         },
     );
 
@@ -236,13 +204,11 @@ describe('GET /rest', () => {
         // given
         const params = new URLSearchParams({ foo: 'bar' });
         const url = `${restURL}?${params}`;
-        const requestHeaders = new Headers();
-        requestHeaders.append('Accept', 'application/json');
 
         // when
-        const { status } = await fetch(url, { headers: requestHeaders });
+        const { status } = await client.get(url);
 
         // then
-        expect(status).toBe(404);
+        expect(status).toBe(HttpStatusCode.NotFound);
     });
 });

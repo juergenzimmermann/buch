@@ -15,21 +15,26 @@
 
 // https://vitest.dev/config/#globalsetup
 
-import { AUTHORIZATION, BEARER, POST, baseURL } from './constants.mjs';
-import { getToken } from './token.mjs';
+import { BEARER, baseURL } from './constants.mjs';
+import axios, { AxiosHeaders, type AxiosResponse } from 'axios';
+import { getToken } from './rest/token.mjs';
+
+// "Accept: APPLICATION_JSON" ist default https://axios.rest/pages/advanced/request-config.html#headers
+export const client = axios.create({
+    baseURL: `${baseURL}/dev/db_populate`,
+    httpVersion: 2,
+    validateStatus: () => true,
+});
 
 const dbPopulate = async (token: string) => {
-    const url = `${baseURL}/dev/db_populate`;
-    const headers = new Headers();
-    headers.append(AUTHORIZATION, `${BEARER} ${token}`);
+    const headers = new AxiosHeaders();
+    headers.setAuthorization(`${BEARER} ${token}`);
 
-    const response = await fetch(url, {
-        method: POST,
+    const { data }: AxiosResponse<{ db_populate: string }> = await client.post('', undefined, {
         headers,
     });
 
-    const { db_populate } = (await response.json()) as { db_populate: string };
-    if (db_populate !== 'ok') {
+    if (data.db_populate !== 'ok') {
         throw new Error('Fehler bei POST /dev/db_populate');
     }
     console.log('DB wurde neu geladen');

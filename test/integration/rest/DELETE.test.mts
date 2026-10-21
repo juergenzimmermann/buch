@@ -1,4 +1,3 @@
-// oxlint-disable max-lines-per-function
 // Copyright (C) 2025 - present Juergen Zimmermann, Hochschule Karlsruhe
 //
 // This program is free software: you can redistribute it and/or modify
@@ -14,9 +13,11 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-import { AUTHORIZATION, BEARER, DELETE, restURL } from '../constants.mts';
+import { AxiosHeaders, HttpStatusCode } from 'axios';
 import { beforeAll, describe, expect, test } from 'vitest';
-import { getToken } from '../token.mts';
+import { BEARER } from '../constants.mts';
+import { client } from './client.mts';
+import { getToken } from './token.mts';
 
 // -----------------------------------------------------------------------------
 // T e s t d a t e n
@@ -38,42 +39,32 @@ describe('DELETE /rest', () => {
 
     test.concurrent('Vorhandenes Buch loeschen', async () => {
         // given
-        const url = `${restURL}/${id}`;
-        const headers = new Headers();
-        headers.append(AUTHORIZATION, `${BEARER} ${token}`);
+        const headers = new AxiosHeaders();
+        headers.setAuthorization(`${BEARER} ${token}`);
 
         // when
-        const { status } = await fetch(url, {
-            method: DELETE,
-            headers,
-        });
+        const { status } = await client.delete(`/${id}`, { headers });
 
         // then
-        expect(status).toBe(204);
+        expect(status).toBe(HttpStatusCode.NoContent);
     });
 
     test.concurrent('Buch loeschen, aber ohne Token', async () => {
         // given
-        const url = `${restURL}/${id}`;
-
         // when
-        const { status } = await fetch(url, { method: DELETE });
+        const { status } = await client.delete(`/${id}`);
 
         // then
-        expect(status).toBe(401);
+        expect(status).toBe(HttpStatusCode.Unauthorized);
     });
 
     test.concurrent('Buch loeschen, aber mit falschem Token', async () => {
         // given
-        const url = `${restURL}/${id}`;
-        const headers = new Headers();
-        headers.append(AUTHORIZATION, `${BEARER} FALSCHER_TOKEN`);
+        const headers = new AxiosHeaders();
+        headers.setAuthorization(`${BEARER} FALSCHER_TOKEN`);
 
         // when
-        const { status } = await fetch(url, {
-            method: DELETE,
-            headers,
-        });
+        const { status } = await client.delete(`/${id}`, { headers });
 
         // then
         expect(status).toBe(401);
@@ -81,17 +72,13 @@ describe('DELETE /rest', () => {
 
     test.concurrent('Vorhandenes Buch als "user" loeschen', async () => {
         // given
-        const url = `${restURL}/60`;
-        const headers = new Headers();
-        headers.append(AUTHORIZATION, `${BEARER} ${tokenUser}`);
+        const headers = new AxiosHeaders();
+        headers.setAuthorization(`${BEARER} ${tokenUser}`);
 
         // when
-        const { status } = await fetch(url, {
-            method: DELETE,
-            headers,
-        });
+        const { status } = await client.delete(`/60`, { headers });
 
         // then
-        expect(status).toBe(403);
+        expect(status).toBe(HttpStatusCode.Forbidden);
     });
 });

@@ -1,4 +1,3 @@
-// oxlint-disable max-lines-per-function, no-magic-numbers
 // Copyright (C) 2025 - present Juergen Zimmermann, Hochschule Karlsruhe
 //
 // This program is free software: you can redistribute it and/or modify
@@ -21,22 +20,29 @@
 //  * node:test ab Node 18
 //  * bun:test
 
-// Alternativen zu fetch aus ES 2015:
+// fetch aus ES 2015 unterstuetzt nur HTTP 1.1
+// https://nodejs.org/docs/latest/api/globals.html#fetch
+// https://undici.nodejs.org (undici = 11 auf italienisch)
 // https://fetch.spec.whatwg.org
-// https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch
-//    axios       https://axios-http.co
+
+// Alternativen:
+//    axios       https://axios-http.com
 //    got         https://github.com/sindresorhus/got
 
-import { CONTENT_TYPE, IF_NONE_MATCH, restURL } from '../constants.mts';
+import { type AxiosResponse, HttpStatusCode } from 'axios';
+import { CONTENT_TYPE, IF_NONE_MATCH } from '../constants.mts';
 import { describe, expect, test } from 'vitest';
+import { client } from './client.mts';
 
 // -----------------------------------------------------------------------------
 // T e s t d a t e n
 // -----------------------------------------------------------------------------
+// oxlint-disable no-magic-numbers
 const ids = [1, 20];
-const idNichtVorhanden = 999999;
+const idNichtVorhanden = 999_999;
 const idsETag = [1, 20];
 const idFalsch = 'xy';
+// oxlint-enable no-magic-numbers
 
 // -----------------------------------------------------------------------------
 // T e s t s
@@ -45,65 +51,48 @@ const idFalsch = 'xy';
 describe('GET /rest/:id', () => {
     test.concurrent.each(ids)('Buch zu vorhandener ID %i', async (id) => {
         // given
-        const url = `${restURL}/${id}`;
-        const requestHeaders = new Headers();
-        requestHeaders.append('Accept', 'application/json');
-
         // when
-        const response = await fetch(url, { headers: requestHeaders });
-        const { status, headers } = response;
+        const { data, headers, request, status }: AxiosResponse<{ id: number }> = await client.get(
+            `/${id}`,
+        );
 
         // then
-        expect(status).toBe(200);
-        expect(headers.get(CONTENT_TYPE)).toMatch(/json/iu);
+        expect(status).toBe(HttpStatusCode.Ok);
+        expect(headers[CONTENT_TYPE]).toMatch(/json/iu);
+        // ClientHttp2Stream ist ein TypeScript-Interface aus dem Node-Modul '"node:http2'
+        expect(request.constructor.name).toBe('ClientHttp2Stream');
 
-        const body = (await response.json()) as { id: number };
-
-        expect(body.id).toBe(id);
+        expect(data.id).toBe(id);
     });
 
     test.concurrent('Kein Buch zu nicht-vorhandener ID', async () => {
         // given
-        const url = `${restURL}/${idNichtVorhanden}`;
-        const requestHeaders = new Headers();
-        requestHeaders.append('Accept', 'application/json');
-
         // when
-        const { status } = await fetch(url, { headers: requestHeaders });
+        const { status } = await client.get(`/${idNichtVorhanden}`);
 
         // then
-        expect(status).toBe(404);
+        expect(status).toBe(HttpStatusCode.NotFound);
     });
 
     test.concurrent('Kein Buch zu falscher ID', async () => {
         // given
-        const url = `${restURL}/${idFalsch}`;
-        const requestHeaders = new Headers();
-        requestHeaders.append('Accept', 'application/json');
-
         // when
-        const { status } = await fetch(url, { headers: requestHeaders });
+        const { status } = await client.get(`/${idFalsch}`);
 
         // then
-        expect(status).toBe(404);
+        expect(status).toBe(HttpStatusCode.NotFound);
     });
 
     test.concurrent.each(idsETag)(`Buch zu ID %i mit ${IF_NONE_MATCH}`, async (id) => {
         // given
-        const url = `${restURL}/${id}`;
-        const headers = new Headers();
-        headers.append('Accept', 'application/json');
-        headers.append(IF_NONE_MATCH, '"0"');
-
         // when
-        const response = await fetch(url, { headers });
-        const { status } = response;
+        const { data, status } = await client.get(`/${id}`, {
+            headers: { [IF_NONE_MATCH]: '"0"' },
+        });
 
         // then
-        expect(status).toBe(304);
+        expect(status).toBe(HttpStatusCode.NotModified);
 
-        const body = await response.text();
-
-        expect(body).toBe('');
+        expect(data).toBe('');
     });
 });

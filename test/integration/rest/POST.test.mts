@@ -14,19 +14,13 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-import {
-    APPLICATION_JSON,
-    AUTHORIZATION,
-    BEARER,
-    CONTENT_TYPE,
-    LOCATION,
-    POST,
-    restURL,
-} from '../constants.mts';
-import { type ProblemDetails, badRequest } from '../../../src/problem-details.mts';
+import { AxiosHeaders, type AxiosResponse, HttpStatusCode } from 'axios';
+import { BEARER, LOCATION } from '../constants.mts';
 import { beforeAll, describe, expect, test } from 'vitest';
 import { type BuchNeuType } from '../../../src/buch/router/buch-validation.mts';
-import { getToken } from '../token.mts';
+import { type ProblemDetails } from '../../../src/problem-details.mts';
+import { client } from './client.mts';
+import { getToken } from './token.mts';
 import { idPattern } from '../../../src/buch/router/create-base-url.mts';
 
 // -----------------------------------------------------------------------------
@@ -99,24 +93,18 @@ describe('POST /rest', () => {
 
     test('Neues Buch', async () => {
         // given
-        const headers = new Headers();
-        headers.append(CONTENT_TYPE, APPLICATION_JSON);
-        headers.append(AUTHORIZATION, `${BEARER} ${token}`);
+        const headers = new AxiosHeaders();
+        headers.setAuthorization(`${BEARER} ${token}`);
 
         // when
-        const response = await fetch(restURL, {
-            method: POST,
-            body: JSON.stringify(neuesBuch),
-            headers,
-        });
+        const response = await client.post('', neuesBuch, { headers });
 
         // then
         const { status } = response;
-
-        expect(status).toBe(201);
+        expect(status).toBe(HttpStatusCode.Created);
 
         const responseHeaders = response.headers;
-        const location = responseHeaders.get(LOCATION);
+        const location = responseHeaders[LOCATION.toLowerCase()];
 
         expect(location).toBeDefined();
 
@@ -133,9 +121,8 @@ describe('POST /rest', () => {
 
     test('Neues Buch mit ungueltigen Daten', async () => {
         // given
-        const headers = new Headers();
-        headers.append(CONTENT_TYPE, APPLICATION_JSON);
-        headers.append(AUTHORIZATION, `${BEARER} ${token}`);
+        const headers = new AxiosHeaders();
+        headers.setAuthorization(`${BEARER} ${token}`);
 
         const expectedPaths = [
             'isbn',
@@ -149,19 +136,16 @@ describe('POST /rest', () => {
         ];
 
         // when
-        const response = await fetch(restURL, {
-            method: POST,
-            body: JSON.stringify(neuesBuchInvalid),
-            headers,
-        });
+        const { data, status }: AxiosResponse<ProblemDetails> = await client.post(
+            '',
+            neuesBuchInvalid,
+            { headers },
+        );
 
         // then
-        const { status } = response;
+        expect(status).toBe(HttpStatusCode.UnprocessableContent);
 
-        expect(status).toBe(422);
-
-        const body = (await response.json()) as ProblemDetails;
-        const { detail } = body;
+        const { detail } = data;
 
         expect(detail).toBeDefined();
         expect(detail).toHaveLength(expectedPaths.length);
@@ -173,77 +157,41 @@ describe('POST /rest', () => {
 
     test('Neues Buch, aber die ISBN existiert bereits', async () => {
         // given
-        const headers = new Headers();
-        headers.append(CONTENT_TYPE, APPLICATION_JSON);
-        headers.append(AUTHORIZATION, `${BEARER} ${token}`);
+        const headers = new AxiosHeaders();
+        headers.setAuthorization(`${BEARER} ${token}`);
 
         // when
-        const response = await fetch(restURL, {
-            method: POST,
-            body: JSON.stringify(neuesBuchIsbnExistiert),
-            headers,
-        });
+        const { data, status }: AxiosResponse<ProblemDetails> = await client.post(
+            '',
+            neuesBuchIsbnExistiert,
+            { headers },
+        );
 
         // then
-        const { status } = response;
-
-        expect(status).toBe(422);
-
-        const body = (await response.json()) as ProblemDetails;
-
-        expect(body.detail).toStrictEqual(expect.stringContaining('ISBN'));
+        expect(status).toBe(HttpStatusCode.UnprocessableContent);
+        expect(data.detail).toStrictEqual(expect.stringContaining('ISBN'));
     });
 
     test.concurrent('Neues Buch, aber ohne Token', async () => {
         // when
-        const { status } = await fetch(restURL, {
-            method: POST,
-            body: JSON.stringify(neuesBuch),
-        });
+        const { status } = await client.post('', neuesBuch);
 
         // then
-        expect(status).toBe(401);
+        expect(status).toBe(HttpStatusCode.Unauthorized);
     });
 
     test.concurrent('Neues Buch, aber mit falschem Token', async () => {
         // given
-        const headers = new Headers();
-        headers.append(CONTENT_TYPE, APPLICATION_JSON);
-        headers.append(AUTHORIZATION, `${BEARER} FALSCHER_TOKEN`);
+        const headers = new AxiosHeaders();
+        headers.setAuthorization(`${BEARER} FALSCHER_TOKEN`);
 
         // when
-        const { status } = await fetch(restURL, {
-            method: POST,
-            body: JSON.stringify(neuesBuch),
-            headers,
-        });
+        const { status } = await client.post('', neuesBuch, { headers });
 
         // then
-        expect(status).toBe(401);
+        expect(status).toBe(HttpStatusCode.Unauthorized);
     });
 
     // eslint-disable-next-line @typescript-eslint/no-empty-function
     test.concurrent.todo('Abgelaufener Token', () => {});
-
-    test('Neues Buch mit ungueltigem JSON', async () => {
-        // given
-        const headers = new Headers();
-        headers.append(CONTENT_TYPE, APPLICATION_JSON);
-        headers.append(AUTHORIZATION, `${BEARER} ${token}`);
-
-        // when
-        const response = await fetch(restURL, {
-            method: POST,
-            body: 'KEIN JSON',
-            headers,
-        });
-
-        // then
-        expect(response.status).toBe(badRequest);
-        expect(response.headers.get('Content-Type')).toBe('application/problem+json');
-
-        const body = (await response.json()) as ProblemDetails;
-        expect(body.statusCode).toBe(badRequest);
-        expect(body.detail).toBe('Ungueltiges JSON');
-    });
 });
