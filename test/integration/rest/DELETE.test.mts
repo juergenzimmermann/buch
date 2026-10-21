@@ -67,7 +67,7 @@ describe('DELETE /rest', () => {
         const { status } = await client.delete(`/${id}`, { headers });
 
         // then
-        expect(status).toBe(401);
+        expect(status).toBe(HttpStatusCode.Unauthorized);
     });
 
     test.concurrent('Vorhandenes Buch als "user" loeschen', async () => {
