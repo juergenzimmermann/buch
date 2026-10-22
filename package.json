@@ -122,7 +122,7 @@
     "runtime": [
       {
         "name": "node",
-        "version": "26.12.0",
+        "version": "26.12.1",
         "onFail": "warn"
       },
       {
@@ -134,7 +134,7 @@
   },
   "engines": {
     "bun": "1.4.3",
-    "node": "26.12.0",
+    "node": "26.12.1",
     "pnpm": "12.14.0"
   }
 }
