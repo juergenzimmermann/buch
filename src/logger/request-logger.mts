@@ -14,7 +14,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 import { type Context, type Next } from 'hono';
-import { createMiddleware } from 'hono/factory';
+import { defineMiddleware } from 'hono/factory';
 import { getLogger } from './logger.mts';
 
 const logger = getLogger('requestLogger', 'func');
@@ -25,7 +25,7 @@ const logger = getLogger('requestLogger', 'func');
  * @author [Jürgen Zimmermann](mailto:Juergen.Zimmermann@h-ka.de)
  */
 // https://hono.dev/docs/guides/middleware
-export const requestLogger = createMiddleware(async (c: Context, next: Next) => {
+export const requestLogger = defineMiddleware(async (c: Context, next: Next) => {
     const { method, url } = c.req;
     logger.debug('method=%s, url=%s', method, url);
     return await next();

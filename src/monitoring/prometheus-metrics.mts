@@ -18,7 +18,7 @@
 
 import { type Context, type Next } from 'hono';
 import { Counter, Histogram, collectDefaultMetrics } from '@prometheus-io/client';
-import { createMiddleware } from 'hono/factory';
+import { defineMiddleware } from 'hono/factory';
 
 // Metriken für Prometheus mit Default-Daten konfigurieren
 collectDefaultMetrics();
@@ -44,7 +44,7 @@ const httpRequestDurationSeconds = new Histogram({
  * @author [Jürgen Zimmermann](mailto:Juergen.Zimmermann@h-ka.de)
  */
 // https://hono.dev/docs/guides/middleware
-export const trackMetrics = createMiddleware(async (c: Context, next: Next) => {
+export const trackMetrics = defineMiddleware(async (c: Context, next: Next) => {
     const start = Date.now();
     const { path, method } = c.req;
 

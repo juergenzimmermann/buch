@@ -435,6 +435,9 @@ können mit _Node_ folgendermaßen aufgerufen werden:
     pnpm run tsc
     node --env-file=.env dist/src/beispiele.mjs
     node --env-file=.env dist/src/beispiele-write.mjs
+
+    bun --env-file=.env src/beispiele.mts
+    bun --env-file=.env src/beispiele-write.mts
 ```
 
 ## Neuere Versionen und evtl. Sicherheitslücken

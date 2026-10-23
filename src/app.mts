@@ -36,7 +36,7 @@ import { router as buchWriteRouter } from './buch/router/buch-write-router.mts';
 import { compress } from 'hono/compress';
 import { cors } from 'hono/cors';
 import { corsOptions } from './config/cors.mts'; // oxlint-disable-line import/max-dependencies
-import { createMiddleware } from 'hono/factory';
+import { defineMiddleware } from 'hono/factory';
 import { router as devRouter } from './config/dev/dev-router.mts';
 import { env } from './config/env.mts';
 import { getLogger } from './logger/logger.mts';
@@ -52,7 +52,7 @@ import { showRoutes } from 'hono/dev';
 import { trackMetrics } from './monitoring/prometheus-metrics.mts';
 
 /**
- * Web-Applikation mit Hono.
+ * Web-Applikation mit Hono. https://e18e.dev/docs/replacements/express#hono
  * @author [Jürgen Zimmermann](mailto:Juergen.Zimmermann@h-ka.de)
  */
 export const app = new Hono();
@@ -67,7 +67,7 @@ const logger = getLogger('app');
 // https://hono.dev/docs/guides/middleware#execution-order
 
 // Zusaetzliche Security-Header
-const securityHeaders = createMiddleware(async (c: Context, next: Next) => {
+const securityHeaders = defineMiddleware(async (c: Context, next: Next) => {
     c.header('X-Content-Type-Options', 'nosniff');
     // siehe CORS
     c.header('X-Frame-Options', 'SAMEORIGIN');
