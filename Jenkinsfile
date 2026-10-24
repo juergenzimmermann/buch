@@ -108,7 +108,7 @@ pipeline {
                     #pnpm store path
 
                     npm r -g bun
-                    npm i -g --allow-scripts=bun bun@1.4.3
+                    npm i -g --allow-scripts=bun bun@1.4.4
                     which bun
                     bun --version
                 '''
