@@ -191,8 +191,8 @@ importers:
         specifier: 17.0.2
         version: 17.0.2
       graphql-yoga:
-        specifier: 6.0.0
-        version: 6.0.0(graphql@17.0.2)(pino@10.4.0)
+        specifier: 6.0.1
+        version: 6.0.1(graphql@17.0.2)(pino@10.4.0)
       hono:
         specifier: 5.0.0-rc.0
         version: 5.0.0-rc.0
@@ -1992,8 +1992,8 @@ packages:
   graphmatch@1.1.1:
     resolution: {integrity: sha512-5ykVn/EXM1hF0XCaWh05VbYvEiOL2lY1kBxZtaYsyvjp7cmWOU1XsAdfQBwClraEofXDT197lFbXOEVMHpvQOg==}
 
-  graphql-yoga@6.0.0:
-    resolution: {integrity: sha512-XOXLeDpB4zCOPDz3c3ai8Hqo2aoJKS1bqaBlKNW00z16PlgsmXiBvTUKAzA+b7/AUHo8Rc+oCyHfLCDMS1b3RQ==}
+  graphql-yoga@6.0.1:
+    resolution: {integrity: sha512-uGfyZNivj4HaNvFi25ce9YLoywWLwxzlt9lM9dYETep00qsPOyGr5jR2Jeg/KxTCqOKMiyqS3oWuM0uhL8QgaQ==}
     engines: {node: '>=22.15.0'}
     peerDependencies:
       graphql: ^16.0.0 || ^17.0.0
@@ -4404,7 +4404,7 @@ snapshots:
 
   graphmatch@1.1.1: {}
 
-  graphql-yoga@6.0.0(graphql@17.0.2)(pino@10.4.0):
+  graphql-yoga@6.0.1(graphql@17.0.2)(pino@10.4.0):
     dependencies:
       '@envelop/core': 6.0.0
       '@envelop/instrumentation': 2.0.0
