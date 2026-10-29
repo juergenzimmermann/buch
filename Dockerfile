@@ -36,7 +36,7 @@
 # https://cheatsheetseries.owasp.org/cheatsheets/NodeJS_Docker_Cheat_Sheet.html
 
 ARG NODE_VERSION_DHI=26.12.1-1 \
-    NODE_VERSION=26.12.1
+    NODE_VERSION=26.13.0
 # ---------------------------------------------------------------------------------------
 # S t a g e   d i s t
 # ---------------------------------------------------------------------------------------
@@ -56,7 +56,7 @@ RUN <<EOF
   apt-get upgrade --yes --no-show-upgraded
 
   npm r -g pnpm
-  npm i -g pnpm@12.15.0
+  npm i -g pnpm@12.16.1
 
   # Python evtl. fuer pg notwendig
   # "python3-dev" enthaelt "multiprocessing"
@@ -109,7 +109,7 @@ RUN <<EOF
   ln -s /usr/bin/python3.13 /usr/bin/python
   update-ca-certificates
 
-  npm i -g pnpm@12.15.0
+  npm i -g pnpm@12.16.1
 EOF
 
 WORKDIR /home/node
