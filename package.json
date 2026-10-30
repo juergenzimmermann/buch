@@ -68,14 +68,13 @@
     "@prisma/sqlcommenter-query-insights": "7.10.1",
     "@prometheus-io/client": "0.16.1",
     "dotenv": "18.0.9",
-    "fast-uri": "3.1.9",
     "figlet": "1.12.0",
     "graphql": "17.0.2",
     "graphql-yoga": "6.0.1",
     "hono": "5.0.0-rc.0",
     "isbn3": "2.0.12",
     "jose": "6.2.13",
-    "nodemailer": "10.2.1",
+    "nodemailer": "10.3.0",
     "pg": "8.23.1",
     "pino": "10.4.0",
     "pino-pretty": "13.2.0",
@@ -92,7 +91,7 @@
     "@tsconfig/strictest": "2.0.8",
     "@types/bun": "1.4.4",
     "@types/k6": "2.3.1",
-    "@types/node": "26.6.5",
+    "@types/node": "26.6.6",
     "@types/nodemailer": "8.0.2",
     "@types/pg": "8.23.1",
     "@vitest/coverage-istanbul": "5.1.0-beta.1",
@@ -110,11 +109,17 @@
     "vitest": "5.1.0-beta.1"
   },
   "overrides": {
+    "@prisma/client": {
+      "fast-uri": "^3.1.9"
+    },
     "@prisma/config": {
       "deepmerge-ts": "^8.0.2"
     },
+    "@prisma/prisma7": {
+      "fast-uri": "^3.1.9"
+    },
     "leasot": {
-      "lodash": "4.18.1"
+      "lodash": "^4.18.1"
     }
   },
   "devEngines": {
