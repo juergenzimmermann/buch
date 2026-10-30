@@ -20,15 +20,16 @@
 // https://asciidoctor-docs.netlify.com
 // https://asciidoctor.org
 
-import { Registry, convert, getVersion } from '@asciidoctor/core';
+import { Extensions, convertFile, getVersion } from '@asciidoctor/core';
 import { join } from 'node:path';
 // https://github.com/eshepelyuk/asciidoctor-plantuml.js ist deprecated
-import kroki from 'asciidoctor-kroki';
+import { register } from 'asciidoctor-kroki';
 import url from 'node:url';
 
 console.log(`Asciidoctor.js ${getVersion()}`);
 
-kroki.register(new Registry());
+const registry = Extensions.create();
+register(registry);
 
 const options = {
     safe: 'safe',
@@ -36,18 +37,9 @@ const options = {
     base_dir: 'extras/doc',
     to_dir: 'html',
     mkdirs: true,
+    extension_registry: registry,
 };
-convert(join('extras', 'doc', 'projekthandbuch.adoc'), options);
+await convertFile(join('extras', 'doc', 'projekthandbuch.adoc'), options);
 
 const basedir = url.fileURLToPath(new URL('.', import.meta.url));
 console.log(`HTML-Datei ${join(basedir, '..', 'extras', 'doc', 'html', 'projekthandbuch.html')}`);
-
-// https://asciidoctor.github.io/asciidoctor.js/master
-// const htmlString = asciidoctor.convert(
-//     fs.readFileSync(join('extras', 'doc', 'projekthandbuch.adoc')),
-//     { safe: 'safe', attributes: { linkcss: true }, base_dir: 'doc' },
-// );
-// const htmlFile = join('extras', 'doc', 'projekthandbuch.html');
-// fs.writeFileSync(htmlFile, htmlString);
-
-// console.log(`HTML-Datei ${join(__dirname, '..', htmlFile)}`);

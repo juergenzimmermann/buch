@@ -200,11 +200,11 @@ importers:
         specifier: 2.0.12
         version: 2.0.12
       jose:
-        specifier: 6.2.13
-        version: 6.2.13
+        specifier: 6.2.14
+        version: 6.2.14
       nodemailer:
-        specifier: 10.3.0
-        version: 10.3.0
+        specifier: 10.3.1
+        version: 10.3.1
       pg:
         specifier: 8.23.1
         version: 8.23.1
@@ -264,8 +264,8 @@ importers:
         specifier: 5.1.0-beta.1
         version: 5.1.0-beta.1(vitest@5.1.0-beta.1)
       asciidoctor-kroki:
-        specifier: 1.0.1
-        version: 1.0.1(@asciidoctor/core@4.1.1)
+        specifier: 2.0.0-rc.4
+        version: 2.0.0-rc.4(@asciidoctor/core@4.1.1)
       axios:
         specifier: 1.21.0
         version: 1.21.0(debug@4.4.3)
@@ -1486,8 +1486,8 @@ packages:
   argparse@2.0.1:
     resolution: {integrity: sha512-8+9WqebbFzpX9OR+Wa6O29asIogeRMzcGtAINdpMHHyAg10f05aSFVBbcEqGf/PXw1EjAZ+q2/bEBg3DvurK3Q==}
 
-  asciidoctor-kroki@1.0.1:
-    resolution: {integrity: sha512-q1qLIR3bwWld9J2Uhvi3v6HGGvm5Ke1pGgyTGUIEIn1h9MNNx87lSEF+YPleT5hjQn4liwGvc5Ji++DPTKM/ug==}
+  asciidoctor-kroki@2.0.0-rc.4:
+    resolution: {integrity: sha512-s388FLErkKVbE7TTA2cMJAU9MqQqcLGtmfDb6g3F4iaevGqT4LT1pWbJitPsRpEZ4MsrUX3eWYyhy/Oz6TeUTQ==}
     engines: {node: '>=22'}
     peerDependencies:
       '@asciidoctor/core': '>=4.0.0 <5.0.0'
@@ -2077,8 +2077,8 @@ packages:
     resolution: {integrity: sha512-AC/7JofJvZGrrneWNaEnJeOLUx+JlGt7tNa0wZiRPT4MY1wmfKjt2+6O2p2uz2+skll8OZZmJMNqeke7kKbNgQ==}
     hasBin: true
 
-  jose@6.2.13:
-    resolution: {integrity: sha512-7TIg10ZE1x82YediN+lcrPNvGMKge9yFHQD+Qho/b8y2adfugU3AsvvHfxV0fzyFllT6l9xCjf4RWY9g/Z9PJQ==}
+  jose@6.2.14:
+    resolution: {integrity: sha512-3JasLuki1NRLQvY4wCoC37KZk4qxoBx2k2aFqLxT84IezqW0bkJKnNtxnZj/Fu1xsQivoc/lytxaRHJoGLjJ1A==}
 
   joycon@3.1.1:
     resolution: {integrity: sha512-34wB/Y7MW7bzjKRjUKTa46I2Z7eV62Rkhva+KkopW7Qvv/OSWBqvkSY7vusOPrNuZcUG3tApvdVgNB8POj3SPw==}
@@ -2292,8 +2292,8 @@ packages:
     resolution: {integrity: sha512-OmO8+GM1JUZqXET720VrJCwkjUCXmCMQm0Z3UDDRbfNLHS4NEAvY60j5jiFv0tkKw2PNNlqOLhahVmwJIOLDIQ==}
     engines: {node: '>=18'}
 
-  nodemailer@10.3.0:
-    resolution: {integrity: sha512-LsqM+Sxjap8BMgxQuVvABoEcm9ed2f3h2e0ohB7kV3sl9+4IaXlxC0DT8CQelg/S0he38gT4yT0RH1pvZxHf+A==}
+  nodemailer@10.3.1:
+    resolution: {integrity: sha512-uF0AFsJC07Y1vdW7p580DKAnh7rAO+4UPSSB3mDCPNDufoiaOebV6JmrzpxB14OjEEEiBsNdYoM2Y+fN8M7BBA==}
     engines: {node: '>=20.0.0'}
 
   obug@2.2.1:
@@ -3910,7 +3910,7 @@ snapshots:
 
   argparse@2.0.1: {}
 
-  asciidoctor-kroki@1.0.1(@asciidoctor/core@4.1.1):
+  asciidoctor-kroki@2.0.0-rc.4(@asciidoctor/core@4.1.1):
     dependencies:
       '@asciidoctor/core': 4.1.1
       json5: 2.2.3
@@ -4471,7 +4471,7 @@ snapshots:
 
   jiti@2.7.0: {}
 
-  jose@6.2.13: {}
+  jose@6.2.14: {}
 
   joycon@3.1.1: {}
 
@@ -4651,7 +4651,7 @@ snapshots:
 
   node-releases@2.0.60: {}
 
-  nodemailer@10.3.0: {}
+  nodemailer@10.3.1: {}
 
   obug@2.2.1: {}
 
