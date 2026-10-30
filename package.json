@@ -58,6 +58,7 @@
     "fmt:check:bun": "bun fmt --check",
     "sonar": "node scripts/sonar-scanner.mts",
     "tsc": "tsc --pretty",
+    "tsrs": "tsrs --pretty",
     "posttsc": "pnpm run copy-resources",
     "typedoc": "typedoc src"
   },
@@ -103,6 +104,7 @@
     "oxfmt": "0.75.0",
     "oxlint": "1.90.0",
     "oxlint-tsgolint": "7.0.2005",
+    "tsrs": "0.20.1-ts7.1.0-beta",
     "typedoc": "0.28.20",
     "typescript": "7.1.0-beta",
     "vite": "8.3.5",
