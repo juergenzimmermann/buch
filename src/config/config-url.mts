@@ -1,0 +1,35 @@
+// Copyright (C) 2020 - present Juergen Zimmermann, Hochschule Karlsruhe
+//
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with this program. If not, see <https://www.gnu.org/licenses/>.
+
+/**
+ * Das Modul enthält Objekte mit Konfigurationsdaten aus der YAML-Datei.
+ * @packageDocumentation
+ */
+
+import { URL } from 'node:url';
+import { getConfig } from './config.mts';
+import { styleText } from 'node:util';
+
+// "import.meta" nur bei ESM
+// - in package.json das Feld "type" mit dem Wert "module"
+// - Dateiendung .mts
+// https://nodejs.org/api/esm.html
+// http://2ality.com/2017/11/import-meta.html
+export const configURL = new URL(import.meta.url);
+const message = styleText(['black', 'bgWhite'], '!!!configURL (config-url):');
+console.log(`${message} ${configURL}`);
+
+const config = await getConfig();
+console.log(`!!!config=${JSON.stringify(config)}`);

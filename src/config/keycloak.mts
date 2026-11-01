@@ -18,7 +18,7 @@
  * @packageDocumentation
  */
 
-import { config } from './app.mts';
+import { config } from './app-config.mts';
 import { env } from './env.mts';
 import { getLogger } from '../logger/logger.mts';
 

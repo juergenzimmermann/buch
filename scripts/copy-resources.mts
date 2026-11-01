@@ -28,7 +28,7 @@ try {
 }
 
 // DB-Skripte, PEM-Dateien fuer TLS und GraphQL-Schema kopieren
-const resourcesSrc = join(src, 'config', 'resources');
-const resourcesDist = join(dist, src, 'config', 'resources');
+const resourcesSrc = join(src, 'config');
+const resourcesDist = join(dist, src, 'config');
 await mkdir(resourcesDist, { recursive: true });
 await cp(resourcesSrc, resourcesDist, { recursive: true });

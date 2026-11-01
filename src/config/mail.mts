@@ -19,7 +19,7 @@
  */
 
 import { type SMTPTransportOptions } from 'nodemailer';
-import { config } from './app.mts';
+import { config } from './app-config.mts';
 import { getLogger } from '../logger/logger.mts';
 
 const { mail } = config;

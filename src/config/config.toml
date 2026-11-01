@@ -1,0 +1,50 @@
+# Copyright (C) 2025 - present Juergen Zimmermann
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
+[server]
+#host = <AUFRUF VON hostname()>
+#port = 3000
+#key = "key.pem"
+#certificate = "certificate.crt"
+# TODO Angular HttpClient kann nur HTTP 1.1
+allowHTTP1 = true
+
+[db]
+populate = true
+
+[keycloak]
+#https = true
+host = "localhost"
+port = 8843
+#realm = "javascript"
+# siehe Keycloak Menuepunkt "Clients" > Tab "Clients list" > Spalte "Client ID"
+#clientId = "javascript-client"
+#clientSecret = <SIEHE UMGEBUNGSVARIABLE>
+clientSecret = "yPbRUMZTstne8CcqJhqlEuH6IPQNroa3mxErr5lrNvUI5vUMRR5W1LVK2d0PIaKxCAYMX3iifji7ojCt6xBDnY"
+#audience = ["account"]
+
+[mail]
+#enabled = false
+host = "localhost"
+port = 1025
+#log = false
+#from = '"Joe Doe" <Joe.Doe@acme.com>'
+#to = '"Foo Bar" <Foo.Bar@acme.com>'
+
+[log]
+dir = "./log"
+# Auskommentieren fuer Lasttests
+level = "debug"
+pretty = true

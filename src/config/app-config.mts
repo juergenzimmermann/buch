@@ -1,4 +1,4 @@
-// Copyright (C) 2020 - present Juergen Zimmermann, Hochschule Karlsruhe
+// Copyright (C) 2026 - present Juergen Zimmermann, Hochschule Karlsruhe
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -14,18 +14,18 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 /**
- * Das Modul enthält Objekte mit Konfigurationsdaten aus der YAML-Datei.
+ * Das Modul enthält Objekte mit Konfigurationsdaten aus der TOML-Datei.
  * @packageDocumentation
  */
 
-import { URL } from 'node:url';
-import { styleText } from 'node:util';
+import { configURL } from './config-url.mts';
+import { parse } from 'smol-toml';
+import { readFile } from 'node:fs/promises';
 
-// "import.meta" nur bei ESM
-// - in package.json das Feld "type" mit dem Wert "module"
-// - Dateiendung .mts
-// https://nodejs.org/api/esm.html
-// http://2ality.com/2017/11/import-meta.html
-export const resourcesURL = new URL('resources/', import.meta.url);
-const message = styleText(['black', 'bgWhite'], 'resourcesURL:');
-console.log(`${message} ${resourcesURL}`);
+export type Config = Record<'server' | 'db' | 'keycloak' | 'log' | 'health' | 'mail', any>;
+
+const configUrl = new URL('config.toml', configURL);
+const configText = await readFile(configUrl, { encoding: 'utf8' });
+export const config = parse(configText) as Config;
+
+console.log(`!!!config aus config.toml: ${JSON.stringify(config)}`);

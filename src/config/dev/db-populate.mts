@@ -22,15 +22,15 @@ import { PrismaClient } from '../../generated/prisma/client.ts';
 import { PrismaPg } from '@prisma/adapter-pg';
 import { URL } from 'node:url';
 import { adapter } from '../prisma-client.mts';
-import { config } from '../app.mts';
+import { config } from '../app-config.mts';
+import { configURL } from '../config-url.mts';
 import { getLogger } from '../../logger/logger.mts';
 import process from 'node:process';
 import { readFile } from 'node:fs/promises';
-import { resourcesURL } from '../resources.mts';
 
 const activated = config.db?.populate === true;
 
-const dbURL = new URL('postgresql/', resourcesURL);
+const dbURL = new URL('postgresql/', configURL);
 
 // PrismaClient fuer DB "buch" (siehe Umgebungsvariable DATABASE_URL in ".env")
 // d.h. mit PostgreSQL-User "buch" und Schema "buch"

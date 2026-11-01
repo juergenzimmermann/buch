@@ -281,10 +281,10 @@ gesetzt sein:
 
 ```shell
     # Windows:
-    $env:DATABASE_URL='postgresql://buch:p@localhost/buch?schema=buch&connection_limit=10&sslnegotiation=direct&sslcert=src/config/resources/postgresql/server.crt'
+    $env:DATABASE_URL='postgresql://buch:p@localhost/buch?schema=buch&connection_limit=10&sslnegotiation=direct&sslcert=src/config/postgresql/server.crt'
 
     # macOS:
-    DATABASE_URL='postgresql://buch:p@localhost/buch?schema=buch&connection_limit=10&sslnegotiation=direct&sslcert=src/config/resources/postgresql/server.crt'
+    DATABASE_URL='postgresql://buch:p@localhost/buch?schema=buch&connection_limit=10&sslnegotiation=direct&sslcert=src/config/postgresql/server.crt'
 ```
 
 Dadurch ist folgendes konfiguriert:
@@ -295,7 +295,7 @@ Dadurch ist folgendes konfiguriert:
 - DB-Name: `buch`
 - Schema: `buch`
 - Größe des Verbindungs-Pools: max. `10` Verbindungen
-- SSL: durch die Zertifikatsdatei `server.crt` im Verzeichnis `src\config\resources\postgresql`
+- SSL: durch die Zertifikatsdatei `server.crt` im Verzeichnis `src\config\postgresql`
 
 Nun kann man ein neues Prisma-Schema erstellen, d.h. im Verzeichnis `prisma`
 wird die Datei `schema.prisma` angelegt. Das Verzeichnis `prisma` darf dabei
@@ -307,7 +307,7 @@ noch nicht existieren.
       --preview-feature nativeDistinct `
       --preview-feature relationJoins `
       --output '../src/generated/prisma' `
-      --url 'postgresql://buch:p@localhost/buch?schema=buch&connection_limit=10&sslnegotiation=direct&sslcert=src/config/resources/postgresql/server.crt'
+      --url 'postgresql://buch:p@localhost/buch?schema=buch&connection_limit=10&sslnegotiation=direct&sslcert=src/config/postgresql/server.crt'
 ```
 
 Dabei werden folgende Dateien und Verzeichnisse generiert:

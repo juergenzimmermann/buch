@@ -14,7 +14,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 import { type PrettyOptions } from 'pino-pretty';
-import { config } from './app.mts';
+import { config } from './app-config.mts';
 import { env } from './env.mts';
 import { pino } from 'pino';
 import { resolve } from 'node:path';

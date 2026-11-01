@@ -181,6 +181,9 @@ importers:
       '@prometheus-io/client':
         specifier: 0.16.1
         version: 0.16.1
+      c12:
+        specifier: 4.0.0-rc.4
+        version: 4.0.0-rc.4(dotenv@18.0.9)(giget@3.3.1)(jiti@2.7.0)(magicast@0.5.5)
       dotenv:
         specifier: 18.0.9
         version: 18.0.9
@@ -1598,6 +1601,23 @@ packages:
     peerDependencies:
       magicast: '*'
     peerDependenciesMeta:
+      magicast:
+        optional: true
+
+  c12@4.0.0-rc.4:
+    resolution: {integrity: sha512-SdcZfDXUc7ownRiqbEf5yjaVlbWN9GuWS6SSPlKJ1cFOQYMrb1ouU8YWxZoPfXZbF/tw+f4HjjJS0tlXQJfkEg==}
+    peerDependencies:
+      dotenv: '*'
+      giget: '>=3.3.1'
+      jiti: '*'
+      magicast: '*'
+    peerDependenciesMeta:
+      dotenv:
+        optional: true
+      giget:
+        optional: true
+      jiti:
+        optional: true
       magicast:
         optional: true
 
@@ -4055,6 +4075,20 @@ snapshots:
       pkg-types: 2.4.0
       rc9: 3.1.0
     optionalDependencies:
+      magicast: 0.5.5
+
+  c12@4.0.0-rc.4(dotenv@18.0.9)(giget@3.3.1)(jiti@2.7.0)(magicast@0.5.5):
+    dependencies:
+      confbox: 0.3.1
+      defu: 6.1.7
+      exsolve: 1.2.0
+      pathe: 2.0.3
+      pkg-types: 2.4.0
+      rc9: 3.1.0
+    optionalDependencies:
+      dotenv: 18.0.9
+      giget: 3.3.1
+      jiti: 2.7.0
       magicast: 0.5.5
 
   cacheable@2.5.0:

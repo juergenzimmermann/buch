@@ -21,13 +21,13 @@
  */
 
 import { URL } from 'node:url';
-import { config } from './app.mts';
+import { config } from './app-config.mts';
+import { configURL } from './config-url.mts';
 import { env } from './env.mts';
 import { getLogger } from '../logger/logger.mts';
 import { hostname } from 'node:os';
 import process from 'node:process';
 import { readFile } from 'node:fs/promises';
-import { resourcesURL } from './resources.mts';
 
 const logger = getLogger('config/server');
 
@@ -62,7 +62,7 @@ try {
 }
 
 // https://nodejs.org/api/fs.html
-const tlsURL = new URL('tls/', resourcesURL);
+const tlsURL = new URL('tls/', configURL);
 logger.debug('tlsURL = %s', tlsURL);
 
 // public/private keys und Zertifikat fuer TLS
