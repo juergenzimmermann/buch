@@ -35,10 +35,10 @@ import { router as authRouter } from './security/auth-router.mts';
 import { router as buchWriteRouter } from './buch/router/buch-write-router.mts';
 import { compress } from 'hono/compress';
 import { cors } from 'hono/cors';
-import { corsOptions } from './config/cors.mts'; // oxlint-disable-line import/max-dependencies
+import { corsOptions } from './config/cors-options.mts'; // oxlint-disable-line import/max-dependencies
 import { defineMiddleware } from 'hono/factory';
 import { router as devRouter } from './config/dev/dev-router.mts';
-import { env } from './config/env.mts';
+import { getConfig } from './config/config.mts';
 import { getLogger } from './logger/logger.mts';
 import { graphqlApp } from './buch/graphql/graphql-app.mts';
 import { router as healthRouter } from './admin/health-router.mts';
@@ -96,8 +96,11 @@ app.route(paths.auth, authRouter);
 app.route('/', graphqlApp);
 app.route('/prometheus', prometheusRouter);
 
-const { NODE_ENV } = env;
-if (NODE_ENV === 'development' || NODE_ENV === 'test') {
+// "Top-level await"
+const config = await getConfig();
+// Destructuring
+const { nodeEnv } = config.server;
+if (nodeEnv === 'development' || nodeEnv === 'test') {
     app.route(paths.dev, devRouter);
 }
 

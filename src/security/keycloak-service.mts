@@ -13,10 +13,15 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 
+import { getConfig } from '../config/config.mts';
 import { getLogger } from '../logger/logger.mts';
-import { keycloakConfig } from '../config/keycloak.mts';
 
-const { accessTokenUrl, clientId, secret } = keycloakConfig;
+const config = await getConfig();
+const { clientId, clientSecret, host, https, port, realm } = config.keycloak;
+
+const schema = https ? 'https' : 'http';
+const accessTokenUrl = `${schema}://${host}:${port}/realms/${realm}/protocol/openid-connect/token`;
+
 const CONTENT_TYPE = 'Content-Type';
 const X_WWW_FORM_URLENCODED = 'application/x-www-form-urlencoded';
 const POST = 'POST';
@@ -79,7 +84,7 @@ export const token = async ({ username, password }: TokenData) => {
         password,
         grant_type: 'password',
         client_id: clientId,
-        client_secret: secret,
+        client_secret: clientSecret,
     });
 
     logger.debug('token: path=%s', accessTokenUrl);

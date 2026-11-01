@@ -14,7 +14,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 /**
- * Das Modul enthält Objekte mit Konfigurationsdaten aus der TOML-Datei.
+ * Das Modul enthält Objekte mit Konfigurationsdaten aus "config.toml" durch _c12_.
+ * _c12_ seit 2022, _cosmiconfig_ seit 2015.
  * @packageDocumentation
  */
 
@@ -23,6 +24,7 @@
 import { URL, fileURLToPath } from 'node:url';
 import { hostname } from 'node:os';
 import { loadConfig } from 'c12';
+import process from 'node:process';
 import { styleText } from 'node:util';
 import { z } from 'zod';
 
@@ -45,28 +47,50 @@ try {
     hasQUIC = false;
 }
 
-// const { NODE_ENV } = env;
-
 const runtime = process.versions?.bun ? 'Bun' : 'Node';
+const lenKeycloakSecret = 86;
 
+// https://getpino.io
+const logLevels = ['fatal', 'error', 'warn', 'info', 'debug', 'trace'] as const;
+type LogLevel = (typeof logLevels)[number];
+const logLevelEnv = process.env['LOG_LEVEL'];
+let logLevelDefault: LogLevel;
+if (logLevels.includes(logLevelEnv as LogLevel)) {
+    logLevelDefault = logLevelEnv as LogLevel;
+} else {
+    logLevelDefault = 'info';
+}
+
+// Zod-Schema fuer config.toml
 const ConfigSchema = z.object({
     server: z.object({
         host: z.string().default(hostname()),
         // oxlint-disable-next-line no-magic-numbers
         port: z.number().int().min(1).max(65535).default(3000),
-        key: z.url().default(new URL('key.pem', tlsURL).toString()),
-        cert: z.url().default(new URL('certificate.crt', tlsURL).toString()),
+        keyFile: z.url().default(fileURLToPath(new URL('key.pem', tlsURL))),
+        certFile: z.url().default(fileURLToPath(new URL('certificate.crt', tlsURL))),
         allowHTTP1: z.boolean().default(false),
         hasTemporal: z.boolean().default(hasTemporal),
         hasQUIC: z.boolean().default(hasQUIC),
         nodeEnv: z
             .literal(['production', 'PRODUCTION', 'test', 'development'])
-            .default('production'),
+            .prefault(() => (process.env['NODE_ENV'] as any) ?? 'production'),
         runtime: z.literal(['Node', 'Bun']).default(runtime),
     }),
 
     db: z.object({
-        // !!!url: z.url(),
+        dbUrl: z
+            .string()
+            .startsWith('postgresql://')
+            .prefault(() => process.env['DATABASE_URL'] ?? 'FEHLER: DATABASE_URL in .env setzen'),
+        dbUrlAdmin: z
+            .string()
+            .startsWith('postgresql://')
+            .prefault(
+                () =>
+                    process.env['DATABASE_URL_ADMIN'] ??
+                    'FEHLER: DATABASE_URL_ADMIN in .env setzen',
+            ),
         populate: z.boolean().default(false),
     }),
 
@@ -77,7 +101,15 @@ const ConfigSchema = z.object({
         port: z.number().int().min(1).max(65535).default(8443),
         realm: z.string().default('javascript'),
         clientId: z.string().default('javascript-client'),
-        clientSecret: z.string(),
+        clientSecret: z
+            .string()
+            .min(lenKeycloakSecret)
+            .max(lenKeycloakSecret)
+            .prefault(
+                () =>
+                    process.env['CLIENT_SECRET']?.replace(/^CLIENT_SECRET=/u, '') ??
+                    'FEHLER: CLIENT_SECRET in .env setzen',
+            ),
         audience: z.array(z.string()).default(['account']),
     }),
 
@@ -86,14 +118,17 @@ const ConfigSchema = z.object({
         host: z.string().default('mail'),
         // oxlint-disable-next-line no-magic-numbers
         port: z.number().int().min(1).max(65535).default(25),
-        log: z.boolean().default(false),
+        logger: z.boolean().default(false),
         from: z.string().default('"Joe Doe" <Joe.Doe@acme.com>'),
         to: z.string().default('"Foo Bar" <Foo.Bar@acme.com>'),
     }),
 
     log: z.object({
         dir: z.string().default('/tmp'),
-        level: z.literal(['fatal', 'error', 'warn', 'info', 'debug', 'trace']).default('info'),
+        file: z.string().default('server.log'),
+        level: z
+            .literal(['fatal', 'error', 'warn', 'info', 'debug', 'trace'])
+            .default(logLevelDefault),
         pretty: z.boolean().default(false),
     }),
 });
@@ -104,11 +139,14 @@ const tomlName = 'config.toml';
 const tomlURL = new URL(tomlName, configURL);
 const message = styleText(['black', 'bgWhite'], `${tomlName}:`);
 console.log(`${message} ${tomlURL}`);
+
+// Konfigurationsdaten aus "config.toml" durch "c12"
 export const getConfig = async (): Promise<Config> => {
     const { config } = await loadConfig<Config>({
         name: 'config',
         configFile: fileURLToPath(tomlURL),
         configFileRequired: true,
+        dotenv: true,
         schema: ConfigSchema,
     });
 

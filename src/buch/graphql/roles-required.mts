@@ -16,10 +16,14 @@
 import { createRemoteJWKSet, jwtVerify } from 'jose';
 import { GraphQLError } from 'graphql';
 import { JOSEError } from 'jose/errors';
+import { getConfig } from '../../config/config.mts';
 import { getLogger } from '../../logger/logger.mts';
-import { keycloakConfig } from '../../config/keycloak.mts';
 
-const { issuer, jwksUri, clientId, audience } = keycloakConfig;
+const config = await getConfig();
+const { audience, clientId, host, https, port, realm } = config.keycloak;
+const schema = https ? 'https' : 'http';
+const issuer = `${schema}://${host}:${port}/realms/${realm}`;
+const jwksUri = `${issuer}/protocol/openid-connect/certs`;
 const jwks = createRemoteJWKSet(new URL(jwksUri));
 const algorithms = ['RS256'];
 

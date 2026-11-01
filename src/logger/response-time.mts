@@ -15,10 +15,13 @@
 
 import { type Context, type Next } from 'hono';
 import { defineMiddleware } from 'hono/factory';
+import { getConfig } from '../config/config.mts';
 import { getLogger } from './logger.mts';
-import { serverConfig } from '../config/server.mts';
 
 const logger = getLogger('responseTime', 'func');
+
+const config = await getConfig();
+const { hasTemporal } = config.server;
 
 /**
  * Middleware für Hono, um vor dem Abschicken eines Response dessen Antwortzeit
@@ -32,7 +35,7 @@ export const responseTime = defineMiddleware(async (c: Context, next: Next) => {
     // https://github.com/tc39/proposal-temporal
     // https://developer.mozilla.org/de/docs/Web/JavaScript/Reference/Global_Objects/Temporal
 
-    if (serverConfig.hasTemporal) {
+    if (hasTemporal) {
         const start = Temporal.Now.instant().epochMilliseconds;
         await next(); // oxlint-disable-line node/callback-return
         const duration = Temporal.Now.instant().epochMilliseconds - start;

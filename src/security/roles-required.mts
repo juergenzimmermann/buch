@@ -17,14 +17,18 @@ import { type Context, type HonoRequest, type Next } from 'hono';
 import { ForbiddenError, InternalServerError, UnauthorizedError } from './errors.mts';
 import { JOSEError, JWTClaimValidationFailed } from 'jose/errors';
 import { createRemoteJWKSet, jwtVerify } from 'jose';
+import { getConfig } from '../config/config.mts';
 import { getLogger } from '../logger/logger.mts';
-import { keycloakConfig } from '../config/keycloak.mts';
 
 const logger = getLogger('security/roles-required');
 
 type Rolle = 'admin' | 'user';
 
-const { issuer, jwksUri, clientId, audience } = keycloakConfig;
+const config = await getConfig();
+const { audience, clientId, host, https, port, realm } = config.keycloak;
+const schema = https ? 'https' : 'http';
+const issuer = `${schema}://${host}:${port}/realms/${realm}`;
+const jwksUri = `${issuer}/protocol/openid-connect/certs`;
 const jwks = createRemoteJWKSet(new URL(jwksUri));
 const algorithms = ['RS256'];
 

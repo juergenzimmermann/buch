@@ -15,9 +15,9 @@
 
 import { PrismaClient } from '../generated/prisma/client.ts';
 import { PrismaPg } from '@prisma/adapter-pg';
+import { getConfig } from './config.mts';
 import { getLogger } from '../logger/logger.mts';
 import { prismaQueryInsights } from '@prisma/sqlcommenter-query-insights';
-import process from 'node:process';
 import { styleText } from 'node:util';
 
 /**
@@ -26,10 +26,10 @@ import { styleText } from 'node:util';
  * @packageDocumentation
  */
 
-const dbUrl = process.env['DATABASE_URL'];
-
 const logger = getLogger('config/prisma-client');
-logger.debug('dbUrl = %s', dbUrl);
+
+const config = await getConfig();
+const { dbUrl } = config.db;
 
 // PrismaClient passend zur Umgebungsvariable DATABASE_URL in ".env"
 // d.h. mit PostgreSQL-User "buch" und Schema "buch"

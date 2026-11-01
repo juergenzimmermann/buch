@@ -18,16 +18,16 @@
  * @packageDocumentation
  */
 
+import { configURL, getConfig } from '../config.mts';
 import { PrismaClient } from '../../generated/prisma/client.ts';
 import { PrismaPg } from '@prisma/adapter-pg';
 import { URL } from 'node:url';
 import { adapter } from '../prisma-client.mts';
-import { config } from '../app-config.mts';
-import { configURL } from '../config-url.mts';
 import { getLogger } from '../../logger/logger.mts';
 import process from 'node:process';
 import { readFile } from 'node:fs/promises';
 
+const config = await getConfig();
 const activated = config.db?.populate === true;
 
 const dbURL = new URL('postgresql/', configURL);

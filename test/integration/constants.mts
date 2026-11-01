@@ -13,10 +13,11 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 
+import { getConfig } from '../../src/config/config.mts';
 import { paths } from '../../src/config/paths.mts';
-import { serverConfig } from '../../src/config/server.mts';
 
-const { host, port } = serverConfig;
+const config = await getConfig();
+const { host, port } = config.server;
 
 export const baseURL = `https://${host}:${port}`;
 export const restURL = `${baseURL}/rest`;

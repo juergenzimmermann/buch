@@ -18,16 +18,10 @@ export const corsOptions = {
     origin: [
         // Angular mit devserver
         'https://localhost:4200',
-        // Angular mit devserver (HTTP)
-        'http://localhost:4200',
         // React mit Vite und devserver
         'https://localhost:5173',
-        // React mit Vite und devserver (HTTP)
-        'http://localhost:5173',
         // Keycloak
-        'http://localhost:8843',
-        // Keycloak (HTTP)
-        'http://localhost:8880',
+        'https://localhost:8843',
     ],
     // origin: true,
 

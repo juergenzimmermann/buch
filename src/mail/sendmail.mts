@@ -19,9 +19,9 @@
  * @packageDocumentation
  */
 
-import { type SendMailOptions, createTransport } from 'nodemailer';
+import { type SMTPTransportOptions, type SendMailOptions, createTransport } from 'nodemailer';
+import { getConfig } from '../config/config.mts';
 import { getLogger } from '../logger/logger.mts';
-import { mailConfig } from '../config/mail.mts';
 
 /** Typdefinition für das Senden einer Email. */
 export type SendMailParams = {
@@ -33,7 +33,24 @@ export type SendMailParams = {
 
 const logger = getLogger('sendmail', 'func');
 
-const { activated, from, to } = mailConfig;
+const config = await getConfig();
+const { enabled, from, host, port, to } = config.mail;
+
+export const options: SMTPTransportOptions = {
+    host,
+    port,
+    secure: false,
+
+    // Googlemail:
+    // service: 'gmail',
+    // auth: {
+    //     user: 'Meine.Benutzerkennung@gmail.com',
+    //     pass: 'mypassword'
+    // }
+
+    logger: config.mail.logger,
+} as const;
+
 /**
  * Email mit Subject und Inhalt asynchron senden.
  * @param subject Subject vom Typ string.
@@ -43,7 +60,7 @@ const { activated, from, to } = mailConfig;
  * @author [Jürgen Zimmermann](mailto:Juergen.Zimmermann@h-ka.de)
  */
 export const sendmail = async ({ subject, body }: SendMailParams) => {
-    if (!activated) {
+    if (!enabled) {
         logger.warn('Mail deaktiviert');
         return;
     }
@@ -52,7 +69,7 @@ export const sendmail = async ({ subject, body }: SendMailParams) => {
     logger.debug('mailOptions=%o', mailOptions);
 
     try {
-        await createTransport(mailConfig.options).sendMail(mailOptions); // NOSONAR
+        await createTransport(options).sendMail(mailOptions); // NOSONAR
     } catch (err) {
         logger.warn('Fehler %o', err as object);
     }

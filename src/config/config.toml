@@ -16,12 +16,14 @@
 [server]
 #host = <AUFRUF VON hostname()>
 #port = 3000
-#key = "key.pem"
-#certificate = "certificate.crt"
+#keyFile = "key.pem"
+#certificateFile = "certificate.crt"
 # TODO Angular HttpClient kann nur HTTP 1.1
 allowHTTP1 = true
 
 [db]
+#dbUrl = <DATABASE_URL in .env>
+#dbUrlAdmin = <DATABASE_URL_ADMIN in .env>
 populate = true
 
 [keycloak]
@@ -31,20 +33,20 @@ port = 8843
 #realm = "javascript"
 # siehe Keycloak Menuepunkt "Clients" > Tab "Clients list" > Spalte "Client ID"
 #clientId = "javascript-client"
-#clientSecret = <SIEHE UMGEBUNGSVARIABLE>
-clientSecret = "yPbRUMZTstne8CcqJhqlEuH6IPQNroa3mxErr5lrNvUI5vUMRR5W1LVK2d0PIaKxCAYMX3iifji7ojCt6xBDnY"
+#clientSecret = <CLIENT_SECRET in .env>
 #audience = ["account"]
 
 [mail]
 #enabled = false
 host = "localhost"
 port = 1025
-#log = false
+#logger = false
 #from = '"Joe Doe" <Joe.Doe@acme.com>'
 #to = '"Foo Bar" <Foo.Bar@acme.com>'
 
 [log]
 dir = "./log"
+#file = "server.log"
 # Auskommentieren fuer Lasttests
 level = "debug"
 pretty = true

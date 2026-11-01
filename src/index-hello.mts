@@ -14,13 +14,15 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 import { Hono } from 'hono';
-import { serverConfig } from './config/server.mts';
+import { getConfig } from './config/config.mts';
 
 // "Hello World" als Web-Applikation mit Hono.
 const app = new Hono();
 app.get('/', (c) => c.json({ msg: 'Hello World' }));
 
-if (serverConfig.runtime === 'Bun') {
+const config = await getConfig();
+
+if (config.server.runtime === 'Bun') {
     const Bun = await import('bun');
     Bun.serve({ port: 3000, fetch: app.fetch });
     console.log('🚀 Der Server http://localhost:3000 ist gestartet');

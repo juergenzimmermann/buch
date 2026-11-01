@@ -20,18 +20,20 @@
 
 import { release, type, userInfo } from 'node:os';
 import figlet from 'figlet';
+import { getConfig } from '../config/config.mts';
 import { getLogger } from './logger.mts';
 import process from 'node:process';
-import { serverConfig } from '../config/server.mts';
 
 const logger = getLogger('banner', 'func');
+
+const config = await getConfig();
 
 /**
  * Ein Banner für den Server-Start.
  * @author [Jürgen Zimmermann](mailto:Juergen.Zimmermann@h-ka.de)
  */
 export const banner = async () => {
-    const { host, nodeEnv, port, runtime } = serverConfig;
+    const { host, nodeEnv, port, runtime } = config.server;
 
     console.log();
     const text = await figlet.text('buch 2026.10.1');
