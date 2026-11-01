@@ -129,7 +129,7 @@
   "devEngines": {
     "packageManager": {
       "name": "pnpm",
-      "version": "^12.16.1",
+      "version": "^12.17.0",
       "onFail": "warn"
     },
     "runtime": [
@@ -148,6 +148,6 @@
   "engines": {
     "bun": "^1.4.4",
     "node": "^26.13.0",
-    "pnpm": "^12.16.1"
+    "pnpm": "^12.17.0"
   }
 }
