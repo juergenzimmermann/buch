@@ -23,7 +23,7 @@ extras/compose/keycloak/tls/key.pem
 extras/compose/postgres/password.txt
 extras/compose/postgres/init/tls/server.key
 extras/bruno/javascript/environments
-src/config/resources/tls/key.pem
+src/config/tls/key.pem
 src/beispiele.ts
 src/beispiele-write.ts
 test/lasttest-locust/__pycache__
