@@ -64,7 +64,7 @@
     "typedoc": "typedoc src"
   },
   "dependencies": {
-    "@hono/node-server": "2.1.5",
+    "@hono/node-server": "2.1.6",
     "@prisma/adapter-pg": "7.10.1",
     "@prisma/client": "7.10.1",
     "@prisma/sqlcommenter-query-insights": "7.10.1",
@@ -86,7 +86,7 @@
     "zod": "4.6.7"
   },
   "devDependencies": {
-    "@asciidoctor/core": "4.1.1",
+    "@asciidoctor/core": "4.2.1",
     "@prisma/prisma7": "7.10.1",
     "@stylistic/eslint-plugin": "5.10.0",
     "@tsconfig/node-ts": "23.6.4",
@@ -97,8 +97,8 @@
     "@types/node": "26.6.6",
     "@types/nodemailer": "8.0.2",
     "@types/pg": "8.23.1",
-    "@vitest/coverage-istanbul": "5.1.0-beta.1",
-    "@vitest/ui": "5.1.0-beta.1",
+    "@vitest/coverage-istanbul": "5.1.0",
+    "@vitest/ui": "5.1.0",
     "asciidoctor-kroki": "2.0.0",
     "axios": "1.21.0",
     "globals": "17.14.0",
@@ -110,7 +110,7 @@
     "typedoc": "0.28.20",
     "typescript": "7.1.0-beta",
     "vite": "8.3.5",
-    "vitest": "5.1.0-beta.1"
+    "vitest": "5.1.0"
   },
   "overrides": {
     "@prisma/client": {
