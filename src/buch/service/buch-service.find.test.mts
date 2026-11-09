@@ -15,7 +15,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 import { BuchDTO, type BuchSelect } from './buch-dto.mts';
-import { describe, expect, test, vi } from 'vitest';
+import { beforeEach, describe, expect, test, vi } from 'vitest';
 import { find, findAll } from './buch-service.mts';
 import { type Pageable } from './pageable.mts';
 import { type Suchparameter } from './suchparameter.mts';
@@ -95,6 +95,10 @@ const mockDrizzleQueryNotFound = () => {
 
 // oxlint-disable-next-line max-lines-per-function
 describe('buch-service: find', () => {
+    beforeEach(() => {
+        vi.resetAllMocks();
+    });
+
     test('findAll', async () => {
         // given
         const pageable: Pageable = { number: 1, size: 5 };
