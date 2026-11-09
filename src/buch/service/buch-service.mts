@@ -19,15 +19,15 @@
  * @packageDocumentation
  */
 
-import { BuchDTO, type BuchSelect } from './buchDTO.mts';
+import { BuchDTO, type BuchSelect } from './buch-dto.mts';
 import { type Suchparameter, suchparameterNamen } from './suchparameter.mts';
 import { abbildungTable, buchFileTable, buchTable, titelTable } from '../../db/schema.mts';
 import { count, eq } from 'drizzle-orm';
-import { type AbbildungSelect } from './abbildungDTO.mts';
+import { type AbbildungSelect } from './abbildung-dto.mts';
 import { NotFoundError } from './errors.mts';
 import { type Pageable } from './pageable.mts';
 import { type Slice } from './slice.mts';
-import { type TitelSelect } from './titelDTO.mts';
+import { type TitelSelect } from './titel-dto.mts';
 import { buildWhere } from './build-where.mts';
 import { db } from '../../config/db.mts';
 import { getLogger } from '../../logger/logger.mts';

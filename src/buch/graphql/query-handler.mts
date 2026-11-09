@@ -21,7 +21,7 @@ import {
     toSuchparameter,
 } from './types.mts';
 import { find, findById } from '../service/buch-service.mts';
-import { type BuchDTO } from '../service/buchDTO.mts';
+import { type BuchDTO } from '../service/buch-dto.mts';
 import { GraphQLError } from 'graphql';
 import { NotFoundError } from '../service/errors.mts';
 import { type Slice } from '../service/slice.mts';

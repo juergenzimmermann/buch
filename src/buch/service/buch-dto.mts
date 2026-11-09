@@ -13,8 +13,8 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-import { AbbildungDTO, type AbbildungSelect } from './abbildungDTO.mts';
-import { TitelDTO, type TitelSelect } from './titelDTO.mts';
+import { AbbildungDTO, type AbbildungSelect } from './abbildung-dto.mts';
+import { TitelDTO, type TitelSelect } from './titel-dto.mts';
 import { buchTable } from '../../db/schema.mts';
 
 export type BuchSelect = typeof buchTable.$inferSelect;

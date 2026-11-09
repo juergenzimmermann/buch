@@ -14,7 +14,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 import { type BuchNeuType, type BuchUpdateType } from '../validation/buch-validation.mts';
-import { type BuchDTO } from '../service/buchDTO.mts';
+import { type BuchDTO } from '../service/buch-dto.mts';
 import { type Buchart } from '../service/suchparameter.mts';
 
 // -----------------------------------------------------------------------------

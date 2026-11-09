@@ -17,7 +17,7 @@
 import { type AxiosResponse, HttpStatusCode } from 'axios';
 import { CONTENT_TYPE, restURL } from '../constants.mts';
 import { describe, expect, test } from 'vitest';
-import { type BuchDTO } from '../../../src/buch/service/buchDTO.mts';
+import { type BuchDTO } from '../../../src/buch/service/buch-dto.mts';
 import { type Page } from '../../../src/buch/router/page.mts';
 import { client } from './client.mts';
 
