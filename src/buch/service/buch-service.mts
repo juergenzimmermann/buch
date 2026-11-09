@@ -176,11 +176,13 @@ export const createSlice = (
 };
 
 export const findAll = async (pageable: Pageable): Promise<Readonly<Slice<BuchDTO>>> => {
-    const { number } = pageable;
+    const { number, size } = pageable;
     const rows: BuchMitTitelSelect[] = await db
         .select()
         .from(buchTable)
-        .innerJoin(titelTable, eq(buchTable.id, titelTable.buchId));
+        .innerJoin(titelTable, eq(buchTable.id, titelTable.buchId))
+        .offset(number * size)
+        .limit(size);
     const totalElements = rows.length;
     if (totalElements === 0) {
         logger.debug('#findAll: Keine Buecher gefunden');
