@@ -60,17 +60,18 @@ const id = 50;
 describe('buch-write-service: delete', () => {
     beforeEach(() => {
         vi.resetAllMocks();
+
+        transactionMock.mockImplementation((transactionBody) =>
+            transactionBody({ delete: deleteMock }),
+        );
+        deleteMock.mockReturnValue({ where: deleteWhereMock });
+        deleteWhereMock.mockReturnValue({ returning: returningMock });
     });
 
     test('Buch loeschen', async () => {
         // given
         // Mocking, dass das Buch mit der id 1 existiert und in einer Transaktion geloescht wird
         existsByIdMock.mockResolvedValueOnce(true);
-        transactionMock.mockImplementation((transactionBody) =>
-            transactionBody({ delete: deleteMock }),
-        );
-        deleteMock.mockReturnValue({ where: deleteWhereMock });
-        deleteWhereMock.mockReturnValue({ returning: returningMock });
         returningMock.mockResolvedValueOnce([{ id }]);
 
         // when
