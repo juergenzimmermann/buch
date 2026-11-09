@@ -1,3 +1,4 @@
+// oxlint-disable max-lines
 // Copyright (C) 2025 - present Juergen Zimmermann, Hochschule Karlsruhe
 //
 // This program is free software: you can redistribute it and/or modify
@@ -74,13 +75,31 @@ const titelSelectMock: Readonly<TitelSelect> = {
 
 const buchMockDTO = new BuchDTO(buchSelectMock, titelSelectMock);
 
+const mockDrizzleQuery = () => {
+    selectMock.mockReturnValueOnce({ from: fromMock }).mockReturnValueOnce({ from: fromMock });
+    fromMock.mockReturnValue({ innerJoin: innerJoinMock });
+    innerJoinMock.mockReturnValue({ where: whereMock });
+    whereMock.mockReturnValueOnce({ offset: offsetMock }).mockResolvedValueOnce([{ count: 1 }]);
+    offsetMock.mockReturnValue({ limit: limitMock });
+    limitMock.mockResolvedValueOnce([{ buch: buchSelectMock, titel: titelSelectMock }]);
+};
+
+const mockDrizzleQueryNotFound = () => {
+    selectMock.mockReturnValueOnce({ from: fromMock });
+    fromMock.mockReturnValue({ innerJoin: innerJoinMock });
+    innerJoinMock.mockReturnValue({ where: whereMock });
+    whereMock.mockReturnValueOnce({ offset: offsetMock });
+    offsetMock.mockReturnValue({ limit: limitMock });
+    limitMock.mockResolvedValueOnce([]);
+};
+
 // oxlint-disable-next-line max-lines-per-function
 describe('buch-service: find', () => {
     test('findAll', async () => {
         // given
         const pageable: Pageable = { number: 1, size: 5 };
 
-        // Mocking der Drizzle-Abfrage
+        // Mocking der Drizzle-Query
         selectMock.mockReturnValue({ from: fromMock });
         fromMock.mockReturnValue({ innerJoin: innerJoinMock });
         innerJoinMock.mockReturnValue({ offset: offsetMock });
@@ -101,7 +120,7 @@ describe('buch-service: find', () => {
         // given
         const pageable: Pageable = { number: 1, size: 5 };
 
-        // Mocking der Drizzle-Abfrage
+        // Mocking der Drizzle-Query
         selectMock.mockReturnValue({ from: fromMock });
         fromMock.mockReturnValue({ innerJoin: innerJoinMock });
         innerJoinMock.mockReturnValue({ offset: offsetMock });
@@ -123,7 +142,134 @@ describe('buch-service: find', () => {
         const suchparameter: Suchparameter = { titel };
         const pageable: Pageable = { number: 1, size: 5 };
 
-        // Mocking der Drizzle-Abfrage
+        mockDrizzleQuery();
+
+        // when
+        const result = await find(suchparameter as Record<string, string>, pageable);
+
+        // then
+        const { content, totalElements } = result;
+
+        expect(content).toHaveLength(1);
+        expect(content[0]).toStrictEqual(buchMockDTO);
+        expect(totalElements).toBe(1);
+    });
+
+    test('titel nicht vorhanden', async () => {
+        // given
+        const suchparameter: Suchparameter = { titel };
+        const pageable: Pageable = { number: 1, size: 5 };
+
+        mockDrizzleQueryNotFound();
+
+        // when / then
+        await expect(find(suchparameter as Record<string, string>, pageable)).rejects.toThrow(
+            /^Keine Buecher gefunden/u,
+        );
+    });
+
+    test('isbn vorhanden', async () => {
+        // given
+        const suchparameter: Suchparameter = { isbn };
+        const pageable: Pageable = { number: 1, size: 5 };
+
+        mockDrizzleQuery();
+
+        // when
+        const result = await find(suchparameter as Record<string, string>, pageable);
+
+        // then
+        const { content, totalElements } = result;
+
+        expect(content).toHaveLength(1);
+        expect(content[0]).toStrictEqual(buchMockDTO);
+        expect(totalElements).toBe(1);
+    });
+
+    test('isbn nicht vorhanden', async () => {
+        // given
+        const suchparameter: Suchparameter = { isbn };
+        const pageable: Pageable = { number: 1, size: 5 };
+
+        mockDrizzleQueryNotFound();
+
+        // when / then
+        await expect(find(suchparameter as Record<string, string>, pageable)).rejects.toThrow(
+            /^Keine Buecher gefunden/u,
+        );
+    });
+
+    test('art vorhanden', async () => {
+        // given
+        const suchparameter: Suchparameter = { art };
+        const pageable: Pageable = { number: 1, size: 5 };
+
+        mockDrizzleQuery();
+
+        // when
+        const result = await find(suchparameter as Record<string, string>, pageable);
+
+        // then
+        const { content, totalElements } = result;
+
+        expect(content).toHaveLength(1);
+        expect(content[0]).toStrictEqual(buchMockDTO);
+        expect(totalElements).toBe(1);
+    });
+
+    test('rating mindestens', async () => {
+        // given
+        const suchparameter: Suchparameter = { rating };
+        const pageable: Pageable = { number: 1, size: 5 };
+
+        mockDrizzleQuery();
+
+        // when
+        const result = await find(suchparameter as Record<string, string>, pageable);
+
+        // then
+        const { content, totalElements } = result;
+
+        expect(content).toHaveLength(1);
+        expect(content[0]).toStrictEqual(buchMockDTO);
+        expect(totalElements).toBe(1);
+    });
+
+    test('rating keine Zahl', async () => {
+        // given
+        const suchparameter: Suchparameter = { rating: 'FALSCH' };
+        const pageable: Pageable = { number: 1, size: 5 };
+
+        // when / then
+        await expect(find(suchparameter as Record<string, string>, pageable)).rejects.toThrow(
+            /^Ungueltige Suchparameter/u,
+        );
+    });
+
+    test('preis max', async () => {
+        // given
+        const suchparameter: Suchparameter = { preis: Number.parseInt(preis, 10) };
+        const pageable: Pageable = { number: 1, size: 5 };
+
+        mockDrizzleQuery();
+
+        // when
+        const result = await find(suchparameter as Record<string, string>, pageable);
+
+        // then
+        const { content, totalElements } = result;
+
+        expect(content).toHaveLength(1);
+        expect(content[0]).toStrictEqual(buchMockDTO);
+        expect(totalElements).toBe(1);
+    });
+
+    test('lieferbar true', async () => {
+        // given
+        const suchparameter: Suchparameter = { lieferbar };
+        const pageable: Pageable = { number: 1, size: 5 };
+
+        // Mocking der Drizzle-Query
         selectMock.mockReturnValueOnce({ from: fromMock }).mockReturnValueOnce({ from: fromMock });
         fromMock.mockReturnValue({ innerJoin: innerJoinMock });
         innerJoinMock.mockReturnValue({ where: whereMock });
@@ -135,10 +281,57 @@ describe('buch-service: find', () => {
         const result = await find(suchparameter as Record<string, string>, pageable);
 
         // then
-        const { content } = result;
+        const { content, totalElements } = result;
 
         expect(content).toHaveLength(1);
         expect(content[0]).toStrictEqual(buchMockDTO);
-        expect(result.totalElements).toBe(1);
+        expect(totalElements).toBe(1);
+    });
+
+    test('datum', async () => {
+        // given
+        const suchparameter: Suchparameter = { datum };
+        const pageable: Pageable = { number: 1, size: 5 };
+
+        mockDrizzleQuery();
+
+        // when
+        const result = await find(suchparameter as Record<string, string>, pageable);
+
+        // then
+        const { content, totalElements } = result;
+
+        expect(content).toHaveLength(1);
+        expect(content[0]).toStrictEqual(buchMockDTO);
+        expect(totalElements).toBe(1);
+    });
+
+    test('homepage', async () => {
+        // given
+        const suchparameter: Suchparameter = { homepage };
+        const pageable: Pageable = { number: 1, size: 5 };
+
+        mockDrizzleQuery();
+
+        // when
+        const result = await find(suchparameter as Record<string, string>, pageable);
+
+        // then
+        const { content, totalElements } = result;
+
+        expect(content).toHaveLength(1);
+        expect(content[0]).toStrictEqual(buchMockDTO);
+        expect(totalElements).toBe(1);
+    });
+
+    test('suchparameter ungueltig', async () => {
+        // given
+        const suchparameter: any = { ungueltig: 'FALSCH' };
+        const pageable: Pageable = { number: 1, size: 5 };
+
+        mockDrizzleQuery();
+
+        // when / then
+        await expect(find(suchparameter, pageable)).rejects.toThrow(/^Ungueltige Suchparameter/u);
     });
 });
