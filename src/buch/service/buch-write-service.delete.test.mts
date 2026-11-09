@@ -21,9 +21,11 @@ const { existsByIdMock, deleteMock, deleteWhereMock, returningMock, transactionM
     () => {
         return {
             existsByIdMock: vi.fn<(id: number) => Promise<boolean>>(),
+
             deleteMock: vi.fn<(...args: unknown[]) => unknown>(),
             deleteWhereMock: vi.fn<(...args: unknown[]) => unknown>(),
             returningMock: vi.fn<(...args: unknown[]) => Promise<unknown>>(),
+
             transactionMock:
                 vi.fn<
                     (

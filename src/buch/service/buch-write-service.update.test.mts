@@ -34,10 +34,12 @@ const {
         fromMock: vi.fn<(...args: unknown[]) => unknown>(),
         whereMock: vi.fn<(...args: unknown[]) => unknown>(),
         limitMock: vi.fn<(...args: unknown[]) => Promise<unknown>>(),
+
         updateMock: vi.fn<(...args: unknown[]) => unknown>(),
         setMock: vi.fn<(...args: unknown[]) => unknown>(),
         updateWhereMock: vi.fn<(...args: unknown[]) => unknown>(),
         returningMock: vi.fn<(...args: unknown[]) => Promise<unknown>>(),
+
         transactionMock:
             vi.fn<
                 (

@@ -38,15 +38,18 @@ const {
         fromMock: vi.fn<(...args: unknown[]) => unknown>(),
         whereMock: vi.fn<(...args: unknown[]) => unknown>(),
         limitMock: vi.fn<(...args: unknown[]) => Promise<unknown>>(),
+
         insertMock: vi.fn<(...args: unknown[]) => unknown>(),
         valuesMock: vi.fn<(...args: unknown[]) => unknown>(),
         returningMock: vi.fn<(...args: unknown[]) => Promise<unknown>>(),
+
         transactionMock:
             vi.fn<
                 (
                     callback: (tx: { insert: (...args: unknown[]) => unknown }) => Promise<unknown>,
                 ) => Promise<unknown>
             >(),
+
         createTransportMock: vi.fn<typeof createTransport>(),
         sendMailMock: vi.fn<Mail['sendMail']>(),
     };
@@ -91,11 +94,13 @@ describe('buch-write-service: create', () => {
         fromMock.mockReturnValue({ where: whereMock });
         whereMock.mockReturnValue({ limit: limitMock });
         limitMock.mockResolvedValue([]);
+
         transactionMock.mockImplementation((transactionBody) =>
             transactionBody({ insert: insertMock }),
         );
         insertMock.mockReturnValue({ values: valuesMock });
         valuesMock.mockReturnValue({ returning: returningMock });
+
         createTransportMock.mockReturnValue({ sendMail: sendMailMock } as unknown as ReturnType<
             typeof createTransport
         >);

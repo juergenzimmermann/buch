@@ -14,7 +14,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 import { BuchDTO, type BuchSelect } from './buch-dto.mts';
-import { describe, expect, test, vi } from 'vitest';
+import { beforeEach, describe, expect, test, vi } from 'vitest';
 import { type TitelSelect } from './titel-dto.mts';
 import { findById } from './buch-service.mts';
 
@@ -39,6 +39,16 @@ vi.mock(import('../../config/db.mts'), () => {
 });
 
 describe('buch-service: findById', () => {
+    beforeEach(() => {
+        vi.resetAllMocks();
+
+        // Mocking der Drizzle-Abfrage mit dem Ergebnis des Inner Joins
+        selectMock.mockReturnValue({ from: fromMock });
+        fromMock.mockReturnValue({ innerJoin: innerJoinMock });
+        innerJoinMock.mockReturnValue({ where: whereMock });
+        whereMock.mockReturnValue({ limit: limitMock });
+    });
+
     test('id vorhanden', async () => {
         // given
         const id = 1;
@@ -66,10 +76,6 @@ describe('buch-service: findById', () => {
         const expectedBuchDTO: BuchDTO = new BuchDTO(buchSelectMock, titelSelectMock);
 
         // Mocking der Drizzle-Abfrage
-        selectMock.mockReturnValue({ from: fromMock });
-        fromMock.mockReturnValue({ innerJoin: innerJoinMock });
-        innerJoinMock.mockReturnValue({ where: whereMock });
-        whereMock.mockReturnValue({ limit: limitMock });
         limitMock.mockResolvedValueOnce([{ buch: buchSelectMock, titel: titelSelectMock }]);
 
         // when
@@ -84,11 +90,8 @@ describe('buch-service: findById', () => {
     test('id nicht vorhanden', async () => {
         // given
         const id = 999;
-        // Drizzle-Abfrage mit dem Ergebnis des Inner Joins
-        selectMock.mockReturnValue({ from: fromMock });
-        fromMock.mockReturnValue({ innerJoin: innerJoinMock });
-        innerJoinMock.mockReturnValue({ where: whereMock });
-        whereMock.mockReturnValue({ limit: limitMock });
+
+        // Mocking der Drizzle-Abfrage
         limitMock.mockResolvedValueOnce([]);
 
         // when / then
