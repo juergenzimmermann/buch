@@ -30,7 +30,7 @@ include:
 
 services:
   keycloak:
-    image: dhi.io/keycloak:26.8.1-debian13
+    image: dhi.io/keycloak:26.8.2-debian13
     # /opt/keycloak/bin/kc.sh
     # --help
     #command: ["start"]

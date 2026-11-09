@@ -104,7 +104,6 @@
     "leasot": "14.4.0",
     "oxfmt": "0.77.0",
     "oxlint": "1.92.0",
-    "oxlint-tsgolint": "7.0.2006",
     "tsrs": "0.23.0-ts7.1.0-beta",
     "tsx": "4.23.15",
     "typedoc": "0.28.20",
