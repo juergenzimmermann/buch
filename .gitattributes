@@ -6,4 +6,4 @@
 *.jpg binary
 *.cer binary
 *.pem binary
-package-lock.json binary
+pnpm-lock.json binary

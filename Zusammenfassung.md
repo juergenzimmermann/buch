@@ -54,11 +54,9 @@ GPL v3
   - ETag
 - Watch-Modus
 - Validierung durch Zod
-- ORM durch Prisma (für PostgreSQL)
+- ORM durch Drizzle (für PostgreSQL)
   - Schema
-  - Code-Generierung
-  - flexible WHERE-Klauseln
-  - Fetch-Join: untergeordnete JSON-Daten mitlesen
+  - (Fetch-) Join
   - Transaktionen
   - Lost Updates
 - CSV-Dateien in die DB laden
@@ -90,8 +88,8 @@ GPL v3
 | === und !==                                   | 1          |            |
 | Destructuring für JSON-Objekte und -Arrays    | 2015       |            |
 | Shorthand Properties                          | 2015       |            |
-| Rest (und Spread) Properties für JSON-Objekte | 2018       |            |
-| (Rest und Spread Properties für JSON-Arrays)  | 2015       |            |
+| Spread Operator für JSON-Objekte              | 2018       |            |
+| Spread Operator für JSON-Arrays               | 2015       |            |
 | Optional Chaining ?.                          | 2020       |            |
 | Nullish Coalescing ??                         | 2020       |            |
 | Template Strings                              | 2015       |            |

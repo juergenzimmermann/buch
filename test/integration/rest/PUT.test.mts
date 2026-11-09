@@ -17,7 +17,7 @@
 import { AxiosHeaders, type AxiosResponse, HttpStatusCode } from 'axios';
 import { BEARER, IF_MATCH } from '../constants.mts';
 import { beforeAll, describe, expect, test } from 'vitest';
-import { type BuchUpdateType } from '../../../src/buch/router/buch-validation.mts';
+import { type BuchUpdateType } from '../../../src/buch/validation/buch-validation.mts';
 import { type ProblemDetails } from '../../../src/problem-details.mts';
 import { client } from './client.mts';
 import { getToken } from './token.mts';

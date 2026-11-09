@@ -1,4 +1,4 @@
-// Copyright (C) 2021 - present Juergen Zimmermann, Hochschule Karlsruhe
+// Copyright (C) 2026 - present Juergen Zimmermann, Hochschule Karlsruhe
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -19,34 +19,52 @@
  */
 
 import { configURL, getConfig } from '../config.mts';
-import { PrismaClient } from '../../generated/prisma/client.ts';
-import { PrismaPg } from '@prisma/adapter-pg';
+import { type PoolConfig } from 'pg';
 import { URL } from 'node:url';
-import { adapter } from '../prisma-client.mts';
+import { db } from '../db.mts';
+import { drizzle } from 'drizzle-orm/node-postgres';
 import { getLogger } from '../../logger/logger.mts';
 import process from 'node:process';
 import { readFile } from 'node:fs/promises';
+import { sql } from 'drizzle-orm';
 
 const config = await getConfig();
-const activated = config.db?.populate === true;
 
+const {
+    admin,
+    database,
+    adminPassword,
+    host,
+    cert,
+    tlsMinVersion,
+    tlsMaxVersion,
+    poolIdleTimeoutMillis,
+    poolConnectionTimeoutMillis,
+} = config.db;
+const activated = config.db.populate === true;
+const { nodeEnv } = config.server;
+
+const connectionAdmin: PoolConfig = {
+    user: admin,
+    database,
+    password: adminPassword,
+    host,
+    ssl: {
+        cert: await readFile(new URL(cert, new URL('..', configURL))),
+        minVersion: tlsMinVersion,
+        maxVersion: tlsMaxVersion,
+    },
+    sslnegotiation: 'direct',
+    max: 5,
+    idleTimeoutMillis: poolIdleTimeoutMillis,
+    connectionTimeoutMillis: poolConnectionTimeoutMillis,
+};
+const drizzleConfigAdmin: any = { connection: connectionAdmin };
+if (nodeEnv === 'development') {
+    drizzleConfigAdmin.logger = true;
+}
+export const dbAdmin = drizzle(drizzleConfigAdmin);
 const dbURL = new URL('postgresql/', configURL);
-
-// PrismaClient fuer DB "buch" (siehe Umgebungsvariable DATABASE_URL in ".env")
-// d.h. mit PostgreSQL-User "buch" und Schema "buch"
-// aber OHNE Logging der Queries
-const prisma: PrismaClient = new PrismaClient({
-    adapter,
-    errorFormat: 'pretty',
-});
-
-const adapterAdmin = new PrismaPg({
-    connectionString: process.env['DATABASE_URL_ADMIN'],
-});
-const prismaAdmin: PrismaClient = new PrismaClient({
-    adapter: adapterAdmin,
-    errorFormat: 'pretty',
-});
 
 const logger = getLogger('populate', 'func');
 
@@ -54,10 +72,6 @@ const logger = getLogger('populate', 'func');
  * Die Test-DB wird im Development-Modus neu geladen, nachdem die Module
  * initialisiert sind, was durch `OnApplicationBootstrap` realisiert wird.
  */
-/**
- * Initialisierung durch DI mit `DataSource` für SQL-Queries.
- */
-
 export const populate = async () => {
     if (!activated) {
         return;
@@ -65,8 +79,7 @@ export const populate = async () => {
 
     logger.warn('Die DB wird neu geladen');
 
-    // Bei "TypedSQL" von Prisma ist nur 1 SQL-Anweisung pro Datei moeglich
-    // https://www.prisma.io/typedsql
+    // https://orm.drizzle.team/docs/sql
     const dropScript = new URL('drop-table.sql', dbURL);
     logger.debug('dropScript = %s', dropScript);
     // https://nodejs.org/api/fs.html#fspromisesreadfilepath-options
@@ -81,15 +94,13 @@ export const populate = async () => {
     const copyStatements = await readFile(copyScript, 'utf8');
 
     try {
-        await prisma.$connect();
-        await prisma.$transaction(async (tx) => {
-            await tx.$executeRawUnsafe(dropStatements);
-            await tx.$executeRawUnsafe(createStatements);
+        await db.$client.connect();
+        await db.transaction(async (tx) => {
+            await tx.execute(sql.raw(dropStatements));
+            await tx.execute(sql.raw(createStatements));
         });
-        await prisma.$disconnect();
-        logger.warn('Die DB wurde neu geladen');
     } catch (err) {
-        logger.error('Fehler beim Neuladen der DB.');
+        logger.error('Fehler beim Neuanlegen der DB-Tabellen.');
         logger.error('Beachte bei Bun: PostgreSQL ist nicht mit TLS nutzbar.');
         logger.error('%o', err as any);
         process.exit();
@@ -97,9 +108,15 @@ export const populate = async () => {
 
     // COPY zum Laden von CSV-Dateien erfordert Administrationsrechte
     // https://www.postgresql.org/docs/current/sql-copy.html
-    await prismaAdmin.$connect();
-    await prismaAdmin.$transaction(async (tx) => {
-        await tx.$executeRawUnsafe(copyStatements);
-    });
-    await prismaAdmin.$disconnect();
+    try {
+        await dbAdmin.transaction(async (tx) => {
+            await tx.execute(sql.raw(copyStatements));
+        });
+    } catch (err) {
+        logger.error('Fehler beim Kopieren der CSV-Dateien.');
+        logger.error('%o', err as any);
+        process.exit();
+    }
+
+    logger.warn('Die DB wurde neu geladen');
 };

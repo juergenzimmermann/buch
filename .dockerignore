@@ -4,8 +4,9 @@
 .venv
 .vscode
 dist
+log
 node_modules
-prisma
+drizzle
 tests
 .editorconfig
 .gitignore

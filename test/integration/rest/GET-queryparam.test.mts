@@ -17,17 +17,11 @@
 import { type AxiosResponse, HttpStatusCode } from 'axios';
 import { CONTENT_TYPE, restURL } from '../constants.mts';
 import { describe, expect, test } from 'vitest';
-import { type Buch } from '../../../src/generated/prisma/client.ts';
-import { type BuchMitTitel } from '../../../src/buch/service/buch-service.mts';
+import { type BuchDTO } from '../../../src/buch/service/buchDTO.mts';
 import { type Page } from '../../../src/buch/router/page.mts';
 import { client } from './client.mts';
 
-type BuchType = Omit<Buch, 'preis' | 'rabatt'> & {
-    preis: string;
-    rabatt: string;
-};
-
-type BuchMitTitelType = Omit<BuchMitTitel, 'preis' | 'rabatt'> & {
+type BuchType = Omit<BuchDTO, 'preis' | 'rabatt'> & {
     preis: string;
     rabatt: string;
 };
@@ -70,8 +64,7 @@ describe('GET /rest', () => {
         const url = `${restURL}?${params}`;
 
         // when
-        const { data, headers, status }: AxiosResponse<Page<BuchMitTitelType>> =
-            await client.get(url);
+        const { data, headers, status }: AxiosResponse<Page<BuchType>> = await client.get(url);
 
         // then
         expect(status).toBe(HttpStatusCode.Ok);

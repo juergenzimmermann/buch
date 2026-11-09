@@ -1,3 +1,4 @@
+// oxlint-disable max-lines, max-dependencies
 // Copyright (C) 2016 - present Juergen Zimmermann, Hochschule Karlsruhe
 //
 // This program is free software: you can redistribute it and/or modify
@@ -18,197 +19,178 @@
  * @packageDocumentation
  */
 
-import { type BuchFile, type Prisma } from '../../generated/prisma/client.ts';
+import { BuchDTO, type BuchSelect } from './buchDTO.mts';
 import { type Suchparameter, suchparameterNamen } from './suchparameter.mts';
-import { type BuchInclude } from '../../generated/prisma/models/Buch.ts';
+import { abbildungTable, buchFileTable, buchTable, titelTable } from '../../db/schema.mts';
+import { count, eq } from 'drizzle-orm';
+import { type AbbildungSelect } from './abbildungDTO.mts';
 import { NotFoundError } from './errors.mts';
 import { type Pageable } from './pageable.mts';
 import { type Slice } from './slice.mts';
-import { buildWhere } from './where-builder.mts';
+import { type TitelSelect } from './titelDTO.mts';
+import { buildWhere } from './build-where.mts';
+import { db } from '../../config/db.mts';
 import { getLogger } from '../../logger/logger.mts';
-import { prismaClient } from '../../config/prisma-client.mts';
-
-// Typdefinition für `findById`
-type FindByIdParams = {
-    // ID des gesuchten Buchs
-    readonly id: number;
-    /** Sollen die Abbildungen mitgeladen werden? */
-    readonly mitAbbildungen?: boolean;
-};
-
-export type BuchMitTitel = Prisma.BuchGetPayload<{
-    include: { titel: true };
-}>;
-
-// "preis" und "rabatt" sind vom Prisma-internen Typ "Decimal"
-export type BuchMitTitelDTO = Omit<BuchMitTitel, 'preis' | 'rabatt'> & {
-    preis: number;
-    rabatt: number;
-};
-
-export type BuchMitTitelUndAbbildungen = Prisma.BuchGetPayload<{
-    include: {
-        titel: true;
-        abbildungen: true;
-    };
-}>;
-
-// "preis" und "rabatt" sind vom Prisma-internen Typ "Decimal"
-export type BuchMitTitelUndAbbildungenDTO = Omit<BuchMitTitelUndAbbildungen, 'preis' | 'rabatt'> & {
-    preis: number;
-    rabatt: number;
-};
-
-const INCLUDE_TITEL: BuchInclude = { titel: true };
-const INCLUDE_TITEL_UND_ABBILDUNGEN: BuchInclude = {
-    titel: true,
-    abbildungen: true,
-};
-
-const logger = getLogger('buch-service');
 
 // Rueckgabetyp Promise bei asynchronen Funktionen
 //    ab ES2015
 //    vergleiche Task<> bei C#
 // Status eines Promise:
-//    Pending: das Resultat ist noch nicht vorhanden, weil die asynchrone
-//             Operation noch nicht abgeschlossen ist
+//    Pending:   das Resultat ist noch nicht vorhanden, weil die asynchrone
+//               Operation noch nicht abgeschlossen ist
 //    Fulfilled: die asynchrone Operation ist abgeschlossen und
 //               das Promise-Objekt hat einen Wert
-//    Rejected: die asynchrone Operation ist fehlgeschlagen and das
-//              Promise-Objekt wird nicht den Status "fulfilled" erreichen.
-//              Im Promise-Objekt ist dann die Fehlerursache enthalten.
+//    Rejected:  die asynchrone Operation ist fehlgeschlagen and das
+//               Promise-Objekt wird nicht den Status "fulfilled" erreichen.
+//               Im Promise-Objekt ist dann die Fehlerursache enthalten.
+
+type BuchMitTitelSelect = { buch: BuchSelect; titel: TitelSelect };
+type BuchMitTitelUndAbbildungSelect = BuchMitTitelSelect & {
+    abbildung: AbbildungSelect;
+};
+
+const logger = getLogger('buch-service');
 
 /**
- * Ein Buch asynchron anhand seiner ID suchen
+ * Ein Buch asynchron anhand seiner ID suchen und den Titel mitladen
  * @param id ID des gesuchten Buches
- * @returns Das gefundene Buch in einem Promise aus ES2015.
+ * @returns Das gefundene Buch in einem Promise.
  * @throws NotFoundError falls kein Buch mit der ID existiert
  */
-// https://2ality.com/2015/01/es6-destructuring.html#simulating-named-parameters-in-javascript
-export const findById = async ({
-    id,
-    mitAbbildungen,
-}: FindByIdParams): Promise<Readonly<BuchMitTitelUndAbbildungenDTO>> => {
+export const findById = async (id: number): Promise<Readonly<BuchDTO>> => {
     logger.debug('findById: id=%d', id);
 
-    // Das Resultat ist null, falls kein Datensatz gefunden
     // Lesen: Keine Transaktion erforderlich
-    // "include":
-    // - referenzierte Daten werden mitgeladen
-    // - keine Konfiguration fuer Eager- oder Lazy-Fetching
-    // - keine Proxy-Objekte durch evtl. Lazy-Fetching
-    // - keine DTO-Klassen mit weggelassenen nicht geladenen Properties
-    const include = mitAbbildungen ? INCLUDE_TITEL_UND_ABBILDUNGEN : INCLUDE_TITEL;
-    const buch: BuchMitTitelUndAbbildungen | null = await prismaClient.buch.findUnique({
-        where: { id },
-        include,
-    });
-    if (buch === null) {
+    const [row]: BuchMitTitelSelect[] = await db
+        .select()
+        .from(buchTable)
+        .innerJoin(titelTable, eq(buchTable.id, titelTable.buchId))
+        .where(eq(buchTable.id, id))
+        .limit(1);
+
+    if (row === undefined) {
         logger.debug('Es gibt kein Buch mit der ID %d', id);
         throw new NotFoundError(`Es gibt kein Buch mit der ID ${id}.`);
     }
-    // nullish coalescing operator
-    buch.schlagwoerter ??= [];
 
-    // Rest Properties
-    const { preis, rabatt, ...buchRest } = buch;
-    const buchDTO: BuchMitTitelUndAbbildungenDTO = {
-        // Spread Properties
-        ...buchRest,
-        preis: preis.toNumber(),
-        rabatt: rabatt.toNumber(),
-    };
+    const buchDTO: BuchDTO = new BuchDTO(row.buch, row.titel);
 
     logger.debug('findById: buchDTO=%o', buchDTO);
     return buchDTO;
 };
 
 /**
- * Binärdatei zu einem Buch suchen.
- * @param buchId ID des zugehörigen Buchs.
- * @returns Binärdatei oder undefined als Promise.
+ * Ein Buch asynchron anhand seiner ID suchen und den Titel und die Abbildungen mitladen
+ * @param id ID des gesuchten Buches
+ * @returns Das gefundene Buch in einem Promise.
+ * @throws NotFoundError falls kein Buch mit der ID existiert
  */
-export const findFileByBuchId = async (buchId: number): Promise<Readonly<BuchFile> | undefined> => {
-    logger.debug('findFileByBuchId: buchId=%d', buchId);
-    const buchFile: BuchFile | null = await prismaClient.buchFile.findUnique({
-        where: { buchId },
-    });
-    if (buchFile === null) {
-        logger.debug('findFileByBuchId: Keine Datei gefunden');
-        return;
+export const findByIdMitAbb = async (id: number): Promise<Readonly<BuchDTO>> => {
+    logger.debug('findByIdMitAbb: id=%d', id);
+
+    const rows: BuchMitTitelUndAbbildungSelect[] = await db
+        .select()
+        .from(buchTable)
+        .innerJoin(titelTable, eq(buchTable.id, titelTable.buchId))
+        .innerJoin(abbildungTable, eq(buchTable.id, abbildungTable.buchId))
+        .where(eq(buchTable.id, id));
+
+    if (rows.length === 0) {
+        logger.debug('Es gibt kein Buch mit der ID %d', id);
+        throw new NotFoundError(`Es gibt kein Buch mit der ID ${id}.`);
     }
 
-    logger.debug(
-        'findFileByBuchId: id=%s, byteLength=%d, filename=%s, mimetype=%s, buchId=%d',
-        buchFile.id,
-        buchFile.data.byteLength,
-        buchFile.filename,
-        buchFile.mimetype,
-        buchFile.buchId,
-    );
+    // jeder Datensatz enthaelt das gefundene Buch
+    const [firstRow] = rows;
+    if (firstRow === undefined) {
+        logger.debug('Interner Fehler bei der Suche mit der ID %d', id);
+        throw new NotFoundError(`Es gibt kein Buch mit der ID ${id}.`);
+    }
 
-    // als Datei im Wurzelverzeichnis des Projekts speichern:
-    // import { writeFile } from 'node:fs/promises';
-    // await writeFile(buchFile.filename, buchFile.data);
+    // Abbildungen als JSON-Array fuer das eine gefundene Buch
+    const abbildungRows = rows.filter((row) => row !== undefined).map((row) => row.abbildung);
 
-    return buchFile;
+    const buchDTO: BuchDTO = new BuchDTO(firstRow.buch, firstRow.titel, abbildungRows);
+    logger.debug('findByIdMitAbb: buchDTO=%o', buchDTO);
+    return buchDTO;
 };
 
 /**
- * Anzahl der gefundenen Bücher zurückliefern.
- * @param WHERE-Klausel der eigentlichen Suche.
- * @returns Anzahl der gefundenen Bücher.
+ * Die Version zu gegebener ID ermitteln.
+ * @param id ID des gesuchten Buches
+ * @returns Die Version in einem Promise.
+ * @throws NotFoundError falls kein Buch mit der ID existiert
  */
-export const getCount = async (where?: Prisma.BuchWhereInput) => {
-    logger.debug('count: where=%o', where ?? 'undefined');
-    const { count } = prismaClient.buch;
-    const anzahl = where === undefined ? await count() : await count({ where });
-    logger.debug('count: %d', anzahl);
-    return anzahl;
+export const findVersionById = async (id: number): Promise<number> => {
+    logger.debug('findVersionById: id=%d', id);
+
+    const [row]: { version: number }[] = await db
+        .select({ version: buchTable.version })
+        .from(buchTable)
+        .where(eq(buchTable.id, id))
+        .limit(1);
+
+    if (row === undefined) {
+        logger.debug('Es gibt kein Buch mit der ID %d', id);
+        throw new NotFoundError(`Es gibt kein Buch mit der ID ${id}.`);
+    }
+
+    const { version } = row;
+    logger.debug('findVersionById: version=%d', version);
+    return version;
 };
 
-const createSlice = (
-    buecher: BuchMitTitel[],
+/**
+ * Gibt es ein Buch zur gegebenen ID
+ * @param id ID des gesuchten Buches
+ * @returns true in einem Promise, falls das Buch existiert, sonst false.
+ */
+export const existsById = async (id: number): Promise<boolean> => {
+    logger.debug('existsById: id=%d', id);
+
+    const [row]: { id: number }[] = await db
+        .select({ id: buchTable.id })
+        .from(buchTable)
+        .where(eq(buchTable.id, id))
+        .limit(1);
+
+    if (row === undefined) {
+        logger.debug('existsById: false');
+        return false;
+    }
+
+    logger.debug('existsById: true');
+    return true;
+};
+
+export const createSlice = (
+    buecher: BuchDTO[],
     totalElements: number,
-): Readonly<Slice<BuchMitTitelDTO>> => {
-    const buecherDTO = buecher.map((buch) => {
-        // Rest Properties
-        const { preis, rabatt, ...buchRest } = buch;
-        const buchDTO: BuchMitTitelDTO = {
-            // Spread Properties
-            ...buchRest,
-            preis: preis.toNumber(),
-            rabatt: rabatt.toNumber(),
-        };
-        buchDTO.schlagwoerter = buch.schlagwoerter ?? [];
-        return buchDTO;
-    });
-    const buchSlice: Slice<BuchMitTitelDTO> = {
-        content: buecherDTO,
+): Readonly<Slice<BuchDTO>> => {
+    const buchSlice: Slice<BuchDTO> = {
+        content: buecher,
         totalElements,
     };
     logger.debug('createSlice: buchSlice=%o', buchSlice);
     return buchSlice;
 };
 
-export const findAll = async (pageable: Pageable): Promise<Readonly<Slice<BuchMitTitelDTO>>> => {
-    const { number, size } = pageable;
-    const buecher: BuchMitTitel[] | null = await prismaClient.buch.findMany({
-        // TODO limit und offset ab Prisma 8: https://github.com/prisma/orm/releases/tag/v8.0.0-rc.7
-        skip: number * size,
-        take: size,
-        include: INCLUDE_TITEL,
-    });
-    if (buecher === null || buecher.length === 0) {
+export const findAll = async (pageable: Pageable): Promise<Readonly<Slice<BuchDTO>>> => {
+    const { number } = pageable;
+    const rows: BuchMitTitelSelect[] = await db
+        .select()
+        .from(buchTable)
+        .innerJoin(titelTable, eq(buchTable.id, titelTable.buchId));
+    const totalElements = rows.length;
+    if (totalElements === 0) {
         logger.debug('#findAll: Keine Buecher gefunden');
         throw new NotFoundError(`Ungueltige Seite "${number}"`);
     }
-    const totalElements = await getCount();
+    const buecher = rows.map((row) => new BuchDTO(row.buch, row.titel));
     return createSlice(buecher, totalElements);
 };
 
-const checkKeys = (keys: string[]) => {
+export const checkKeys = (keys: string[]) => {
     logger.debug('#checkKeys: keys=%o', keys);
     // Ist jeder Suchparameter auch eine Property von Buch oder "schlagwoerter"?
     let validKeys = true;
@@ -228,7 +210,7 @@ const checkKeys = (keys: string[]) => {
     return validKeys;
 };
 
-const checkEnums = (suchparameter: Suchparameter) => {
+export const checkEnums = (suchparameter: Suchparameter) => {
     const { art } = suchparameter;
     logger.debug('#checkEnums: Suchparameter "art=%s"', art);
     return art === undefined || art === 'EPUB' || art === 'HARDCOVER' || art === 'PAPERBACK';
@@ -244,7 +226,7 @@ const checkEnums = (suchparameter: Suchparameter) => {
 export const find = async (
     suchparameter: Record<string, string | undefined>,
     pageable: Pageable,
-): Promise<Readonly<Slice<Readonly<BuchMitTitelDTO>>>> => {
+): Promise<Readonly<Slice<Readonly<BuchDTO>>>> => {
     logger.debug('find: suchparameter=%s, pageable=%o', JSON.stringify(suchparameter), pageable);
 
     // Keine Suchparameter?
@@ -260,28 +242,66 @@ export const find = async (
     }
 
     const where = buildWhere(suchparameter as Suchparameter);
-    if (Object.keys(where).length === 0) {
-        logger.debug('Ungueltige Suchparameter');
-        throw new NotFoundError('Ungueltige Suchparameter');
-    }
-
     const { number, size } = pageable;
 
     // Das Resultat ist eine leere Liste, falls nichts gefunden
     // Lesen: Keine Transaktion erforderlich
-    const buecher: BuchMitTitel[] = await prismaClient.buch.findMany({
-        where,
-        // TODO limit und offset ab Prisma 8: https://github.com/prisma/orm/releases/tag/v8.0.0-rc.7
-        skip: number * size,
-        take: size,
-        include: INCLUDE_TITEL,
-    });
-    if (buecher.length === 0) {
+    const rows: BuchMitTitelSelect[] = await db
+        .select()
+        .from(buchTable)
+        .innerJoin(titelTable, eq(buchTable.id, titelTable.buchId))
+        .where(where)
+        .offset(number * size)
+        .limit(size);
+    if (rows.length === 0) {
         logger.debug('find: Keine Buecher gefunden');
         throw new NotFoundError(
             `Keine Buecher gefunden: ${JSON.stringify(suchparameter)}, Seite ${pageable.number}}`,
         );
     }
-    const totalElements = await getCount(where);
-    return createSlice(buecher, totalElements);
+
+    const buecher = rows.map((row) => new BuchDTO(row.buch, row.titel));
+    const [total] = await db
+        .select({ count: count() })
+        .from(buchTable)
+        .innerJoin(titelTable, eq(buchTable.id, titelTable.buchId))
+        .where(where);
+    return createSlice(buecher, total?.count ?? 0);
+};
+
+export type BuchFileSelect = typeof buchFileTable.$inferSelect;
+
+/**
+ * Binärdatei zu einem Buch suchen.
+ * @param buchId ID des zugehörigen Buchs.
+ * @returns Binärdatei oder undefined als Promise.
+ */
+export const findFileByBuchId = async (
+    buchId: number,
+): Promise<Readonly<BuchFileSelect> | undefined> => {
+    logger.debug('findFileByBuchId: buchId=%d', buchId);
+    const [buchFile]: BuchFileSelect[] = await db
+        .select()
+        .from(buchFileTable)
+        .where(eq(buchFileTable.buchId, buchId))
+        .limit(1);
+    if (buchFile === undefined) {
+        logger.debug('findFileByBuchId: Keine Datei gefunden');
+        return;
+    }
+
+    logger.debug(
+        'findFileByBuchId: id=%s, byteLength=%d, filename=%s, mimetype=%s, buchId=%d',
+        buchFile.id,
+        (buchFile.data as Uint8Array<ArrayBuffer>).byteLength,
+        buchFile.filename,
+        buchFile.mimetype,
+        buchFile.buchId,
+    );
+
+    // als Datei im Wurzelverzeichnis des Projekts speichern:
+    // import { writeFile } from 'node:fs/promises';
+    // await writeFile(buchFile.filename, buchFile.data);
+
+    return buchFile;
 };

@@ -1,4 +1,3 @@
-// oxlint-disable no-magic-numbers
 // Copyright (C) 2026 - present Juergen Zimmermann, Hochschule Karlsruhe
 //
 // This program is free software: you can redistribute it and/or modify
@@ -22,7 +21,9 @@
 //      class-validator (ursprüngl. in Nest integriert)
 //      ata-validator (evtl. in Node und Bun integriert)
 
+import { AbbildungSchema } from './abbildung-validation.mts';
 import ISBN from 'isbn3';
+import { TitelSchema } from './titel-validation.mts';
 import { z } from 'zod';
 
 export const MAX_RATING = 5;
@@ -44,18 +45,8 @@ const BuchSchema = z.strictObject({
     homepage: z.httpUrl().optional(),
     schlagwoerter: z.array(z.string()).optional(),
 
-    titel: z.strictObject({
-        titel: z.string().regex(/^\w.*/u).max(40),
-        untertitel: z.string().max(40).optional(),
-    }),
-    abbildungen: z
-        .array(
-            z.strictObject({
-                beschriftung: z.string().max(32),
-                contentType: z.string().max(16),
-            }),
-        )
-        .optional(),
+    titel: TitelSchema,
+    abbildungen: z.array(AbbildungSchema).optional(),
 });
 
 // https://zod.dev/compile seit Zod 4.5

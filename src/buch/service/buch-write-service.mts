@@ -1,3 +1,4 @@
+// oxlint-disable max-lines
 // Copyright (C) 2016 - present Juergen Zimmermann, Hochschule Karlsruhe
 //
 // This program is free software: you can redistribute it and/or modify
@@ -18,57 +19,72 @@
  * @packageDocumentation
  */
 
-import { type BuchFile, type Prisma } from '../../generated/prisma/client.ts';
+import { type BuchNeuType, type BuchUpdateType } from '../validation/buch-validation.mts';
 import {
     IsbnExistsError,
     NotFoundError,
     VersionInvalidError,
     VersionOutdatedError,
 } from './errors.mts';
-import { findById } from './buch-service.mts';
+import { abbildungTable, buchFileTable, buchTable, titelTable } from '../../db/schema.mts';
+import { eq, sql } from 'drizzle-orm';
+import { existsById, findVersionById } from './buch-service.mts';
+import { db } from '../../config/db.mts';
 import { getLogger } from '../../logger/logger.mts';
-import { prismaClient } from '../../config/prisma-client.mts';
 import { sendmail } from '../../mail/sendmail.mts';
-
-export type BuchCreate = Prisma.BuchCreateInput;
-type BuchCreated = Prisma.BuchGetPayload<{
-    include: {
-        titel: true;
-        abbildungen: true;
-    };
-}>;
-
-export type BuchUpdate = Prisma.BuchUpdateInput;
-/** Typdefinitionen zum Aktualisieren eines Buches mit `update`. */
-export type UpdateParams = {
-    /** ID des zu aktualisierenden Buches. */
-    readonly id: number | undefined;
-    /** Buch-Objekt mit den aktualisierten Werten. */
-    readonly buch: BuchUpdate;
-    /** Versionsnummer für die zu aktualisierenden Werte. */
-    readonly version: string;
-};
-type BuchUpdated = Prisma.BuchGetPayload<{}>;
-
-type BuchFileCreate = Prisma.BuchFileUncheckedCreateInput;
-export type BuchFileCreated = Prisma.BuchFileGetPayload<{}>;
-
-const VERSION_PATTERN = /^"\d{1,3}"/u;
 
 const logger = getLogger('buch-write-service');
 
+export type BuchInsert = typeof buchTable.$inferInsert;
+// ohne Fremdschluessel-Spalte
+export type TitelInsert = Omit<typeof titelTable.$inferInsert, 'buchId'>;
+// ohne Fremdschluessel-Spalte
+export type AbbildungInsert = Omit<typeof abbildungTable.$inferInsert, 'buchId'>;
+export type InsertType = {
+    buch: BuchInsert;
+    titel: TitelInsert;
+    abbildungen?: AbbildungInsert[];
+};
+export type BuchFileInsert = typeof buchFileTable.$inferInsert;
+
+const VERSION_PATTERN = /^"\d{1,3}"/u;
+
+/**
+ * Error-Klasse für internen Fehler.
+ */
+export class InternalServerError extends Error {}
+
 // =============================================================================
-// C R E A T E
+// I N S E R T
 // =============================================================================
-const checkUniqueISBN = async ({ isbn }: Prisma.BuchCreateInput): Promise<undefined> => {
+const buchNeuToInsert = (buchNeu: BuchNeuType): InsertType => {
+    const { titel, abbildungen, preis, rabatt, ...buchTmp } = buchNeu;
+    const titelInsert: TitelInsert = titel;
+    const abbildungenInsert: AbbildungInsert[] | undefined = abbildungen;
+    const preisStr = preis.toString();
+    const rabattStr = String(rabatt);
+
+    const buchInsert: BuchInsert = { ...buchTmp, preis: preisStr, rabatt: rabattStr };
+    return abbildungenInsert === undefined
+        ? { buch: buchInsert, titel: titelInsert }
+        : { buch: buchInsert, titel: titelInsert, abbildungen: abbildungenInsert };
+};
+
+const checkUniqueISBN = async (isbn: string): Promise<undefined> => {
     logger.debug('checkUniqueISBN: isbn=%s', isbn);
 
-    const anzahl = await prismaClient.buch.count({ where: { isbn } });
-    if (anzahl > 0) {
-        logger.debug('checkUniqueISBN: isbn existiert: %s', isbn);
-        throw new IsbnExistsError(isbn);
+    const [row]: { id: number }[] = await db
+        .select({ id: buchTable.id })
+        .from(buchTable)
+        .where(eq(buchTable.isbn, isbn))
+        .limit(1);
+    if (row === undefined) {
+        logger.debug('checkUniqueISBN: ok');
+        return;
     }
-    logger.debug('checkUniqueISBN: ok');
+
+    logger.debug('checkUniqueISBN: isbn %s existiert', isbn);
+    throw new IsbnExistsError(isbn);
 };
 
 const sendmailFn = async ({ id, titel }: { id: number | 'N/A'; titel: string }) => {
@@ -92,31 +108,166 @@ const sendmailFn = async ({ id, titel }: { id: number | 'N/A'; titel: string }) 
 
 /**
  * Ein neues Buch soll angelegt werden.
- * @param buch Das neu abzulegende Buch
+ * @param buchNeu Das neu abzulegende Buch
  * @returns Die ID des neu angelegten Buches
  * @throws IsbnExists falls die ISBN-Nummer bereits existiert
  */
-export const create = async (buch: BuchCreate) => {
-    logger.debug('create: buch=%o', buch);
-    await checkUniqueISBN(buch);
+export const insert = async (buchNeu: BuchNeuType) => {
+    logger.debug('create: buchNeu=%o', buchNeu);
+    await checkUniqueISBN(buchNeu.isbn);
+
+    const { buch, titel, abbildungen } = buchNeuToInsert(buchNeu);
 
     // Neuer Datensatz mit generierter ID
-    let buchDb: BuchCreated | undefined;
-    await prismaClient.$transaction(async (tx) => {
-        buchDb = await tx.buch.create({
-            data: buch,
-            include: { titel: true, abbildungen: true },
-        });
-    });
-    await sendmailFn({
-        id: buchDb?.id ?? 'N/A',
-        titel: buchDb?.titel?.titel ?? 'N/A',
+    const buchId = await db.transaction(async (tx) => {
+        // https://orm.drizzle.team/docs/insert
+        // Destructuring
+        const [buchInsert] = await tx
+            .insert(buchTable)
+            .values(buch)
+            .returning({ id: buchTable.id });
+        if (buchInsert === undefined) {
+            throw new InternalServerError(`Das Buch ${buch} wurde nicht eingefuegt.`);
+        }
+        const buchIdTmp = buchInsert.id;
+
+        const [titelInsert] = await tx
+            .insert(titelTable)
+            .values({ ...titel, buchId: buchIdTmp })
+            .returning({ id: titelTable.id });
+        if (titelInsert === undefined) {
+            throw new InternalServerError(`Der Titel ${titel} wurde nicht eingefuegt.`);
+        }
+        logger.debug('ID neuer Titel: %d', titelInsert.id);
+
+        if (abbildungen !== undefined) {
+            await Promise.all(
+                abbildungen?.map(async (abbildung) => {
+                    const [abbildungInsert] = await tx
+                        .insert(abbildungTable)
+                        .values({ ...abbildung, buchId: buchIdTmp })
+                        .returning({ id: abbildungTable.id });
+                    if (abbildungInsert === undefined) {
+                        throw new Error('Die Abbildung wurde nicht eingefuegt.');
+                    }
+                    logger.debug('ID neue Abbildung: %d', abbildungInsert.id);
+                }),
+            );
+        }
+
+        return buchIdTmp;
     });
 
-    logger.debug('create: buchDb.id=%s', buchDb?.id);
-    return buchDb?.id ?? Number.NaN;
+    await sendmailFn({
+        id: buchId,
+        titel: titel.titel,
+    });
+
+    logger.debug('create: dbId=%d', buchId);
+    return buchId;
 };
 
+// =============================================================================
+// U P D A T E
+// =============================================================================
+const checkLatestVersion = async (id: number, versionStr: string) => {
+    logger.debug('checkLatestVersion: id=%d, versionStr=%s', id, versionStr);
+    if (!VERSION_PATTERN.test(versionStr)) {
+        throw new VersionInvalidError(versionStr);
+    }
+
+    const version = Number.parseInt(versionStr.slice(1, -1), 10);
+    const versionDb = await findVersionById(id);
+
+    if (version < versionDb) {
+        logger.debug('checkLatestVersion: versionDb=%d (outdated)', versionDb);
+        throw new VersionOutdatedError(version);
+    }
+
+    logger.debug('checkLatestVersion: versionDb=%d (ok)', versionDb);
+    return versionDb;
+};
+
+/**
+ * Ein vorhandenes Buch soll aktualisiert werden.
+ * @param id ID des zu aktualisierenden Buchs
+ * @param buch Neue Daten für das Buch
+ * @param version Versionsnummer des Buchs
+ * @returns Die neue Versionsnummer gemäß optimistischer Synchronisation
+ * @throws NotFoundException falls kein Buch zur ID vorhanden ist
+ * @throws VersionInvalidException falls die Versionsnummer ungültig ist
+ * @throws VersionOutdatedException falls die Versionsnummer veraltet ist
+ */
+export const update = async (id: number, buch: BuchUpdateType, version: string) => {
+    logger.debug('update: id=%s, buch=%o, version=%s', id, buch, version);
+    if (id === undefined) {
+        logger.debug('update: Keine gueltige ID');
+        throw new NotFoundError(`Es gibt kein Buch mit der ID ${id}.`);
+    }
+
+    const versionDB = await checkLatestVersion(id, version);
+    logger.debug('update: versionDB=%d', versionDB);
+
+    const { preis, rabatt, ...buchOhnePreisRabatt } = buch;
+    const [updated] = await db.transaction(
+        async (tx) =>
+            // https://orm.drizzle.team/docs/update
+            await tx
+                .update(buchTable)
+                .set({
+                    // Spread-Operator
+                    ...buchOhnePreisRabatt,
+                    version: versionDB + 1,
+                    preis: preis.toString(),
+                    rabatt: String(rabatt),
+                    // Funktion "now" von SQL durch den Template-String aufrufen
+                    aktualisiert: sql`now()`,
+                })
+                .where(eq(buchTable.id, id))
+                .returning({ version: buchTable.version }),
+    );
+
+    const versionUpdated = updated === undefined ? Number.NaN : updated.version;
+    logger.debug('update: versionUpdated=%s', versionUpdated);
+
+    return versionUpdated;
+};
+
+// =============================================================================
+// D E L E T E
+// =============================================================================
+/**
+ * Ein Buch wird asynchron anhand seiner ID gelöscht.
+ *
+ * @param id ID des zu löschenden Buches
+ * @returns true, falls das Buch vorhanden war und gelöscht wurde. Sonst false.
+ */
+export const deleteFn = async (id: number) => {
+    logger.debug('delete: id=%d', id);
+
+    const exists = await existsById(id);
+    if (!exists) {
+        return false;
+    }
+
+    let deleted = false;
+    await db.transaction(async (tx) => {
+        // https://orm.drizzle.team/docs/delete
+        // "CREATE TABLE" mit "ON DELETE CASCADE"
+        const [idDelete] = await tx
+            .delete(buchTable)
+            .where(eq(buchTable.id, id))
+            .returning({ id: buchTable.id });
+        deleted = idDelete !== undefined;
+    });
+
+    logger.debug('delete: %s', deleted);
+    return deleted;
+};
+
+// =============================================================================
+// B I N A E R D A T E I   S P E I C H E R N
+// =============================================================================
 /**
  * Zu einem vorhandenen Buch eine Binärdatei mit z.B. einem Bild abspeichern.
  * @param buchId ID des vorhandenen Buches
@@ -133,120 +284,41 @@ export const addFile = async (
     name: string,
     size: number,
     type: string,
-): Promise<Readonly<BuchFile> | undefined> => {
+): Promise<Readonly<BuchFileInsert>> => {
     logger.debug('addFile: buchId=%d, filename=%s, size=%d', buchId, name, size);
 
     // TODO Dateigroesse pruefen
 
-    let buchFileCreated: BuchFileCreated | undefined;
-    await prismaClient.$transaction(async (tx) => {
-        // Buch ermitteln, falls vorhanden
-        const buch = await tx.buch.findUnique({
-            where: { id: buchId },
-        });
-        if (buch === null) {
-            logger.debug('Es gibt kein Buch mit der ID %d', buchId);
-            throw new NotFoundError(`Es gibt kein Buch mit der ID ${buchId}.`);
-        }
+    // Buch ermitteln, falls vorhanden
+    if (!(await existsById(buchId))) {
+        logger.debug('Es gibt kein Buch mit der ID %d', buchId);
+        throw new NotFoundError(`Es gibt kein Buch mit der ID ${buchId}.`);
+    }
 
+    const buchFileInsert = await db.transaction(async (tx) => {
         // evtl. vorhandene Datei löschen
-        await tx.buchFile.deleteMany({ where: { buchId } });
+        await tx.delete(buchFileTable).where(eq(buchFileTable.buchId, buchId)).returning();
 
-        const buchFile: BuchFileCreate = {
+        const buchFile: BuchFileInsert = {
             filename: name,
             data: data as Uint8Array<ArrayBuffer>,
             mimetype: type,
             buchId,
         };
-        buchFileCreated = await tx.buchFile.create({ data: buchFile });
+        const [result] = await tx.insert(buchFileTable).values(buchFile).returning();
+        return result;
     });
+
+    if (buchFileInsert === undefined) {
+        throw new InternalServerError(`Fehler beim INSERT von ${name}`);
+    }
 
     logger.debug(
         'addFile: id=%s, byteLength=%s, filename=%s, mimetype=%s',
-        buchFileCreated?.id,
-        buchFileCreated?.data.byteLength,
-        buchFileCreated?.filename,
-        buchFileCreated?.mimetype,
+        buchFileInsert.id,
+        (buchFileInsert.data as Uint8Array<ArrayBuffer>).byteLength,
+        buchFileInsert.filename,
+        buchFileInsert.mimetype,
     );
-    return buchFileCreated;
-};
-
-// =============================================================================
-// U P D A T E
-// =============================================================================
-const checkLatestVersion = async (id: number, versionStr: string) => {
-    logger.debug('checkLatestVersion: id=%d, versionStr=%s', id, versionStr);
-    if (!VERSION_PATTERN.test(versionStr)) {
-        throw new VersionInvalidError(versionStr);
-    }
-
-    const version = Number.parseInt(versionStr.slice(1, -1), 10);
-    const buchDb = await findById({ id });
-
-    if (version < buchDb.version) {
-        logger.debug('checkLatestVersion: versionDb=%d', version);
-        throw new VersionOutdatedError(version);
-    }
-
-    logger.debug('checkLatestVersion: ok');
-};
-
-/**
- * Ein vorhandenes Buch soll aktualisiert werden. "Destructured" Argument
- * mit id (ID des zu aktualisierenden Buchs), buch (zu aktualisierendes Buch)
- * und version (Versionsnummer für optimistische Synchronisation).
- * @returns Die neue Versionsnummer gemäß optimistischer Synchronisation
- * @throws NotFoundException falls kein Buch zur ID vorhanden ist
- * @throws VersionInvalidException falls die Versionsnummer ungültig ist
- * @throws VersionOutdatedException falls die Versionsnummer veraltet ist
- */
-// https://2ality.com/2015/01/es6-destructuring.html#simulating-named-parameters-in-javascript
-export const update = async ({ id, buch, version }: UpdateParams) => {
-    logger.debug('update: id=%s, buch=%o, version=%s', id, buch, version);
-    if (id === undefined) {
-        logger.debug('update: Keine gueltige ID');
-        throw new NotFoundError(`Es gibt kein Buch mit der ID ${id}.`);
-    }
-
-    await checkLatestVersion(id, version);
-
-    buch.version = { increment: 1 };
-    let buchUpdated: BuchUpdated | undefined;
-    await prismaClient.$transaction(async (tx) => {
-        buchUpdated = await tx.buch.update({
-            data: buch,
-            where: { id },
-        });
-    });
-    logger.debug('update: buchUpdated=%s', JSON.stringify(buchUpdated));
-
-    return buchUpdated?.version ?? Number.NaN;
-};
-
-// =============================================================================
-// D E L E T E
-// =============================================================================
-/**
- * Ein Buch wird asynchron anhand seiner ID gelöscht.
- *
- * @param id ID des zu löschenden Buches
- * @returns true, falls das Buch vorhanden war und gelöscht wurde. Sonst false.
- */
-export const deleteFn = async (id: number) => {
-    logger.debug('delete: id=%d', id);
-
-    const buch = await prismaClient.buch.findUnique({
-        where: { id },
-    });
-    if (buch === null) {
-        logger.debug('delete: not found');
-        return false;
-    }
-
-    await prismaClient.$transaction(async (tx) => {
-        await tx.buch.delete({ where: { id } });
-    });
-
-    logger.debug('delete');
-    return true;
+    return buchFileInsert;
 };

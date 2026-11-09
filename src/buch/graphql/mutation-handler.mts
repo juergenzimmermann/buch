@@ -20,14 +20,14 @@ import {
     type DeletePayload,
     type ID,
     type UpdatePayload,
-    toCreate,
+    toBuchNeu,
     toID,
     toInt,
     toNumber,
     toUpdate,
 } from './types.mts';
-import { BuchNeuSchema, BuchUpdateGraphQLSchema } from '../router/buch-validation.mts';
-import { create, deleteFn, update } from '../service/buch-write-service.mts';
+import { BuchNeuSchema, BuchUpdateGraphQLSchema } from '../validation/buch-validation.mts';
+import { deleteFn, insert, update } from '../service/buch-write-service.mts';
 import { GraphQLError } from 'graphql';
 import { NotFoundError } from '../service/errors.mts';
 import { getLogger } from '../../logger/logger.mts';
@@ -79,9 +79,9 @@ export const createHandler = async (input: BuchNeuInput): Promise<CreatePayload>
     // Validierung mit Zod
     validateBuchNeu(input);
 
-    const buchCreate = toCreate(input);
-    logger.debug('createHandler: buchCreate=%o', buchCreate);
-    const id = await create(buchCreate);
+    const buchNeu = toBuchNeu(input);
+    logger.debug('createHandler: buchCreate=%o', buchNeu);
+    const id = await insert(buchNeu);
 
     logger.debug('createHandler: id=%d', id);
     return { id: toID(id) };
@@ -136,11 +136,7 @@ export const updateHandler = async (input: BuchUpdateInput): Promise<UpdatePaylo
 
     let version: number | undefined;
     try {
-        version = await update({
-            id: toNumber(input.id),
-            buch: buchUpdate,
-            version: `"${input.version}"`,
-        });
+        version = await update(toNumber(input.id), buchUpdate, `"${input.version}"`);
     } catch (err) {
         if (err instanceof NotFoundError) {
             logger.debug('buchHandler: Kein Buch gefunden.');

@@ -83,6 +83,4 @@ coverage
 !.vscode/launch.json
 !.vscode/extensions.json
 
-/generated/prisma
-
-/src/generated/prisma
+/drizzle

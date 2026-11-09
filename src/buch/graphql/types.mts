@@ -13,8 +13,9 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-import { type BuchCreate, type BuchUpdate } from '../service/buch-write-service.mts';
-import { type BuchMitTitelUndAbbildungenDTO } from '../service/buch-service.mts';
+import { type BuchNeuType, type BuchUpdateType } from '../validation/buch-validation.mts';
+import { type BuchDTO } from '../service/buchDTO.mts';
+import { type Buchart } from '../service/suchparameter.mts';
 
 // -----------------------------------------------------------------------------
 // I D   u n d   I n t   f u e r   G r a p h Q L
@@ -34,8 +35,8 @@ export const toID = (value: string | number): ID => {
 };
 export const toInt = (num: number): Int => (Number.isInteger(num) ? num : Math.round(num)) as Int;
 export const toNumber = (id: ID): number => Number.parseInt(id, 10);
-const toDateOrNull = (dateStr?: string | null): Date | null =>
-    dateStr === undefined || dateStr === null ? null : new Date(dateStr);
+const toDateOrUndefined = (dateStr?: string | null): Date | undefined =>
+    dateStr === undefined || dateStr === null ? undefined : new Date(dateStr);
 
 // -----------------------------------------------------------------------------
 // S u c h e
@@ -55,13 +56,13 @@ export type Buch = {
     titel: { titel: string; untertitel?: string };
 };
 
-export const toBuchType = (buch: BuchMitTitelUndAbbildungenDTO): Buch => {
+export const toBuchType = (buch: BuchDTO): Buch => {
     const result: Buch = {
         id: toID(buch.id),
         version: buch.version,
         isbn: buch.isbn,
         rating: toInt(buch.rating),
-        art: buch.art ?? 'HARDCOVER',
+        art: (buch.art as Buchart) ?? 'HARDCOVER',
         preis: buch.preis,
         rabatt: buch.rabatt,
         lieferbar: buch.lieferbar,
@@ -79,8 +80,8 @@ export const toBuchType = (buch: BuchMitTitelUndAbbildungenDTO): Buch => {
     if (homepage !== null) {
         result.homepage = homepage;
     }
-    if (titel !== null && titel.untertitel !== null) {
-        result.titel.untertitel = titel.untertitel;
+    if (titel !== null && titel?.untertitel !== null) {
+        result.titel.untertitel = titel?.untertitel ?? 'N/A';
     }
 
     return result;
@@ -139,7 +140,7 @@ export type BuchNeuInput = {
     abbildungen?: { beschriftung: string; contentType: string }[];
 };
 
-export const toCreate = (buch: BuchNeuInput): BuchCreate => {
+export const toBuchNeu = (buch: BuchNeuInput): BuchNeuType => {
     const {
         isbn,
         rating,
@@ -153,35 +154,20 @@ export const toCreate = (buch: BuchNeuInput): BuchCreate => {
         titel,
         abbildungen,
     } = buch;
-    const buchCreate: BuchCreate = {
-        version: 0,
+    const buchNeu: BuchNeuType = {
         isbn,
         rating,
-        art: art ?? null,
+        art,
         preis,
         rabatt,
         lieferbar,
-        datum: toDateOrNull(datum),
-        homepage: homepage ?? null,
+        datum: toDateOrUndefined(datum),
+        homepage,
         schlagwoerter: schlagwoerter ?? [],
-        titel: {
-            // fuer Prisma und die generierte Funktion "create"
-            create: {
-                titel: titel.titel,
-                untertitel: titel.untertitel ?? null,
-            },
-        },
-        abbildungen: {
-            create: (abbildungen ?? []).map((abbildung) => {
-                const { beschriftung, contentType } = abbildung;
-                return {
-                    beschriftung,
-                    contentType,
-                };
-            }),
-        },
+        titel,
+        abbildungen,
     };
-    return buchCreate;
+    return buchNeu;
 };
 
 export type CreatePayload = {
@@ -192,42 +178,17 @@ export type CreatePayload = {
 // A e n d e r n
 // -----------------------------------------------------------------------------
 // Partial<>, damit alle Properties optional sind
-export type BuchUpdateInput = Partial<Omit<BuchNeuInput, 'titel' | 'abbildungen'>> & {
+export type BuchUpdateInput = Omit<BuchNeuInput, 'titel' | 'abbildungen'> & {
     id: ID;
     version: Int;
 };
 
-export const toUpdate = (buch: BuchUpdateInput): BuchUpdate => {
-    const { version, isbn, rating, art, preis, rabatt, lieferbar, datum, homepage, schlagwoerter } =
-        buch;
-    const buchUpdate: BuchUpdate = { version };
-    if (isbn !== undefined) {
-        buchUpdate.isbn = isbn;
-    }
-    if (rating !== undefined) {
-        buchUpdate.rating = rating;
-    }
-    if (art !== undefined) {
-        buchUpdate.art = art;
-    }
-    if (preis !== undefined) {
-        buchUpdate.preis = preis;
-    }
-    if (rabatt !== undefined) {
-        buchUpdate.rabatt = rabatt;
-    }
-    if (lieferbar !== undefined) {
-        buchUpdate.lieferbar = lieferbar;
-    }
-    if (datum !== undefined) {
-        buchUpdate.datum = toDateOrNull(datum);
-    }
-    if (homepage !== undefined) {
-        buchUpdate.homepage = homepage;
-    }
-    if (schlagwoerter !== undefined) {
-        buchUpdate.schlagwoerter = schlagwoerter;
-    }
+export const toUpdate = (buch: BuchUpdateInput): BuchUpdateType => {
+    const { datum, ...buchOhneDatum } = buch;
+    delete (buchOhneDatum as any).id;
+    delete (buchOhneDatum as any).version;
+    const buchUpdate: BuchUpdateType =
+        datum === undefined ? { ...buchOhneDatum } : { ...buchOhneDatum, datum: new Date(datum) };
     return buchUpdate;
 };
 

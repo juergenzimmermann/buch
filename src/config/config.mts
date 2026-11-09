@@ -79,19 +79,26 @@ const ConfigSchema = z.object({
     }),
 
     db: z.object({
-        dbUrl: z
+        user: z.string().default('buch'),
+        database: z.string().default('buch'),
+        password: z
             .string()
-            .startsWith('postgresql://')
-            .prefault(() => process.env['DATABASE_URL'] ?? 'FEHLER: DATABASE_URL in .env setzen'),
-        dbUrlAdmin: z
+            .prefault(() => process.env['DB_PASSWORD'] ?? 'FEHLER: DB_PASSWORD in .env setzen'),
+        adminPassword: z
             .string()
-            .startsWith('postgresql://')
             .prefault(
                 () =>
-                    process.env['DATABASE_URL_ADMIN'] ??
-                    'FEHLER: DATABASE_URL_ADMIN in .env setzen',
+                    process.env['DB_ADMIN_PASSWORD'] ?? 'FEHLER: DB_ADMIN_PASSWORD in .env setzen',
             ),
+        host: z.string().default('postgres'),
+        cert: z.string().endsWith('.crt').default('config/postgresql/server.crt'),
+        tlsMinVersion: z.literal(['TLSv1.3', 'TLSv1.2']).default('TLSv1.3'),
+        tlsMaxVersion: z.literal(['TLSv1.3', 'TLSv1.2']).default('TLSv1.3'),
+        poolMax: z.number().int().min(1).max(100).default(10), // oxlint-disable-line no-magic-numbers
+        poolIdleTimeoutMillis: z.number().int().min(1_000).max(60_000).default(10_000), // oxlint-disable-line no-magic-numbers
+        poolConnectionTimeoutMillis: z.number().int().min(1_000).default(3_000), // oxlint-disable-line no-magic-numbers
         populate: z.boolean().default(false),
+        admin: z.string().default('postgres'),
     }),
 
     keycloak: z.object({

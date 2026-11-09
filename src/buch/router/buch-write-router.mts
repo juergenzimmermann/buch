@@ -13,18 +13,11 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-/**
- * Das Modul besteht aus Router für die Verwaltung von Bücher.
- * @packageDocumentation
- */
-
 import {
-    type BuchCreate,
-    type BuchFileCreated,
-    type BuchUpdate,
+    type BuchFileInsert,
     addFile,
-    create,
     deleteFn,
+    insert,
     update,
 } from '../service/buch-write-service.mts';
 import {
@@ -32,9 +25,8 @@ import {
     type BuchNeuType,
     BuchUpdateSchema,
     type BuchUpdateType,
-} from './buch-validation.mts';
+} from '../validation/buch-validation.mts';
 import { badRequest, createProblemDetails, preconditionRequired } from '../../problem-details.mts';
-import { File } from 'node:buffer';
 import { Hono } from 'hono';
 import { createBaseUrl } from './create-base-url.mts';
 import { getLogger } from '../../logger/logger.mts';
@@ -49,39 +41,9 @@ export const router = new Hono();
 const logger = getLogger('buch-write-router');
 const MAX_FILE_SIZE_BYTES = 10_485_760;
 
-// -----------------------------------------------------------------------------
+// =============================================================================
 // N e u a n l e g e n
-// -----------------------------------------------------------------------------
-const buchDtoToBuchCreateInput = (buchDTO: BuchNeuType): BuchCreate => {
-    const abbildungen = buchDTO.abbildungen?.map((abbildungDTO) => {
-        const abbildung = {
-            beschriftung: abbildungDTO.beschriftung,
-            contentType: abbildungDTO.contentType,
-        };
-        return abbildung;
-    });
-    const buch: BuchCreate = {
-        version: 0,
-        isbn: buchDTO.isbn,
-        rating: buchDTO.rating,
-        art: buchDTO.art ?? null,
-        preis: buchDTO.preis,
-        rabatt: buchDTO.rabatt ?? 0,
-        lieferbar: buchDTO.lieferbar ?? false,
-        datum: buchDTO.datum ?? null,
-        homepage: buchDTO.homepage ?? null,
-        schlagwoerter: buchDTO.schlagwoerter ?? [],
-        titel: {
-            create: {
-                titel: buchDTO.titel.titel,
-                untertitel: buchDTO.titel.untertitel ?? null,
-            },
-        },
-        abbildungen: { create: abbildungen ?? [] },
-    };
-    return buch;
-};
-
+// =============================================================================
 router.post('/', rolesRequired('admin', 'user'), async (c) => {
     let requestBody: unknown;
     try {
@@ -91,11 +53,10 @@ router.post('/', rolesRequired('admin', 'user'), async (c) => {
     }
 
     // Validierung mit Zod: ZodError wird geworfen, falls Validierung nicht erfolgreich
-    const buchDTO: BuchNeuType = BuchNeuSchema.parse(requestBody);
-    logger.debug('post: buchDTO=%o', buchDTO);
+    const buchNeu: BuchNeuType = BuchNeuSchema.parse(requestBody);
+    logger.debug('post: buchNeu=%o', buchNeu);
 
-    const buch = buchDtoToBuchCreateInput(buchDTO);
-    const id = await create(buch);
+    const id = await insert(buchNeu);
 
     const location = `${createBaseUrl(c.req)}/${id}`;
     const { header, body } = c;
@@ -103,24 +64,9 @@ router.post('/', rolesRequired('admin', 'user'), async (c) => {
     return body(null, 201);
 });
 
-// -----------------------------------------------------------------------------
+// =============================================================================
 // A e n d e r n
-// -----------------------------------------------------------------------------
-const buchDtoToBuchUpdate = (buchDTO: BuchUpdateType): BuchUpdate => {
-    return {
-        version: 0,
-        isbn: buchDTO.isbn,
-        rating: buchDTO.rating,
-        art: buchDTO.art ?? null,
-        preis: buchDTO.preis,
-        rabatt: buchDTO.rabatt ?? 0,
-        lieferbar: buchDTO.lieferbar ?? false,
-        datum: buchDTO.datum ?? null,
-        homepage: buchDTO.homepage ?? null,
-        schlagwoerter: buchDTO.schlagwoerter ?? [],
-    };
-};
-
+// =============================================================================
 router.put('/:id', rolesRequired('admin', 'user'), async (c) => {
     const { req } = c;
     const id = req.param('id') ?? '-1';
@@ -146,15 +92,10 @@ router.put('/:id', rolesRequired('admin', 'user'), async (c) => {
     } catch {
         return createProblemDetails(c, badRequest, 'Ungueltiges JSON');
     }
-    const buchDTO: BuchUpdateType = BuchUpdateSchema.parse(requestBody);
-    logger.debug('put: buchDTO=%o', buchDTO);
+    const buchUpdate: BuchUpdateType = BuchUpdateSchema.parse(requestBody);
+    logger.debug('put: buchUpdate=%o', buchUpdate);
 
-    const buch = buchDtoToBuchUpdate(buchDTO);
-    const neueVersion = await update({
-        id: idNumber,
-        buch,
-        version,
-    });
+    const neueVersion = await update(idNumber, buchUpdate, version);
     logger.debug('put: neueVersion=%d', neueVersion);
     const headers = {
         ETag: `"${neueVersion}"`,
@@ -162,9 +103,9 @@ router.put('/:id', rolesRequired('admin', 'user'), async (c) => {
     return c.body(null, 204, headers);
 });
 
-// -----------------------------------------------------------------------------
+// =============================================================================
 // L o e s c h e n
-// -----------------------------------------------------------------------------
+// =============================================================================
 router.delete('/:id', rolesRequired('admin'), async (c) => {
     const id = c.req.param('id') ?? '-1';
     logger.debug('delete: id=%s', id);
@@ -178,9 +119,9 @@ router.delete('/:id', rolesRequired('admin'), async (c) => {
     return body(null, 204);
 });
 
-// -----------------------------------------------------------------------------
+// =============================================================================
 // F i l e   U p l o a d
-// -----------------------------------------------------------------------------
+// =============================================================================
 router.post('/:id', rolesRequired('admin', 'user'), async (c) => {
     const id = c.req.param('id') ?? '-1';
     logger.debug('upload: id=%s', id);
@@ -196,8 +137,11 @@ router.post('/:id', rolesRequired('admin', 'user'), async (c) => {
     // https://dev.to/aaronksaunders/quick-rest-api-file-upload-with-hono-js-and-drizzle-49ok
     const body = await c.req.parseBody();
     const { file } = body;
-    if (file === undefined || (Array.isArray(file) && file.length !== 1)) {
-        return createProblemDetails(c, badRequest, 'Keine oder mehrere Dateien hochgeladen');
+    if (file === undefined) {
+        return createProblemDetails(c, badRequest, 'Keine Dateien hochgeladen');
+    }
+    if (Array.isArray(file) && file.length !== 1) {
+        return createProblemDetails(c, badRequest, 'Mehrere Dateien hochgeladen');
     }
     if (!(file instanceof File)) {
         return createProblemDetails(c, badRequest, `Ungueltiger Typ beim Upload: ${typeof file}`);
@@ -209,13 +153,12 @@ router.post('/:id', rolesRequired('admin', 'user'), async (c) => {
         return createProblemDetails(c, badRequest, `Datei mit ${size} Bytes`);
     }
     const buffer = Buffer.from(await file.arrayBuffer());
-    const buchFile: BuchFileCreated | undefined = await addFile(idNumber, buffer, name, size, type);
+    const buchFile: BuchFileInsert = await addFile(idNumber, buffer, name, size, type);
     logger.debug(
-        'upload: id=%s, byteLength=%s, filename=%s, mimetype=%s',
-        buchFile?.id,
-        buchFile?.data.byteLength,
-        buchFile?.filename,
-        buchFile?.mimetype,
+        'upload: byteLength=%s, filename=%s, mimetype=%s',
+        (buchFile.data as Uint8Array<ArrayBuffer>).byteLength,
+        buchFile.filename,
+        buchFile.mimetype,
     );
 
     const location = `${createBaseUrl(c.req)}/file/${id}`;

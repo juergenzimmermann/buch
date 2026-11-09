@@ -13,10 +13,10 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-import { connectDB, disconnectDB } from './config/prisma-client.mts';
 import { app } from './app.mts';
 import { banner } from './logger/banner.mts';
 import { createSecureServer } from 'node:http2';
+import { disconnectDB } from './config/db.mts';
 import { getConfig } from './config/config.mts';
 import { getLogger } from './logger/logger.mts';
 import { populate } from './config/dev/db-populate.mts';
@@ -43,7 +43,6 @@ if (nodeEnv === 'development' || nodeEnv === 'test') {
 const { fetch } = app;
 
 await populate();
-await connectDB();
 
 // fetch: Request-Handler fuer den Node- oder Bun-Server mit Signatur gemaess Fetch-API von ES2015
 // d.h. eine Funktion, die einen Request empfaengt und einen Response produziert:

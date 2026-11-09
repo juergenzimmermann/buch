@@ -22,8 +22,21 @@
 allowHTTP1 = true
 
 [db]
-#dbUrl = <DATABASE_URL in .env>
-#dbUrlAdmin = <DATABASE_URL_ADMIN in .env>
+#user = "buch"
+#admin = "postgres"
+#database = "buch"
+password = "p"
+adminPassword = "p"
+host = "localhost"
+#cert = "config/postgresql/server.crt"
+#tlsMinVersion = "TLSv1.3"
+#tlsMaxVersion = "TLSv1.3"
+# max. DB-Verbindungen
+poolMax = 5
+# Timeout, wie lange eine Verbindung inaktive ist, bevor sie geschlossen wird
+poolIdleTimeoutMillis = 30000
+# Timeout fuer Aufbau der DB-Verbindung
+poolConnectionTimeoutMillis = 5000
 populate = true
 
 [keycloak]

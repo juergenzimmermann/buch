@@ -5,13 +5,13 @@ info:
 
 http:
   method: GET
-  url: "{{restUrl}}?datum=2026-02-08"
+  url: "{{restUrl}}?datum=2025-02-08"
   headers:
     - name: Accept
       value: application/json
   params:
     - name: datum
-      value: 2026-02-08
+      value: 2025-02-08
       type: query
   auth: inherit
 

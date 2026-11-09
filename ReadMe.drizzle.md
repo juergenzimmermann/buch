@@ -1,7 +1,7 @@
-# Hinweise zu Prisma
+# Hinweise zu Drizzle
 
 <!--
-  Copyright (C) 2025 - present Juergen Zimmermann, Hochschule Karlsruhe
+  Copyright (C) 2026 - present Juergen Zimmermann, Hochschule Karlsruhe
 
   This program is free software: you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
@@ -43,15 +43,13 @@
   - [Software-Pakete in node_modules mit pnpm installieren](#software-pakete-in-node_modules-mit-pnpm-installieren)
   - [Indirekt genutzte Packages](#indirekt-genutzte-packages)
   - [Meta-Informationen zu einem Package](#meta-informationen-zu-einem-package)
-- [Prisma-Schema für ein neues Projekt](#prisma-schema-für-ein-neues-projekt)
-  - [Initiales Prisma-Schema erstellen](#initiales-prisma-schema-erstellen)
-  - [Models aus einer bestehenden DB generieren](#models-aus-einer-bestehenden-db-generieren)
+- [Drizzle-Schema für ein neues Projekt](#drizzle-schema-für-ein-neues-projekt)
+  - [Initiales Drizzle-Schema erstellen](#initiales-drizzle-schema-erstellen)
   - [Schema anpassen](#schema-anpassen)
-- [Code-Generierung für den DB-Client](#code-generierung-für-den-db-client)
-- [Einfaches Beispiel in TypeScript](#einfaches-beispiel-in-typescript)
+- [Einfache Beispiele in TypeScript](#einfache-beispiele-in-typescript)
 - [Aufruf der Beispiele](#aufruf-der-beispiele)
 - [Neuere Versionen und evtl. Sicherheitslücken](#neuere-versionen-und-evtl-sicherheitslücken)
-- [Prisma Studio](#prisma-studio)
+- [Drizzle Studio](#drizzle-studio)
 
 ## Vorbereitung der Installation
 
@@ -246,7 +244,7 @@ entfernt werden und die Umgebungsvariable `PNPM_HOME` kann gelöscht werden.
 
 ### Software-Pakete in node_modules mit pnpm installieren
 
-Die Softwarepakete für _Prisma_ werden mit _pnpm_ folgendermaßen installiert:
+Die Softwarepakete aus `package.json` für _Drizzle_ werden mit _pnpm_ folgendermaßen installiert:
 
 ```shell
     pnpm i
@@ -255,36 +253,35 @@ Die Softwarepakete für _Prisma_ werden mit _pnpm_ folgendermaßen installiert:
 ### Indirekt genutzte Packages
 
 ```shell
-    pnpm why body-parser
+    pnpm why pg-pool
 ```
 
 ### Meta-Informationen zu einem Package
 
 Mit dem nachfolgenden Kommando können Meta-Informationen zu einem Package, z.B.
-`prisma`, abgerufen werden (siehe `package.json`):
+`drizzle-orm`, abgerufen werden (siehe `package.json`):
 
 ```shell
-    pnpm view prisma
+    pnpm view drizzle-orm
 ```
 
 ---
 
-## Prisma-Schema für ein NEUES Projekt
+## Drizzle-Schema für ein NEUES Projekt
 
-Für dieses Projektbeispiel **ÜBERSPRINGEN**, weil `prisma\schema.prisma` schon existiert.
-Es geht weiter im Abschnitt [Code-Generierung für den DB-Client](#code-generierung-für-den-db-client).
+Für dieses Projektbeispiel **ÜBERSPRINGEN**, weil `src\db\schema.mts` schon existiert.
 
-### Initiales Prisma-Schema erstellen
+### Initiales Drizzle-Schema erstellen
 
-Um ein neues Prisma-Schema zu erstellen, muss die Umgebungsvariable `DATABASE_URL`
+Um ein neues Drizzle-Schema zu erstellen, muss die Umgebungsvariable `DATABASE_URL`
 gesetzt sein:
 
 ```shell
     # Windows:
-    $env:DATABASE_URL='postgresql://buch:p@localhost/buch?schema=buch&connection_limit=10&sslnegotiation=direct&sslcert=src/config/postgresql/server.crt'
+    $env:DATABASE_URL='postgresql://buch:p@localhost/buch?schema=buch&connection_limit=5&sslnegotiation=direct&sslcert=src/config/postgresql/server.crt'
 
     # macOS:
-    DATABASE_URL='postgresql://buch:p@localhost/buch?schema=buch&connection_limit=10&sslnegotiation=direct&sslcert=src/config/postgresql/server.crt'
+    DATABASE_URL='postgresql://buch:p@localhost/buch?schema=buch&connection_limit=5&sslnegotiation=direct&sslcert=src/config/postgresql/server.crt'
 ```
 
 Dadurch ist folgendes konfiguriert:
@@ -294,129 +291,50 @@ Dadurch ist folgendes konfiguriert:
 - DB-Host: `localhost`
 - DB-Name: `buch`
 - Schema: `buch`
-- Größe des Verbindungs-Pools: max. `10` Verbindungen
+- Größe des Verbindungs-Pool: max. `5` Verbindungen
 - SSL: durch die Zertifikatsdatei `server.crt` im Verzeichnis `src\config\postgresql`
 
-Nun kann man ein neues Prisma-Schema erstellen, d.h. im Verzeichnis `prisma`
-wird die Datei `schema.prisma` angelegt. Das Verzeichnis `prisma` darf dabei
-noch nicht existieren.
+Außerdem muss die Konfigurationsdatei `drizzle.config.ts` im Wurzelverzeichnis existieren, in welcher
+Folgendes konfiguriert ist:
+
+- _PostgreSQL_ als Datenbank-System
+- URL für den DB-Zugriff mit der Umgebungsvariable `DATABASE_URL`
+- Schema der DB, das für die Tabellen verwendet werden soll (hier: `buch`)
+- Verzeichnis für die zu generierendden Dateien `schema.ts` und `relations.ts` (hier: `drizzle`)
+- DB-Schema in TypeScript für _Drizzle Studio_ (s.u.)
+
+Jetzt werden die beiden Dateien `schema.ts` und `relations.ts` im Verzeichnis `drizzle` generiert:
 
 ```shell
-    pnpm prisma7 init `
-      --datasource-provider postgresql `
-      --preview-feature nativeDistinct `
-      --preview-feature relationJoins `
-      --output '../src/generated/prisma' `
-      --url 'postgresql://buch:p@localhost/buch?schema=buch&connection_limit=10&sslnegotiation=direct&sslcert=src/config/postgresql/server.crt'
+    pnpm exec drizzle-kit pull
 ```
-
-Dabei werden folgende Dateien und Verzeichnisse generiert:
-
-- `prisma7.config.ts` siehe https://github.com/prisma/prisma/releases/tag/6.18.0
-- `prisma\schema.prisma`
-- `.env`
-- `.gitignore`
-- `.agents\skills\`
-- `.claude\skills\`
-- `.windsurf\skills\`
-- `skills-lock.json`
-
-Falls `.env` bereits existiert, wird ggf. `DATABASE_URL` als Umgebungsvariable
-eingetragen. Der Wert von `DATABASE_URL` muss auf jeden Fall mit dem Wert
-übereinstimmen, den man zuvor in der Shell gesetzt hatte (s.o.).
-
-### Models aus einer bestehenden DB generieren
-
-Als nächstes müssen Prisma-Models aus einer **bestehenden** DB generiert werden,
-um später das OR-Mapping zu ermöglichen; diese Vorgehensweise bezeichnet man
-als _adopt an existing database workflow_.
-
-Der DB-Server mit einer existierenden DB wird gestartet:
-
-```powerhell
-    cd extras\compose\postgres
-    docker compose up
-```
-
-Nun wird die Generierung durchgeführt, so dass die Datei `prisma\schema.prisma`
-um die Models für das spätere OR-Mapping ergänzt wird:
-
-```shell
-    pnpm prisma7 db pull
-```
-
-Warnungen, dass _Check-Constraints_ nicht unterstützt werden, können ignoriert
-werden, weil an der API-Schnittstelle (z.B. REST) des künftigen Appservers,
-Validierungsfehler überprüft werden.
 
 ### Schema anpassen
 
-Nachdem die Models generiert wurden, empfiehlt es sich das Schema anzupassen, z.B.:
+Nachdem die Dateien im Verzeichnis `drizzle` generiert wurden, kopiert man sie als _ESM-Module_
+mit der Endung `.mts` in das Verzeichnis `src/db`. Danach empfiehlt es sich, `schema.mts` anzupassen
+und zu ändern:
 
-- PascalCase für die Model-Namen, z.B. `B`uch statt `b`uch.
-  - Bei jedem umbenannten Model muss am Ende `@@map` ergänzt werden, z.B. @@map("buch").
-- camelCase für die Field-Namen, z.B. `buchId` statt `buch_id`.
-  - Bei jedem umbenannten Field muss `@map` ergänzt werden, z.B. @map("buch_id").
-  - Bei jeder `@relation` muss bei `fields` der geänderte Name eingetragen werden.
-- Bei 1:N-Beziehungen sollte ein Plural für die Field-Namen verwendet werden,
-  z.B. abbildung`en` statt abbildung
-- Bei Fields, die für den Zeitstempel der letzten Änderung verwendet werden,
-  sollte `@updatedAt` ergänzt werden.
-- Bei den Models sollte am Ende `@@schema` ergänzt werden, damit die späteren
-  JavaScript-Objekte auf Datensätze in Tabellen im gewünschten Schema abgebildet
-  werden.
+- Falls Variablen vor ihrer Definition verwendet werden, muss man die Reihenfolge ändern.
+- Die Drizzle-Methode`.defaultNow()` kann man statt `.default(sql`now()`)` verwenden.
+- Die Variable für das Schema kann man `...Schema` nennen, z.B. `buchSchema`
+- Die Variablen für die Tabellen kann man `...Table` nennen, z.B. `buchTable`
 
-Außerdem sollte in `prisma\schema.prisma` der eigene Schema-Name (hier: `buch`)
-eingetragen werden:
+So erkennt man später in den TypeScript-Dateien, dass es sich um das DB-Schema und um die DB-Tabellen
+handelt.
 
-```prisma
-  ...
-  datasource db {
-    provider = "postgresql"
-    schemas  = ["buch"]
-  }
-```
+Die Änderungen der Schema- und Tabellen-Variablen zieht man anschließend in der Datei
+`relations.mts` nach. Außerdem empfiehlt es sich, in `relations.mts` den sogenannten _Namespace Import_
+`import * as schema from "./schema";` durch _Named Imports_ mit den Variablen der Tabellen-Namen zu
+ersetzen, z.B. `import { abbildungTable, buchTable, titelTable } from './schema.mts';`.
 
 ---
 
-## Code-Generierung für den DB-Client
+## Einfache Beispiele in TypeScript
 
-Das Prisma-Schema enthält nun die exakten Abbildungsvorschriften für das
-künftige OR-Mapping. Mit diesem Schema kann nun der Prisma-Client generiert
-werden, der später für das OR-Mapping in TypeScript verwendet wird:
-
-```shell
-    pnpm prisma7 generate
-```
-
----
-
-## Einfaches Beispiel in TypeScript
-
-Jetzt kann man mit TypeScript auf die DB zugreifen, z.B.:
-
-```typescript
-// src/beispiel.mts
-// Aufruf:   node --env-file=.env src\beispiel.mts
-import { PrismaClient } from '@prisma/client';
-
-const prisma = new PrismaClient();
-
-try {
-  await prisma.$connect();
-  const buecher = await prisma.buch.findMany();
-  console.log(`buecher=${JSON.stringify(buecher)}`);
-} finally {
-  await prisma.$disconnect();
-}
-```
-
-Der obige Prisma-Client `prisma.buch` greift auf die Tabelle `buch` in der
-konfigurierten PostgreSQL-DB zu. Dabei werden die npm-Packages _@prisma/client_
-und _@prisma/adapter-pg_ verwendet, die in `package.json` als `dependency`
-eingetragen sind. @prisma/adapter-pg wiederum verwendet intern das npm-Package
-_pg_ (siehe https://node-postgres.com).
-.
+In den beiden Dateien `src\beispiele.mts` und `src\beispiele-write.mts` sind einfache
+Beispiele in TypeScript enthalten, die zeigen, wie man mit _Drizzle_ auf die
+Datenbank zugreifen kann.
 
 ## Aufruf der Beispiele
 
@@ -424,11 +342,6 @@ Die beiden Beispiel-Dateien `src\beispiele.mts` und `src\beispiele-write.mts`
 können mit _Node_ folgendermaßen aufgerufen werden:
 
 ```shell
-    # Windows:
-    $env:NODE_TLS_REJECT_UNAUTHORIZED=0
-    # macOS / Linux:
-    export NODE_TLS_REJECT_UNAUTHORIZED=0
-
     node --env-file=.env src/beispiele.mts
     node --env-file=.env src/beispiele-write.mts
 
@@ -451,21 +364,15 @@ und auch auf Sicherheitslücken überprüft werden:
     pnpm audit --prod
 ```
 
-## Prisma Studio
+## Drizzle Studio
 
-Während die Erweiterung _PostgreSQL_ für VS Code nur Daten anzeigen kann, kann
-_Prisma Studio_ auch Daten einfügen, ändern und löschen. Der Aufruf mit _pnpm_
-lautet folgendermaßen, wobei man an der Oberfläche von Prisma Studio noch das
-Schema `buch` auswählen muss, um die Tabellen anzuzeigen:
+_Drizzle Studio_ ist eine Alternative zur Erweiterung _PostgreSQL_ für _VS Code_. Der Aufruf mit
+_pnpm_ lautet folgendermaßen:
 
 ```shell
-    # Windows:
-    $env:DATABASE_URL='postgresql://buch:p@localhost/buch'
-
-    # macOS / Linux:
-    DATABASE_URL='postgresql://buch:p@localhost/buch'
-
-    pnpm prisma7 studio
+    pnpm exec drizzle-kit studio
 ```
 
-Durch den Menüpunkt _Visualizer_ kann man sich die Beziehungen zwischen den Tabellen anzeigen lassen.
+Nun kann man in einem Webbrowser `https://local.drizzle.studio` aufrufen, weshalb eine Internet-Verbindung
+erforderlich ist. An der Oberfläche von Drizzle Studio muss man noch das Schema `buch` auswählen,
+um die Tabellen anzuzeigen.

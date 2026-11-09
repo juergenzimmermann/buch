@@ -21,6 +21,7 @@ http:
         type: file
         value:
           - C:\workspace\javascript\hono\extras\bruno\logo.png
+        contentType: image/png
   auth:
     type: oauth2
     flow: resource_owner_password_credentials
@@ -59,3 +60,4 @@ settings:
   timeout: 0
   followRedirects: true
   maxRedirects: 5
+  forwardAuthorizationHeader: true

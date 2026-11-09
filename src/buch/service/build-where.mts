@@ -18,9 +18,10 @@
  * @packageDocumentation
  */
 
-import { type Buchart, Prisma } from '../../generated/prisma/client.ts';
-import { type BuchWhereInput } from '../../generated/prisma/models/Buch.ts';
-import { type Suchparameter } from './suchparameter.mts';
+import { type Buchart, type Suchparameter } from './suchparameter.mts';
+import { type SQLWrapper, and, arrayContains, eq, gte, ilike, lte } from 'drizzle-orm';
+import { buchTable, titelTable } from '../../db/schema.mts';
+import { NotFoundError } from './errors.mts';
 import { getLogger } from '../../logger/logger.mts';
 
 type Schlagwort = string | boolean | undefined;
@@ -78,7 +79,7 @@ export const buildWhere = ({
     ...restProps
 }: Suchparameter) => {
     logger.debug(
-        'build: javascript=%s, typescript=%s, java=%s, python=%s, restProps=%o',
+        'buildWhere: javascript=%s, typescript=%s, java=%s, python=%s, restProps=%o',
         javascript,
         typescript,
         java,
@@ -89,42 +90,36 @@ export const buildWhere = ({
     // Beispiel: { titel: 'a', rating: 4, preis: 22.5, javascript: true }
     // wird zu:
     // WHERE titel ILIKE %a% AND rating >= 4 AND preis <= 22.5 AND schlagwoerter @> '["JAVASCRIPT"]'
-    const where: BuchWhereInput = {};
+    const conditions: SQLWrapper[] = [];
 
     // Properties vom Typ number, enum, boolean, Date
     // diverse Vergleiche, z.B. Gleichheit, <= (lte), >= (gte)
     Object.entries(restProps).forEach(([key, value]) => {
         switch (key) {
             case 'titel':
-                where.titel = {
-                    // https://www.prisma.io/docs/orm/prisma-client/queries/filtering-and-sorting#filter-on-relations
-                    titel: {
-                        // https://www.prisma.io/docs/orm/reference/prisma-client-reference#filter-conditions-and-operators
-                        contains: value as string,
-                        mode: Prisma.QueryMode.insensitive,
-                    },
-                };
+                conditions.push(ilike(titelTable.titel, `%${value}%`));
                 break;
             case 'isbn':
-                where.isbn = { equals: value as string };
+                conditions.push(eq(buchTable.isbn, value as string));
                 break;
             case 'rating': {
                 const ratingNumber = Number.parseInt(value as string, 10);
                 if (!Number.isNaN(ratingNumber)) {
-                    where.rating = { gte: ratingNumber };
+                    conditions.push(gte(buchTable.rating, ratingNumber));
                 }
                 break;
             }
             case 'preis': {
                 const preisNumber = Number.parseFloat(value as string);
                 if (!Number.isNaN(preisNumber)) {
-                    where.preis = { lte: preisNumber };
+                    const condition = lte(buchTable.preis, value as string);
+                    conditions.push(condition);
                 }
                 break;
             }
             case 'art':
                 // enum
-                where.art = { equals: value as Buchart };
+                conditions.push(eq(buchTable.art, value as Buchart));
                 break;
             case 'lieferbar': {
                 let lieferbar = true;
@@ -133,14 +128,14 @@ export const buildWhere = ({
                 } else if (typeof value === 'boolean') {
                     lieferbar = value;
                 }
-                where.lieferbar = { equals: lieferbar };
+                conditions.push(eq(buchTable.lieferbar, lieferbar));
                 break;
             }
             case 'datum':
-                where.datum = { gte: new Date(value as string) };
+                conditions.push(gte(buchTable.datum, new Date(value as string)));
                 break;
             case 'homepage':
-                where.homepage = { equals: value as string };
+                conditions.push(eq(buchTable.homepage, value as string));
                 break;
             default:
                 break;
@@ -154,10 +149,16 @@ export const buildWhere = ({
         python,
     });
     if (schlagwoerter.length > 0) {
-        // https://www.prisma.io/docs/orm/prisma-client/special-fields-and-types/working-with-json-fields#json-object-arrays
-        where.schlagwoerter = { array_contains: schlagwoerter };
+        console.log('!!!schlagwoerter', schlagwoerter);
+        conditions.push(arrayContains(buchTable.schlagwoerter, schlagwoerter));
     }
 
-    logger.debug('build: where=%o', where);
+    if (conditions.length === 0) {
+        logger.debug('buildWhere: Ungueltige Suchparameter');
+        throw new NotFoundError('Ungueltige Suchparameter');
+    }
+
+    const where = and(...conditions);
+    logger.debug('buildWhere: <return>');
     return where;
 };

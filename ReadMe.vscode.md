@@ -42,7 +42,6 @@ installiert werden. Bei _PostgreSQL_ empfiehlt sich die Erweiterung von _Microso
 - DotENV
 - EditorConfig for VS Code
 - Error Lens
-- ESLint
 - Even Better TOML
 - German Language Pack for Visual Studio Code
 - GitLens
@@ -57,9 +56,8 @@ installiert werden. Bei _PostgreSQL_ empfiehlt sich die Erweiterung von _Microso
 - Material Icon Theme
 - PlantUML
 - PostgreSQL
-- Prettier - Code formatter
+- Oxc
 - Pretty TypeScript Errors
-- Prisma
 - Rainbow CSV
 - Todo Tree
 - TypeScript Importer

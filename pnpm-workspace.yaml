@@ -31,9 +31,9 @@ saveExact: true
 savePrefix: ""
 
 # https://pnpm.io/settings/build#allowbuilds
+# https://pnpm.io/settings/build#allowbuilds
 allowBuilds:
-  "@prisma/engines": true
-  prisma: true
+  esbuild: true
 
 # https://pnpm.io/settings/other#dedupedirectdeps
 dedupeDirectDeps: true
@@ -48,5 +48,3 @@ blockExoticSubdeps: true
 
 auditConfig:
   ignoreGhsas: ["GHSA-ggr8-5vv4-36mx"]
-
-minimumReleaseAgeExclude: ["hono@5.0.0-rc.0"]

@@ -20,12 +20,8 @@ import {
     toBuchType,
     toSuchparameter,
 } from './types.mts';
-import {
-    type BuchMitTitelDTO,
-    type BuchMitTitelUndAbbildungenDTO,
-    find,
-    findById,
-} from '../service/buch-service.mts';
+import { find, findById } from '../service/buch-service.mts';
+import { type BuchDTO } from '../service/buchDTO.mts';
 import { GraphQLError } from 'graphql';
 import { NotFoundError } from '../service/errors.mts';
 import { type Slice } from '../service/slice.mts';
@@ -39,9 +35,7 @@ export const buchHandler = async (id: ID) => {
 
     let buch: Buch;
     try {
-        const buchDB: BuchMitTitelUndAbbildungenDTO = await findById({
-            id: Number.parseInt(id, 10),
-        });
+        const buchDB: Readonly<BuchDTO> = await findById(Number.parseInt(id, 10));
         buch = toBuchType(buchDB);
     } catch (err) {
         if (err instanceof NotFoundError) {
@@ -75,7 +69,7 @@ export const buecherHandler = async (input?: SuchParameterInput | undefined) => 
     const pageable = createPageable({});
     const suchparameter = toSuchparameter(input);
 
-    let buecherSlice: Readonly<Slice<Readonly<BuchMitTitelDTO>>>;
+    let buecherSlice: Readonly<Slice<Readonly<BuchDTO>>>;
     try {
         buecherSlice = await find(suchparameter, pageable);
     } catch (err) {
@@ -97,9 +91,7 @@ export const buecherHandler = async (input?: SuchParameterInput | undefined) => 
     }
     logger.debug('buecherHandler: buecherSlice=%o', buecherSlice);
 
-    const result = buecherSlice.content.map((buch) =>
-        toBuchType(buch as BuchMitTitelUndAbbildungenDTO),
-    );
+    const result = buecherSlice.content.map((buch) => toBuchType(buch as BuchDTO));
     logger.debug('buecherHandler: result=%o', result);
     return result;
 };

@@ -15,23 +15,15 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 import { type AxiosResponse, HttpStatusCode } from 'axios';
-import { Buchart, type Prisma } from '../../../src/generated/prisma/client.ts';
 import { describe, expect, test } from 'vitest';
+import { type Buch } from '../../../src/buch/graphql/types.mts';
+import { type Buchart } from '../../../src/buch/service/suchparameter.mts';
 import { CONTENT_TYPE } from '../constants.mts';
 import { type GraphQLQuery } from './graphql.mts';
 import { client } from './client.mts';
 
-export type BuchDTO = Omit<
-    Prisma.BuchGetPayload<{
-        include: {
-            titel: true;
-        };
-    }>,
-    'aktualisiert' | 'erzeugt' | 'rabatt'
->;
-
-type BuchSuccessType = { data: { buch: BuchDTO }; errors?: undefined };
-type BuecherSuccessType = { data: { buecher: BuchDTO[] }; errors?: undefined };
+type BuchSuccessType = { data: { buch: Buch }; errors?: undefined };
+type BuecherSuccessType = { data: { buecher: Buch[] }; errors?: undefined };
 
 export type ErrorsType = {
     message: string;

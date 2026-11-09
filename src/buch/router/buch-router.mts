@@ -18,7 +18,7 @@
  * @packageDocumentation
  */
 
-import { find, findById, findFileByBuchId, getCount } from '../service/buch-service.mts';
+import { find, findById, findFileByBuchId } from '../service/buch-service.mts';
 import { BadRequestError } from './errors.mts';
 import { Hono } from 'hono';
 import { createPage } from './page.mts';
@@ -33,9 +33,9 @@ export const router = new Hono();
 
 const logger = getLogger('buch-router');
 
-// -----------------------------------------------------------------------------
+// =============================================================================
 // S u c h e   m i t   P f a d - P a r a m e t e r
-// -----------------------------------------------------------------------------
+// =============================================================================
 // Empfehlung: Handler direkt nach der Pfad-Definition, keine ausgelagerten Controller
 // https://hono.dev/docs/guides/best-practices#don-t-make-controllers-when-possible
 router.get('/:id', async (c) => {
@@ -59,7 +59,7 @@ router.get('/:id', async (c) => {
         return c.notFound();
     }
 
-    const buch = await findById({ id: idNumber });
+    const buch = await findById(idNumber);
 
     // ETags
     // https://hono.dev/docs/api/request#header
@@ -80,9 +80,9 @@ router.get('/:id', async (c) => {
     return json(buch);
 });
 
-// -----------------------------------------------------------------------------
+// =============================================================================
 // S u c h e   m i t   Q u e r y - P a r a m e t e r
-// -----------------------------------------------------------------------------
+// =============================================================================
 router.get('/', async (c) => {
     const { req } = c;
     const accept = req.header('Accept')?.toLowerCase() ?? '*/*';
@@ -94,17 +94,11 @@ router.get('/', async (c) => {
 
     const queryParams = req.query();
     logger.debug('get: queryParams=%o', queryParams);
-    const countOnly = queryParams['count-only'];
-    if (countOnly !== undefined) {
-        const count = await getCount();
-        logger.debug('get: count=%d', count);
-        return c.json({ count });
-    }
 
     const { page, size } = queryParams;
     delete queryParams['page'];
     delete queryParams['size'];
-    logger.debug('get: page=%s, size=%s,  queryParams=%o', page, size, queryParams);
+    logger.debug('get: page=%s, size=%s, queryParams=%o', page, size, queryParams);
 
     const pageable = createPageable({ number: page, size });
     const buecherSlice = await find(queryParams, pageable); // NOSONAR
@@ -113,9 +107,9 @@ router.get('/', async (c) => {
     return c.json(buchPage);
 });
 
-// -----------------------------------------------------------------------------
+// =============================================================================
 // S u c h e   m i t   Q U E R Y  -  M e t h o d e
-// -----------------------------------------------------------------------------
+// =============================================================================
 // https://www.rfc-editor.org/rfc/rfc10008.html
 router.query('/', async (c) => {
     const { req } = c;
@@ -141,9 +135,9 @@ router.query('/', async (c) => {
     return c.json(buchPage);
 });
 
-// -----------------------------------------------------------------------------
+// =============================================================================
 // D o w n l o a d
-// -----------------------------------------------------------------------------
+// =============================================================================
 router.get('/file/:id', async (c) => {
     const id = c.req.param('id');
     logger.debug('download: id=%s', id);
@@ -157,7 +151,7 @@ router.get('/file/:id', async (c) => {
         return c.notFound();
     }
 
-    return c.body(buchFile.data, {
+    return c.body(buchFile.data as Uint8Array<ArrayBuffer>, {
         headers: { 'Content-Type': buchFile.mimetype ?? '' },
     });
 });

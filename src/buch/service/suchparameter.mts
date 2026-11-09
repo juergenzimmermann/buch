@@ -18,7 +18,7 @@
  * @packageDocumentation
  */
 
-import { type Buchart } from '../../generated/prisma/enums.ts';
+export type Buchart = 'EPUB' | 'HARDCOVER' | 'PAPERBACK';
 
 // Typdefinition für `find`
 export type Suchparameter = {
