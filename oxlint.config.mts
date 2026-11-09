@@ -44,7 +44,7 @@ export default defineConfig({
         node: true,
     },
 
-    ignorePatterns: ['test/lasttest/script.ts', 'extras/doc/api/*.js'],
+    ignorePatterns: ['drizzle.config.ts', 'test/lasttest/script.ts', 'extras/doc/api/*.js'],
 
     // https://oxc.rs/docs/guide/usage/linter/config-file-reference.html#options
     options: {
