@@ -42,6 +42,9 @@ dedupeDirectDeps: true
 # https://pnpm.io/settings/dependency-resolution#blockexoticsubdeps
 blockExoticSubdeps: true
 
+lockfile:
+  format: v13
+
 # Kein Unterverzeichnis node_modules/.pnpm, sondern Sym-Links nach $env:LOCALAPPDATA\\pnpm\store\v11
 # https://pnpm.io/settings/node-modules#enableglobalvirtualstore
 #enableGlobalVirtualStore = true
