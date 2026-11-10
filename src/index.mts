@@ -82,7 +82,7 @@ if (runtime === 'Bun') {
                 cert,
                 minVersion: 'TLSv1.3',
                 maxVersion: 'TLSv1.3',
-                // Bruno und Angular HttpClient kann nur HTTP 1.1: https://github.com/usebruno/bruno/issues/1728
+                // Angular HttpClient kann nur HTTP 1.1
                 allowHTTP1,
             },
         },
