@@ -38,6 +38,7 @@ const logger = getLogger('buch-router');
 // =============================================================================
 // Empfehlung: Handler direkt nach der Pfad-Definition, keine ausgelagerten Controller
 // https://hono.dev/docs/guides/best-practices#don-t-make-controllers-when-possible
+// Arrow Function
 router.get('/:id', async (c) => {
     const { req } = c;
     // https://hono.dev/docs/api/request
