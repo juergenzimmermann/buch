@@ -174,10 +174,10 @@ importers:
         version: 0.16.1
       c12:
         specifier: 4.0.0-rc.4
-        version: 4.0.0-rc.4(dotenv@18.0.9)(giget@3.3.1)(jiti@2.7.0)(magicast@0.5.5)
+        version: 4.0.0-rc.4(dotenv@18.0.10)(giget@3.3.1)(jiti@2.7.0)(magicast@0.5.5)
       dotenv:
-        specifier: 18.0.9
-        version: 18.0.9
+        specifier: 18.0.10
+        version: 18.0.10
       drizzle-orm:
         specifier: 1.0.0-rc.5
         version: 1.0.0-rc.5(@opentelemetry/api@1.10.0)(@types/pg@8.23.1)(bun-types@1.4.4)(pg@8.23.1)(zod@4.6.7)
@@ -197,11 +197,11 @@ importers:
         specifier: 2.0.13
         version: 2.0.13
       jose:
-        specifier: 6.2.15
-        version: 6.2.15
+        specifier: 6.2.16
+        version: 6.2.16
       nodemailer:
-        specifier: 10.3.1
-        version: 10.3.1
+        specifier: 10.4.0
+        version: 10.4.0
       pg:
         specifier: 8.23.1
         version: 8.23.1
@@ -1613,8 +1613,8 @@ packages:
     resolution: {integrity: sha512-WkrWp9GR4KXfKGYzOLmTuGVi1UWFfws377n9cc55/tb6DuqyF6pcQ5AbiHEshaDpY9v6oaSr2XCDidGmMwdzIA==}
     engines: {node: '>=8'}
 
-  dotenv@18.0.9:
-    resolution: {integrity: sha512-3fVOW4cB02R066PUSwn8O4TJyz9NckQl7F81blIbaq9jKBm2tSmOKky7ZHIXzGvkVPXCSn6jkpziBPZdGFs8Tw==}
+  dotenv@18.0.10:
+    resolution: {integrity: sha512-89FAA1xchzK2mxVWdr5F/0rldwiueXs6zJM86rO66EzekR1iBdiXRthyG+m5GvkJaFH3C2LESzamTkgndmLT2A==}
     engines: {node: '>=12'}
     hasBin: true
 
@@ -2076,8 +2076,8 @@ packages:
     resolution: {integrity: sha512-AC/7JofJvZGrrneWNaEnJeOLUx+JlGt7tNa0wZiRPT4MY1wmfKjt2+6O2p2uz2+skll8OZZmJMNqeke7kKbNgQ==}
     hasBin: true
 
-  jose@6.2.15:
-    resolution: {integrity: sha512-qdF6ewcZARtef63fJ9AKKZPgxw+t7USH6HLXYcD4CrdmSvDp79rpJSPFEKc90QBeGS63u1KQtN2MZQHC0yDIzA==}
+  jose@6.2.16:
+    resolution: {integrity: sha512-4LSJpbuBuPdGrONCdZUy0xnxtLf8eEz+EY0SMXdHQEBU7bgUHDVblU/JAjryv3wID9/LK7/YuwFwq+AQNfMscQ==}
 
   joycon@3.1.1:
     resolution: {integrity: sha512-34wB/Y7MW7bzjKRjUKTa46I2Z7eV62Rkhva+KkopW7Qvv/OSWBqvkSY7vusOPrNuZcUG3tApvdVgNB8POj3SPw==}
@@ -2259,8 +2259,8 @@ packages:
   natural-compare@1.4.0:
     resolution: {integrity: sha512-OWND8ei3VtNC9h7V60qff3SVobHr996CTwgxubgyQYEpg290h9J0buyECNNJexkFm5sOajh5G116RYA1c8ZMSw==}
 
-  nodemailer@10.3.1:
-    resolution: {integrity: sha512-uF0AFsJC07Y1vdW7p580DKAnh7rAO+4UPSSB3mDCPNDufoiaOebV6JmrzpxB14OjEEEiBsNdYoM2Y+fN8M7BBA==}
+  nodemailer@10.4.0:
+    resolution: {integrity: sha512-fyy6r4Q5euRJ9Qr3Cts9K7SZrfe9zmz9oLOYiAR02MEJRDRci+99y0OoYBYBgpLffOqkkjXrB/d26VfiMje/kA==}
     engines: {node: '>=20.0.0'}
 
   obug@3.0.0:
@@ -3571,7 +3571,7 @@ snapshots:
       '@types/node': 26.6.6
       undici-types: 8.12.3
 
-  c12@4.0.0-rc.4(dotenv@18.0.9)(giget@3.3.1)(jiti@2.7.0)(magicast@0.5.5):
+  c12@4.0.0-rc.4(dotenv@18.0.10)(giget@3.3.1)(jiti@2.7.0)(magicast@0.5.5):
     dependencies:
       confbox: 0.3.1
       defu: 6.1.7
@@ -3580,7 +3580,7 @@ snapshots:
       pkg-types: 2.4.0
       rc9: 3.1.0
     optionalDependencies:
-      dotenv: 18.0.9
+      dotenv: 18.0.10
       giget: 3.3.1
       jiti: 2.7.0
       magicast: 0.5.5
@@ -3642,7 +3642,7 @@ snapshots:
     dependencies:
       path-type: 4.0.0
 
-  dotenv@18.0.9: {}
+  dotenv@18.0.10: {}
 
   drizzle-kit@1.0.0-rc.5(drizzle-orm@1.0.0-rc.5(@opentelemetry/api@1.10.0)(@types/pg@8.23.1)(bun-types@1.4.4)(pg@8.23.1)(zod@4.6.7)):
     optionalDependencies:
@@ -3985,7 +3985,7 @@ snapshots:
   jiti@2.7.0:
     optional: true
 
-  jose@6.2.15: {}
+  jose@6.2.16: {}
 
   joycon@3.1.1: {}
 
@@ -4138,7 +4138,7 @@ snapshots:
 
   natural-compare@1.4.0: {}
 
-  nodemailer@10.3.1: {}
+  nodemailer@10.4.0: {}
 
   obug@3.0.0: {}
 
