@@ -17,7 +17,7 @@
 import { type AxiosResponse, HttpStatusCode } from 'axios';
 import { describe, expect, test } from 'vitest';
 import { type Buch } from '../../../src/buch/graphql/types.mts';
-import { type Buchart } from '../../../src/buch/service/suchparameter.mts';
+import { type Buchart } from '../../../src/buch/repository/suchparameter.mts';
 import { CONTENT_TYPE } from '../constants.mts';
 import { type GraphQLQuery } from './graphql.mts';
 import { client } from './client.mts';

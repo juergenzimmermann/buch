@@ -21,7 +21,6 @@
 import { type Buchart, type Suchparameter } from './suchparameter.mts';
 import { type SQLWrapper, and, arrayContains, eq, gte, ilike, lte } from 'drizzle-orm';
 import { buchTable, titelTable } from '../../db/schema.mts';
-import { NotFoundError } from './errors.mts';
 import { getLogger } from '../../logger/logger.mts';
 
 type Schlagwort = string | boolean | undefined;
@@ -155,7 +154,7 @@ export const buildWhere = ({
 
     if (conditions.length === 0) {
         logger.debug('buildWhere: Ungueltige Suchparameter');
-        throw new NotFoundError('Ungueltige Suchparameter');
+        return;
     }
 
     const where = and(...conditions);

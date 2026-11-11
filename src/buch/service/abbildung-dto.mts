@@ -13,9 +13,8 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-import { abbildungTable } from '../../db/schema.mts';
+import { type AbbildungSelect } from '../repository/repository.mts';
 
-export type AbbildungSelect = typeof abbildungTable.$inferSelect;
 export class AbbildungDTO {
     id: number;
     beschriftung: string;

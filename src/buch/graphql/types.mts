@@ -15,7 +15,7 @@
 
 import { type BuchNeuType, type BuchUpdateType } from '../validation/buch-validation.mts';
 import { type BuchDTO } from '../service/buch-dto.mts';
-import { type Buchart } from '../service/suchparameter.mts';
+import { type Buchart } from '../repository/suchparameter.mts';
 
 // -----------------------------------------------------------------------------
 // I D   u n d   I n t   f u e r   G r a p h Q L

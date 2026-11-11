@@ -13,7 +13,7 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-import { type Pageable } from '../service/pageable.mts';
+import { type Pageable } from '../repository/pageable.mts';
 import { type Slice } from '../service/slice.mts';
 
 export type Page<T> = {

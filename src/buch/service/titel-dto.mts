@@ -13,9 +13,8 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-import { titelTable } from '../../db/schema.mts';
+import { type TitelSelect } from '../repository/repository.mts';
 
-export type TitelSelect = typeof titelTable.$inferSelect;
 export class TitelDTO {
     id: number;
     titel: string;

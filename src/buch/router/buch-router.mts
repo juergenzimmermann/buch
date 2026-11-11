@@ -22,7 +22,7 @@ import { find, findById, findFileByBuchId } from '../service/buch-service.mts';
 import { BadRequestError } from './errors.mts';
 import { Hono } from 'hono';
 import { createPage } from './page.mts';
-import { createPageable } from '../service/pageable.mts';
+import { createPageable } from '../repository/pageable.mts';
 import { getLogger } from '../../logger/logger.mts';
 
 /**

@@ -1,4 +1,3 @@
-// oxlint-disable max-lines, max-dependencies
 // Copyright (C) 2016 - present Juergen Zimmermann, Hochschule Karlsruhe
 //
 // This program is free software: you can redistribute it and/or modify
@@ -19,17 +18,19 @@
  * @packageDocumentation
  */
 
-import { BuchDTO, type BuchSelect } from './buch-dto.mts';
-import { type Suchparameter, suchparameterNamen } from './suchparameter.mts';
-import { abbildungTable, buchFileTable, buchTable, titelTable } from '../../db/schema.mts';
-import { count, eq } from 'drizzle-orm';
-import { type AbbildungSelect } from './abbildung-dto.mts';
+import { type Suchparameter, suchparameterNamen } from '../repository/suchparameter.mts';
+import {
+    select,
+    selectAll,
+    selectById,
+    selectByIdMitAbb,
+    selectFileByBuchId,
+} from '../repository/repository.mts';
+import { BuchDTO } from './buch-dto.mts';
 import { NotFoundError } from './errors.mts';
-import { type Pageable } from './pageable.mts';
+import { type Pageable } from '../repository/pageable.mts';
 import { type Slice } from './slice.mts';
-import { type TitelSelect } from './titel-dto.mts';
-import { buildWhere } from './build-where.mts';
-import { db } from '../../config/db.mts';
+import { buchFileTable } from '../../db/schema.mts';
 import { getLogger } from '../../logger/logger.mts';
 
 // Rueckgabetyp Promise bei asynchronen Funktionen
@@ -44,11 +45,6 @@ import { getLogger } from '../../logger/logger.mts';
 //               Promise-Objekt wird nicht den Status "fulfilled" erreichen.
 //               Im Promise-Objekt ist dann die Fehlerursache enthalten.
 
-type BuchMitTitelSelect = { buch: BuchSelect; titel: TitelSelect };
-type BuchMitTitelUndAbbildungSelect = BuchMitTitelSelect & {
-    abbildung: AbbildungSelect;
-};
-
 const logger = getLogger('buch-service');
 
 /**
@@ -61,13 +57,7 @@ export const findById = async (id: number): Promise<Readonly<BuchDTO>> => {
     logger.debug('findById: id=%d', id);
 
     // Lesen: Keine Transaktion erforderlich
-    const [row]: BuchMitTitelSelect[] = await db
-        .select()
-        .from(buchTable)
-        .innerJoin(titelTable, eq(buchTable.id, titelTable.buchId))
-        .where(eq(buchTable.id, id))
-        .limit(1);
-
+    const row = await selectById(id);
     if (row === undefined) {
         logger.debug('Es gibt kein Buch mit der ID %d', id);
         throw new NotFoundError(`Es gibt kein Buch mit der ID ${id}.`);
@@ -88,13 +78,7 @@ export const findById = async (id: number): Promise<Readonly<BuchDTO>> => {
 export const findByIdMitAbb = async (id: number): Promise<Readonly<BuchDTO>> => {
     logger.debug('findByIdMitAbb: id=%d', id);
 
-    const rows: BuchMitTitelUndAbbildungSelect[] = await db
-        .select()
-        .from(buchTable)
-        .innerJoin(titelTable, eq(buchTable.id, titelTable.buchId))
-        .innerJoin(abbildungTable, eq(buchTable.id, abbildungTable.buchId))
-        .where(eq(buchTable.id, id));
-
+    const rows = await selectByIdMitAbb(id);
     if (rows.length === 0) {
         logger.debug('Es gibt kein Buch mit der ID %d', id);
         throw new NotFoundError(`Es gibt kein Buch mit der ID ${id}.`);
@@ -115,54 +99,6 @@ export const findByIdMitAbb = async (id: number): Promise<Readonly<BuchDTO>> => 
     return buchDTO;
 };
 
-/**
- * Die Version zu gegebener ID ermitteln.
- * @param id ID des gesuchten Buches
- * @returns Die Version in einem Promise.
- * @throws NotFoundError falls kein Buch mit der ID existiert
- */
-export const findVersionById = async (id: number): Promise<number> => {
-    logger.debug('findVersionById: id=%d', id);
-
-    const [row]: { version: number }[] = await db
-        .select({ version: buchTable.version })
-        .from(buchTable)
-        .where(eq(buchTable.id, id))
-        .limit(1);
-
-    if (row === undefined) {
-        logger.debug('Es gibt kein Buch mit der ID %d', id);
-        throw new NotFoundError(`Es gibt kein Buch mit der ID ${id}.`);
-    }
-
-    const { version } = row;
-    logger.debug('findVersionById: version=%d', version);
-    return version;
-};
-
-/**
- * Gibt es ein Buch zur gegebenen ID
- * @param id ID des gesuchten Buches
- * @returns true in einem Promise, falls das Buch existiert, sonst false.
- */
-export const existsById = async (id: number): Promise<boolean> => {
-    logger.debug('existsById: id=%d', id);
-
-    const [row]: { id: number }[] = await db
-        .select({ id: buchTable.id })
-        .from(buchTable)
-        .where(eq(buchTable.id, id))
-        .limit(1);
-
-    if (row === undefined) {
-        logger.debug('existsById: false');
-        return false;
-    }
-
-    logger.debug('existsById: true');
-    return true;
-};
-
 export const createSlice = (
     buecher: BuchDTO[],
     totalElements: number,
@@ -176,17 +112,10 @@ export const createSlice = (
 };
 
 export const findAll = async (pageable: Pageable): Promise<Readonly<Slice<BuchDTO>>> => {
-    const { number, size } = pageable;
-    const rows: BuchMitTitelSelect[] = await db
-        .select()
-        .from(buchTable)
-        .innerJoin(titelTable, eq(buchTable.id, titelTable.buchId))
-        .offset(number * size)
-        .limit(size);
-    const totalElements = rows.length;
+    const { rows, totalElements } = await selectAll(pageable);
     if (totalElements === 0) {
         logger.debug('#findAll: Keine Buecher gefunden');
-        throw new NotFoundError(`Ungueltige Seite "${number}"`);
+        throw new NotFoundError(`Ungueltige Seite "${pageable.number}"`);
     }
     const buecher = rows.map((row) => new BuchDTO(row.buch, row.titel));
     return createSlice(buecher, totalElements);
@@ -243,18 +172,14 @@ export const find = async (
         throw new NotFoundError('Ungueltige Suchparameter');
     }
 
-    const where = buildWhere(suchparameter as Suchparameter);
-    const { number, size } = pageable;
-
     // Das Resultat ist eine leere Liste, falls nichts gefunden
     // Lesen: Keine Transaktion erforderlich
-    const rows: BuchMitTitelSelect[] = await db
-        .select()
-        .from(buchTable)
-        .innerJoin(titelTable, eq(buchTable.id, titelTable.buchId))
-        .where(where)
-        .offset(number * size)
-        .limit(size);
+    const result = await select(suchparameter, pageable);
+    if (result === undefined) {
+        throw new NotFoundError('Keine Buecher gefunden');
+    }
+
+    const { rows, totalElements } = result;
     if (rows.length === 0) {
         logger.debug('find: Keine Buecher gefunden');
         throw new NotFoundError(
@@ -263,12 +188,7 @@ export const find = async (
     }
 
     const buecher = rows.map((row) => new BuchDTO(row.buch, row.titel));
-    const [total] = await db
-        .select({ count: count() })
-        .from(buchTable)
-        .innerJoin(titelTable, eq(buchTable.id, titelTable.buchId))
-        .where(where);
-    return createSlice(buecher, total?.count ?? 0);
+    return createSlice(buecher, totalElements ?? 0);
 };
 
 export type BuchFileSelect = typeof buchFileTable.$inferSelect;
@@ -282,11 +202,7 @@ export const findFileByBuchId = async (
     buchId: number,
 ): Promise<Readonly<BuchFileSelect> | undefined> => {
     logger.debug('findFileByBuchId: buchId=%d', buchId);
-    const [buchFile]: BuchFileSelect[] = await db
-        .select()
-        .from(buchFileTable)
-        .where(eq(buchFileTable.buchId, buchId))
-        .limit(1);
+    const buchFile = await selectFileByBuchId(buchId);
     if (buchFile === undefined) {
         logger.debug('findFileByBuchId: Keine Datei gefunden');
         return;

@@ -27,8 +27,8 @@ import {
     VersionOutdatedError,
 } from './errors.mts';
 import { abbildungTable, buchFileTable, buchTable, titelTable } from '../../db/schema.mts';
-import { eq, sql } from 'drizzle-orm';
-import { existsById, findVersionById } from './buch-service.mts';
+import { count, eq, sql } from 'drizzle-orm';
+import { selectExistsById, selectVersionById } from '../repository/repository.mts';
 import { db } from '../../config/db.mts';
 import { getLogger } from '../../logger/logger.mts';
 import { sendmail } from '../../mail/sendmail.mts';
@@ -73,12 +73,11 @@ const buchNeuToInsert = (buchNeu: BuchNeuType): InsertType => {
 const checkUniqueISBN = async (isbn: string): Promise<undefined> => {
     logger.debug('checkUniqueISBN: isbn=%s', isbn);
 
-    const [row]: { id: number }[] = await db
-        .select({ id: buchTable.id })
+    const [row] = await db
+        .select({ count: count() })
         .from(buchTable)
-        .where(eq(buchTable.isbn, isbn))
-        .limit(1);
-    if (row === undefined) {
+        .where(eq(buchTable.isbn, isbn));
+    if (row?.count === 0) {
         logger.debug('checkUniqueISBN: ok');
         return;
     }
@@ -87,7 +86,7 @@ const checkUniqueISBN = async (isbn: string): Promise<undefined> => {
     throw new IsbnExistsError(isbn);
 };
 
-const sendmailFn = async ({ id, titel }: { id: number | 'N/A'; titel: string }) => {
+const sendmailFn = async (id: number, titel: string) => {
     const subject = `Neues Buch ${id}`;
     // Sonderzeichen fuer HTML maskieren
     const titelEscaped = titel.replace(
@@ -158,10 +157,7 @@ export const insert = async (buchNeu: BuchNeuType) => {
         return buchIdTmp;
     });
 
-    await sendmailFn({
-        id: buchId,
-        titel: titel.titel,
-    });
+    await sendmailFn(buchId, titel.titel);
 
     logger.debug('create: dbId=%d', buchId);
     return buchId;
@@ -177,7 +173,11 @@ const checkLatestVersion = async (id: number, versionStr: string) => {
     }
 
     const version = Number.parseInt(versionStr.slice(1, -1), 10);
-    const versionDb = await findVersionById(id);
+    const versionDb = await selectVersionById(id);
+    if (versionDb === undefined) {
+        logger.debug('Es gibt kein Buch mit der ID %d', id);
+        throw new NotFoundError(`Es gibt kein Buch mit der ID ${id}.`);
+    }
 
     if (version < versionDb) {
         logger.debug('checkLatestVersion: versionDb=%d (outdated)', versionDb);
@@ -245,7 +245,7 @@ export const update = async (id: number, buch: BuchUpdateType, version: string) 
 export const deleteFn = async (id: number) => {
     logger.debug('delete: id=%d', id);
 
-    const exists = await existsById(id);
+    const exists = await selectExistsById(id);
     if (!exists) {
         return false;
     }
@@ -290,7 +290,7 @@ export const addFile = async (
     // TODO Dateigroesse pruefen
 
     // Buch ermitteln, falls vorhanden
-    if (!(await existsById(buchId))) {
+    if (!(await selectExistsById(buchId))) {
         logger.debug('Es gibt kein Buch mit der ID %d', buchId);
         throw new NotFoundError(`Es gibt kein Buch mit der ID ${buchId}.`);
     }

@@ -25,7 +25,7 @@ import { type BuchDTO } from '../service/buch-dto.mts';
 import { GraphQLError } from 'graphql';
 import { NotFoundError } from '../service/errors.mts';
 import { type Slice } from '../service/slice.mts';
-import { createPageable } from '../service/pageable.mts';
+import { createPageable } from '../repository/pageable.mts';
 import { getLogger } from '../../logger/logger.mts';
 
 const logger = getLogger('query-handler');
