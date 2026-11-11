@@ -148,7 +148,6 @@ export const buildWhere = ({
         python,
     });
     if (schlagwoerter.length > 0) {
-        console.log('!!!schlagwoerter', schlagwoerter);
         conditions.push(arrayContains(buchTable.schlagwoerter, schlagwoerter));
     }
 

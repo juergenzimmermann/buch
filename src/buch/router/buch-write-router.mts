@@ -14,19 +14,18 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 import {
-    type BuchFileInsert,
-    addFile,
-    deleteFn,
-    insert,
-    update,
-} from '../service/buch-write-service.mts';
-import {
     BuchNeuSchema,
     type BuchNeuType,
     BuchUpdateSchema,
     type BuchUpdateType,
 } from '../validation/buch-validation.mts';
-import { badRequest, createProblemDetails, preconditionRequired } from '../../problem-details.mts';
+import { addFile, deleteFn, insert, update } from '../service/buch-write-service.mts';
+import {
+    badRequest,
+    createProblemDetails,
+    preconditionFailed,
+    preconditionRequired,
+} from '../../problem-details.mts';
 import { Hono } from 'hono';
 import { createBaseUrl } from './create-base-url.mts';
 import { getLogger } from '../../logger/logger.mts';
@@ -78,11 +77,16 @@ router.put('/:id', rolesRequired('admin', 'user'), async (c) => {
     }
 
     // https://hono.dev/docs/api/request#header
-    const version = req.header('If-Match');
-    logger.debug('put: version=%s', version);
-    if (version === undefined) {
+    const ifMatch = req.header('If-Match');
+    logger.debug('put: version=%s', ifMatch);
+    if (ifMatch === undefined) {
         logger.debug('put: version === undefined');
         return createProblemDetails(c, preconditionRequired, 'Header "If-Match" fehlt');
+    }
+    const version = Number.parseInt(ifMatch.slice(1, -1), 10);
+    if (Number.isNaN(version)) {
+        logger.debug('put: version === undefined');
+        return createProblemDetails(c, preconditionFailed, 'Header "If-Match" fehlt');
     }
 
     // Validierung mit Zod
@@ -153,13 +157,8 @@ router.post('/:id', rolesRequired('admin', 'user'), async (c) => {
         return createProblemDetails(c, badRequest, `Datei mit ${size} Bytes`);
     }
     const buffer = Buffer.from(await file.arrayBuffer());
-    const buchFile: BuchFileInsert = await addFile(idNumber, buffer, name, size, type);
-    logger.debug(
-        'upload: byteLength=%s, filename=%s, mimetype=%s',
-        (buchFile.data as Uint8Array<ArrayBuffer>).byteLength,
-        buchFile.filename,
-        buchFile.mimetype,
-    );
+    const fileId = await addFile(idNumber, buffer, size, name, type);
+    logger.debug('upload: fileId=%d', fileId);
 
     const location = `${createBaseUrl(c.req)}/file/${id}`;
     c.header('Location', location);

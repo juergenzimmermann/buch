@@ -1,4 +1,3 @@
-// oxlint-disable max-lines
 // Copyright (C) 2016 - present Juergen Zimmermann, Hochschule Karlsruhe
 //
 // This program is free software: you can redistribute it and/or modify
@@ -19,35 +18,29 @@
  * @packageDocumentation
  */
 
-import { type BuchNeuType, type BuchUpdateType } from '../validation/buch-validation.mts';
 import {
-    IsbnExistsError,
-    NotFoundError,
-    VersionInvalidError,
-    VersionOutdatedError,
-} from './errors.mts';
-import { abbildungTable, buchFileTable, buchTable, titelTable } from '../../db/schema.mts';
-import { count, eq, sql } from 'drizzle-orm';
-import { selectExistsById, selectVersionById } from '../repository/repository.mts';
+    type AbbildungInsert,
+    type BuchInsert,
+    type InsertType,
+    type TitelInsert,
+    deleteBuch,
+    deleteBuchFile,
+    existsISBN,
+    existsId,
+    insertAbbildung,
+    insertBuch,
+    insertBuchFile,
+    insertTitel,
+    selectVersionById,
+    updateBuch,
+} from '../repository/repository.mts';
+import { type BuchNeuType, type BuchUpdateType } from '../validation/buch-validation.mts';
+import { IsbnExistsError, NotFoundError, VersionOutdatedError } from './errors.mts';
 import { db } from '../../config/db.mts';
 import { getLogger } from '../../logger/logger.mts';
 import { sendmail } from '../../mail/sendmail.mts';
 
 const logger = getLogger('buch-write-service');
-
-export type BuchInsert = typeof buchTable.$inferInsert;
-// ohne Fremdschluessel-Spalte
-export type TitelInsert = Omit<typeof titelTable.$inferInsert, 'buchId'>;
-// ohne Fremdschluessel-Spalte
-export type AbbildungInsert = Omit<typeof abbildungTable.$inferInsert, 'buchId'>;
-export type InsertType = {
-    buch: BuchInsert;
-    titel: TitelInsert;
-    abbildungen?: AbbildungInsert[];
-};
-export type BuchFileInsert = typeof buchFileTable.$inferInsert;
-
-const VERSION_PATTERN = /^"\d{1,3}"/u;
 
 /**
  * Error-Klasse für internen Fehler.
@@ -68,22 +61,6 @@ const buchNeuToInsert = (buchNeu: BuchNeuType): InsertType => {
     return abbildungenInsert === undefined
         ? { buch: buchInsert, titel: titelInsert }
         : { buch: buchInsert, titel: titelInsert, abbildungen: abbildungenInsert };
-};
-
-const checkUniqueISBN = async (isbn: string): Promise<undefined> => {
-    logger.debug('checkUniqueISBN: isbn=%s', isbn);
-
-    const [row] = await db
-        .select({ count: count() })
-        .from(buchTable)
-        .where(eq(buchTable.isbn, isbn));
-    if (row?.count === 0) {
-        logger.debug('checkUniqueISBN: ok');
-        return;
-    }
-
-    logger.debug('checkUniqueISBN: isbn %s existiert', isbn);
-    throw new IsbnExistsError(isbn);
 };
 
 const sendmailFn = async (id: number, titel: string) => {
@@ -113,7 +90,10 @@ const sendmailFn = async (id: number, titel: string) => {
  */
 export const insert = async (buchNeu: BuchNeuType) => {
     logger.debug('create: buchNeu=%o', buchNeu);
-    await checkUniqueISBN(buchNeu.isbn);
+    const { isbn } = buchNeu;
+    if (await existsISBN(isbn)) {
+        throw new IsbnExistsError(isbn);
+    }
 
     const { buch, titel, abbildungen } = buchNeuToInsert(buchNeu);
 
@@ -121,35 +101,31 @@ export const insert = async (buchNeu: BuchNeuType) => {
     const buchId = await db.transaction(async (tx) => {
         // https://orm.drizzle.team/docs/insert
         // Destructuring
-        const [buchInsert] = await tx
-            .insert(buchTable)
-            .values(buch)
-            .returning({ id: buchTable.id });
-        if (buchInsert === undefined) {
-            throw new InternalServerError(`Das Buch ${buch} wurde nicht eingefuegt.`);
+        const buchIdTmp = await insertBuch(buch, tx);
+        if (buchIdTmp === undefined) {
+            throw new InternalServerError(
+                `Das Buch ${JSON.stringify(buch)} wurde nicht eingefuegt.`,
+            );
         }
-        const buchIdTmp = buchInsert.id;
 
-        const [titelInsert] = await tx
-            .insert(titelTable)
-            .values({ ...titel, buchId: buchIdTmp })
-            .returning({ id: titelTable.id });
-        if (titelInsert === undefined) {
-            throw new InternalServerError(`Der Titel ${titel} wurde nicht eingefuegt.`);
+        const titelId = await insertTitel(titel, buchIdTmp, tx);
+        if (titelId === undefined) {
+            throw new InternalServerError(
+                `Der Titel ${JSON.stringify(titel)} wurde nicht eingefuegt.`,
+            );
         }
-        logger.debug('ID neuer Titel: %d', titelInsert.id);
+        logger.debug('ID neuer Titel: %d', titelId);
 
         if (abbildungen !== undefined) {
             await Promise.all(
                 abbildungen?.map(async (abbildung) => {
-                    const [abbildungInsert] = await tx
-                        .insert(abbildungTable)
-                        .values({ ...abbildung, buchId: buchIdTmp })
-                        .returning({ id: abbildungTable.id });
-                    if (abbildungInsert === undefined) {
-                        throw new Error('Die Abbildung wurde nicht eingefuegt.');
+                    const abbildungId = await insertAbbildung(abbildung, buchIdTmp, tx);
+                    if (abbildungId === undefined) {
+                        throw new Error(
+                            `Die Abbildung ${JSON.stringify(abbildung)} wurde nicht eingefuegt.`,
+                        );
                     }
-                    logger.debug('ID neue Abbildung: %d', abbildungInsert.id);
+                    logger.debug('ID neue Abbildung: %d', abbildungId);
                 }),
             );
         }
@@ -166,20 +142,16 @@ export const insert = async (buchNeu: BuchNeuType) => {
 // =============================================================================
 // U P D A T E
 // =============================================================================
-const checkLatestVersion = async (id: number, versionStr: string) => {
-    logger.debug('checkLatestVersion: id=%d, versionStr=%s', id, versionStr);
-    if (!VERSION_PATTERN.test(versionStr)) {
-        throw new VersionInvalidError(versionStr);
-    }
+const checkLatestVersion = async (id: number, version: number) => {
+    logger.debug('checkLatestVersion: id=%d, version=%s', id, version);
 
-    const version = Number.parseInt(versionStr.slice(1, -1), 10);
     const versionDb = await selectVersionById(id);
     if (versionDb === undefined) {
         logger.debug('Es gibt kein Buch mit der ID %d', id);
         throw new NotFoundError(`Es gibt kein Buch mit der ID ${id}.`);
     }
 
-    if (version < versionDb) {
+    if (version !== versionDb) {
         logger.debug('checkLatestVersion: versionDb=%d (outdated)', versionDb);
         throw new VersionOutdatedError(version);
     }
@@ -198,7 +170,7 @@ const checkLatestVersion = async (id: number, versionStr: string) => {
  * @throws VersionInvalidException falls die Versionsnummer ungültig ist
  * @throws VersionOutdatedException falls die Versionsnummer veraltet ist
  */
-export const update = async (id: number, buch: BuchUpdateType, version: string) => {
+export const update = async (id: number, buch: BuchUpdateType, version: number) => {
     logger.debug('update: id=%s, buch=%o, version=%s', id, buch, version);
     if (id === undefined) {
         logger.debug('update: Keine gueltige ID');
@@ -208,29 +180,20 @@ export const update = async (id: number, buch: BuchUpdateType, version: string) 
     const versionDB = await checkLatestVersion(id, version);
     logger.debug('update: versionDB=%d', versionDB);
 
-    const { preis, rabatt, ...buchOhnePreisRabatt } = buch;
-    const [updated] = await db.transaction(
-        async (tx) =>
-            // https://orm.drizzle.team/docs/update
-            await tx
-                .update(buchTable)
-                .set({
-                    // Spread-Operator
-                    ...buchOhnePreisRabatt,
-                    version: versionDB + 1,
-                    preis: preis.toString(),
-                    rabatt: String(rabatt),
-                    // Funktion "now" von SQL durch den Template-String aufrufen
-                    aktualisiert: sql`now()`,
-                })
-                .where(eq(buchTable.id, id))
-                .returning({ version: buchTable.version }),
-    );
+    const { preis, rabatt } = buch;
+    const neueVersion = await db.transaction(async (tx) => {
+        const preisStr = preis.toString();
+        const rabattStr = String(rabatt);
+        return await updateBuch(
+            id,
+            { ...buch, preis: preisStr, rabatt: rabattStr },
+            version + 1,
+            tx,
+        );
+    });
 
-    const versionUpdated = updated === undefined ? Number.NaN : updated.version;
-    logger.debug('update: versionUpdated=%s', versionUpdated);
-
-    return versionUpdated;
+    logger.debug('update: neueVersion=%d', neueVersion);
+    return neueVersion;
 };
 
 // =============================================================================
@@ -245,21 +208,16 @@ export const update = async (id: number, buch: BuchUpdateType, version: string) 
 export const deleteFn = async (id: number) => {
     logger.debug('delete: id=%d', id);
 
-    const exists = await selectExistsById(id);
-    if (!exists) {
+    if (!(await existsId(id))) {
         return false;
     }
 
-    let deleted = false;
-    await db.transaction(async (tx) => {
-        // https://orm.drizzle.team/docs/delete
-        // "CREATE TABLE" mit "ON DELETE CASCADE"
-        const [idDelete] = await tx
-            .delete(buchTable)
-            .where(eq(buchTable.id, id))
-            .returning({ id: buchTable.id });
-        deleted = idDelete !== undefined;
-    });
+    const deleted = await db.transaction(
+        async (tx) =>
+            // https://orm.drizzle.team/docs/delete
+            // "CREATE TABLE" mit "ON DELETE CASCADE"
+            await deleteBuch(id, tx),
+    );
 
     logger.debug('delete: %s', deleted);
     return deleted;
@@ -281,44 +239,36 @@ export const deleteFn = async (id: number) => {
 export const addFile = async (
     buchId: number,
     data: Buffer,
-    name: string,
     size: number,
-    type: string,
-): Promise<Readonly<BuchFileInsert>> => {
-    logger.debug('addFile: buchId=%d, filename=%s, size=%d', buchId, name, size);
+    filename: string,
+    mimetype: string,
+): Promise<Readonly<number>> => {
+    logger.debug(
+        'addFile: buchId=%d, size=%d, filename=%s, mimetype=%s',
+        buchId,
+        size,
+        filename,
+        mimetype,
+    );
 
     // TODO Dateigroesse pruefen
 
     // Buch ermitteln, falls vorhanden
-    if (!(await selectExistsById(buchId))) {
+    if (!(await existsId(buchId))) {
         logger.debug('Es gibt kein Buch mit der ID %d', buchId);
         throw new NotFoundError(`Es gibt kein Buch mit der ID ${buchId}.`);
     }
 
-    const buchFileInsert = await db.transaction(async (tx) => {
+    const idResult = await db.transaction(async (tx) => {
         // evtl. vorhandene Datei löschen
-        await tx.delete(buchFileTable).where(eq(buchFileTable.buchId, buchId)).returning();
-
-        const buchFile: BuchFileInsert = {
-            filename: name,
-            data: data as Uint8Array<ArrayBuffer>,
-            mimetype: type,
-            buchId,
-        };
-        const [result] = await tx.insert(buchFileTable).values(buchFile).returning();
-        return result;
+        await deleteBuchFile(buchId, tx);
+        return await insertBuchFile(data, filename, mimetype, buchId, tx);
     });
-
-    if (buchFileInsert === undefined) {
+    if (idResult === undefined) {
         throw new InternalServerError(`Fehler beim INSERT von ${name}`);
     }
 
-    logger.debug(
-        'addFile: id=%s, byteLength=%s, filename=%s, mimetype=%s',
-        buchFileInsert.id,
-        (buchFileInsert.data as Uint8Array<ArrayBuffer>).byteLength,
-        buchFileInsert.filename,
-        buchFileInsert.mimetype,
-    );
-    return buchFileInsert;
+    const { id } = idResult;
+    logger.debug('addFile: id=%d', id);
+    return id;
 };

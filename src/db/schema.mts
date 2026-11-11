@@ -58,6 +58,24 @@ export const buchTable = buchSchema.table(
     ],
 );
 
+export const titelTable = buchSchema.table(
+    'titel',
+    {
+        id: integer().primaryKey().generatedAlwaysAsIdentity({ startWith: 1000 }),
+        titel: text().notNull(),
+        untertitel: text(),
+        buchId: integer('buch_id').notNull(),
+    },
+    (table) => [
+        foreignKey({
+            columns: [table.buchId],
+            foreignColumns: [buchTable.id],
+            name: 'titel_buch_id_fkey',
+        }).onDelete('cascade'),
+        unique('titel_buch_id_key').on(table.buchId),
+    ],
+);
+
 export const abbildungTable = buchSchema.table(
     'abbildung',
     {
@@ -93,23 +111,5 @@ export const buchFileTable = buchSchema.table(
         }).onDelete('cascade'),
         index('buch_file_buch_id_idx').using('btree', table.buchId.asc().nullsLast()),
         unique('buch_file_buch_id_key').on(table.buchId),
-    ],
-);
-
-export const titelTable = buchSchema.table(
-    'titel',
-    {
-        id: integer().primaryKey().generatedAlwaysAsIdentity({ startWith: 1000 }),
-        titel: text().notNull(),
-        untertitel: text(),
-        buchId: integer('buch_id').notNull(),
-    },
-    (table) => [
-        foreignKey({
-            columns: [table.buchId],
-            foreignColumns: [buchTable.id],
-            name: 'titel_buch_id_fkey',
-        }).onDelete('cascade'),
-        unique('titel_buch_id_key').on(table.buchId),
     ],
 );

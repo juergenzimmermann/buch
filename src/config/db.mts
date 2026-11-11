@@ -18,10 +18,10 @@ import { type PoolConfig } from 'pg';
 import { drizzle } from 'drizzle-orm/node-postgres';
 import { getLogger } from '../logger/logger.mts';
 import { readFile } from 'node:fs/promises';
+import { relations } from '../db/relations.mts';
 
 /**
- * Das Modul besteht aus dem Objekt {@linkcode prismaClient} als DB-Client
- * mit _Prisma_.
+ * Das Modul enthält das Objekt {@linkcode db} als DB-Client mit _Drizzle_.
  * @packageDocumentation
  */
 
@@ -58,11 +58,11 @@ const connection: PoolConfig = {
     idleTimeoutMillis: poolIdleTimeoutMillis, // Timeout, wie lange eine Verbindung inaktive ist, bevor sie geschlossen wird
     connectionTimeoutMillis: poolConnectionTimeoutMillis, // Timeout fuer Aufbau der DB-Verbindung
 };
-const drizzleConfig: any = { connection };
-if (nodeEnv === 'development') {
-    drizzleConfig.logger = true;
-}
-export const db = drizzle(drizzleConfig);
+export const db = drizzle({
+    connection,
+    relations,
+    logger: nodeEnv === 'development' || nodeEnv === 'test',
+});
 
 /**
  * DB-Verbindung für den Drizzle-Client trennen.

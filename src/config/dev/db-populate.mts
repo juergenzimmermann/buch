@@ -26,6 +26,7 @@ import { drizzle } from 'drizzle-orm/node-postgres';
 import { getLogger } from '../../logger/logger.mts';
 import process from 'node:process';
 import { readFile } from 'node:fs/promises';
+import { relations } from '../../db/relations.mts';
 import { sql } from 'drizzle-orm';
 
 const config = await getConfig();
@@ -44,7 +45,7 @@ const {
 const activated = config.db.populate === true;
 const { nodeEnv } = config.server;
 
-const connectionAdmin: PoolConfig = {
+const connection: PoolConfig = {
     user: admin,
     database,
     password: adminPassword,
@@ -59,11 +60,12 @@ const connectionAdmin: PoolConfig = {
     idleTimeoutMillis: poolIdleTimeoutMillis,
     connectionTimeoutMillis: poolConnectionTimeoutMillis,
 };
-const drizzleConfigAdmin: any = { connection: connectionAdmin };
-if (nodeEnv === 'development') {
-    drizzleConfigAdmin.logger = true;
-}
-export const dbAdmin = drizzle(drizzleConfigAdmin);
+export const dbAdmin = drizzle({
+    connection,
+    relations,
+    logger: nodeEnv === 'development' || nodeEnv === 'test',
+});
+
 const dbURL = new URL('postgresql/', configURL);
 
 const logger = getLogger('populate', 'func');

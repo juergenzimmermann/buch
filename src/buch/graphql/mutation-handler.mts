@@ -136,7 +136,7 @@ export const updateHandler = async (input: BuchUpdateInput): Promise<UpdatePaylo
 
     let version: number | undefined;
     try {
-        version = await update(toNumber(input.id), buchUpdate, `"${input.version}"`);
+        version = await update(toNumber(input.id), buchUpdate, input.version);
     } catch (err) {
         if (err instanceof NotFoundError) {
             logger.debug('buchHandler: Kein Buch gefunden.');
