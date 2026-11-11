@@ -104,7 +104,7 @@
     "leasot": "14.4.0",
     "oxfmt": "0.78.0",
     "oxlint": "1.93.0",
-    "tsrs": "0.23.0-ts7.1.0-beta",
+    "tsrs": "0.24.0-ts7.1.0-beta",
     "tsx": "4.23.15",
     "typedoc": "0.28.20",
     "typescript": "7.1.0-beta",
@@ -134,7 +134,7 @@
     "runtime": [
       {
         "name": "node",
-        "version": "^26.13.0",
+        "version": "^26.13.1",
         "onFail": "warn"
       },
       {
@@ -146,7 +146,7 @@
   },
   "engines": {
     "bun": "^1.4.4",
-    "node": "^26.13.0",
+    "node": "^26.13.1",
     "pnpm": "^12.19.0"
   }
 }
