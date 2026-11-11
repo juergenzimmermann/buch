@@ -17,32 +17,32 @@ import { beforeEach, describe, expect, test, vi } from 'vitest';
 import { deleteFn } from './buch-write-service.mts';
 
 // Hoisting: wird an den (Datei-) Anfang verschoben
-const { existsByIdMock, deleteMock, deleteWhereMock, returningMock, transactionMock } = vi.hoisted(
-    () => {
-        return {
-            existsByIdMock: vi.fn<(id: number) => Promise<boolean>>(),
-
-            deleteMock: vi.fn<(...args: unknown[]) => unknown>(),
-            deleteWhereMock: vi.fn<(...args: unknown[]) => unknown>(),
-            returningMock: vi.fn<(...args: unknown[]) => Promise<unknown>>(),
-
-            transactionMock:
-                vi.fn<
-                    (
-                        callback: (tx: {
-                            delete: (...args: unknown[]) => unknown;
-                        }) => Promise<unknown>,
-                    ) => Promise<unknown>
-                >(),
-        };
-    },
-);
-
-vi.mock(import('./buch-service.mts'), async (importOriginal) => {
-    const buchService = await importOriginal();
+const {
+    selectMock,
+    fromMock,
+    whereMock,
+    limitMock,
+    deleteMock,
+    deleteWhereMock,
+    returningMock,
+    transactionMock,
+} = vi.hoisted(() => {
     return {
-        ...buchService,
-        existsById: existsByIdMock,
+        selectMock: vi.fn<(...args: unknown[]) => unknown>(),
+        fromMock: vi.fn<(...args: unknown[]) => unknown>(),
+        whereMock: vi.fn<(...args: unknown[]) => unknown>(),
+        limitMock: vi.fn<(...args: unknown[]) => Promise<unknown>>(),
+
+        deleteMock: vi.fn<(...args: unknown[]) => unknown>(),
+        deleteWhereMock: vi.fn<(...args: unknown[]) => unknown>(),
+        returningMock: vi.fn<(...args: unknown[]) => Promise<unknown>>(),
+
+        transactionMock:
+            vi.fn<
+                (
+                    callback: (tx: { delete: (...args: unknown[]) => unknown }) => Promise<unknown>,
+                ) => Promise<unknown>
+            >(),
     };
 });
 
@@ -50,6 +50,7 @@ vi.mock(import('./buch-service.mts'), async (importOriginal) => {
 vi.mock(import('../../config/db.mts'), () => {
     return {
         db: {
+            select: selectMock,
             transaction: transactionMock,
         } as unknown as typeof import('../../config/db.mts').db,
     };
@@ -61,6 +62,10 @@ describe('buch-write-service: delete', () => {
     beforeEach(() => {
         vi.resetAllMocks();
 
+        selectMock.mockReturnValue({ from: fromMock });
+        fromMock.mockReturnValue({ where: whereMock });
+        whereMock.mockReturnValue({ limit: limitMock });
+
         transactionMock.mockImplementation((transactionBody) =>
             transactionBody({ delete: deleteMock }),
         );
@@ -71,7 +76,7 @@ describe('buch-write-service: delete', () => {
     test('Buch loeschen', async () => {
         // given
         // Mocking, dass das Buch mit der id 1 existiert und in einer Transaktion geloescht wird
-        existsByIdMock.mockResolvedValueOnce(true);
+        limitMock.mockResolvedValueOnce([{ id }]);
         returningMock.mockResolvedValueOnce([{ id }]);
 
         // when
@@ -84,7 +89,7 @@ describe('buch-write-service: delete', () => {
     test('Buch loeschen: id nicht vorhanden', async () => {
         // given
         // Mocking, dass das Buch mit der id 1 nicht existiert
-        existsByIdMock.mockResolvedValueOnce(false);
+        limitMock.mockResolvedValueOnce([]);
 
         // when
         const deleteResult = await deleteFn(id);
