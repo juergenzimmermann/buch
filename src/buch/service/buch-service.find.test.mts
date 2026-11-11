@@ -85,10 +85,10 @@ const mockDrizzleQuery = () => {
 };
 
 const mockDrizzleQueryNotFound = () => {
-    selectMock.mockReturnValueOnce({ from: fromMock });
+    selectMock.mockReturnValueOnce({ from: fromMock }).mockReturnValueOnce({ from: fromMock });
     fromMock.mockReturnValue({ innerJoin: innerJoinMock });
     innerJoinMock.mockReturnValue({ where: whereMock });
-    whereMock.mockReturnValueOnce({ offset: offsetMock });
+    whereMock.mockReturnValueOnce({ offset: offsetMock }).mockResolvedValueOnce([{ count: 0 }]);
     offsetMock.mockReturnValue({ limit: limitMock });
     limitMock.mockResolvedValueOnce([]);
 };
