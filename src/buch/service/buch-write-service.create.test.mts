@@ -25,7 +25,6 @@ const {
     selectMock,
     fromMock,
     whereMock,
-    limitMock,
     insertMock,
     valuesMock,
     returningMock,
@@ -36,8 +35,7 @@ const {
     return {
         selectMock: vi.fn<(...args: unknown[]) => unknown>(),
         fromMock: vi.fn<(...args: unknown[]) => unknown>(),
-        whereMock: vi.fn<(...args: unknown[]) => unknown>(),
-        limitMock: vi.fn<(...args: unknown[]) => Promise<unknown>>(),
+        whereMock: vi.fn<(...args: unknown[]) => Promise<unknown>>(),
 
         insertMock: vi.fn<(...args: unknown[]) => unknown>(),
         valuesMock: vi.fn<(...args: unknown[]) => unknown>(),
@@ -92,8 +90,7 @@ describe('buch-write-service: create', () => {
         vi.resetAllMocks();
         selectMock.mockReturnValue({ from: fromMock });
         fromMock.mockReturnValue({ where: whereMock });
-        whereMock.mockReturnValue({ limit: limitMock });
-        limitMock.mockResolvedValue([]);
+        whereMock.mockResolvedValue([]);
 
         transactionMock.mockImplementation((transactionBody) =>
             transactionBody({ insert: insertMock }),
@@ -127,7 +124,7 @@ describe('buch-write-service: create', () => {
     test('Neues Buch: ISBN bereits vorhanden', async () => {
         // given
         // Mocking fuer die Suche mit ISBN: Buch mit id 1 gefunden
-        limitMock.mockResolvedValue([{ id: 1 }]);
+        whereMock.mockResolvedValue([{ count: 1 }]);
 
         // when / then
         await expect(insert(buch)).rejects.toBeInstanceOf(IsbnExistsError);
