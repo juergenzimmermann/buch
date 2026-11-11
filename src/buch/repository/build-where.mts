@@ -103,17 +103,19 @@ export const buildWhere = ({
                 break;
             case 'rating': {
                 const ratingNumber = Number.parseInt(value as string, 10);
-                if (!Number.isNaN(ratingNumber)) {
-                    conditions.push(gte(buchTable.rating, ratingNumber));
+                if (Number.isNaN(ratingNumber)) {
+                    return;
                 }
+                conditions.push(gte(buchTable.rating, ratingNumber));
                 break;
             }
             case 'preis': {
                 const preisNumber = Number.parseFloat(value as string);
-                if (!Number.isNaN(preisNumber)) {
-                    const condition = lte(buchTable.preis, value as string);
-                    conditions.push(condition);
+                if (Number.isNaN(preisNumber)) {
+                    return;
                 }
+                const condition = lte(buchTable.preis, value as string);
+                conditions.push(condition);
                 break;
             }
             case 'art':

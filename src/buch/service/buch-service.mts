@@ -169,7 +169,7 @@ export const find = async (
     // Lesen: Keine Transaktion erforderlich
     const result = await select(suchparameter, pageable);
     if (result === undefined) {
-        throw new NotFoundError('Keine Buecher gefunden');
+        throw new NotFoundError('Ungueltige Suchparameter');
     }
 
     const { rows, totalElements } = result;

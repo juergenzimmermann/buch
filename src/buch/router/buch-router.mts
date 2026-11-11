@@ -23,7 +23,6 @@ import { BadRequestError } from './errors.mts';
 import { Hono } from 'hono';
 import { createPage } from './page.mts';
 import { createPageable } from '../repository/pageable.mts';
-import { findFileByBuchId } from '../service/buch-file-service.mts';
 import { getLogger } from '../../logger/logger.mts';
 
 /**
@@ -135,25 +134,4 @@ router.query('/', async (c) => {
     const buchPage = createPage(buecherSlice, pageable);
     logger.debug('get: buchPage=%o', buchPage);
     return c.json(buchPage);
-});
-
-// =============================================================================
-// D o w n l o a d
-// =============================================================================
-router.get('/file/:id', async (c) => {
-    const id = c.req.param('id');
-    logger.debug('download: id=%s', id);
-    const idNumber = Number.parseInt(id, 10);
-    if (Number.isNaN(idNumber)) {
-        return c.notFound();
-    }
-
-    const buchFile = await findFileByBuchId(idNumber);
-    if (buchFile === undefined) {
-        return c.notFound();
-    }
-
-    return c.body(buchFile.data as Uint8Array<ArrayBuffer>, {
-        headers: { 'Content-Type': buchFile.mimetype ?? '' },
-    });
 });

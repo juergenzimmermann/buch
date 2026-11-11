@@ -27,7 +27,6 @@ import {
 } from '../../problem-details.mts';
 import { deleteFn, insert, update } from '../service/buch-write-service.mts';
 import { Hono } from 'hono';
-import { addFile } from '../service/buch-file-service.mts';
 import { createBaseUrl } from './create-base-url.mts';
 import { getLogger } from '../../logger/logger.mts';
 import { rolesRequired } from '../../security/roles-required.mts';
@@ -39,7 +38,6 @@ import { rolesRequired } from '../../security/roles-required.mts';
 export const router = new Hono();
 
 const logger = getLogger('buch-write-router');
-const MAX_FILE_SIZE_BYTES = 10_485_760;
 
 // =============================================================================
 // N e u a n l e g e n
@@ -122,46 +120,4 @@ router.delete('/:id', rolesRequired('admin'), async (c) => {
 
     await deleteFn(idNumber);
     return body(null, 204);
-});
-
-// =============================================================================
-// F i l e   U p l o a d
-// =============================================================================
-router.post('/:id', rolesRequired('admin', 'user'), async (c) => {
-    const id = c.req.param('id') ?? '-1';
-    logger.debug('upload: id=%s', id);
-    const idNumber = Number.parseInt(id, 10);
-    if (Number.isNaN(idNumber)) {
-        return c.notFound();
-    }
-
-    const contentType = c.req.header('Content-Type');
-    logger.debug('upload: contentType=%s', contentType);
-
-    // https://hono.dev/examples/file-upload
-    // https://dev.to/aaronksaunders/quick-rest-api-file-upload-with-hono-js-and-drizzle-49ok
-    const body = await c.req.parseBody();
-    const { file } = body;
-    if (file === undefined) {
-        return createProblemDetails(c, badRequest, 'Keine Dateien hochgeladen');
-    }
-    if (Array.isArray(file) && file.length !== 1) {
-        return createProblemDetails(c, badRequest, 'Mehrere Dateien hochgeladen');
-    }
-    if (!(file instanceof File)) {
-        return createProblemDetails(c, badRequest, `Ungueltiger Typ beim Upload: ${typeof file}`);
-    }
-
-    const { name, size, type } = file;
-    logger.debug('upload: name=%s, size=%d, type=%s', name, size, type);
-    if (size > MAX_FILE_SIZE_BYTES) {
-        return createProblemDetails(c, badRequest, `Datei mit ${size} Bytes`);
-    }
-    const buffer = Buffer.from(await file.arrayBuffer());
-    const fileId = await addFile(idNumber, buffer, size, name, type);
-    logger.debug('upload: fileId=%d', fileId);
-
-    const location = `${createBaseUrl(c.req)}/file/${id}`;
-    c.header('Location', location);
-    return c.body(null, 204);
 });
