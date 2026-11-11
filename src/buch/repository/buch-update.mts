@@ -19,13 +19,13 @@
  */
 
 import { eq, sql } from 'drizzle-orm';
-import { type BuchInsert } from './buch-insert.mts';
 import { type NodePgTransaction } from 'drizzle-orm/node-postgres';
+import { type PgUpdateSetSource } from 'drizzle-orm/pg-core';
 import { buchTable } from '../../db/schema.mts';
 import { getLogger } from '../../logger/logger.mts';
 import { type relations } from '../../db/relations.mts';
 
-export type BuchUpdate = Omit<BuchInsert, 'version' | 'erzeugt' | 'aktualisiert'>;
+export type BuchUpdate = PgUpdateSetSource<typeof buchTable>;
 
 const logger = getLogger('buch-update');
 
@@ -45,12 +45,14 @@ export const updateBuch = async (
     tx: NodePgTransaction<typeof relations>,
 ) => {
     logger.debug('updateBuch: id=%d, buch=%o, version=%d', id, buch, version);
+
     const data = {
         ...buch,
         version,
         // Funktion "now" von SQL durch den Template-String aufrufen
         aktualisiert: sql`now()`,
     };
+
     // https://orm.drizzle.team/docs/update
     await tx
         .update(buchTable)
