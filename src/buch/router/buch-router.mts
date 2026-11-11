@@ -18,11 +18,12 @@
  * @packageDocumentation
  */
 
-import { find, findById, findFileByBuchId } from '../service/buch-service.mts';
+import { find, findById } from '../service/buch-service.mts';
 import { BadRequestError } from './errors.mts';
 import { Hono } from 'hono';
 import { createPage } from './page.mts';
 import { createPageable } from '../repository/pageable.mts';
+import { findFileByBuchId } from '../service/buch-file-service.mts';
 import { getLogger } from '../../logger/logger.mts';
 
 /**

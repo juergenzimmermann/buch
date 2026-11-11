@@ -19,14 +19,15 @@ import {
     BuchUpdateSchema,
     type BuchUpdateType,
 } from '../validation/buch-validation.mts';
-import { addFile, deleteFn, insert, update } from '../service/buch-write-service.mts';
 import {
     badRequest,
     createProblemDetails,
     preconditionFailed,
     preconditionRequired,
 } from '../../problem-details.mts';
+import { deleteFn, insert, update } from '../service/buch-write-service.mts';
 import { Hono } from 'hono';
+import { addFile } from '../service/buch-file-service.mts';
 import { createBaseUrl } from './create-base-url.mts';
 import { getLogger } from '../../logger/logger.mts';
 import { rolesRequired } from '../../security/roles-required.mts';

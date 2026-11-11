@@ -24,9 +24,7 @@ import { BuchDTO } from './buch-dto.mts';
 import { NotFoundError } from './errors.mts';
 import { type Pageable } from '../repository/pageable.mts';
 import { type Slice } from './slice.mts';
-import { buchFileTable } from '../../db/schema.mts';
 import { getLogger } from '../../logger/logger.mts';
-import { selectFileByBuchId } from '../repository/buch-file.mts';
 
 // Rueckgabetyp Promise bei asynchronen Funktionen
 //    ab ES2015
@@ -184,37 +182,4 @@ export const find = async (
 
     const buecher = rows.map((row) => new BuchDTO(row.buch, row.titel));
     return createSlice(buecher, totalElements ?? 0);
-};
-
-export type BuchFileSelect = typeof buchFileTable.$inferSelect;
-
-/**
- * Binärdatei zu einem Buch suchen.
- * @param buchId ID des zugehörigen Buchs.
- * @returns Binärdatei oder undefined als Promise.
- */
-export const findFileByBuchId = async (
-    buchId: number,
-): Promise<Readonly<BuchFileSelect> | undefined> => {
-    logger.debug('findFileByBuchId: buchId=%d', buchId);
-    const buchFile = await selectFileByBuchId(buchId);
-    if (buchFile === undefined) {
-        logger.debug('findFileByBuchId: Keine Datei gefunden');
-        return;
-    }
-
-    logger.debug(
-        'findFileByBuchId: id=%s, byteLength=%d, filename=%s, mimetype=%s, buchId=%d',
-        buchFile.id,
-        (buchFile.data as Uint8Array<ArrayBuffer>).byteLength,
-        buchFile.filename,
-        buchFile.mimetype,
-        buchFile.buchId,
-    );
-
-    // als Datei im Wurzelverzeichnis des Projekts speichern:
-    // import { writeFile } from 'node:fs/promises';
-    // await writeFile(buchFile.filename, buchFile.data);
-
-    return buchFile;
 };

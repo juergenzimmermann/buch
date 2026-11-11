@@ -14,12 +14,12 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-import { BuchDTO, type BuchSelect } from './buch-dto.mts';
+import { type BuchSelect, type TitelSelect } from '../repository/buch-select.mts';
 import { beforeEach, describe, expect, test, vi } from 'vitest';
 import { find, findAll } from './buch-service.mts';
-import { type Pageable } from './pageable.mts';
-import { type Suchparameter } from './suchparameter.mts';
-import { type TitelSelect } from './titel-dto.mts';
+import { BuchDTO } from './buch-dto.mts';
+import { type Pageable } from '../repository/pageable.mts';
+import { type Suchparameter } from '../repository/suchparameter.mts';
 
 // Hoisting: wird an den (Datei-) Anfang verschoben
 const { selectMock, fromMock, innerJoinMock, whereMock, offsetMock, limitMock } = vi.hoisted(() => {

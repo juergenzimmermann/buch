@@ -13,9 +13,9 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-import { BuchDTO, type BuchSelect } from './buch-dto.mts';
+import { type BuchSelect, type TitelSelect } from './../repository/buch-select.mts';
 import { beforeEach, describe, expect, test, vi } from 'vitest';
-import { type TitelSelect } from './titel-dto.mts';
+import { BuchDTO } from './buch-dto.mts';
 import { findById } from './buch-service.mts';
 
 // Hoisting: wird an den (Datei-) Anfang verschoben

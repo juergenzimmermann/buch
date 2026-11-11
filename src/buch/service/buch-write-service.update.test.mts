@@ -71,7 +71,6 @@ const buch: BuchUpdateType = {
     schlagwoerter: ['JAVASCRIPT'],
 };
 
-// oxlint-disable-next-line max-lines-per-function
 describe('buch-write-service: update', () => {
     beforeEach(() => {
         vi.resetAllMocks();
@@ -91,7 +90,7 @@ describe('buch-write-service: update', () => {
     test('Buch aktualisieren', async () => {
         // given
         const id = 1;
-        const versionVorher = '"0"';
+        const versionVorher = 0;
 
         // Mocking der aktuellen Version in der DB
         limitMock.mockResolvedValueOnce([{ version: 0 }]);
@@ -103,38 +102,27 @@ describe('buch-write-service: update', () => {
         const versionNachher = await update(id, buch, versionVorher);
 
         // then
-        expect(versionNachher).toBe(Number.parseInt(versionVorher.slice(1, -1), 10) + 1);
+        expect(versionNachher).toBe(versionVorher + 1);
     });
 
     test('Buch aktualisieren: alte Version', async () => {
         // given
         const id = 1;
-        const version = '"0"';
+        const version = 0;
 
         // Mocking der aktuellen Version in der DB
         limitMock.mockResolvedValueOnce([{ version: 1 }]);
 
         // when / then
         await expect(update(id, buch, version)).rejects.toThrow(
-            `Die Versionsnummer ${version.slice(1, -1)} ist nicht aktuell.`,
-        );
-    });
-
-    test('Buch aktualisieren: ungueltige Version', async () => {
-        // given
-        const id = 1;
-        const version = '0';
-
-        // when / then
-        await expect(update(id, buch, version)).rejects.toThrow(
-            `Die Versionsnummer ${version} ist ungueltig`,
+            `Die Versionsnummer ${version} ist nicht aktuell.`,
         );
     });
 
     test('Buch aktualisieren: ohne id', async () => {
         // given
         const id = undefined;
-        const version = '"0"';
+        const version = 0;
 
         // when / then
         await expect(update(id as any, buch, version)).rejects.toThrow(

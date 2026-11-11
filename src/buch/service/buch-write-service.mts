@@ -29,7 +29,6 @@ import {
 } from '../repository/buch-insert.mts';
 import { type BuchNeuType, type BuchUpdateType } from '../validation/buch-validation.mts';
 import { IsbnExistsError, NotFoundError, VersionOutdatedError } from './errors.mts';
-import { deleteBuchFile, insertBuchFile } from '../repository/buch-file.mts';
 import { existsISBN, existsId, selectVersionById } from '../repository/buch-select.mts';
 import { db } from '../../config/db.mts';
 import { deleteBuch } from '../repository/buch-delete.mts';
@@ -218,54 +217,4 @@ export const deleteFn = async (id: number) => {
 
     logger.debug('delete: %s', deleted);
     return deleted;
-};
-
-// =============================================================================
-// B I N A E R D A T E I   S P E I C H E R N
-// =============================================================================
-/**
- * Zu einem vorhandenen Buch eine Binärdatei mit z.B. einem Bild abspeichern.
- * @param buchId ID des vorhandenen Buches
- * @param data Bytes der Datei als Buffer Node
- * @param name Dateiname
- * @param size Dateigröße in Bytes
- * @param type MIME-Typ, z.B. image/png
- * @returns Entity-Objekt für `BuchFile`
- */
-// oxlint-disable-next-line max-params
-export const addFile = async (
-    buchId: number,
-    data: Buffer,
-    size: number,
-    filename: string,
-    mimetype: string,
-): Promise<Readonly<number>> => {
-    logger.debug(
-        'addFile: buchId=%d, size=%d, filename=%s, mimetype=%s',
-        buchId,
-        size,
-        filename,
-        mimetype,
-    );
-
-    // TODO Dateigroesse pruefen
-
-    // Buch ermitteln, falls vorhanden
-    if (!(await existsId(buchId))) {
-        logger.debug('Es gibt kein Buch mit der ID %d', buchId);
-        throw new NotFoundError(`Es gibt kein Buch mit der ID ${buchId}.`);
-    }
-
-    const idResult = await db.transaction(async (tx) => {
-        // evtl. vorhandene Datei löschen
-        await deleteBuchFile(buchId, tx);
-        return await insertBuchFile(data, filename, mimetype, buchId, tx);
-    });
-    if (idResult === undefined) {
-        throw new InternalServerError(`Fehler beim INSERT von ${name}`);
-    }
-
-    const { id } = idResult;
-    logger.debug('addFile: id=%d', id);
-    return id;
 };
