@@ -17,7 +17,7 @@ import {
     type AbbildungSelect,
     type BuchSelect,
     type TitelSelect,
-} from '../repository/repository.mts';
+} from '../repository/buch-select.mts';
 import { AbbildungDTO } from './abbildung-dto.mts';
 import { TitelDTO } from './titel-dto.mts';
 

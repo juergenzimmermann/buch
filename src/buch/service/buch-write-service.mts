@@ -23,22 +23,19 @@ import {
     type BuchInsert,
     type InsertType,
     type TitelInsert,
-    deleteBuch,
-    deleteBuchFile,
-    existsISBN,
-    existsId,
     insertAbbildung,
     insertBuch,
-    insertBuchFile,
     insertTitel,
-    selectVersionById,
-    updateBuch,
-} from '../repository/repository.mts';
+} from '../repository/buch-insert.mts';
 import { type BuchNeuType, type BuchUpdateType } from '../validation/buch-validation.mts';
 import { IsbnExistsError, NotFoundError, VersionOutdatedError } from './errors.mts';
+import { deleteBuchFile, insertBuchFile } from '../repository/buch-file.mts';
+import { existsISBN, existsId, selectVersionById } from '../repository/buch-select.mts';
 import { db } from '../../config/db.mts';
+import { deleteBuch } from '../repository/buch-delete.mts';
 import { getLogger } from '../../logger/logger.mts';
 import { sendmail } from '../../mail/sendmail.mts';
+import { updateBuch } from '../repository/buch-update.mts';
 
 const logger = getLogger('buch-write-service');
 

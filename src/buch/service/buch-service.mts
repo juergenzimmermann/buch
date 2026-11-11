@@ -19,19 +19,14 @@
  */
 
 import { type Suchparameter, suchparameterNamen } from '../repository/suchparameter.mts';
-import {
-    select,
-    selectAll,
-    selectById,
-    selectByIdMitAbb,
-    selectFileByBuchId,
-} from '../repository/repository.mts';
+import { select, selectAll, selectById, selectByIdMitAbb } from '../repository/buch-select.mts';
 import { BuchDTO } from './buch-dto.mts';
 import { NotFoundError } from './errors.mts';
 import { type Pageable } from '../repository/pageable.mts';
 import { type Slice } from './slice.mts';
 import { buchFileTable } from '../../db/schema.mts';
 import { getLogger } from '../../logger/logger.mts';
+import { selectFileByBuchId } from '../repository/buch-file.mts';
 
 // Rueckgabetyp Promise bei asynchronen Funktionen
 //    ab ES2015

@@ -187,7 +187,7 @@ snapshots:
 				"hono": "5.0.0-rc.0",
 				"isbn3": "2.0.13",
 				"jose": "6.2.17",
-				"nodemailer": "10.4.0",
+				"nodemailer": "10.5.0",
 				"pg": "8.23.1",
 				"pino": "10.4.0",
 				"pino-pretty": "13.2.0",
@@ -3164,8 +3164,8 @@ snapshots:
 			"integrity": "sha512-OWND8ei3VtNC9h7V60qff3SVobHr996CTwgxubgyQYEpg290h9J0buyECNNJexkFm5sOajh5G116RYA1c8ZMSw==",
 		},
 
-		"nodemailer@10.4.0": {
-			"integrity": "sha512-fyy6r4Q5euRJ9Qr3Cts9K7SZrfe9zmz9oLOYiAR02MEJRDRci+99y0OoYBYBgpLffOqkkjXrB/d26VfiMje/kA==",
+		"nodemailer@10.5.0": {
+			"integrity": "sha512-L/w/HH5MqpzMDuZD7fQdt/+KqymuvrpaApaIjAH2XA3ILePwlcvXCVVvP75xVrXCEt2ggK2marrrHHFB5Qu0kA==",
 			"engines": {"node": ">=20.0.0"},
 		},
 

@@ -13,7 +13,7 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-import { type AbbildungSelect } from '../repository/repository.mts';
+import { type AbbildungSelect } from '../repository/buch-select.mts';
 
 export class AbbildungDTO {
     id: number;
