@@ -75,7 +75,7 @@ zusätzlich die aktuelle Upload-Geschwindigkeit ermittelt werden.
 
 ## Lokaler Appserver mit dem Watch-Modus
 
-Durch `pnpm run dev` wird der Appserver im _Watch_-Modus für die
+Durch `pnpm dev` wird der Appserver im _Watch_-Modus für die
 Entwicklung gestartet, d.h. bei Code-Änderungen wird der Server automatisch
 neu gestartet. `pnpm start` startet den Appserver ohne Watch-Modus.
 
@@ -213,7 +213,7 @@ _Oxlint_ wird durch oxslint.config.ts` konfiguriert und durch folgendes Skript
 ausgeführt:
 
 ```shell
-    pnpm run lint
+    pnpm lint
 ```
 
 ### Oxfmt
@@ -222,7 +222,7 @@ _Oxfmt_ (statt _Prettier_) ist ein Formatierer, der durch `oxfmt.config.mts`
 konfiguriert und durch folgendes Skript ausgeführt wird:
 
 ```shell
-    pnpm run fmt
+    pnpm fmt
 ```
 
 ### SonarQube

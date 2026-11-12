@@ -71,6 +71,7 @@ services:
 
   grafana:
     image: grafana/grafana:13.2.6
+    #image: grafana/grafana:13.2.5
     ports:
       - published: 3333
         target: 3000
