@@ -31,9 +31,10 @@ saveExact: true
 savePrefix: ""
 
 # https://pnpm.io/settings/build#allowbuilds
-# https://pnpm.io/settings/build#allowbuilds
 allowBuilds:
   esbuild: true
+  #pnpm add -D github:birkskyum/typedoc#ts-7.1
+  #typedoc@https://codeload.github.com/birkskyum/typedoc/tar.gz/18099a7bc596326cca17dae294868c2b887a005d: true
 
 # https://pnpm.io/settings/other#dedupedirectdeps
 dedupeDirectDeps: true

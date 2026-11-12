@@ -106,9 +106,8 @@
     "oxlint": "1.93.0",
     "tsrs": "0.24.0-ts7.1.0-beta",
     "tsx": "4.23.15",
-    "typedoc": "0.28.20",
     "typescript": "7.1.0-beta",
-    "vite": "8.3.7",
+    "vite": "8.3.8",
     "vitest": "5.1.0"
   },
   "overrides": {
