@@ -32,10 +32,11 @@ import {
 import { BadRequestError } from './buch/router/errors.mts';
 import { type ZodError } from 'zod';
 import { router as authRouter } from './security/auth-router.mts';
+import { router as buchFileRouter } from './buch/router/buch-file-router.mts';
 import { router as buchWriteRouter } from './buch/router/buch-write-router.mts';
 import { compress } from 'hono/compress';
-import { cors } from 'hono/cors';
-import { corsOptions } from './config/cors-options.mts'; // oxlint-disable-line import/max-dependencies
+import { cors } from 'hono/cors'; // oxlint-disable-line import/max-dependencies
+import { corsOptions } from './config/cors-options.mts';
 import { defineMiddleware } from 'hono/factory';
 import { router as devRouter } from './config/dev/dev-router.mts';
 import { getConfig } from './config/config.mts';
@@ -90,6 +91,7 @@ if (logger.isLevelEnabled('debug')) {
 // -----------------------------------------------------------------------------
 app.route(paths.rest, router);
 app.route(paths.rest, buchWriteRouter);
+app.route(paths.rest, buchFileRouter);
 app.route(paths.health, healthRouter);
 app.route(paths.auth, authRouter);
 // Yoga baut eine Hono-App mit Basispfad "/graphql"
