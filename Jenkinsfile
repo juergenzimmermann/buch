@@ -126,8 +126,6 @@ pipeline {
                 sh '''
                     cat package.json
                     pnpm i -P --frozen-lockfile
-                    pnpm add -D @prisma/prisma7
-                    pnpm prisma7 generate
                 '''
             }
         }
