@@ -24,7 +24,7 @@ GPL v3
 ## Entwicklungsumgebung
 
 - Konfig-Dateien, Verzeichnisse
-- pnpm mit package.json einschl. dependencies, devDependencies und scripts
+- pnpm mit package.json (einschl. dependencies, devDependencies und scripts) und pnpm-workspace.yml
 - node_modules
 - ES2015+, TypeScript einschl. .d.ts sowie tsconfig.json
 - oxlint mit oxlint.config.ts
@@ -66,7 +66,7 @@ GPL v3
 - File Upload und Download
 - Logging mit Pino
 - GraphQL durch Yoga
-  - schema-first
+  - code-first
   - Schema mit Types, Query und Mutation
   - Resolver mit Handler
 - .env, config/resources, reguläre Ausdrücke mit /.../

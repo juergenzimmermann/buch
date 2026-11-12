@@ -19,7 +19,7 @@
 
 - Schrittweise vorgehen, um die Komplexität zu reduzieren
 - Iteratives Lernen: bei jedem Schritt die Funktionalität verstehen, bevor man weiter macht
-- Am Projektende ein Code-Review durch z.B._Codex_ und/oder _Copilot_ durchführen lassen
+- Am Projektende ein Code-Review durch z.B. _Codex_, _Copilot_ oder _Claude_ durchführen lassen
 
 ## Elementare Infrastruktur und einfacher Server
 
@@ -46,7 +46,7 @@
 - Gruppierung und Aufteilung von Router
 - Middleware für Antwortzeit ("response time") und Request
 - Request- und Response-Body komprimieren mit "hono/compress" für GZip
-- Security-Header (ähnlich wie Helmet für Express): z.B. STS, nosniff, ..., CORS
+- Security-Header: z.B. STS, nosniff, ..., CORS
   - CSP (= Content Security Policy): nur bei HTML notwendig
   - Schutz vor XSS (= Cross-Site Scripting): nur bei HTML notwendig
 
@@ -64,12 +64,12 @@
 - Bruno
 - DB neu laden mit CSV-Dateien
 - Unit-Tests
-- Integrationstests mit Vitest und z.B.fetch oder Axios
+- Integrationstests mit Vitest und z.B. Axios oder fetch (nur HTTP 1.1)
 - CI mit z.B. GitHub Actions
 
 ## Docker
 
-- Dockerfile mit "Hardened" Image
+- Dockerfile (wenn möglich mit "Hardened" Image)
 - Docker Compose
 
 ## Weitere Funktionalitäten

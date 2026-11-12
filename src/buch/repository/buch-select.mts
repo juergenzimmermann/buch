@@ -152,7 +152,7 @@ export const existsISBN = async (isbn: string): Promise<boolean> => {
 export const selectAll = async (
     pageable: Pageable,
 ): Promise<Readonly<{ rows: BuchMitTitelSelect[]; totalElements: number }>> => {
-    logger.debug('selectAll: id=%o', pageable);
+    logger.debug('selectAll: pageable=%o', pageable);
 
     const { number, size } = pageable;
     const rows: BuchMitTitelSelect[] = await db
@@ -162,9 +162,10 @@ export const selectAll = async (
         .offset(number * size)
         .limit(size);
 
-    const totalElements = rows.length;
+    const [countJson] = await db.select({ count: count() }).from(buchTable);
+    const totalElements = countJson?.count ?? 0;
 
-    logger.debug('selectAll: totalElements=%d', totalElements);
+    logger.debug('selectAll: totalElements=%s', totalElements);
     return { rows, totalElements };
 };
 

@@ -97,8 +97,10 @@ Ggf. fährt man Grafana und Prometheus wieder herunter, um `grafana.db` zu lösc
 und als leere Datei anzulegen.
 
 Zuerst klickt man auf die Kachel _Create your first dashboard_ und anschließend
-auf den Button _Import dashboard_. Im Eingabefeld für _Grafana.com dashboard URL or ID_
-gibt man z.B. die ID `11159` ein (siehe https://grafana.com/grafana/dashboards/11159-nodejs-application-dashboard), das übrigens auch mit _Bun_ nutzbar ist.
+im Dropdown-Menü rechts oben auf den Menüunkt _Import dashboard_. Im Eingabefeld
+für _Grafana.com dashboard URL or ID_ gibt man z.B. die ID `11159` ein (siehe
+https://grafana.com/grafana/dashboards/11159-nodejs-application-dashboard),
+das übrigens auch mit _Bun_ nutzbar ist.
 
 Danach klickt man auf den Button _Load_. Im Dropdown-Menü _DS Prometheus_ wählt man
 die Option _prometheus default_ aus, was in der Datei `datasource.yml` im Verzeichnis
