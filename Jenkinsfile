@@ -126,7 +126,7 @@ pipeline {
                 sh '''
                     cat package.json
                     pnpm i -P --frozen-lockfile
-                    pnpm add -D tsc oxlint oxfmt tsrs
+                    pnpm add -D typescript oxlint oxfmt tsrs
                 '''
             }
         }
