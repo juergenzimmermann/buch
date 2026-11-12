@@ -40,24 +40,36 @@ const {
     poolIdleTimeoutMillis,
     poolConnectionTimeoutMillis,
 } = config.db;
-const { nodeEnv } = config.server;
+const { nodeEnv, runtime } = config.server;
 
-const connection: PoolConfig = {
-    user,
-    database,
-    password,
-    host,
-    ssl: {
-        cert: await readFile(new URL(cert, new URL('..', configURL))),
-        minVersion: tlsMinVersion,
-        maxVersion: tlsMaxVersion,
-    },
-    sslnegotiation: 'direct',
-    // Connection Pool
-    max: poolMax,
-    idleTimeoutMillis: poolIdleTimeoutMillis, // Timeout, wie lange eine Verbindung inaktive ist, bevor sie geschlossen wird
-    connectionTimeoutMillis: poolConnectionTimeoutMillis, // Timeout fuer Aufbau der DB-Verbindung
-};
+// Bun ohne TLS
+const connection: PoolConfig =
+    runtime === 'Bun'
+        ? {
+              user,
+              database,
+              password,
+              host,
+              max: poolMax,
+              idleTimeoutMillis: poolIdleTimeoutMillis,
+              connectionTimeoutMillis: poolConnectionTimeoutMillis,
+          }
+        : {
+              user,
+              database,
+              password,
+              host,
+              ssl: {
+                  cert: await readFile(new URL(cert, new URL('..', configURL))),
+                  minVersion: tlsMinVersion,
+                  maxVersion: tlsMaxVersion,
+              },
+              sslnegotiation: 'direct',
+              // Connection Pool
+              max: poolMax,
+              idleTimeoutMillis: poolIdleTimeoutMillis, // Timeout, wie lange eine Verbindung inaktive ist, bevor sie geschlossen wird
+              connectionTimeoutMillis: poolConnectionTimeoutMillis, // Timeout fuer Aufbau der DB-Verbindung
+          };
 export const db = drizzle({
     connection,
     relations,

@@ -43,23 +43,34 @@ const {
     poolConnectionTimeoutMillis,
 } = config.db;
 const activated = config.db.populate === true;
-const { nodeEnv } = config.server;
+const { nodeEnv, runtime } = config.server;
 
-const connection: PoolConfig = {
-    user: admin,
-    database,
-    password: adminPassword,
-    host,
-    ssl: {
-        cert: await readFile(new URL(cert, new URL('..', configURL))),
-        minVersion: tlsMinVersion,
-        maxVersion: tlsMaxVersion,
-    },
-    sslnegotiation: 'direct',
-    max: 5,
-    idleTimeoutMillis: poolIdleTimeoutMillis,
-    connectionTimeoutMillis: poolConnectionTimeoutMillis,
-};
+const connection: PoolConfig =
+    runtime === 'Bun'
+        ? {
+              user: admin,
+              database,
+              password: adminPassword,
+              host,
+              max: 5,
+              idleTimeoutMillis: poolIdleTimeoutMillis,
+              connectionTimeoutMillis: poolConnectionTimeoutMillis,
+          }
+        : {
+              user: admin,
+              database,
+              password: adminPassword,
+              host,
+              ssl: {
+                  cert: await readFile(new URL(cert, new URL('..', configURL))),
+                  minVersion: tlsMinVersion,
+                  maxVersion: tlsMaxVersion,
+              },
+              sslnegotiation: 'direct',
+              max: 5,
+              idleTimeoutMillis: poolIdleTimeoutMillis,
+              connectionTimeoutMillis: poolConnectionTimeoutMillis,
+          };
 export const dbAdmin = drizzle({
     connection,
     relations,
