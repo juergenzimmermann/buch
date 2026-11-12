@@ -21,6 +21,7 @@ pipeline {
     agent any
     tools {
         // Einstellungen > Tools > NodeJS Installationen
+        // /var/jenkins_home/tools/jenkins.plugins.nodejs.tools.NodeJSInstallation
         nodejs 'node-26.13.1'
     }
 
