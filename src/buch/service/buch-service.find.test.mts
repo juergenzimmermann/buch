@@ -104,7 +104,11 @@ describe('buch-service: find', () => {
         const pageable: Pageable = { number: 1, size: 5 };
 
         // Mocking der Drizzle-Query
-        selectMock.mockReturnValue({ from: fromMock });
+        selectMock.mockReturnValueOnce({ from: fromMock }).mockReturnValueOnce({
+            from: vi
+                .fn<(...args: unknown[]) => Promise<unknown>>()
+                .mockResolvedValue([{ count: 1 }]),
+        });
         fromMock.mockReturnValue({ innerJoin: innerJoinMock });
         innerJoinMock.mockReturnValue({ offset: offsetMock });
         offsetMock.mockReturnValue({ limit: limitMock });
@@ -114,10 +118,11 @@ describe('buch-service: find', () => {
         const result = await findAll(pageable);
 
         // then
-        const { content } = result;
+        const { content, totalElements } = result;
 
         expect(content).toHaveLength(1);
         expect(content[0]).toStrictEqual(buchMockDTO);
+        expect(totalElements).toBeGreaterThan(0);
     });
 
     test('find ohne WHERE', async () => {
@@ -125,7 +130,11 @@ describe('buch-service: find', () => {
         const pageable: Pageable = { number: 1, size: 5 };
 
         // Mocking der Drizzle-Query
-        selectMock.mockReturnValue({ from: fromMock });
+        selectMock.mockReturnValueOnce({ from: fromMock }).mockReturnValueOnce({
+            from: vi
+                .fn<(...args: unknown[]) => Promise<unknown>>()
+                .mockResolvedValue([{ count: 1 }]),
+        });
         fromMock.mockReturnValue({ innerJoin: innerJoinMock });
         innerJoinMock.mockReturnValue({ offset: offsetMock });
         offsetMock.mockReturnValue({ limit: limitMock });
