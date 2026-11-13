@@ -82,7 +82,7 @@ neu gestartet. `pnpm start` startet den Appserver ohne Watch-Modus.
 Beim Starten des Appservers wird außerdem mit _Prisma_ die DB-Verbindung
 aufgebaut. Der Benutzername und das Passwort sind in der Datei
 `src\config\db.ts` auf `admin` und `p` voreingestellt. Durch die Property
-`db.populate` in `src\config\resources\app.toml` wird festgelegt, ob die
+`db.populate` in `src\config\config.toml` wird festgelegt, ob die
 DB `buch` neu geladen wird.
 
 Wenn der Appserver mit _Bun_ statt _Node_ gestartet werden soll, ruft man

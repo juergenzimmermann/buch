@@ -18,9 +18,9 @@ siehe https://github.com/grafana/k6-learn/blob/main/Modules/II-k6-Foundations/03
 ## Start des zu testenden Applikationsservers
 
 Bevor der zu testende Applikationsserver gestartet wird, sollte zumindest in
-`src\config\resources\app.toml` bzw. `extras\compose\buch\app.yml`
-der Log-Level `debug` deaktiviert und auf "Pretty Printing" werden, um die
-Log-Ausgaben in der Konsole zu reduzieren. Dazu genügt es, die Zeilen
+`src\config\config.toml` bzw. `extras\compose\buch\config.yml`
+der Log-Level `debug` deaktiviert und auf "Pretty Printing" verzichtet werden,
+um die Log-Ausgaben in der Konsole zu reduzieren. Dazu genügt es, die Zeilen
  `log.level = "debug"` und `log.pretty = true` auszukommentieren.
 
 Der zu testende Applikationsserver einschließlich der Backend-Systeme muss

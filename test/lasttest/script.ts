@@ -66,7 +66,7 @@ const neuesBuch: Omit<BuchNeuType, 'datum'> & {
     ],
 };
 
-const tlsDir = '../../src/config/resources/tls';
+const tlsDir = '../../src/config/tls';
 const cert = open(`${tlsDir}/certificate.crt`);
 const key = open(`${tlsDir}/key.pem`);
 
@@ -76,7 +76,7 @@ export function setup() {
         username: 'admin',
         password: 'p',
     };
-    const tokenResponse = http.request<'text'>('QUERY', tokenUrl, JSON.stringify(body));
+    const tokenResponse = http.query<'text'>(tokenUrl, JSON.stringify(body));
 
     let token: string;
     if (tokenResponse.status === 200) {
@@ -89,7 +89,7 @@ export function setup() {
     }
 
     const headers = { Authorization: `Bearer ${token}` };
-    const res = http.post(dbPopulateUrl, null, { headers });
+    const res = http.query(dbPopulateUrl, null, { headers });
     if (res.status === 200) {
         console.log('DB neu geladen');
     } else {
@@ -151,6 +151,24 @@ export const options: Options = {
                 { target: 0, duration: rampDownDuration },
             ],
         },
+        query_titel: {
+            exec: 'queryByTitel',
+            executor: 'ramping-vus',
+            stages: [
+                { target: 5, duration: rampUpDuration },
+                { target: 5, duration: '22s' },
+                { target: 0, duration: rampDownDuration },
+            ],
+        },
+        query_isbn: {
+            exec: 'queryByISBN',
+            executor: 'ramping-vus',
+            stages: [
+                { target: 4, duration: rampUpDuration },
+                { target: 4, duration: '22s' },
+                { target: 0, duration: rampDownDuration },
+            ],
+        },
         post_buch: {
             exec: 'postBuch',
             executor: 'ramping-vus',
@@ -160,8 +178,8 @@ export const options: Options = {
                 { target: 0, duration: rampDownDuration },
             ],
         },
-        query_buch: {
-            exec: 'queryBuch',
+        graphql_query_buch: {
+            exec: 'graphqlQueryBuch',
             executor: 'ramping-vus',
             stages: [
                 { target: 3, duration: rampUpDuration },
@@ -169,8 +187,8 @@ export const options: Options = {
                 { target: 0, duration: rampDownDuration },
             ],
         },
-        query_buecher: {
-            exec: 'queryBuecher',
+        graphql_query_buecher: {
+            exec: 'graphqlQueryBuecher',
             executor: 'ramping-vus',
             stages: [
                 { target: 5, duration: rampUpDuration },
@@ -178,8 +196,8 @@ export const options: Options = {
                 { target: 0, duration: rampDownDuration },
             ],
         },
-        query_buecher_nicht_vorhanden: {
-            exec: 'queryBuecherNichtVorhanden',
+        graphql_query_buecher_nicht_vorhanden: {
+            exec: 'graphqlQueryBuecherNichtVorhanden',
             executor: 'ramping-vus',
             stages: [
                 { target: 2, duration: rampUpDuration },
@@ -196,6 +214,15 @@ export const options: Options = {
             stages: [
                 { target: 3, duration: rampUpDuration },
                 { target: 3, duration: '22s' },
+                { target: 0, duration: rampDownDuration },
+            ],
+        },
+        query_titel_nicht_vorhanden: {
+            exec: 'queryByTitelNichtVorhanden',
+            executor: 'ramping-vus',
+            stages: [
+                { target: 1, duration: rampUpDuration },
+                { target: 1, duration: '22s' },
                 { target: 0, duration: rampDownDuration },
             ],
         },
@@ -288,6 +315,43 @@ export function getBySchlagwort() {
     sleep(1);
 }
 
+// QUERY /rest
+export function queryByTitel() {
+    const titel = titelArray[Math.floor(Math.random() * titelArray.length)];
+    const body = { titel };
+    const response = http.query(restUrl, JSON.stringify(body));
+
+    const { status, headers } = response;
+    expect(status).toBe(200);
+    expect(headers['Content-Type']).toContain('application/json');
+    sleep(1);
+}
+
+// 404 QUERY /rest
+// Statuscodes mit 4xx und 5xx fuehren zu http_req_failed
+// https://grafana.com/docs/k6/latest/using-k6/metrics/create-custom-metrics
+// https://grafana.com/docs/k6/latest/javascript-api/k6-metrics/counter
+export function queryByTitelNichtVorhanden() {
+    const titel = titelNichtVorhanden[Math.floor(Math.random() * titelNichtVorhanden.length)];
+    const body = { titel };
+    const response = http.query(restUrl, JSON.stringify(body));
+
+    expect(response.status).toBe(404);
+    sleep(1);
+}
+
+// QUERY /rest
+export function queryByISBN() {
+    const isbn = isbns[Math.floor(Math.random() * isbns.length)];
+    const body = { isbn };
+    const response = http.query(restUrl, JSON.stringify(body));
+
+    const { status, headers } = response;
+    expect(status).toBe(200);
+    expect(headers['Content-Type']).toContain('application/json');
+    sleep(1);
+}
+
 // POST /rest
 export function postBuch() {
     const schlagwort = schlagwoerter[Math.floor(Math.random() * schlagwoerter.length)];
@@ -299,7 +363,7 @@ export function postBuch() {
         username: 'admin',
         password: 'p',
     };
-    const tokenResponse = http.request<'text'>('QUERY', tokenUrl, JSON.stringify(body));
+    const tokenResponse = http.query<'text'>(tokenUrl, JSON.stringify(body));
     expect(tokenResponse.status).toBe(200);
     const token = JSON.parse(tokenResponse.body).access_token;
 
@@ -318,7 +382,7 @@ export function postBuch() {
 }
 
 // POST /graphql query "buch"
-export function queryBuch() {
+export function graphqlQueryBuch() {
     const id = ids[Math.floor(Math.random() * ids.length)];
     const body = {
         query: `
@@ -354,7 +418,7 @@ export function queryBuch() {
 }
 
 // POST /graphql query "buecher"
-export function queryBuecher() {
+export function graphqlQueryBuecher() {
     const titel = titelArray[Math.floor(Math.random() * titelArray.length)];
     const body = {
         query: `
@@ -384,7 +448,7 @@ export function queryBuecher() {
 }
 
 // POST /graphql query "buecher" nicht gefunden
-export function queryBuecherNichtVorhanden() {
+export function graphqlQueryBuecherNichtVorhanden() {
     const body = {
         query: `
             {
