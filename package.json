@@ -87,9 +87,9 @@
   "devDependencies": {
     "@asciidoctor/core": "4.2.1",
     "@stylistic/eslint-plugin": "5.10.0",
-    "@tsconfig/node-ts": "23.6.4",
-    "@tsconfig/node26": "26.0.1",
-    "@tsconfig/strictest": "2.0.8",
+    "@tsconfig/node-ts": "23.6.5",
+    "@tsconfig/node26": "26.0.2",
+    "@tsconfig/strictest": "2.0.9",
     "@types/bun": "1.4.4",
     "@types/k6": "2.3.1",
     "@types/node": "26.6.6",
@@ -104,7 +104,7 @@
     "leasot": "14.4.0",
     "oxfmt": "0.78.0",
     "oxlint": "1.93.0",
-    "tsrs": "0.24.0-ts7.1.0-beta",
+    "tsrs": "0.25.0-ts7.1.0-beta",
     "tsx": "4.23.15",
     "typescript": "7.1.0-beta",
     "vite": "8.3.8",
@@ -127,7 +127,7 @@
   "devEngines": {
     "packageManager": {
       "name": "pnpm",
-      "version": "^12.19.0",
+      "version": "^12.20.0",
       "onFail": "warn"
     },
     "runtime": [
@@ -146,6 +146,6 @@
   "engines": {
     "bun": "^1.4.4",
     "node": "^26.13.1",
-    "pnpm": "^12.19.0"
+    "pnpm": "^12.20.0"
   }
 }
