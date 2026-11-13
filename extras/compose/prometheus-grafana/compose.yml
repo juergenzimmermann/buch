@@ -40,11 +40,11 @@ services:
         source: ./prometheus-data
         target: /prometheus
       - type: bind
-        source: ../../../src/config/resources/tls/certificate.crt
+        source: ../../../src/config/tls/certificate.crt
         target: /etc/prometheus/certificate.crt
         read_only: true
       - type: bind
-        source: ../../../src/config/resources/tls/key.pem
+        source: ../../../src/config/tls/key.pem
         target: /etc/prometheus/private-key.pem
         read_only: true
     networks: [acme-network]
@@ -71,7 +71,6 @@ services:
 
   grafana:
     image: grafana/grafana:13.2.6
-    #image: grafana/grafana:13.2.5
     ports:
       - published: 3333
         target: 3000
