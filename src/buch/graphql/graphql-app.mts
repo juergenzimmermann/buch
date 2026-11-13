@@ -30,6 +30,7 @@ import { buchHandler, buecherHandler } from './query-handler.mts';
 import { createHandler, deleteHandler, tokenHandler, updateHandler } from './mutation-handler.mts';
 import { createSchema, createYoga } from 'graphql-yoga';
 import { Hono } from 'hono';
+import { getConfig } from '../../config/config.mts';
 import { getLogger } from '../../logger/logger.mts';
 import { rolesRequired } from './roles-required.mts';
 import { typeDefs } from './schema.mts';
@@ -76,8 +77,11 @@ const resolvers = {
 // -----------------------------------------------------------------------------
 // Y o g a   S e r v e r   m i t   S c h e m a   e i n s c h l.  R e s o l v e r
 // -----------------------------------------------------------------------------
+const config = await getConfig();
+const { logging } = config.graphql;
 const yogaServer = createYoga({
     schema: createSchema({ typeDefs, resolvers }),
+    logging,
 });
 
 // -----------------------------------------------------------------------------

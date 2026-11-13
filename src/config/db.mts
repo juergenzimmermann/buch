@@ -39,6 +39,7 @@ const {
     poolMax,
     poolIdleTimeoutMillis,
     poolConnectionTimeoutMillis,
+    log,
 } = config.db;
 const { nodeEnv, runtime } = config.server;
 
@@ -70,10 +71,11 @@ const connection: PoolConfig =
               idleTimeoutMillis: poolIdleTimeoutMillis, // Timeout, wie lange eine Verbindung inaktive ist, bevor sie geschlossen wird
               connectionTimeoutMillis: poolConnectionTimeoutMillis, // Timeout fuer Aufbau der DB-Verbindung
           };
+const useLogger = log === true && (nodeEnv === 'development' || nodeEnv === 'test');
 export const db = drizzle({
     connection,
     relations,
-    logger: nodeEnv === 'development' || nodeEnv === 'test',
+    logger: useLogger,
 });
 
 /**

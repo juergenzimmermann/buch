@@ -25,6 +25,7 @@ allowHTTP1 = true
 #dbUrl = <DATABASE_URL in .env>
 #dbUrlAdmin = <DATABASE_URL_ADMIN in .env>
 populate = true
+log = true
 
 [keycloak]
 #https = true
@@ -43,6 +44,9 @@ port = 1025
 #logger = false
 #from = '"Joe Doe" <Joe.Doe@acme.com>'
 #to = '"Foo Bar" <Foo.Bar@acme.com>'
+
+[graphql]
+#logging = "warn"
 
 [log]
 #dir = "/tmp"

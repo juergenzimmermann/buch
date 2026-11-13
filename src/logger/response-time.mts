@@ -21,7 +21,9 @@ import { getLogger } from './logger.mts';
 const logger = getLogger('responseTime', 'func');
 
 const config = await getConfig();
-const { hasTemporal } = config.server;
+const { log, server } = config;
+const { level } = log;
+const { hasTemporal } = server;
 
 /**
  * Middleware für Hono, um vor dem Abschicken eines Response dessen Antwortzeit
@@ -30,6 +32,10 @@ const { hasTemporal } = config.server;
  */
 // https://hono.dev/docs/guides/middleware
 export const responseTime = defineMiddleware(async (c: Context, next: Next) => {
+    if (level !== 'debug' && level !== 'trace') {
+        return await next();
+    }
+
     // https://nodejs.org/en/blog/release/v26.0.0#temporal-api
     // https://tc39.es/proposal-temporal
     // https://github.com/tc39/proposal-temporal

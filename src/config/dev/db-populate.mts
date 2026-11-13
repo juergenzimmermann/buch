@@ -41,6 +41,7 @@ const {
     tlsMaxVersion,
     poolIdleTimeoutMillis,
     poolConnectionTimeoutMillis,
+    log,
 } = config.db;
 const activated = config.db.populate === true;
 const { nodeEnv, runtime } = config.server;
@@ -71,10 +72,11 @@ const connection: PoolConfig =
               idleTimeoutMillis: poolIdleTimeoutMillis,
               connectionTimeoutMillis: poolConnectionTimeoutMillis,
           };
+const useLogger = log === true && (nodeEnv === 'development' || nodeEnv === 'test');
 export const dbAdmin = drizzle({
     connection,
     relations,
-    logger: nodeEnv === 'development' || nodeEnv === 'test',
+    logger: useLogger,
 });
 
 const dbURL = new URL('postgresql/', configURL);

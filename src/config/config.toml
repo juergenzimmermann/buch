@@ -38,6 +38,7 @@ poolIdleTimeoutMillis = 30000
 # Timeout fuer Aufbau der DB-Verbindung
 poolConnectionTimeoutMillis = 5000
 populate = true
+log = true
 
 [keycloak]
 #https = true
@@ -56,6 +57,10 @@ port = 1025
 #logger = false
 #from = '"Joe Doe" <Joe.Doe@acme.com>'
 #to = '"Foo Bar" <Foo.Bar@acme.com>'
+
+[graphql]
+# https://the-guild.dev/graphql/yoga-server/docs/features/logging-and-debugging
+#logging = "warn"
 
 [log]
 dir = "./log"

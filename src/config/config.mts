@@ -98,6 +98,7 @@ const ConfigSchema = z.object({
         poolIdleTimeoutMillis: z.number().int().min(1_000).max(60_000).default(10_000), // oxlint-disable-line no-magic-numbers
         poolConnectionTimeoutMillis: z.number().int().min(1_000).default(3_000), // oxlint-disable-line no-magic-numbers
         populate: z.boolean().default(false),
+        log: z.boolean().optional(),
         admin: z.string().default('postgres'),
     }),
 
@@ -128,6 +129,11 @@ const ConfigSchema = z.object({
         logger: z.boolean().default(false),
         from: z.string().default('"Joe Doe" <Joe.Doe@acme.com>'),
         to: z.string().default('"Foo Bar" <Foo.Bar@acme.com>'),
+    }),
+
+    graphql: z.object({
+        // https://the-guild.dev/graphql/yoga-server/docs/features/logging-and-debugging
+        logging: z.literal(['error', 'warn', 'info', 'debug']).default('info'),
     }),
 
     log: z.object({

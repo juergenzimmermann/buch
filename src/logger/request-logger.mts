@@ -15,9 +15,13 @@
 
 import { type Context, type Next } from 'hono';
 import { defineMiddleware } from 'hono/factory';
+import { getConfig } from '../config/config.mts';
 import { getLogger } from './logger.mts';
 
 const logger = getLogger('requestLogger', 'func');
+
+const config = await getConfig();
+const { level } = config.log;
 
 /**
  * Middleware für Hono, um bei einem eingegangenen Request die HTTP-Methode und
@@ -26,6 +30,10 @@ const logger = getLogger('requestLogger', 'func');
  */
 // https://hono.dev/docs/guides/middleware
 export const requestLogger = defineMiddleware(async (c: Context, next: Next) => {
+    if (level !== 'debug' && level !== 'trace') {
+        return await next();
+    }
+
     const { method, url } = c.req;
     logger.debug('method=%s, url=%s', method, url);
     return await next();
