@@ -65,14 +65,14 @@
     "typedoc": "typedoc src"
   },
   "dependencies": {
-    "@hono/node-server": "2.1.7",
+    "@hono/node-server": "2.1.8",
     "@prometheus-io/client": "0.16.1",
     "c12": "4.0.0-rc.4",
     "dotenv": "18.0.10",
     "drizzle-orm": "1.0.0-rc.5",
     "figlet": "1.12.0",
     "graphql": "17.1.0",
-    "graphql-yoga": "6.0.1",
+    "graphql-yoga": "6.1.0",
     "hono": "5.0.0-rc.0",
     "isbn3": "2.0.13",
     "jose": "6.2.17",
@@ -86,7 +86,7 @@
   },
   "devDependencies": {
     "@asciidoctor/core": "4.2.1",
-    "@stylistic/eslint-plugin": "5.10.0",
+    "@stylistic/eslint-plugin": "6.0.0-beta.6",
     "@tsconfig/node-ts": "23.6.5",
     "@tsconfig/node26": "26.0.2",
     "@tsconfig/strictest": "2.0.9",
@@ -127,7 +127,7 @@
   "devEngines": {
     "packageManager": {
       "name": "pnpm",
-      "version": "^12.20.0",
+      "version": "^12.21.0",
       "onFail": "warn"
     },
     "runtime": [
@@ -146,6 +146,6 @@
   "engines": {
     "bun": "^1.4.4",
     "node": "^26.13.1",
-    "pnpm": "^12.20.0"
+    "pnpm": "^12.21.0"
   }
 }

@@ -176,14 +176,14 @@ snapshots:
 	"projects": {
 		".": {
 			"dependencies": {
-				"@hono/node-server": "2.1.7",
+				"@hono/node-server": "2.1.8",
 				"@prometheus-io/client": "0.16.1",
 				"c12": "4.0.0-rc.4",
 				"dotenv": "18.0.10",
 				"drizzle-orm": "1.0.0-rc.5",
 				"figlet": "1.12.0",
 				"graphql": "17.1.0",
-				"graphql-yoga": "6.0.1",
+				"graphql-yoga": "6.1.0",
 				"hono": "5.0.0-rc.0",
 				"isbn3": "2.0.13",
 				"jose": "6.2.17",
@@ -197,7 +197,7 @@ snapshots:
 			},
 			"devDependencies": {
 				"@asciidoctor/core": "4.2.1",
-				"@stylistic/eslint-plugin": "5.10.0",
+				"@stylistic/eslint-plugin": "6.0.0-beta.6",
 				"@tsconfig/node-ts": "23.6.5",
 				"@tsconfig/node26": "26.0.2",
 				"@tsconfig/strictest": "2.0.9",
@@ -307,19 +307,19 @@ snapshots:
 			},
 		},
 
-		"@envelop/core@6.0.0": {
-			"integrity": "sha512-r/FPut3JaDJnH64Hn6umeqxlZNMJsFf2IJmZzmv6F1m+Mxfez1zKmKIOOFFO4DRc6ghqqzZMvIH9r2/LVLWxuw==",
+		"@envelop/core@6.0.1": {
+			"integrity": "sha512-wFH1atHzCeK+iFOpWOdbpybDh9SIujMsLMDxH4WvVGa/SIMZ4ktLxH4/7Zqr9d4pT7O1r6eDQd3j981OfusZtQ==",
 			"engines": {"node": ">=22.15.0"},
 			"dependencies": {
-				"@envelop/instrumentation": "2.0.0",
-				"@envelop/types": "6.0.0",
+				"@envelop/instrumentation": "2.0.1",
+				"@envelop/types": "6.0.1",
 				"@whatwg-node/promise-helpers": "2.0.2",
 				"tslib": "2.9.1",
 			},
 		},
 
-		"@envelop/instrumentation@2.0.0": {
-			"integrity": "sha512-nXW9DAHfJ7Fh5nTnvr0uDUvCvMw017Agvk3MiE58u8Eby6mTwuiCFp16as2sPVODLLeCBs6rmKs0F1tkpbAXYQ==",
+		"@envelop/instrumentation@2.0.1": {
+			"integrity": "sha512-BnHXPcYTGl6bskFwaeOwt7G2KwHhATOMfc2ojMno7QMFKBSxkmPs6o092LDJ+PTNHk7wv4pTIWhP4LsJkvHIew==",
 			"engines": {"node": ">=22.15.0"},
 			"dependencies": {
 				"@whatwg-node/promise-helpers": "2.0.2",
@@ -327,8 +327,8 @@ snapshots:
 			},
 		},
 
-		"@envelop/types@6.0.0": {
-			"integrity": "sha512-og5ZFJtIvmQwa0Yb/5JarUT4XnpxxcPTpPi+5+cYnJaLT4qYvCVxNIkW+r6/JpTcbG++DuCQHSvt9fsTDRNNOA==",
+		"@envelop/types@6.0.1": {
+			"integrity": "sha512-3XOc8X4FRZdKFMmSVDlHJSBIK4jKtzBpnnoKwI7Qoq1k8aqpYHJg2IXnNKpdOubB9xKsWZvIlqSCOWtAg4td+A==",
 			"engines": {"node": ">=22.15.0"},
 			"dependencies": {
 				"@whatwg-node/promise-helpers": "2.0.2",
@@ -723,8 +723,8 @@ snapshots:
 			},
 		},
 
-		"@hono/node-server@2.1.7": {
-			"integrity": "sha512-Wr0E6S+v2Bw9FkpGNP5BQ5QbJvclUa06UVehd65WFZe6XeJwbrKQQ5wPDevc0IC+QyzbO7v3Llh5uo45IZcSnA==",
+		"@hono/node-server@2.1.8": {
+			"integrity": "sha512-jdf7FHh6A1lzjpHHQUgxsg2GeER2vMetnAOfeActzcoli6jamlK+NAwL6Dsr5Fl3BS3tYUQzCdtZjU8Qxv7bEA==",
 			"engines": {"node": ">=20"},
 			"peerDependencies": {
 				"hono": {
@@ -1500,21 +1500,26 @@ snapshots:
 			"integrity": "sha512-K+NU2HDCEem4sClgHH4ZZXwdJeNFkJo+hRk479DIwdIviAPN2hFJH1KHHwg8CxHQXvi0M5XY4deTXINfIiSG6w==",
 		},
 
-		"@stylistic/eslint-plugin@5.10.0": {
-			"integrity": "sha512-nPK52ZHvot8Ju/0A4ucSX1dcPV2/1clx0kLcH5wDmrE4naKso7TUC/voUyU1O9OTKTrR6MYip6LP0ogEMQ9jPQ==",
-			"engines": {"node": "^18.18.0 || ^20.9.0 || >=21.1.0"},
+		"@stylistic/eslint-plugin@6.0.0-beta.6": {
+			"integrity": "sha512-DqDQZSrV/0AZ/4qLxaQUtNxafk3qWfeG5xOHx64ELjHWSHt2GtELZR6ClrNVvQwo/d13Atf8Hrh/s/ZnuJk57w==",
+			"engines": {"node": "^20.19.0 || ^22.13.0 || >=24"},
 			"peerDependencies": {
 				"eslint": {
 					"specifier": "^9.0.0 || ^10.0.0",
 					"version": "10.14.0",
+					"optional": true,
+				},
+				"oxlint": {
+					"specifier": "^1.55.0",
+					"version": "1.93.0",
+					"optional": true,
 				},
 			},
 			"dependencies": {
 				"@eslint-community/eslint-utils": "4.10.1",
 				"@typescript-eslint/types": "8.72.2",
-				"eslint-visitor-keys": "4.2.1",
-				"espree": "10.4.0",
-				"estraverse": "5.3.0",
+				"@typescript-eslint/visitor-keys": "8.72.2",
+				"espree": "11.2.0",
 				"picomatch": "4.0.7",
 			},
 		},
@@ -1668,6 +1673,15 @@ snapshots:
 		"@typescript-eslint/types@8.72.2": {
 			"integrity": "sha512-Xfn37OLZx03+PCU7qWx9DTv2FCRh1E6fk2+wONeNY15HXIwtcwuveaSwVpGAUptkNmPQegRxW5JyRel9T7wrog==",
 			"engines": {"node": "^18.18.0 || ^20.9.0 || >=21.1.0"},
+		},
+
+		"@typescript-eslint/visitor-keys@8.72.2": {
+			"integrity": "sha512-NAGrjn0Pitjqzq/GkgMC4kBYm233PQ8GffyQ9+kTA3AlNQYEzOf25EIM02BAHZv5FRJSpHpJk+OGUxVkOB93GQ==",
+			"engines": {"node": "^18.18.0 || ^20.9.0 || >=21.1.0"},
+			"dependencies": {
+				"@typescript-eslint/types": "8.72.2",
+				"eslint-visitor-keys": "5.0.1",
+			},
 		},
 
 		"@typescript/typescript-aix-ppc64@7.1.0-beta": {
@@ -2001,7 +2015,7 @@ snapshots:
 			"integrity": "sha512-Q5rweDuJ+ExmykRqnAFXv+V/hC6Rk4lQUsgaiYdmxrxBJqAv6isQtq7GgQyzbcS2VL09Ab4hwHyg8yI7QYrM3Q==",
 			"engines": {"node": ">=22.15.0"},
 			"dependencies": {
-				"@envelop/instrumentation": "2.0.0",
+				"@envelop/instrumentation": "2.0.1",
 				"@whatwg-node/disposablestack": "0.1.0",
 				"@whatwg-node/fetch": "0.12.1",
 				"@whatwg-node/promise-helpers": "2.0.2",
@@ -2618,11 +2632,6 @@ snapshots:
 			"engines": {"node": "^12.22.0 || ^14.17.0 || >=16.0.0"},
 		},
 
-		"eslint-visitor-keys@4.2.1": {
-			"integrity": "sha512-Uhdk5sfqcee/9H/rCOJikYz67o0a2Tw2hGRPOG2Y1R2dg7brRe1uG0yaNQDHu+TO/uQPF/5eCapvYSmHUjt7JQ==",
-			"engines": {"node": "^18.18.0 || ^20.9.0 || >=21.1.0"},
-		},
-
 		"eslint-visitor-keys@5.0.1": {
 			"integrity": "sha512-tD40eHxA35h0PEIZNeIjkHoDR4YjjJp34biM0mDvplBe//mB+IHCqHDGV7pxF+7MklTvighcCPPZC7ynWyjdTA==",
 			"engines": {"node": "^20.19.0 || ^22.13.0 || >=24"},
@@ -2669,16 +2678,6 @@ snapshots:
 				"minimatch": "10.2.6",
 				"natural-compare": "1.4.0",
 				"optionator": "0.9.4",
-			},
-		},
-
-		"espree@10.4.0": {
-			"integrity": "sha512-j6PAQ2uUr79PZhBjP5C5fhl8e39FmRnOjsD5lGnWrFU8i2G776tBK7+nP8KuQUTTyAZUwfQqXAgrVH5MbH9CYQ==",
-			"engines": {"node": "^18.18.0 || ^20.9.0 || >=21.1.0"},
-			"dependencies": {
-				"acorn": "8.19.0",
-				"acorn-jsx": "5.3.2",
-				"eslint-visitor-keys": "4.2.1",
 			},
 		},
 
@@ -2939,8 +2938,8 @@ snapshots:
 			"engines": {"node": ">= 0.4"},
 		},
 
-		"graphql-yoga@6.0.1": {
-			"integrity": "sha512-uGfyZNivj4HaNvFi25ce9YLoywWLwxzlt9lM9dYETep00qsPOyGr5jR2Jeg/KxTCqOKMiyqS3oWuM0uhL8QgaQ==",
+		"graphql-yoga@6.1.0": {
+			"integrity": "sha512-YID0cgrgx3oyh5fJA98414kU3x9cx88ZXGascBGrBkpibQkKRkkb4okMMCLx9n5HCMLiBdaWaFbi31D/7JvqPw==",
 			"engines": {"node": ">=22.15.0"},
 			"peerDependencies": {
 				"graphql": {
@@ -2953,8 +2952,8 @@ snapshots:
 				},
 			},
 			"dependencies": {
-				"@envelop/core": "6.0.0",
-				"@envelop/instrumentation": "2.0.0",
+				"@envelop/core": "6.0.1",
+				"@envelop/instrumentation": "2.0.1",
 				"@graphql-hive/logger": "1.1.1",
 				"@graphql-tools/executor": "4.1.8",
 				"@graphql-tools/schema": "11.0.9",
