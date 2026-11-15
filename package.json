@@ -86,7 +86,7 @@
   },
   "devDependencies": {
     "@asciidoctor/core": "4.2.1",
-    "@stylistic/eslint-plugin": "6.0.0-beta.6",
+    "@stylistic/eslint-plugin": "6.0.0",
     "@tsconfig/node-ts": "23.6.5",
     "@tsconfig/node26": "26.0.2",
     "@tsconfig/strictest": "2.0.9",
