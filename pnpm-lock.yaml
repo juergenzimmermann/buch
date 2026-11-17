@@ -187,7 +187,7 @@ snapshots:
 				"hono": "5.0.0-rc.0",
 				"isbn3": "2.0.13",
 				"jose": "6.2.17",
-				"nodemailer": "10.5.0",
+				"nodemailer": "10.6.0",
 				"pg": "8.23.1",
 				"pino": "10.4.0",
 				"pino-pretty": "13.2.0",
@@ -197,7 +197,7 @@ snapshots:
 			},
 			"devDependencies": {
 				"@asciidoctor/core": "4.2.1",
-				"@stylistic/eslint-plugin": "6.0.0",
+				"@stylistic/eslint-plugin": "6.0.1",
 				"@tsconfig/node-ts": "23.6.5",
 				"@tsconfig/node26": "26.0.2",
 				"@tsconfig/strictest": "2.0.9",
@@ -1504,8 +1504,8 @@ snapshots:
 			"integrity": "sha512-K+NU2HDCEem4sClgHH4ZZXwdJeNFkJo+hRk479DIwdIviAPN2hFJH1KHHwg8CxHQXvi0M5XY4deTXINfIiSG6w==",
 		},
 
-		"@stylistic/eslint-plugin@6.0.0": {
-			"integrity": "sha512-phICSey4OqR8nkSwmoeXsl9EBzv30Zqbge4jrK3CU02GhjTgZ+y5qhTTg92EDK5j7JhX2xzp4VvH+YYUknQ8/Q==",
+		"@stylistic/eslint-plugin@6.0.1": {
+			"integrity": "sha512-7nyi2RmGIuzBYGq5C8cFaoQsh+COfo6oHMWCygzg2iaqJJ4RDThaKCMYRkkOUAQWv80R7sbBbpuKZfulH7bFcw==",
 			"engines": {"node": "^20.19.0 || ^22.13.0 || >=24"},
 			"peerDependencies": {
 				"eslint": {
@@ -3355,8 +3355,8 @@ snapshots:
 			"integrity": "sha512-OWND8ei3VtNC9h7V60qff3SVobHr996CTwgxubgyQYEpg290h9J0buyECNNJexkFm5sOajh5G116RYA1c8ZMSw==",
 		},
 
-		"nodemailer@10.5.0": {
-			"integrity": "sha512-L/w/HH5MqpzMDuZD7fQdt/+KqymuvrpaApaIjAH2XA3ILePwlcvXCVVvP75xVrXCEt2ggK2marrrHHFB5Qu0kA==",
+		"nodemailer@10.6.0": {
+			"integrity": "sha512-jWanL7D9GD3jvUDYKmoC5rWTiG8MnBgnN2yV68bgMKip1zUJhiSTyz7Eg+18y8sk5OvdVDzws5nZK5arSI4f5Q==",
 			"engines": {"node": ">=20.0.0"},
 		},
 
