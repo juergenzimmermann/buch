@@ -30,7 +30,7 @@ export const MAX_RATING = 5;
 
 const BuchSchema = z.strictObject({
     // bei GraphQL ist der Typ ID i.a. ein String
-    id: z.union([z.number().int().gt(0), z.string().regex(/^[1-9]\d*$/u)]),
+    id: z.union([z.int().gt(0), z.string().regex(/^[1-9]\d*$/u)]),
     version: z.int().gte(0),
     isbn: z.string().refine((isbnStr) => ISBN.parse(isbnStr)?.isValid === true, {
         message: 'Ungültige ISBN-Nummer',
