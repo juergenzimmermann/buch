@@ -58,7 +58,7 @@ USER ${BUN_UID}:${BUN_GID}
 COPY --chown=${BUN_UID}: package.json ./
 COPY --from=dist --chown=${BUN_UID}: /app/node_modules ./node_modules
 COPY --chown=${BUN_UID}: src ./src
-COPY --chown=${BUN_UID}: log ./log
+COPY --from=dist --chown=${BUN_UID}: /app/log ./log
 
 # Anzeige bei "docker inspect ..."
 # https://specs.opencontainers.org/image-spec/annotations
