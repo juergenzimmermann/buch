@@ -65,6 +65,7 @@ router.post('/', rolesRequired('admin', 'user'), async (c) => {
 // =============================================================================
 // A e n d e r n
 // =============================================================================
+// oxlint-disable-next-line max-statements
 router.put('/:id', rolesRequired('admin', 'user'), async (c) => {
     const { req } = c;
     const id = req.param('id') ?? '-1';
@@ -84,7 +85,7 @@ router.put('/:id', rolesRequired('admin', 'user'), async (c) => {
     }
     const version = Number.parseInt(ifMatch.slice(1, -1), 10);
     if (Number.isNaN(version)) {
-        logger.debug('put: version === undefined');
+        logger.debug('put: version === NaN');
         return createProblemDetails(c, preconditionFailed, 'Header "If-Match" fehlt');
     }
 
@@ -95,7 +96,9 @@ router.put('/:id', rolesRequired('admin', 'user'), async (c) => {
     } catch {
         return createProblemDetails(c, badRequest, 'Ungueltiges JSON');
     }
+    logger.debug('put: requestBody=%o', requestBody as any);
     const buchUpdate: BuchUpdateType = BuchUpdateSchema.parse(requestBody);
+    console.error('!!!333');
     logger.debug('put: buchUpdate=%o', buchUpdate);
 
     const neueVersion = await update(idNumber, buchUpdate, version);

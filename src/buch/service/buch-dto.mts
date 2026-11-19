@@ -59,8 +59,8 @@ export class BuchDTO {
         this.isbn = isbn;
         this.rating = rating;
         this.art = art;
-        this.preis = Number.parseInt(preis, 10);
-        this.rabatt = Number.parseInt(rabatt, 10);
+        this.preis = Number.parseFloat(preis);
+        this.rabatt = Number.parseFloat(rabatt);
         this.lieferbar = lieferbar;
         this.datum = datum === null ? null : new Date(datum);
         this.homepage = homepage;

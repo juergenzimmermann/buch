@@ -166,6 +166,7 @@ export const selectAll = async (
     const totalElements = countJson?.count ?? 0;
 
     logger.debug('selectAll: totalElements=%s', totalElements);
+    logger.debug('selectAll: rows=%o', rows);
     return { rows, totalElements };
 };
 

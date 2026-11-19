@@ -1,3 +1,4 @@
+// oxlint-disable import/max-dependencies
 // Copyright (C) 2026 - present Juergen Zimmermann, Hochschule Karlsruhe
 //
 // This program is free software: you can redistribute it and/or modify
@@ -14,29 +15,13 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 import { type Context, Hono, type Next } from 'hono';
-import { ForbiddenError, UnauthorizedError } from './security/errors.mts';
-import {
-    IsbnExistsError,
-    NotFoundError,
-    VersionInvalidError,
-    VersionOutdatedError,
-} from './buch/service/errors.mts';
-import {
-    badRequest,
-    createProblemDetails,
-    forbidden,
-    preconditionFailed,
-    unauthorized,
-    unprocessableContent,
-} from './problem-details.mts';
-import { BadRequestError } from './buch/router/errors.mts';
-import { type ZodError } from 'zod';
 import { router as authRouter } from './security/auth-router.mts';
 import { router as buchFileRouter } from './buch/router/buch-file-router.mts';
 import { router as buchWriteRouter } from './buch/router/buch-write-router.mts';
 import { compress } from 'hono/compress';
-import { cors } from 'hono/cors'; // oxlint-disable-line import/max-dependencies
+import { cors } from 'hono/cors';
 import { corsOptions } from './config/cors-options.mts';
+import { createErrorHandler } from './error-handler.mts';
 import { defineMiddleware } from 'hono/factory';
 import { router as devRouter } from './config/dev/dev-router.mts';
 import { getConfig } from './config/config.mts';
@@ -112,42 +97,4 @@ if (logger.isLevelEnabled('debug')) {
     });
 }
 
-// -----------------------------------------------------------------------------
-// E r r o r   H a n d l e r
-// -----------------------------------------------------------------------------
-// https://hono.dev/docs/api/exception#handling-httpexceptions
-// oxlint-disable-next-line promise/prefer-await-to-callbacks
-app.onError((error, c) => {
-    if (error instanceof NotFoundError) {
-        // https://hono.dev/docs/api/context#notfound
-        return c.notFound();
-    }
-
-    if (error instanceof BadRequestError) {
-        return createProblemDetails(c, badRequest);
-    }
-
-    if (error.name === 'ZodError') {
-        return createProblemDetails(c, unprocessableContent, (error as ZodError).issues);
-    }
-
-    if (error instanceof IsbnExistsError) {
-        return createProblemDetails(c, unprocessableContent, error.message);
-    }
-
-    if (error instanceof VersionInvalidError || error instanceof VersionOutdatedError) {
-        return createProblemDetails(c, preconditionFailed, error.message);
-    }
-
-    if (error instanceof UnauthorizedError) {
-        return createProblemDetails(c, unauthorized, error.message);
-    }
-
-    if (error instanceof ForbiddenError) {
-        return createProblemDetails(c, forbidden, error.message);
-    }
-
-    logger.error('Interner Fehler: %o', error);
-    console.log(error.stack);
-    return c.body('Interner Fehler', 500);
-});
+createErrorHandler(app);
