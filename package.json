@@ -95,8 +95,8 @@
     "@types/node": "26.6.6",
     "@types/nodemailer": "8.0.2",
     "@types/pg": "8.23.1",
-    "@vitest/coverage-istanbul": "5.1.0",
-    "@vitest/ui": "5.1.0",
+    "@vitest/coverage-istanbul": "5.1.1",
+    "@vitest/ui": "5.1.1",
     "asciidoctor-kroki": "2.0.0",
     "axios": "1.21.1",
     "drizzle-kit": "1.0.0-rc.5",
@@ -104,11 +104,11 @@
     "leasot": "14.4.0",
     "oxfmt": "0.79.0",
     "oxlint": "1.94.0",
-    "tsrs": "0.25.0-ts7.1.0-beta",
+    "tsrs": "7.1.0-beta.tsrs2",
     "tsx": "4.23.15",
     "typescript": "7.1.0-beta",
     "vite": "8.3.8",
-    "vitest": "5.1.0"
+    "vitest": "5.1.1"
   },
   "overrides": {
     "@prisma/client": {
@@ -138,7 +138,7 @@
       },
       {
         "name": "bun",
-        "version": "^1.4.4",
+        "version": "^1.4.5",
         "onFail": "warn"
       }
     ]
