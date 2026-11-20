@@ -14,8 +14,8 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-import { AxiosHeaders, type AxiosResponse, HttpStatusCode } from 'axios';
-import { BEARER, LOCATION } from '../constants.mts';
+import { BEARER, LOCATION, MAILSERVER_BASE_URL, MAILSERVER_TIMEOUT } from '../constants.mts';
+import axios, { AxiosHeaders, type AxiosInstance, type AxiosResponse, HttpStatusCode } from 'axios';
 import { beforeAll, describe, expect, test } from 'vitest';
 import { type BuchNeuType } from '../../../src/buch/validation/buch-validation.mts';
 import { type ProblemDetails } from '../../../src/problem-details.mts';
@@ -80,6 +80,8 @@ const neuesBuchIsbnExistiert: Omit<BuchNeuType, 'datum'> & { datum: string } = {
     abbildungen: [],
 };
 
+let webClientMailserver: AxiosInstance;
+
 // -----------------------------------------------------------------------------
 // T e s t s
 // -----------------------------------------------------------------------------
@@ -89,15 +91,50 @@ describe('POST /rest', () => {
 
     beforeAll(async () => {
         token = await getToken('admin', 'p');
+
+        webClientMailserver = axios.create({
+            baseURL: MAILSERVER_BASE_URL,
+        });
+        webClientMailserver.delete('/messages');
     });
 
+    // oxlint-disable-next-line max-statements
     test('Neues Buch', async () => {
         // given
         const headers = new AxiosHeaders();
         headers.setAuthorization(`${BEARER} ${token}`);
+        const params = new URLSearchParams({
+            query: 'from: Joe.Doe@acme.com to:Foo.Bar@acme.com subject:"Neues Buch"',
+        });
+        const deadline = Date.now() + MAILSERVER_TIMEOUT;
 
         // when
         const response = await client.post('', neuesBuch, { headers });
+
+        let bodyResponseMailserver;
+        do {
+            // oxlint-disable-next-line no-await-in-loop
+            const responseMailserver = await webClientMailserver.get('/search', {
+                params,
+            });
+            bodyResponseMailserver = responseMailserver.data;
+            if (
+                typeof bodyResponseMailserver === 'object' &&
+                bodyResponseMailserver !== null &&
+                Array.isArray(bodyResponseMailserver?.messages) &&
+                bodyResponseMailserver?.messages?.length > 0
+            ) {
+                break;
+            }
+            if (Date.now() >= deadline) {
+                throw new Error(
+                    `Email wurde nicht in ${MAILSERVER_TIMEOUT} ms in Mailpit verarbeitet.`,
+                );
+            }
+
+            // oxlint-disable-next-line no-await-in-loop no-empty-function
+            await setTimeout(() => {}, 200);
+        } while (true); // oxlint-disable-line no-constant-condition
 
         // then
         const { status } = response;
@@ -117,6 +154,13 @@ describe('POST /rest', () => {
 
         expect(idStr).toBeDefined();
         expect(idPattern.test(idStr ?? '')).toBe(true);
+
+        // Subject der Emails ueberpruefen
+        const { messages } = bodyResponseMailserver;
+        messages.forEach((message: any) => {
+            const subject = message['Subject'];
+            expect(subject).toMatch(`Neues Buch ${idStr}`);
+        });
     });
 
     test('Neues Buch mit ungueltigen Daten', async () => {

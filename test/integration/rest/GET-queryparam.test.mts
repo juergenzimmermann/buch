@@ -61,10 +61,11 @@ describe('GET /rest', () => {
     test.concurrent.each(titelArray)('Buecher mit Teil-Titel %s suchen', async (titel) => {
         // given
         const params = new URLSearchParams({ titel });
-        const url = `${restURL}?${params}`;
 
         // when
-        const { data, headers, status }: AxiosResponse<Page<BuchType>> = await client.get(url);
+        const { data, headers, status }: AxiosResponse<Page<BuchType>> = await client.get(restURL, {
+            params,
+        });
 
         // then
         expect(status).toBe(HttpStatusCode.Ok);
@@ -85,10 +86,9 @@ describe('GET /rest', () => {
         async (titel) => {
             // given
             const params = new URLSearchParams({ titel });
-            const url = `${restURL}?${params}`;
 
             // when
-            const { status } = await client.get(url);
+            const { status } = await client.get(restURL, { params });
 
             // then
             expect(status).toBe(HttpStatusCode.NotFound);
@@ -98,10 +98,11 @@ describe('GET /rest', () => {
     test.concurrent.each(isbns)('Buch mit ISBN %s suchen', async (isbn) => {
         // given
         const params = new URLSearchParams({ isbn });
-        const url = `${restURL}?${params}`;
 
         // when
-        const { data, headers, status }: AxiosResponse<Page<BuchType>> = await client.get(url);
+        const { data, headers, status }: AxiosResponse<Page<BuchType>> = await client.get(restURL, {
+            params,
+        });
 
         // then
         expect(status).toBe(HttpStatusCode.Ok);
@@ -123,10 +124,11 @@ describe('GET /rest', () => {
     test.concurrent.each(ratingMin)('Buecher mit Mindest-"rating" %i suchen', async (rating) => {
         // given
         const params = new URLSearchParams({ rating: rating.toString() });
-        const url = `${restURL}?${params}`;
 
         // when
-        const { data, headers, status }: AxiosResponse<Page<BuchType>> = await client.get(url);
+        const { data, headers, status }: AxiosResponse<Page<BuchType>> = await client.get(restURL, {
+            params,
+        });
 
         // then
         expect(status).toBe(HttpStatusCode.Ok);
@@ -141,10 +143,11 @@ describe('GET /rest', () => {
     test.concurrent.each(preisMax)('Buecher mit max. Preis %d suchen', async (preis) => {
         // given
         const params = new URLSearchParams({ preis: preis.toString() });
-        const url = `${restURL}?${params}`;
 
         // when
-        const { data, status, headers }: AxiosResponse<Page<BuchType>> = await client.get(url);
+        const { data, status, headers }: AxiosResponse<Page<BuchType>> = await client.get(restURL, {
+            params,
+        });
 
         // then
         expect(status).toBe(HttpStatusCode.Ok);
@@ -159,10 +162,11 @@ describe('GET /rest', () => {
     test.concurrent.each(schlagwoerter)('Mind. 1 Buch mit Schlagwort %s', async (schlagwort) => {
         // given
         const params = new URLSearchParams({ [schlagwort]: 'true' });
-        const url = `${restURL}?${params}`;
 
         // when
-        const { data, status, headers }: AxiosResponse<Page<BuchType>> = await client.get(url);
+        const { data, status, headers }: AxiosResponse<Page<BuchType>> = await client.get(restURL, {
+            params,
+        });
 
         // then
         expect(status).toBe(HttpStatusCode.Ok);
@@ -183,10 +187,9 @@ describe('GET /rest', () => {
         'Keine Buecher zu einem nicht vorhandenen Schlagwort',
         async (schlagwort) => {
             const params = new URLSearchParams({ [schlagwort]: 'true' });
-            const url = `${restURL}?${params}`;
 
             // when
-            const { status } = await client.get(url);
+            const { status } = await client.get(restURL, { params });
 
             // then
             expect(status).toBe(HttpStatusCode.NotFound);
@@ -196,10 +199,9 @@ describe('GET /rest', () => {
     test.concurrent('Keine Buecher zu einer nicht-vorhandenen Property', async () => {
         // given
         const params = new URLSearchParams({ foo: 'bar' });
-        const url = `${restURL}?${params}`;
 
         // when
-        const { status } = await client.get(url);
+        const { status } = await client.get(restURL, { params });
 
         // then
         expect(status).toBe(HttpStatusCode.NotFound);

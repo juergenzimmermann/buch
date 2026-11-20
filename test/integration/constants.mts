@@ -32,3 +32,8 @@ export const IF_MATCH = 'If-Match';
 
 export const GRAPHQL_RESPONSE_JSON = 'application/graphql-response+json';
 export const BEARER = 'Bearer';
+
+const MAILSERVER_HOST = 'localhost';
+const MAILSERVER_PORT = 8025;
+export const MAILSERVER_BASE_URL = `http://${MAILSERVER_HOST}:${MAILSERVER_PORT}/api/v1`;
+export const MAILSERVER_TIMEOUT = 2_000;
