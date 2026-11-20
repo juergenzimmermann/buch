@@ -22,7 +22,7 @@
 services:
   postgres:
     # https://github.com/docker-library/postgres/blob/master/19/trixie/Dockerfile
-    image: postgres:19rc2-trixie
+    image: postgres:19-trixie
     ports:
       - published: 5432
         target: 5432
@@ -68,7 +68,7 @@ services:
     # https://linux.die.net/man/7/capabilities
     #cap_drop: [ALL]
     # https://docs.docker.com/reference/compose-file/services/#cap_add
-    cap_add: [CHOWN, SETGID, SETUID, DAC_READ_SEARCH, NET_BIND_SERVICE, FOWNER]
+    #cap_add: [CHOWN, SETGID, SETUID, DAC_READ_SEARCH, NET_BIND_SERVICE, FOWNER]
     healthcheck:
       test: [CMD, pg_isready, --dbname=postgres, --username=postgres]
       interval: 5s
