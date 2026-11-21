@@ -1,0 +1,16 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Node Server",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/src/index.mts",
+      "cwd": "${workspaceFolder}",
+      "runtimeArgs": ["--env-file=.env"],
+      "console": "integratedTerminal",
+      "sourceMaps": true,
+      "skipFiles": ["<node_internals>/**"]
+    }
+  ]
+}
