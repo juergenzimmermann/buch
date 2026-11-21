@@ -17,6 +17,7 @@
 
 # https://mailpit.axllent.org/docs/install/docker
 # https://mailpit.axllent.org/docs/configuration/runtime-options
+# https://github.com/rnwood/smtp4dev
 
 services:
   mail:
