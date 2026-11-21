@@ -201,7 +201,7 @@ snapshots:
 				"@tsconfig/node-ts": "23.6.5",
 				"@tsconfig/node26": "26.0.2",
 				"@tsconfig/strictest": "2.0.9",
-				"@types/bun": "1.4.4",
+				"@types/bun": "1.4.5",
 				"@types/k6": "2.3.1",
 				"@types/node": "26.6.6",
 				"@types/nodemailer": "8.0.2",
@@ -1474,10 +1474,10 @@ snapshots:
 			},
 		},
 
-		"@types/bun@1.4.4": {
-			"integrity": "sha512-9wkRDXUXK124pEnAutE6n/l18j+i9GC5IAHK8TmX/2nlySETmky0OU6yL5U8pW1AoKh++AN9auDCr647BfurjQ==",
+		"@types/bun@1.4.5": {
+			"integrity": "sha512-DpgwNI9z0L1S0gtb45QLCWgwCUcMLnsHYMJHQvpNj7erGiCGBvpggltAIeARrtobNMKMuy0UP7i56tKKgwFs/Q==",
 			"dependencies": {
-				"bun-types": "1.4.4",
+				"bun-types": "1.4.5",
 			},
 		},
 
@@ -1998,8 +1998,8 @@ snapshots:
 			},
 		},
 
-		"bun-types@1.4.4": {
-			"integrity": "sha512-yjrJh5oGX7mMPKGd19YXyIjmEuj4G4zNC30bs7PM9Az7NQ3ndF3j6hbeRdvJTRQEhJ/FYQwW0a2moweEi2hMxQ==",
+		"bun-types@1.4.5": {
+			"integrity": "sha512-ECHn+9dhL3wv0G6u0+7dQvrnaimXiRDxxerYBmhTaLyJEEuvTPWk2Fye3XIf5Y++JIIiHKfQw4Z7V5D8KuiXbg==",
 			"dependencies": {
 				"@types/node": "26.6.6",
 				"undici-types": "8.12.4",
@@ -2333,7 +2333,7 @@ snapshots:
 				},
 				"bun-types": {
 					"specifier": "*",
-					"version": "1.4.4",
+					"version": "1.4.5",
 					"optional": true,
 				},
 				"effect": {
