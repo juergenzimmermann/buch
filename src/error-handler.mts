@@ -40,8 +40,12 @@ const logger = getLogger('error-handler');
 // -----------------------------------------------------------------------------
 // https://hono.dev/docs/api/exception#handling-httpexceptions
 export const createErrorHandler = (app: Hono) =>
-    // oxlint-disable-next-line promise/prefer-await-to-callbacks
-    app.onError((error, c) => {
+    app.onError((c, next) => {
+        const { error } = c;
+        if (error === undefined) {
+            return next();
+        }
+
         if (error instanceof NotFoundError) {
             // https://hono.dev/docs/api/context#notfound
             return c.notFound();

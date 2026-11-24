@@ -55,7 +55,15 @@ auditConfig:
 
 permissions:
   drizzle-kit:
-    skills: [drizzle, drizzle-generate, drizzle-hints, drizzle-output-modes, drizzle-pull, drizzle-responses-and-errors]
+    skills:
+      [
+        drizzle,
+        drizzle-generate,
+        drizzle-hints,
+        drizzle-output-modes,
+        drizzle-pull,
+        drizzle-responses-and-errors,
+      ]
 
 skills:
   dirs:
