@@ -1,0 +1,8 @@
+# pnpm
+/drizzle
+/drizzle-generate
+/drizzle-hints
+/drizzle-output-modes
+/drizzle-pull
+/drizzle-responses-and-errors
+# pnpm end
