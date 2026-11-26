@@ -33,7 +33,7 @@ const jwks = createRemoteJWKSet(new URL(jwksUri));
 const algorithms = ['RS256'];
 
 // Token aus dem Request Header extrahieren
-const getToken = (req: HonoRequest) => {
+const getTokenFromRequestHeader = (req: HonoRequest) => {
     const auth = req.header('Authorization');
     if (!auth?.startsWith('Bearer ')) {
         throw new UnauthorizedError('Authorization fehlt im Header');
@@ -98,10 +98,9 @@ export const rolesRequired =
     async (c: Context, next: Next) => {
         const { req } = c;
 
-        // Token aus dem Request Header extrahieren
-        const token = getToken(req);
+        const token = getTokenFromRequestHeader(req);
 
-        // Base64 in JSON decodieren und verifizieren
+        // Base64-String in JSON decodieren und verifizieren
         const verifyResult = await verifyToken(token);
         if (verifyResult instanceof Response) {
             return verifyResult;

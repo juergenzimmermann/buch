@@ -217,7 +217,7 @@ snapshots:
 				"@tsconfig/strictest": "2.0.9",
 				"@types/bun": "1.4.5",
 				"@types/k6": "2.4.0",
-				"@types/node": "26.6.6",
+				"@types/node": "26.6.10",
 				"@types/nodemailer": "8.0.2",
 				"@types/pg": "8.23.1",
 				"@vitest/coverage-istanbul": "5.1.1",
@@ -1743,8 +1743,8 @@ snapshots:
 			"integrity": "sha512-FGJAyfzNyYiSdWbMjT89k4ltFM0A2Hoq/VMUp0sBA9AjU8M0e/uilJkvv12MHW/KZ3nK3SVyv30IKD4rzjaiOg==",
 		},
 
-		"@types/node@26.6.6": {
-			"integrity": "sha512-MzQj+8Kx3XI40OmUAE6Qoh58ZMNstNNMwn2nfd3qWsfe7nDNSqJNzes4njhz6AHwrSHOffSLwXU6yb474Q4aog==",
+		"@types/node@26.6.10": {
+			"integrity": "sha512-WJuPHoGB8WNQuTksNF7SOQpnH02PXeDYz4iueWbBT6/hTWnShY5F3T/hoJA3fY9+uYReDZ7pyTKKx83jQa7aGg==",
 			"dependencies": {
 				"undici-types": "8.9.0",
 			},
@@ -1753,14 +1753,14 @@ snapshots:
 		"@types/nodemailer@8.0.2": {
 			"integrity": "sha512-c7M5ox8p0nEOfbJ2E9Qcmt8/QCu/VzsiAhzBiZbvky2PhKZDHpKB3sQHBM5MEZNkCfBOaS6S9//AGPRTNB7IaA==",
 			"dependencies": {
-				"@types/node": "26.6.6",
+				"@types/node": "26.6.10",
 			},
 		},
 
 		"@types/pg@8.23.1": {
 			"integrity": "sha512-fKVHpikPdg4GKks3JuLEhvwSyvwzF23hnabPy6DD8ljVbC7+6J5dQzdv4arV6jqq57djnMgs1HKBxX4P8aBI3A==",
 			"dependencies": {
-				"@types/node": "26.6.6",
+				"@types/node": "26.6.10",
 				"pg-protocol": "1.16.1",
 				"pg-types": "2.2.0",
 			},
@@ -2235,7 +2235,7 @@ snapshots:
 		"bun-types@1.4.5": {
 			"integrity": "sha512-ECHn+9dhL3wv0G6u0+7dQvrnaimXiRDxxerYBmhTaLyJEEuvTPWk2Fye3XIf5Y++JIIiHKfQw4Z7V5D8KuiXbg==",
 			"dependencies": {
-				"@types/node": "26.6.6",
+				"@types/node": "26.6.10",
 				"undici-types": "8.12.4",
 			},
 		},
@@ -4173,7 +4173,7 @@ snapshots:
 			"peerDependencies": {
 				"@types/node": {
 					"specifier": "^20.19.0 || >=22.12.0",
-					"version": "26.6.6",
+					"version": "26.6.10",
 					"optional": true,
 				},
 				"@vitejs/devtools": {
@@ -4252,7 +4252,7 @@ snapshots:
 				},
 				"@types/node": {
 					"specifier": "^22.0.0 || >=24.0.0",
-					"version": "26.6.6",
+					"version": "26.6.10",
 					"optional": true,
 				},
 				"@vitest/browser-playwright": {
