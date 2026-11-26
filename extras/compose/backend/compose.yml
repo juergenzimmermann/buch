@@ -21,6 +21,6 @@
 
 # https://docs.docker.com/reference/compose-file/include
 include:
-  - path: ../postgres/compose.yml
-  - path: ../keycloak/compose.yml
-  - path: ../mailpit/compose.yml
+  - ../postgres/compose.yml
+  - ../keycloak/compose.yml
+  - ../mailpit/compose.yml
