@@ -12,7 +12,6 @@ Inhalt
   - [Initiale Konfiguration des Grafana-Dashboards](#initiale-konfiguration-des-grafana-dashboards)
   - [Aufruf eines existierenden Dashboards](#aufruf-eines-existierenden-dashboards)
   - [SQLite als DB-System](#sqlite-als-db-system)
-- [Links](#links)
 
 ---
 
@@ -53,7 +52,7 @@ zum Monitoring (siehe Konfiguration der Hono-Applikation in `src/app.mts`).
 ## Prometheus als Toolkit für Monitoring
 
 Mit der URL `http://localhost:9090` gemäß der Konfiguration in `compose.yml` im
-Verzeichnis `extras\compose\prometheus+grafana` kann man nun die Metriken anzeigen,
+Verzeichnis `extras\compose\prometheus-grafana` kann man nun die Metriken anzeigen,
 die der Prometheus-Server über HTTP von einer Anwendung abruft ("Polling").
 Port `3000`, Pfad `/prometheus` und TLS sind in der Konfigurationsdatei
 `prometheus.yml` im Verzeichnis `extras\compose\prometheus-grafana` spezifiziert.
@@ -69,8 +68,8 @@ mit `http://localhost:9090/targets` anzeigen lassen.
 
 ## Grafana: Dashboards zur Visualisierung
 
-Mit der URL `http://localhost:3000` gemäß der Konfiguration in `compose.yml` im
-Verzeichnis `extras\compose\prometheus+grafana` greift man auf den Grafana-Server
+Mit der URL `http://localhost:3333` gemäß der Konfiguration in `compose.yml` im
+Verzeichnis `extras\compose\prometheus-grafana` greift man auf den Grafana-Server
 zu und muss zunächst ein vorhandenes Dashboard auswählen oder ein eigenes Dashboard
 implementieren.
 
@@ -78,8 +77,8 @@ Auf der Webseite `https://rigorousthemes.com/blog/best-grafana-dashboard-example
 kann man einen Eindruck erhalten, welche Visualisierungen mit Grafana möglich sind.
 
 **BEACHTE**: Grafana nutzt als Default-Port _3000_ und damit denselben Port wie
-JavaScript-basierte Serveranwendungen mit _Node_, _Express_, _Nest_, _Next_ oder
-_Fastify_.
+JavaScript-basierte Serveranwendungen mit _Node_, _Express_, _Hono_, _Nest_ oder
+_Bun_.
 
 ### Initiale Konfiguration des Grafana-Dashboards
 
@@ -96,9 +95,9 @@ Daten von Grafana als SQLite-DB gespeichert ([s.u.](#sqlite-als-db-system)).
 Ggf. fährt man Grafana und Prometheus wieder herunter, um `grafana.db` zu löschen
 und als leere Datei anzulegen.
 
-Zuerst klickt man auf die Kachel _Create your first dashboard_ und anschließend
-im Dropdown-Menü rechts oben auf den Menüunkt _Import dashboard_. Im Eingabefeld
-für _Grafana.com dashboard URL or ID_ gibt man z.B. die ID `11159` ein (siehe
+Zuerst klickt man auf den Menüpunkt _Dashboards_ am linken Rand, anschließend auf das
+Dropdown-Menü _New_ und wählt den Eintrag _Import dashboard_ aus. Im Eingabefeld für
+_Grafana.com dashboard URL or ID_ gibt man z.B. die ID `11159` ein (siehe
 https://grafana.com/grafana/dashboards/11159-nodejs-application-dashboard),
 das übrigens auch mit _Bun_ nutzbar ist.
 
@@ -111,21 +110,12 @@ Abschließend klickt man auf den Button _Import_.
 
 Wenn man einmal das obige Dashboard konfiguriert hat, kann man später die beiden
 Server für Prometheus und Grafana starten und für Grafana die URL `http://localhost:3333`
-aufrufen. Im Overflow-Menü in der linken oberen Ecke wählt man den Menüpunkt
-_Dashboards_ aus und klickt auf den Menüpunkt _NodeJS Application Dashboard_.
-Auch hier ist es empfehlenswert rechts oben: _Last 5 minutes_ im Dropdown-Menü
-auszuwählen.
+aufrufen. Im Navigationsmenü im linken Rand wählt man den Menüpunkt _Dashboards_ aus
+und klickt _NodeJS Application Dashboard_ an. Auch hier ist es empfehlenswert rechts oben
+_Last 5 minutes_ im Dropdown-Menü auszuwählen.
 
 ### SQLite als DB-System
 
 Grafana speichert die anfallenden Daten in mit dem "Embedded" DB-System _SQLite_
 in der Datei `grafana.db`. Dort gibt es z.B. die Tabelle `dashboard` oder `user`.
 Durch einen Doppelklick auf `grafana.db` kann man den DB-Inhalt mit IntelliJ IDEA inspizieren.
-
-## Links
-
-- https://stackabuse.com/monitoring-spring-boot-apps-with-micrometer-prometheus-and-grafana
-- https://medium.com/swlh/monitoring-spring-boot-application-with-micrometer-prometheus-and-grafana-using-custom-metrics-9d33de107ad8
-- https://medium.com/simform-engineering/revolutionize-monitoring-empowering-spring-boot-applications-with-prometheus-and-grafana-e99c5c7248cf
-- https://github.com/micrometer-metrics/micrometer-samples/tree/main/micrometer-samples-boot3-web
-- https://docs.micrometer.io/micrometer/reference/concepts.html
