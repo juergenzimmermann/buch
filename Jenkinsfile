@@ -101,7 +101,7 @@ pipeline {
                     ls -al ~/.cache/node
 
                     npm r -g pnpm
-                    npm i -g --allow-scripts=pnpm pnpm@12.23.0
+                    npm i -g --allow-scripts=pnpm pnpm@12.24.0
                     env | sort
                     which pnpm
                     pnpm --version

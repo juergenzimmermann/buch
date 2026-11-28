@@ -91,8 +91,8 @@
     "@tsconfig/node26": "26.0.2",
     "@tsconfig/strictest": "2.0.9",
     "@types/bun": "1.4.5",
-    "@types/k6": "2.4.0",
-    "@types/node": "26.6.10",
+    "@types/k6": "2.4.1",
+    "@types/node": "26.6.11",
     "@types/nodemailer": "8.0.2",
     "@types/pg": "8.23.1",
     "@vitest/coverage-istanbul": "5.1.2",
@@ -107,7 +107,7 @@
     "tsrs": "7.1.0-beta.tsrs5",
     "tsx": "4.23.15",
     "typescript": "7.1.0-beta",
-    "vite": "8.3.8",
+    "vite": "8.4.0",
     "vitest": "5.1.2"
   },
   "overrides": {
@@ -127,7 +127,7 @@
   "devEngines": {
     "packageManager": {
       "name": "pnpm",
-      "version": "^12.23.0",
+      "version": "^12.24.0",
       "onFail": "warn"
     },
     "runtime": [
@@ -146,6 +146,6 @@
   "engines": {
     "bun": "^1.4.5",
     "node": "^26.13.1",
-    "pnpm": "^12.23.0"
+    "pnpm": "^12.24.0"
   }
 }
